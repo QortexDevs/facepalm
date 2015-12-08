@@ -1,0 +1,13 @@
+{
+    "dataObject": "priceInterval",
+    "strings": {
+        "accusative": "диапазон",
+        "title": "Диапазоны",
+        "editTitle": "Редактирование диапазона"
+    },
+    "titles": {
+        "name": "Название",
+        "floor": "Нижняя граница",
+        "ceil": "Верхняя граница"
+    }
+}

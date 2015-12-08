@@ -1,0 +1,11 @@
+{
+    "dataObject": "priceDimension",
+    "strings": {
+        "accusative": "размерность",
+        "title": "Размерности",
+        "editTitle": "Редактирование размерности"
+    },
+    "titles": {
+        "name": "Название"
+    }
+}

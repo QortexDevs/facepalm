@@ -1,0 +1,11 @@
+{
+    "dataObject": "articleType",
+    "strings": {
+        "accusative": "тип",
+        "title": "Типы статей",
+        "editTitle": "Редактирование типа статей"
+    },
+    "titles": {
+        "name": "Название"
+    }
+}

@@ -1,0 +1,37 @@
+{
+    "dataObject": "menuItem",
+    "strings": {
+        "accusative": "блюдо",
+        "title": "Меню",
+        "editTitle": "Редактирование блюда"
+    },
+    "titles": {
+        "name": "Название",
+        "description": "Описание"
+    },
+    "list": {
+        "columns": {
+            "name": true
+        },
+        "status": "status"
+    },
+    "form": {
+        "fields": {
+            "name": true,
+            "menuSection": {
+                "type": "relation",
+                "cardinality": "one",
+                "to": "menuSection",
+                "title": "Раздел меню"
+            },
+            "description": {
+                "width": "400px"
+            },
+            "photo": {
+                "title": "Фотография",
+                "type": "image",
+                "sizes": "300x300"
+            }
+        }
+    }
+}

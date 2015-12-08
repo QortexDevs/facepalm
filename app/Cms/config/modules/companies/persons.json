@@ -1,0 +1,30 @@
+{
+    "dataObject": "person",
+    "strings": {
+        "accusative": "персону",
+        "title": "Персоны",
+        "editTitle": "Редактирование персоны"
+    },
+    "titles": {
+        "name": "Имя",
+        "post": "Должность"
+    },
+    "list": {
+        "columns": {
+            "name": true,
+            "post": true
+        },
+        "status": "status"
+    },
+    "form": {
+        "fields": {
+            "name": true,
+            "post": true,
+            "photo": {
+                "title": "Фотография",
+                "type": "image",
+                "sizes": "300x300"
+            }
+        }
+    }
+}

@@ -1,0 +1,76 @@
+{
+    "structure": {
+        "users": {
+            "title": "Пользователи",
+            "icon": "user",
+            "sections": {
+                "users": {
+                    "title": "Пользователи"
+                }
+            }
+        },
+        "companies": {
+            "title": "Компании",
+            "icon": "coffee",
+            "sections": {
+                "companies": {
+                    "title": "Компании"
+                },
+                "galleries": {
+                    "title": "Галереи"
+                },
+                "persons": {
+                    "title": "Персоны"
+                },
+                "menu": {
+                    "title": "Меню"
+                },
+                "events": {
+                    "title": "События"
+                },
+                "actions": {
+                    "title": "Акции"
+                },
+                "articles": {
+                    "title": "Статьи"
+                }
+            }
+        },
+        "dictionaries": {
+            "title": "Справочники",
+            "icon": "book",
+            "sections": {
+                "cities": {
+                    "title": "Города"
+                },
+                "serviceTypes": {
+                    "title": "Типы услуг"
+                },
+                "priceDimensions": {
+                    "title": "Размерности цен"
+                },
+                "priceIntervals": {
+                    "title": "Диапазоны цен"
+                },
+                "menuSections": {
+                    "title": "Разделы меню"
+                },
+                "articleTypes": {
+                    "title": "Типы статей"
+                }
+            }
+        },
+        "system": {
+            "title": "Система",
+            "icon": "gears",
+            "sections": {
+                "objects": {
+                    "title": "Объекты"
+                },
+                "relations": {
+                    "title": "Связи"
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "dataObject": "serviceType",
+    "strings": {
+        "accusative": "тип",
+        "title": "Типы услуг",
+        "editTitle": "Редактирование типа услуг"
+    },
+    "titles": {
+        "name": "Название"
+    }
+}

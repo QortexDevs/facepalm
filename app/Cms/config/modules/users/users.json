@@ -1,0 +1,47 @@
+{
+    "model": "user",
+    "strings": {
+        "accusative": "пользователя",
+        "title": "Пользователи",
+        "editTitle": "Редактирование пользователя"
+    },
+    "titles": {
+        "email": "E-mail",
+        "password": "Пароль",
+        "type": "Тип",
+        "status": "Активность"
+    },
+    "list": {
+        "columns": {
+            "email": true,
+            "type": {
+                "type": "select",
+                "options": {
+                    "50": "Администратор",
+                    "100": "Суперпользователь"
+                }
+            }
+        },
+        "status": "status"
+    },
+    "form": {
+        "fields": {
+            "email": true,
+            "password": {
+                "width": "200px"
+            },
+            "type": {
+                "type": "select",
+                "noEmpty": true,
+                "options": {
+                    "50": "Администратор",
+                    "100": "Суперпользователь"
+                }
+            },
+            "acl": {
+                "type": "custom",
+                "title": "Доступ"
+            }
+        }
+    }
+}
