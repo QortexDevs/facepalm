@@ -102,21 +102,6 @@ class Controller extends BaseController
 
     protected function showObjectsList()
     {
-/*        $list = (new CmsList())
-            ->setColumns([
-                'name' => ['title' => 'ФИО'],
-                'email' => 1,
-                'updated_at' => ['type' => CmsList::COLUMN_TYPE_DATETIME],
-                'role.name' => 1
-            ], [
-                'Имя',
-                'Email',
-                'updated_at',
-                'Роль'
-            ])
-            ->setMainModel('User');*/
-
-
         $list = new CmsList($this->config->part('module'));
         dd($list->display());
     }

@@ -49,11 +49,18 @@ class Config
         return new Repository($this->get($key, []));
     }
 
+    /**
+     * @return string
+     */
     protected function getConfigPath()
     {
         return app()->path() . DIRECTORY_SEPARATOR . self::CONFIG_PATH;
     }
 
+    /**
+     * @param $name
+     * @return mixed
+     */
     protected function loadConfig($name)
     {
         $filePath = $this->getConfigPath() . $name;

@@ -1,10 +1,18 @@
 {
-    "private": true,
     "devDependencies": {
-        "gulp": "^3.8.8"
-    },
-    "dependencies": {
-        "laravel-elixir": "^4.0.0",
-        "bootstrap-sass": "^3.0.0"
+        "gulp": "*",
+        "gulp-autoprefixer": "*",
+        "gulp-cssmin": "*",
+        "gulp-imagemin": "*",
+        "gulp-rigger": "*",
+        "gulp-sass": "*",
+        "gulp-sourcemaps": "*",
+        "gulp-uglify": "*",
+        "gulp-concat": "*",
+        "gulp-watch": "*",
+        "gulp-plumber": "*",
+        "imagemin-pngquant": "*",
+        "yargs": "*",
+        "gulp-buster": "*"
     }
 }

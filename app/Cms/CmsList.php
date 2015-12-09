@@ -1,15 +1,26 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: xpundel
- * Date: 06.12.15
- * Time: 21:56
+ *
+ * Вариант создания из кода
+ * $list = (new CmsList())
+ * ->setColumns([
+ * 'name' => ['title' => 'ФИО'],
+ * 'email' => 1,
+ * 'updated_at' => ['type' => CmsList::COLUMN_TYPE_DATETIME],
+ * 'role.name' => 1
+ * ], [
+ * 'Имя',
+ * 'Email',
+ * 'updated_at',
+ * 'Роль'
+ * ])
+ * ->setMainModel('User'); *
  */
 
 namespace app\Cms;
 
-use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Contracts\Config\Repository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -35,7 +46,7 @@ class CmsList
     // todo: нцжна вьюшка со списком и параметром, отображать ли кнопку добавления.
     // todo: Подумать про массовые операции
     // todo: пейджер и фильтр
-    // todo: джойны с другими таблицами. Продумать формат конфига. Отдельный метод для установки для установки из json-конфига
+    // todo: type select from local dictionary
 
     protected $columns = [];
     protected $showIdColumn = true;
@@ -53,14 +64,18 @@ class CmsList
         }
     }
 
+    /**
+     * @param Repository $config
+     * @return $this
+     */
     public function buildFromConfig($config)
     {
-        $this->setColumns($config['list.columns'], $config['titles'])
-            ->setMainModel($config['model'])
-            ->toggleIdColumn($config['list.showId'] !== false)
-            ->toggleStatusButtonColumn($config['list.showStatus'] !== false)
-            ->toggleDeleteButtonColumn($config['list.showDelete'] !== false)
-            ->toggleEditButtonColumn($config['list.showEdit'] !== false);
+        $this->setColumns($config->get('list.columns'), $config->get('titles'))
+            ->setMainModel($config->get('model'))
+            ->toggleIdColumn($config->get('list.showId') !== false)
+            ->toggleStatusButtonColumn($config->get('list.showStatus') !== false)
+            ->toggleDeleteButtonColumn($config->get('list.showDelete') !== false)
+            ->toggleEditButtonColumn($config->get('list.showEdit') !== false);
 
         return $this;
     }

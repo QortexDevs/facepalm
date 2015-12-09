@@ -1,0 +1,62 @@
+.list-image .list-image-item {
+	padding: 10px;
+	display: inline-block;
+	position: relative;
+	/*width: 220px;*/
+	border: 1px solid #f0f0f0;
+	margin: 0 20px 20px 0;
+}
+
+.list-image .list-image-item .list-image-item-canvast {
+	width: 80px;
+	height: 80px;
+	position: relative;
+}
+
+.list-image .list-image-item .list-image-item-progres {
+	z-index: 100;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 0;
+	height: 80px;
+	background-color: #ffcc00;
+	opacity: 0.5;
+}
+
+.list-image .list-image-item input[type=text] {
+	width: 100px !important;
+}
+
+.list-image .list-image-item:hover .list-image-item-remove {
+	display: block;
+}
+
+.list-image .list-image-item .list-image-item-remove {
+	position: absolute;
+	top: -10px;
+	right: -10px;
+	z-index: 10;
+	opacity: 1;
+	background: #ea5a5a;
+	padding:4px 5px;
+	border-radius: 20px;
+	color: #fff;
+	display: none;
+	cursor: pointer;
+	&:hover {
+		background: #da4a4a;
+	}
+	&:active {
+		background: #ca3a3a;
+	}
+}
+
+.list-image .list-image-item .list-image-item-remove-text {
+	display: none;
+}
+
+.list-image .list-image-item a {
+	display: block;
+	margin-bottom: 5px;
+}

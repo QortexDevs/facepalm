@@ -1,0 +1,29 @@
+.alert {
+	padding: 15px;
+	margin-bottom: 20px;
+	//border: 1px solid #eed3d7;
+	border-radius: 4px;
+	position: absolute;
+	bottom: 0px;
+	right: 21px;
+	/* Each alert has its own width */
+	float: right;
+	clear: right;
+}
+
+.alert-red {
+	color: white;
+	background-color: #ea5a5a;
+}
+.alert-green {
+	color: white;
+	background-color: #28bd8b;
+}
+.alert-blue {
+	color: white;
+	background-color: #23b1f7;
+}
+.alert-yellow {
+	color: white;
+	background-color: #ffcc00;
+}

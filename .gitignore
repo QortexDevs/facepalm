@@ -3,3 +3,18 @@
 Homestead.yaml
 Homestead.json
 .env
+
+.idea
+.DS_Store
+Thumbs.db
+.*~
+.*
+*.zip
+*.*~
+*.pyc
+!.gitattributes
+!.gitignore
+
+#if building on server, uncomment this lines and remove files from git
+#busters.json
+#public/assets/build

@@ -1,0 +1,84 @@
+.module-content {
+	.admin {
+		.cms-module-form {
+			margin-left: 0px;
+
+			table {
+				width: auto;
+
+				td {
+					&.field {
+						padding-bottom: 0;
+					}
+				}
+			}
+		}
+		.cms-module-list {
+			table {
+				tr {
+					td {
+						border-bottom: none;
+					}
+				}
+			}
+		}
+
+		&.data-objects-list {
+			table {
+				td {
+					padding: 8px;
+					vertical-align: baseline;
+					&.field {
+						input {
+							&.text {
+								padding: 1px 5px;
+								width: 250px;
+
+								&:read-only {
+									background: #f9f9f9;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		&.data-object-form {
+			table {
+				td {
+					padding: 8px;
+					vertical-align: baseline;
+
+					&.caption {
+						min-width: 60px;
+					}
+
+					&.pad-top {
+						padding-top: 30px;
+					}
+
+					&.field {
+						input {
+							&.text {
+								padding: 1px 5px;
+								width: 180px;
+
+								&.short {
+									width: 100px;
+								}
+
+								&:read-only {
+									background: #f9f9f9;
+								}
+							}
+						}
+						select {
+							padding: 2px 5px;
+							width: 180px;
+						}
+					}
+				}
+			}
+		}
+	}
+}

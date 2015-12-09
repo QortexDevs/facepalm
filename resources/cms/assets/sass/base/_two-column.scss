@@ -1,0 +1,60 @@
+$secondLeftMenuWidth: 250px;
+
+.two-column-layout {
+	display: flex;
+	display: -webkit-flex;
+	align-items: stretch;
+	-webkit-align-items: stretch;
+	min-height: 80vh;
+
+	.nav-panel {
+		width: $secondLeftMenuWidth;
+		background: #1f222d;
+		position: fixed;
+		overflow: auto;
+		height: 100%;
+		padding: 10px;
+		box-shadow: 5px 0 10px -5px rgba(0, 0, 0, 0.5);
+
+		.logo-bar {
+			background: #ac484b;
+			height: 57px;
+			margin: -10px -10px 22px -10px;
+			padding: 10px 15px;
+
+			.sub-title {
+				color: #fff;
+				font: 18px Cuprum;
+				opacity: 0.98;
+				padding:10px 17px;
+			}
+		}
+
+		ul {
+			li {
+				a {
+					display: block;
+					color: #74808f;
+					font: 400 16px/20px 'Cuprum';
+					padding: 10px 16px 10px 22px;
+
+					&:hover {
+						opacity: 0.7;
+					}
+				}
+				&.active {
+					> a {
+						background: inherit;
+						color: #ea5a5a;
+					}
+				}
+			}
+		}
+
+	}
+}
+
+.two-column-layout .main-panel {
+	margin-left: $secondLeftMenuWidth;
+}
+

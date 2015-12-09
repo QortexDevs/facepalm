@@ -1,0 +1,126 @@
+.module-content {
+	.cms-module-form {
+		margin-left: -20px;
+
+		table {
+			width: 100%;
+
+			td {
+				vertical-align: top;
+
+				&.caption {
+					padding-right: 7px;
+					min-width: 120px;
+					padding-bottom: 30px;
+
+					.caption {
+						font-size: 14px;
+						color: #b0b8c2;
+						padding: 2px 20px;
+						margin-top: 2px;
+					}
+
+					&.red {
+						.caption {
+							color: #ea5a5a;
+						}
+					}
+				}
+
+				&.field {
+					padding-bottom: 30px;
+
+					&.red {
+						p {
+							color: #ea5a5a;
+						}
+					}
+
+					input {
+						&.text {
+							border-radius: 2px;
+							padding: 5px;
+							width: 350px;
+							border: 1px solid #dddde5;
+						}
+						&:-webkit-autofill {
+							-webkit-box-shadow: 0 0 0 1000px #fff inset;
+							-webkit-text-fill-color: #333;
+						}
+						&.datepicker {
+							width: 120px;
+
+							& + .clear-date {
+								cursor: pointer;
+								color: #74808f;
+								margin-left:5px;
+							}
+						}
+					}
+					select {
+						border-radius: 2px;
+						padding: 5px;
+						border: 1px solid #dddde5;
+					}
+
+					textarea {
+						border-radius: 2px;
+						padding: 5px;
+						margin-top: 2px;
+						width: 700px;
+						height: 200px;
+						border: 1px solid #dddde5;
+					}
+				}
+			}
+
+			.add-new-subform-item {
+				background-color: #1ba8ed;
+				border: none;
+				color: white;
+				border-radius: 30px;
+				font-size: 14px;
+				padding: 6px 13px 5px 10px;
+				cursor: pointer;
+				outline: none;
+
+				span {
+					font: 400 14px/18px Cuprum;
+					margin-left: 5px;
+				}
+
+				&:hover {
+					opacity: 0.8;
+				}
+				&:active {
+					opacity: 0.6;
+				}
+			}
+
+			.form-buttons {
+				padding: 20px 0 0 0;
+				margin: 20px 0 0 0;
+				border-top: 1px solid #f4f7fa;
+
+				input {
+					border: none;
+					padding: 8px 20px;
+					background: #24b685;
+					color: #fff;
+					border-radius: 30px;
+					cursor: pointer;
+					outline: none;
+					font: 400 20px/20px Cuprum;
+
+					&:hover {
+						opacity: 0.8;
+					}
+					&:active {
+						opacity: 0.6;
+					}
+				}
+			}
+		}
+	}
+}
+

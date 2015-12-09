@@ -1,0 +1,25 @@
+{
+    "name": "FacepalmCMS",
+    "version": "0.0.1",
+    "authors": [
+        "Mikhail Lisnyak <xpundel@gmail.com>"
+    ],
+    "license": "MIT",
+    "private": true,
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "test",
+        "tests"
+    ],
+    "dependencies": {
+        "buzz": "~1.1.10",
+        "fancybox": "*",
+        "growl": "~1.2.7",
+        "jquery": "1.9.*",
+        "sweetalert": "~1.0.1",
+        "underscore": "*",
+        "underscore.string": "~3.2.2"
+    }
+}
