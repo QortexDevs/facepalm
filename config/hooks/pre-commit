@@ -1,0 +1,240 @@
+#!/bin/bash
+red='\x1B[0;31m'
+lightred='\x1B[1;31m'
+green='\x1B[0;32m'
+darkgray='\x1B[1;30m'
+lightgray='\x1B[0;37m'
+lightblue='\x1B[0;36m'
+NC='\x1B[0m' # No Color
+
+# stolen from template file
+
+if git rev-parse --verify HEAD
+then
+    against=HEAD
+else
+    # Initial commit: diff against an empty tree object
+    against=4b825dc642cb6eb9a060e54bf8d69288fbee4904
+fi
+
+
+#Check php files syntax
+echo 
+echo -e "${lightblue}CHECK SYNTAX${NC}"
+echo
+
+
+ROOT_DIR="$(pwd)/"
+LIST=$(git diff-index --cached --name-only --diff-filter=ACMR $against)
+ERRORS_BUFFER=""
+for file in $LIST
+do
+    EXTENSION=$(echo "$file" | grep ".php$")
+    if [ "$EXTENSION" != "" ]; then
+        ERRORS=$(php -l $ROOT_DIR$file 2>&1 | grep "Parse error")
+        if [ "$ERRORS" != "" ]; then
+            if [ "$ERRORS_BUFFER" != "" ]; then
+                ERRORS_BUFFER="$ERRORS_BUFFER\n$ERRORS"
+            else
+                ERRORS_BUFFER="$ERRORS"
+            fi
+            echo -e "${darkgray}Check syntax of file: ${lightgray}$file - ${red}[ ERROR ]${NC}"
+	    echo -e $ERRORS
+	    echo
+	else
+            echo -e "${darkgray}Check syntax of file: ${lightgray}$file - ${green}[ OK ]${NC}"
+        fi
+    fi
+done
+if [ "$ERRORS_BUFFER" != "" ]; then
+    exit 1
+fi
+
+######################################################################################################
+#
+#echo
+#echo -e "${lightblue}#CHECK DEBUG OUTPUT AND FORBIDDEN ENTITIES${NC}"
+#
+#
+#checks[1]="var_dump("
+#checks[2]="print_r("
+#checks[3]="die("
+#checks[4]="console.log1111("
+#checks[5]="console.debug1111("
+#checks[6]="/////////////////////&amp;"
+#checks[7]="&laquo;"
+#checks[8]="&raquo;"
+#element_count=${#checks[@]}
+#let "element_count = $element_count + 1"
+#
+#
+#LIST=$(git diff-index --cached --name-only --diff-filter=ACMR $against)
+#ERRORS_BUFFER=""
+#for file in $LIST
+#do
+#    EXTENSION=$(echo "$file" | grep -e ".php$\|.phtml$\|.html$\|.js$")
+#    echo $EXTENSION;
+#    if [ "$EXTENSION" != "" ]; then
+#	    index=1
+#	    while [ "$index" -lt "$element_count" ]
+#	    do
+#		ERRORS=$(grep "${checks[$index]}" $ROOT_DIR$file >&1)
+#		if [ "$ERRORS" != "" ]; then
+#		    if [ "$ERRORS_BUFFER" != "" ]; then
+#			ERRORS_BUFFER="$ERRORS_BUFFER\n$ERRORS"
+#		    else
+#			ERRORS_BUFFER="$ERRORS"
+#		    fi
+#		    echo -e "${lightred}${checks[$index]}${darkgray} found in file: ${lightgray}$file - ${red}[ ERROR ]${NC}"
+#		fi
+#		let "index = $index + 1"
+#	    done
+#    fi
+#done
+#if [ "$ERRORS_BUFFER" != "" ]; then
+#    exit 1
+#else
+#    echo -e "${green}[ OK ]${NC}"
+#fi
+
+
+
+# path to phpcs "binary"
+PHPCS_BIN=./vendor/bin/phpcs
+
+# the coding standard, you can also specify a path to your own standard here
+# e. g. /path/to/my/standard/dir/
+PHPCS_CODING_STANDARD=config/hooks/CodeStandard
+
+# comma-separated list of file patterns being ignored
+PHPCS_IGNORE=
+
+# comma-seperated list of sniffs from the standard that should be used
+# use `phpcs --standard=PSR1 -e` to list sniffs for your standard
+#PHPCS_SNIFFS=Generic.Files.ByteOrderMark,Generic.PHP.DisallowShortOpenTag
+
+# egrep compatible pattern of  files to be checked
+PHPCS_FILE_PATTERN="\.(php|phtml)$"
+
+# ignore warnings
+PHPCS_IGNORE_WARNINGS=1
+
+# encoding
+PHPCS_ENCODING=utf-8
+
+
+TMP_STAGING=".tmp_staging"
+
+echo
+echo -e "${lightblue}CHECK CODE STYLE${NC}"
+
+
+# simple check if code sniffer is set up correctly
+if [ ! -x $PHPCS_BIN ]; then
+    echo "PHP CodeSniffer bin not found or executable -> $PHPCS_BIN"
+    exit 1
+fi
+
+
+
+# this is the magic:
+# retrieve all files in staging area that are added, modified or renamed
+# but no deletions etc
+FILES=$(git diff-index --name-only --cached --diff-filter=ACMR $against -- )
+
+if [ "$FILES" == "" ]; then
+    exit 0
+fi
+
+# create temporary copy of staging area
+if [ -e $TMP_STAGING ]; then
+    rm -rf $TMP_STAGING
+fi
+mkdir $TMP_STAGING
+
+# match files against whitelist
+FILES_TO_CHECK=""
+for FILE in $FILES
+do
+    echo "$FILE" | egrep -q "$PHPCS_FILE_PATTERN"
+    RETVAL=$?
+    if [ "$RETVAL" -eq "0" ]
+    then
+        FILES_TO_CHECK="$FILES_TO_CHECK $FILE"
+    fi
+done
+
+if [ "$FILES_TO_CHECK" == "" ]; then
+    exit 0
+fi
+
+# execute the code sniffer
+if [ "$PHPCS_IGNORE" != "" ]; then
+    IGNORE="--ignore=$PHPCS_IGNORE"
+else
+    IGNORE=""
+fi
+
+if [ "$PHPCS_SNIFFS" != "" ]; then
+    SNIFFS="--sniffs=$PHPCS_SNIFFS"
+else
+    SNIFFS=""
+fi
+
+if [ "$PHPCS_ENCODING" != "" ]; then
+    ENCODING="--encoding=$PHPCS_ENCODING"
+else
+    ENCODING=""
+fi
+
+if [ "$PHPCS_IGNORE_WARNINGS" == "1" ]; then
+    IGNORE_WARNINGS="-n"
+else
+    IGNORE_WARNINGS=""
+fi
+
+# Copy contents of staged version of files to temporary staging area
+# because we only want the staged version that will be commited and not
+# the version in the working directory
+STAGED_FILES=""
+for FILE in $FILES_TO_CHECK
+do
+  ID=$(git diff-index --cached $against $FILE | cut -d " " -f4)
+
+  # create staged version of file in temporary staging area with the same
+  # path as the original file so that the phpcs ignore filters can be applied
+  mkdir -p "$TMP_STAGING/$(dirname $FILE)"
+  git cat-file blob $ID > "$TMP_STAGING/$FILE"
+  STAGED_FILES="$STAGED_FILES $TMP_STAGING/$FILE"
+done
+
+OUTPUT=$($PHPCS_BIN $IGNORE_WARNINGS --standard=$PHPCS_CODING_STANDARD $ENCODING $IGNORE $SNIFFS $STAGED_FILES)
+RETVAL=$?
+
+
+# delete temporary copy of staging area
+rm -rf $TMP_STAGING
+
+if [ $RETVAL -ne 0 ]; then
+    echo "$OUTPUT"
+    echo
+    echo -e "${red}STYLE ERRORS${NC}"
+    echo -e "${lightgray}Please fix and try to commit again${NC}"
+    echo
+    exit $RETVAL
+else
+    echo
+    echo -e "${green}Style checked${NC}"
+fi
+
+
+######## tests
+echo
+echo -e "${lightblue}TESTS${NC}"
+echo
+
+./vendor/bin/phpunit --colors=always
+RETVAL=$?
+
+exit $RETVAL
+
