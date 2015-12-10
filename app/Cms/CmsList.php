@@ -88,6 +88,12 @@ class CmsList
      */
     public function setColumns($columns, $titles = null)
     {
+        if (!$columns) {
+            return $this;
+        }
+        if (!is_array($columns)) {
+            $columns = (array)$columns;
+        }
         if (count($columns)) {
             if (!Arr::isAssoc($columns)) {
                 if (!is_array($columns[0])) {
@@ -102,14 +108,16 @@ class CmsList
                 if (Arr::has($column, 'name')) {
                     $columnName = $column['name'];
                 }
-                if (!Arr::has($column, 'title') || !$column['title']) {
-                    if (Arr::isAssoc($titles)) {
-                        if (Arr::has($titles, $columnName)) {
-                            $column['title'] = $titles[$columnName];
-                        }
-                    } else {
-                        if (Arr::has($titles, $counter)) {
-                            $column['title'] = $titles[$counter];
+                if (is_array($titles)) {
+                    if (!Arr::has($column, 'title') || !$column['title']) {
+                        if (Arr::isAssoc($titles)) {
+                            if (Arr::has($titles, $columnName)) {
+                                $column['title'] = $titles[$columnName];
+                            }
+                        } else {
+                            if (Arr::has($titles, $counter)) {
+                                $column['title'] = $titles[$counter];
+                            }
                         }
                     }
                 }
@@ -187,10 +195,14 @@ class CmsList
 
     /**
      * @return array
+     * @throws \Exception
      */
     public function display()
     {
         // get query builder with all records (dummy clause)
+        if (!$this->modelName) {
+            throw new \Exception('No model defined');
+        }
         $queryBuilder = call_user_func([$this->modelName, 'where'], 'id', '>', '0');
 
         // todo: сортировка из настроек
