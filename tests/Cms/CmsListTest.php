@@ -3,8 +3,6 @@ namespace Tests;
 
 use App\Cms\CmsList;
 use App\Models\User;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Str;
 

@@ -15,6 +15,7 @@ return [
 
     'paths' => [
         realpath(base_path('resources/site/views')),
+        realpath(base_path('resources/cms/views')),
     ],
 
     /*

@@ -1,0 +1,7 @@
+<div class="cms-module-list">
+    <input type="button"
+           value="Создать{{ moduleConfig.strings['accusative'] ? (" "~moduleConfig.strings['accusative']):"" }}"
+           class="add-new-item"
+           {% if listConfig.editButton %}data-edit-button="{{ listConfig.editButton }}"{% endif %} >
+    {% include "components/list/list.twig" %}
+</div>

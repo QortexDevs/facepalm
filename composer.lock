@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "79ac753933c389834496742fe2369b30",
-    "content-hash": "b6867116b8d3241c9b0c52aeb4954436",
+    "hash": "3ccdd751f06ebd5a0e20197896dcd70b",
+    "content-hash": "87e5e15f07860c7cb93f316c3d926624",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -796,16 +796,16 @@
         },
         {
             "name": "paragonie/random_compat",
-            "version": "1.1.3",
+            "version": "1.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paragonie/random_compat.git",
-                "reference": "b3cbb3782fc25f0b3154a89d896d81d99b87cfa3"
+                "reference": "d762ee5b099a29044603cd4649851e81aa66cb47"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/b3cbb3782fc25f0b3154a89d896d81d99b87cfa3",
-                "reference": "b3cbb3782fc25f0b3154a89d896d81d99b87cfa3",
+                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/d762ee5b099a29044603cd4649851e81aa66cb47",
+                "reference": "d762ee5b099a29044603cd4649851e81aa66cb47",
                 "shasum": ""
             },
             "require": {
@@ -840,7 +840,7 @@
                 "pseudorandom",
                 "random"
             ],
-            "time": "2015-12-09 19:35:44"
+            "time": "2015-12-10 14:48:13"
         },
         {
             "name": "psr/log",
@@ -951,6 +951,70 @@
                 "shell"
             ],
             "time": "2015-11-12 16:18:56"
+        },
+        {
+            "name": "rcrowe/twigbridge",
+            "version": "v0.9.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rcrowe/TwigBridge.git",
+                "reference": "f875fa9457ebadf8f24b683b226848b660407f8f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/rcrowe/TwigBridge/zipball/f875fa9457ebadf8f24b683b226848b660407f8f",
+                "reference": "f875fa9457ebadf8f24b683b226848b660407f8f",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "5.0.*|5.1.*",
+                "illuminate/view": "5.0.*|5.1.*",
+                "php": ">=5.4.0",
+                "twig/twig": "~1.15|~2.0"
+            },
+            "require-dev": {
+                "laravel/framework": "5.0.*",
+                "mockery/mockery": "0.9.*",
+                "phpunit/phpunit": "~4.0",
+                "satooshi/php-coveralls": "~0.6",
+                "squizlabs/php_codesniffer": "~1.5"
+            },
+            "suggest": {
+                "laravelcollective/html": "For bringing back html/form in Laravel 5.x",
+                "twig/extensions": "~1.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.8-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "TwigBridge\\": "src",
+                    "TwigBridge\\Tests\\": "tests"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Barry vd. Heuvel",
+                    "email": "barryvdh@gmail.com"
+                },
+                {
+                    "name": "Rob Crowe",
+                    "email": "hello@vivalacrowe.com"
+                }
+            ],
+            "description": "Adds the power of Twig to Laravel",
+            "keywords": [
+                "laravel",
+                "twig"
+            ],
+            "time": "2015-11-02 17:37:16"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -1826,6 +1890,67 @@
                 "dump"
             ],
             "time": "2015-11-18 13:41:01"
+        },
+        {
+            "name": "twig/twig",
+            "version": "v1.23.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/twigphp/Twig.git",
+                "reference": "d9b6333ae8dd2c8e3fd256e127548def0bc614c6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/d9b6333ae8dd2c8e3fd256e127548def0bc614c6",
+                "reference": "d9b6333ae8dd2c8e3fd256e127548def0bc614c6",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.7"
+            },
+            "require-dev": {
+                "symfony/debug": "~2.7",
+                "symfony/phpunit-bridge": "~2.7"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.23-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Twig_": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com",
+                    "homepage": "http://fabien.potencier.org",
+                    "role": "Lead Developer"
+                },
+                {
+                    "name": "Armin Ronacher",
+                    "email": "armin.ronacher@active-4.com",
+                    "role": "Project Founder"
+                },
+                {
+                    "name": "Twig Team",
+                    "homepage": "http://twig.sensiolabs.org/contributors",
+                    "role": "Contributors"
+                }
+            ],
+            "description": "Twig, the flexible, fast, and secure template language for PHP",
+            "homepage": "http://twig.sensiolabs.org",
+            "keywords": [
+                "templating"
+            ],
+            "time": "2015-11-05 12:49:06"
         },
         {
             "name": "vlucas/phpdotenv",
@@ -3053,22 +3178,25 @@
         },
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "2.4.0",
+            "version": "2.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "32a879f4f35019d78d568db2885d7779ca084a33"
+                "reference": "e4fb41d5d0387d556e2c25534d630b3cce90ea67"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/32a879f4f35019d78d568db2885d7779ca084a33",
-                "reference": "32a879f4f35019d78d568db2885d7779ca084a33",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/e4fb41d5d0387d556e2c25534d630b3cce90ea67",
+                "reference": "e4fb41d5d0387d556e2c25534d630b3cce90ea67",
                 "shasum": ""
             },
             "require": {
                 "ext-tokenizer": "*",
                 "ext-xmlwriter": "*",
                 "php": ">=5.1.2"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0"
             },
             "bin": [
                 "scripts/phpcs",
@@ -3123,7 +3251,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2015-11-23 21:30:59"
+            "time": "2015-12-11 00:12:46"
         },
         {
             "name": "symfony/yaml",

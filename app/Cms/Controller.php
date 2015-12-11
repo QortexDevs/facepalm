@@ -10,6 +10,8 @@ namespace App\Cms;
 
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Config\Repository;
+use Illuminate\View\View;
+use TwigBridge\Facade\Twig;
 
 class Controller extends BaseController
 {
@@ -103,7 +105,8 @@ class Controller extends BaseController
     protected function showObjectsList()
     {
         $list = new CmsList($this->config->part('module'));
-        dd($list->display());
+        $listData = $list->display();
+        return Twig::render('listPage');
     }
 
 }

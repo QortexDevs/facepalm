@@ -233,7 +233,7 @@ echo
 echo -e "${lightblue}TESTS${NC}"
 echo
 
-./vendor/bin/phpunit --colors=always
+php vendor/phpunit/phpunit/phpunit --colors=always
 RETVAL=$?
 
 exit $RETVAL

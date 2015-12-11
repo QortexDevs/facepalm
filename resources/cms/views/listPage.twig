@@ -1,0 +1,6 @@
+{% extends "base.twig" %}
+
+	{% block moduleContent %}
+		<h1>{{ moduleConfig.strings['title'] ?: 'Список объектов' }}</h1>
+		{% include "components/list/container.twig" %}
+	{% endblock moduleContent %}
