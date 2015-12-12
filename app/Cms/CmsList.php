@@ -75,7 +75,7 @@ class CmsList
             ->toggleIdColumn($config->get('list.showId') !== false)
             ->toggleStatusButtonColumn($config->get('list.showStatus') !== false)
             ->toggleDeleteButtonColumn($config->get('list.showDelete') !== false)
-            ->toggleEditButtonColumn($config->get('list.showEdit') !== false);
+            ->toggleEditButtonColumn($config->get('list.showEdit') == true);
 
         return $this;
     }

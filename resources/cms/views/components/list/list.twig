@@ -1,53 +1,59 @@
 <table>
-	<thead>
-	<tr>
-		<th>ID</th>
-		{% for column, columnInfo in columns %}
-			<th>
-				{{ columnInfo.title }}
-			</th>
-		{% endfor %}
-		{% if listConfig.editButton %}
-			<th class="buttons"></th>
-		{% endif %}
-		{% if listConfig.status %}
-			<th class="buttons"></th>
-		{% endif %}
-		<th class="buttons"></th>
-	</tr>
-	</thead>
-	<tbody>
-	{% for object in objects %}
-		<tr {% if listConfig.status and not object[listConfig.status] %}class="inactive"{% endif %} data-id="{{ object.identifier }}">
-			<td><a href='./{{ object.identifier }}/'>{{ object.identifier }}</a></td>
-			{% for column, columnInfo in columns %}
-				<td>
-					{% if columnInfo.type == 'text' %}
-						{{ object[column]|slice(0, 20) }}
-					{% elseif columnInfo.type == 'select' %}
-						{{ columnInfo['options'][object[column]] }}
-					{% elseif columnInfo.type == 'date' %}
-						{{ object[column]=='0000-01-01 00:00:00'?'':object[column]|date('d.m.Y') }}
-					{% else %}
-						<a href='./{{ object.identifier }}/'>{{ attribute(object, column) }}</a>
-					{% endif %}
-				</td>
-			{% endfor %}
-			{% if listConfig.editButton %}
-				<td class="buttons">
-					<a class="edit button fa fa-pencil" href="./{{ object.identifier }}/{{ listConfig.editButton }}/"></a>
-				</td>
-			{% endif %}
-			{% if listConfig.status %}
-				<td class="buttons">
-					<button class="status fa fa-lightbulb-o"></button>
-				</td>
-			{% endif %}
-			<td class="buttons">
-				<button class="delete fa fa-times"></button>
-			</td>
-		</tr>
-	{% endfor %}
-	</tbody>
+    <thead>
+    <tr>
+        <th>ID</th>
+        {% for column, columnInfo in list.meta.columns %}
+            <th>
+                {{ columnInfo.title }}
+            </th>
+        {% endfor %}
+        {% if list.settings.showEditButton %}
+            <th class="buttons"></th>
+        {% endif %}
+        {% if list.settings.showStatusButton %}
+            <th class="buttons"></th>
+        {% endif %}
+        {% if list.settings.showDeleteButton %}
+            <th class="buttons"></th>
+        {% endif %}
+    </tr>
+    </thead>
+    <tbody>
+    {% for object in list.rows %}
+        <tr {% if list.settings.showStatusButton and not object['status'] %}class="inactive"{% endif %}
+            data-id="{{ object.id }}">
+            <td><a href='./{{ object.id }}/'>{{ object.id }}</a></td>
+            {% for column, columnInfo in list.meta.columns %}
+                <td>
+                    {% if columnInfo.type == 'text' %}
+                        {{ object[column]|slice(0, 20) }}
+                    {% elseif columnInfo.type == 'select' %}
+                        {{ columnInfo['options'][object[column]] }}
+                    {% elseif columnInfo.type == 'date' %}
+                        {{ object[column]=='0000-01-01 00:00:00'?'':object[column]|date('d.m.Y') }}
+                    {% else %}
+                        <a href='./{{ object.id }}/'>{{ object[column] }}</a>
+                    {% endif %}
+                </td>
+            {% endfor %}
+            {# todo: custom url for edit #}
+            {% if list.settings.showEditButton %}
+                <td class="buttons">
+                    <a class="edit button fa fa-pencil" href="./{{ object.id }}/edit/"></a>
+                </td>
+            {% endif %}
+            {% if list.settings.showStatusButton %}
+                <td class="buttons">
+                    <button class="status fa fa-lightbulb-o"></button>
+                </td>
+            {% endif %}
+            {% if list.settings.showDeleteButton %}
+                <td class="buttons">
+                    <button class="delete fa fa-times"></button>
+                </td>
+            {% endif %}
+        </tr>
+    {% endfor %}
+    </tbody>
 
 </table>

@@ -106,7 +106,14 @@ class Controller extends BaseController
     {
         $list = new CmsList($this->config->part('module'));
         $listData = $list->display();
-        return Twig::render('listPage');
+        $params = [
+            'cmsStructure' => $this->config->get('structure'),
+            'currentPathSections' => [$this->group, $this->module],
+            'list' => $listData
+        ];
+
+
+        return Twig::render('listPage', $params);
     }
 
 }
