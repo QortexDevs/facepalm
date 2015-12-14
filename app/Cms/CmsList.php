@@ -42,6 +42,7 @@ class CmsList
     const COLUMN_TYPE_DEFAULT = self::COLUMN_TYPE_STRING;
 
     const COLUMN_NAME_ID = 'id';
+    const COLUMN_NAME_STATUS = 'status';
 
     // todo: нцжна вьюшка со списком и параметром, отображать ли кнопку добавления.
     // todo: Подумать про массовые операции
@@ -218,7 +219,8 @@ class CmsList
         /** @var Model $object */
         foreach ($objects as $object) {
             $row = [
-                self::COLUMN_NAME_ID => $object->id
+                self::COLUMN_NAME_ID => $object->id,
+                self::COLUMN_NAME_STATUS => $object->status
             ];
             foreach ($this->columns as $columnName => $column) {
                 if ($this->isRelationColumn($columnName)) {

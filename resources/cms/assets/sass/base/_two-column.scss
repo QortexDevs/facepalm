@@ -45,7 +45,7 @@ $secondLeftMenuWidth: 250px;
 				&.active {
 					> a {
 						background: inherit;
-						color: #ea5a5a;
+						color: $mainThemeColor;
 					}
 				}
 			}
