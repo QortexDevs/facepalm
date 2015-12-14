@@ -7,13 +7,13 @@
 //= ../../../../bower_components/underscore.string/dist/underscore.string.js
 
 $(document).ready(function () {
+
+
     $(document).on('click', '.cms-module-list-content button.status', function () {
         var $tr = $(this).closest('tr[data-id]');
         var id = $tr.data('id');
         var model = $(this).closest('table[data-model]').data('model');
-        var payload = new Object();
-        payload.setWithPath(['toggle', model, id, 'status'], 1);
-        payload = appendCsrfToken(payload);
+        var payload = _.extend({}.setWithPath(['toggle', model, id, 'status'], 1), appendCsrfToken());
         $.post('./', payload, 'json').done(function (result) {
             $tr.toggleClass('inactive', !result);
         });
@@ -21,9 +21,8 @@ $(document).ready(function () {
     });
 });
 
-function appendCsrfToken(payload) {
-    payload['_token'] = $('input:hidden[name=_token]').val();
-    return payload
+function appendCsrfToken() {
+    return {'_token': $('input:hidden[name=_token]').val()};
 }
 
 
