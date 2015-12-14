@@ -14,12 +14,9 @@
         "tests"
     ],
     "dependencies": {
-        "buzz": "~1.1.10",
-        "fancybox": "*",
-        "growl": "~1.2.7",
-        "jquery": "1.9.*",
-        "sweetalert": "~1.0.1",
-        "underscore": "*",
-        "underscore.string": "~3.2.2"
+        "jquery": "~2.1.*",
+        "sweetalert": "~1.1.*",
+        "underscore": "~1.5.*",
+        "underscore.string": "~3.2.*"
     }
 }

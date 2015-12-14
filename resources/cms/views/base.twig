@@ -11,9 +11,7 @@
     <link rel="stylesheet" href="/assets/build/cms/css/main.css"/>
     {% block cssFile %}{% endblock %}
 
-    <script>window.FileAPI = {staticPath: ''};</script>
-    <script src="/build/cms/scripts/all.js"></script>
-    {% block jsFile %}{% endblock %}
+    <script></script>
 
 </head>
 {% block bodyOuter %}
@@ -56,5 +54,8 @@
     </main>
     </body>
 {% endblock bodyOuter %}
-<div id="ohsnap"></div>
+{#<div id="ohsnap"></div>#}
+<script src="/assets/build/cms/js/all.js"></script>
+{% block jsFile %}{% endblock %}
+
 </html>

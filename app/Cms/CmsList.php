@@ -24,7 +24,6 @@ use Illuminate\Contracts\Config\Repository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use Mockery\Exception;
 
 class CmsList
 {
@@ -180,6 +179,7 @@ class CmsList
     /**
      * @param $modelName
      * @return $this
+     * @throws \Exception
      */
     public function setMainModel($modelName)
     {
@@ -189,7 +189,7 @@ class CmsList
         if (class_exists($modelName)) {
             $this->modelName = $modelName;
         } else {
-            throw new Exception('Cannot find class ' . $modelName);
+            throw new \Exception('Cannot find class ' . $modelName);
         }
         return $this;
     }

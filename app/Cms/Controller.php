@@ -8,9 +8,10 @@
 
 namespace App\Cms;
 
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Config\Repository;
-use Illuminate\View\View;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use TwigBridge\Facade\Twig;
 
 class Controller extends BaseController
@@ -35,19 +36,24 @@ class Controller extends BaseController
     /** @var  integer */
     protected $action;
 
+    /** @var  Request */
+    protected $request;
+
 
     /**
      * Get module
      *
+     * @param Request $request
      * @param $group
      * @param $module
      * @param null $params
      * @return \Illuminate\Http\JsonResponse
      */
-    public function module($group = null, $module = null, $params = null)
+    public function module(Request $request, $group = null, $module = null, $params = null)
     {
         $this->group = $group;
         $this->module = $module;
+        $this->request = $request;
 
         $this->config = (new Config())->load($group, $module);
         if ($group && $module && !$this->config->get('module')) {
@@ -64,6 +70,7 @@ class Controller extends BaseController
                 return $this->get();
                 break;
             case 'POST':
+                return $this->post();
                 break;
             case 'DELETE':
                 break;
@@ -102,6 +109,48 @@ class Controller extends BaseController
         }
     }
 
+    /**
+     * toggle[model][id][field]=..
+     * save[model][id][field]=..
+     * add[model][][field]=..
+     *
+     * todo: вынести все эти ебические циклы в общий алгоритм, куда просто передавать колбэк
+     */
+    protected function post()
+    {
+        $input = $this->request->all();
+        $countOfSets = 0;
+        if (Arr::has($input, 'toggle')) {
+            $toggleResult = [];
+            foreach ($input['toggle'] as $modelName => $data) {
+                $fullModelName = 'App\Models\\' . Str::studly($modelName);
+                if (!class_exists($fullModelName)) {
+                    throw new \Exception('Cannot find class ' . $fullModelName);
+                }
+                if (is_array($data)) {
+                    foreach ($data as $id => $keyValue) {
+                        $object = call_user_func([$fullModelName, 'find'], $id);
+                        if ($object) {
+                            foreach (array_keys($keyValue) as $fieldName) {
+                                $countOfSets++;
+                                $object->$fieldName ^= 1;
+                                $toggleResult[$modelName][$id][$fieldName] = $object->$fieldName;
+                            }
+                            $object->save();
+                        }
+                    }
+                }
+            }
+            if ($countOfSets == 1) {
+                // адская конструкция для доступа к конкретному единственному значению многомерного массива
+                $singleElementFieldValue = array_values(array_values(array_values($toggleResult)[0])[0])[0];
+                return response()->json($singleElementFieldValue);
+            } else {
+                return response()->json($toggleResult);
+            }
+        }
+    }
+
     protected function showObjectsList()
     {
         $list = new CmsList($this->config->part('module'));
@@ -109,7 +158,7 @@ class Controller extends BaseController
         $params = [
             'cmsStructure' => $this->config->get('structure'),
             'currentPathSections' => [$this->group, $this->module],
-            'list' => $listData
+            'list' => $listData,
         ];
 
 
