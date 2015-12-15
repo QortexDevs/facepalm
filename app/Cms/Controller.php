@@ -159,6 +159,7 @@ class Controller extends BaseController
             'cmsStructure' => $this->config->get('structure'),
             'currentPathSections' => [$this->group, $this->module],
             'list' => $listData,
+            'moduleConfig' => $this->config->get('module'),
         ];
 
 

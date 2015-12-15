@@ -1,6 +1,4 @@
 {% extends "base.twig" %}
 	{% block moduleContent %}
-		{{ csrf_field() }}
-		<h1>{{ moduleConfig.strings['title'] ?: 'Список объектов' }}</h1>
-		{% include "components/list/container.twig" %}
-	{% endblock moduleContent %}
+        {% include "components/list/container.twig" %}
+    {% endblock moduleContent %}

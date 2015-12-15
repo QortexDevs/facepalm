@@ -14,9 +14,13 @@
     <body class="cms-page">
     {% include 'menu.twig' %}
     <main>
+        {{ csrf_field() }}
         {% block moduleContentOuter %}
             <div class="top-bar">
-
+                <h1>{{ moduleConfig.strings['title'] ?: 'Список объектов' }}</h1>
+                <div class="right">
+                    <i class="fa fa-user"></i>
+                </div>
             </div>
             <div class="module-content">
                 {% block moduleContent %}

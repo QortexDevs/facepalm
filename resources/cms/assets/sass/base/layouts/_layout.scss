@@ -9,15 +9,33 @@
         .top-bar {
             background: $topBarBackgroundColor;
             height: 57px;
+            padding: 0 10px 0 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+
+            h1 {
+                font: 100 30px/40px 'Lato';
+                margin-bottom: 5px;
+                color: white;
+            }
+
+            .right {
+                i {
+                    opacity:0.8;
+                    font-size: 20px;
+                    border: 1px solid rgba(255, 255, 255, 0.4);
+                    background: rgba(0,0,0,0.1);
+                    padding: 7px 10px;
+                    border-radius: 50px;
+                }
+            }
         }
 
         .module-content {
             padding: 20px 50px;
 
-            h1 {
-                font: 100 36px/40px 'Lato';
-                margin-bottom: 30px;
-            }
             h2 {
                 font: 400 24px/28px Cuprum;
                 margin-bottom: 15px;
