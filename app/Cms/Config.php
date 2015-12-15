@@ -6,7 +6,7 @@
  * Time: 19:53
  */
 
-namespace app\Cms;
+namespace App\Cms;
 
 use Illuminate\Config\Repository;
 
@@ -24,8 +24,10 @@ class Config
     {
         $this->configRepository = new Repository($this->loadConfig(self::DEFAULT_CONFIG_NAME));
         if ($group && $module) {
-            $this->configRepository->set('module',
-                $this->loadConfig(self::MODULES_CONFIGS_FOLDER . DIRECTORY_SEPARATOR . $group . DIRECTORY_SEPARATOR . $module . '.json'));
+            $this->configRepository->set(
+                'module',
+                $this->loadConfig(self::MODULES_CONFIGS_FOLDER . DIRECTORY_SEPARATOR . $group . DIRECTORY_SEPARATOR . $module . '.json')
+            );
         }
         return $this;
     }

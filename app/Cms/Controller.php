@@ -100,9 +100,10 @@ class Controller extends BaseController
     {
         switch ($this->action) {
             case self::ACTION_LIST_OBJECTS:
-                return $this->showObjectsList();
+                return $this->showObjectsListPage();
                 break;
             case self::ACTION_EDIT_OBJECT:
+                return $this->showEditObjectFormPage();
                 break;
             case self::ACTION_CREATE_OBJECT:
                 break;
@@ -151,19 +152,39 @@ class Controller extends BaseController
         }
     }
 
-    protected function showObjectsList()
+    protected function showObjectsListPage()
     {
         $list = new CmsList($this->config->part('module'));
         $listData = $list->display();
         $params = [
-            'cmsStructure' => $this->config->get('structure'),
-            'currentPathSections' => [$this->group, $this->module],
             'list' => $listData,
-            'moduleConfig' => $this->config->get('module'),
         ];
 
 
-        return Twig::render('listPage', $params);
+        return $this->renderPage('listPage', $params);
+    }
+
+    protected function showEditObjectFormPage()
+    {
+        $form = new CmsForm($this->config->part('module'));
+        $formData = $form->display();
+        $params = [
+            'list' => $formData,
+        ];
+
+
+        return $this->renderPage('listPage', $params);
+    }
+
+    protected function renderPage($template, $params)
+    {
+        $params = array_merge($params, [
+            'currentPathSections' => [$this->group, $this->module],
+            'cmsStructure' => $this->config->get('structure'),
+            'moduleConfig' => $this->config->get('module'),
+        ]);
+        return Twig::render($template, $params);
+
     }
 
 }

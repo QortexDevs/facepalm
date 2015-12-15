@@ -1,23 +1,6 @@
 <?php
-/**
- *
- * Вариант создания из кода
- * $list = (new CmsList())
- * ->setColumns([
- * 'name' => ['title' => 'ФИО'],
- * 'email' => 1,
- * 'updated_at' => ['type' => CmsList::COLUMN_TYPE_DATETIME],
- * 'role.name' => 1
- * ], [
- * 'Имя',
- * 'Email',
- * 'updated_at',
- * 'Роль'
- * ])
- * ->setMainModel('User'); *
- */
 
-namespace app\Cms;
+namespace App\Cms;
 
 use Carbon\Carbon;
 use Illuminate\Contracts\Config\Repository;
@@ -25,24 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
-class CmsList
+class CmsList extends CmsComponent
 {
-    //todo: вынести отсюда в общий админский класс
-    const COLUMN_TYPE_STRING = 1;
-    const COLUMN_TYPE_ID = 2;
-    const COLUMN_TYPE_DATE = 3;
-    const COLUMN_TYPE_DATETIME = 4;
-    const COLUMN_TYPE_TEXT = 5;
-    const COLUMN_TYPE_DICTIONARY = 6;
-    const COLUMN_TYPE_RELATED = 7;
-    const COLUMN_TYPE_RELATED_MULTIPLE = 8;
-    const COLUMN_TYPE_ACTION_BUTTON = 9;
-
-    const COLUMN_TYPE_DEFAULT = self::COLUMN_TYPE_STRING;
-
-    const COLUMN_NAME_ID = 'id';
-    const COLUMN_NAME_STATUS = 'status';
-
     // todo: нцжна вьюшка со списком и параметром, отображать ли кнопку добавления.
     // todo: Подумать про массовые операции
     // todo: пейджер и фильтр
@@ -53,16 +20,9 @@ class CmsList
     protected $showStatusButton = true;
     protected $showDeleteButton = true;
     protected $showEditButton = false;
-    protected $modelName = null;
 
     protected $relatedModels = [];
 
-    public function __construct($config = null)
-    {
-        if ($config) {
-            $this->buildFromConfig($config);
-        }
-    }
 
     /**
      * @param Repository $config
@@ -88,51 +48,10 @@ class CmsList
      */
     public function setColumns($columns, $titles = null)
     {
-        if (!$columns) {
-            return $this;
-        }
-        if (!is_array($columns)) {
-            $columns = (array)$columns;
-        }
-        if (count($columns)) {
-            if (!Arr::isAssoc($columns)) {
-                if (!is_array($columns[0])) {
-                    $columns = array_flip($columns);
-                }
-            }
-            $counter = 0;
-            foreach ($columns as $columnName => $column) {
-                if (!is_array($column)) {
-                    $column = (array)$column;
-                }
-                if (Arr::has($column, 'name')) {
-                    $columnName = $column['name'];
-                }
-                if (is_array($titles)) {
-                    if (!Arr::has($column, 'title') || !$column['title']) {
-                        if (Arr::isAssoc($titles)) {
-                            if (Arr::has($titles, $columnName)) {
-                                $column['title'] = $titles[$columnName];
-                            }
-                        } else {
-                            if (Arr::has($titles, $counter)) {
-                                $column['title'] = $titles[$counter];
-                            }
-                        }
-                    }
-                }
-                if (!Arr::has($column, 'type') || !$column['type']) {
-                    $column['type'] = self::COLUMN_TYPE_DEFAULT;
-                }
+        $processed = CmsCommon::processFieldsList($columns, $titles);
+        $this->columns = $processed['fields'];
+        $this->relatedModels = $processed['relatedModels'];
 
-                $this->columns[$columnName] = $column;
-                if ($this->isRelationColumn($columnName)) {
-                    $this->relatedModels[] = explode('.', $columnName)[0];
-                }
-                $counter++;
-
-            }
-        }
         return $this;
     }
 
@@ -176,23 +95,6 @@ class CmsList
         return $this;
     }
 
-    /**
-     * @param $modelName
-     * @return $this
-     * @throws \Exception
-     */
-    public function setMainModel($modelName)
-    {
-        if ($modelName) {
-            $modelName = 'App\Models\\' . Str::studly($modelName);
-        }
-        if (class_exists($modelName)) {
-            $this->modelName = $modelName;
-        } else {
-            throw new \Exception('Cannot find class ' . $modelName);
-        }
-        return $this;
-    }
 
     /**
      * @return array
@@ -219,11 +121,11 @@ class CmsList
         /** @var Model $object */
         foreach ($objects as $object) {
             $row = [
-                self::COLUMN_NAME_ID => $object->id,
-                self::COLUMN_NAME_STATUS => $object->status
+                CmsCommon::COLUMN_NAME_ID => $object->id,
+                CmsCommon::COLUMN_NAME_STATUS => $object->status
             ];
             foreach ($this->columns as $columnName => $column) {
-                if ($this->isRelationColumn($columnName)) {
+                if (CmsCommon::isRelationColumn($columnName)) {
                     // todo: refactor this. Store this explodes in inner fields;
                     $path = explode('.', $columnName);
                     if ($object->{$path[0]}) {
@@ -256,14 +158,7 @@ class CmsList
         return $output;
     }
 
-    /**
-     * @param $columnName
-     * @return bool
-     */
-    protected function isRelationColumn($columnName)
-    {
-        return Str::contains($columnName, '.');
-    }
+
 
 
     /**
@@ -274,13 +169,13 @@ class CmsList
     protected function formatColumn($value, $column)
     {
         switch ($column['type']) {
-            case self::COLUMN_TYPE_DATETIME:
+            case CmsCommon::COLUMN_TYPE_DATETIME:
                 return $this->formatDatetime($value);
                 break;
-            case self::COLUMN_TYPE_DATE:
+            case CmsCommon::COLUMN_TYPE_DATE:
                 return $this->formatDate($value);
                 break;
-            case self::COLUMN_TYPE_TEXT:
+            case CmsCommon::COLUMN_TYPE_TEXT:
                 return $this->formatText($value);
                 break;
             default:

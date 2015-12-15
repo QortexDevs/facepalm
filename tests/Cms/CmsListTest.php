@@ -1,6 +1,7 @@
 <?php
 namespace Tests;
 
+use App\Cms\CmsCommon;
 use App\Cms\CmsList;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -170,7 +171,7 @@ class CmsListTest extends TestCase
         $this->assertArrayHasKey('name', $result['meta']['columns']);
         $this->assertEquals('E-mail', $result['meta']['columns']['email']['title']);
         $this->assertEquals('Name', $result['meta']['columns']['name']['title']);
-        $this->assertEquals(CmsList::COLUMN_TYPE_DEFAULT, $result['meta']['columns']['name']['type']);
+        $this->assertEquals(CmsCommon::COLUMN_TYPE_DEFAULT, $result['meta']['columns']['name']['type']);
         $this->assertArrayHasKey('id', $result['rows'][0]);
         $this->assertArrayHasKey('email', $result['rows'][0]);
         $this->assertArrayHasKey('name', $result['rows'][0]);
@@ -317,13 +318,13 @@ class CmsListTest extends TestCase
                 'email' => [
                 ],
                 'name' => [
-                    'type'=>CmsList::COLUMN_TYPE_TEXT
+                    'type'=>CmsCommon::COLUMN_TYPE_TEXT
                 ],
             ])
             ->display();
 
-        $this->assertEquals(CmsList::COLUMN_TYPE_DEFAULT, $result['meta']['columns']['email']['type']);
-        $this->assertEquals(CmsList::COLUMN_TYPE_TEXT, $result['meta']['columns']['name']['type']);
+        $this->assertEquals(CmsCommon::COLUMN_TYPE_DEFAULT, $result['meta']['columns']['email']['type']);
+        $this->assertEquals(CmsCommon::COLUMN_TYPE_TEXT, $result['meta']['columns']['name']['type']);
     }
 
 
