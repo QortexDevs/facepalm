@@ -13,7 +13,7 @@ $(document).ready(function () {
         var $tr = $(this).closest('tr[data-id]');
         var id = $tr.data('id');
         var model = $(this).closest('table[data-model]').data('model');
-        var payload = _.extend({}.setWithPath(['toggle', model, id, 'status'], 1), appendCsrfToken());
+        var payload = _.extend({}.setWithPath(['toggle', model, id, 'status'], 1), getCsrfTokenParameter());
         $.post('./', payload, 'json').done(function (result) {
             $tr.toggleClass('inactive', !result);
         });
@@ -21,7 +21,7 @@ $(document).ready(function () {
     });
 });
 
-function appendCsrfToken() {
+function getCsrfTokenParameter() {
     return {'_token': $('input:hidden[name=_token]').val()};
 }
 

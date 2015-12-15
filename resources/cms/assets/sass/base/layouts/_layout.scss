@@ -1,0 +1,28 @@
+
+.cms-page {
+    display: flex;
+    flex-direction: column;
+
+    main {
+        margin-left: $leftMenuWidth;
+
+        .top-bar {
+            background: $topBarBackgroundColor;
+            height: 57px;
+        }
+
+        .module-content {
+            padding: 20px 50px;
+
+            h1 {
+                font: 100 36px/40px 'Lato';
+                margin-bottom: 30px;
+            }
+            h2 {
+                font: 400 24px/28px Cuprum;
+                margin-bottom: 15px;
+            }
+        }
+    }
+}
+

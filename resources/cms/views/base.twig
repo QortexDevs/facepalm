@@ -2,11 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="utf-8"/>
-    <title>Eventfest: Facepalm CMS</title>
-    <link href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,700&subset=latin,cyrillic' rel='stylesheet'
-          type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Cuprum:400&subset=latin,cyrillic' rel='stylesheet'
-          type='text/css'>
+    <title>Facepalm CMS</title>
     <link rel="stylesheet" href="/assets/build/cms/css/vendor.css"/>
     <link rel="stylesheet" href="/assets/build/cms/css/main.css"/>
     {% block cssFile %}{% endblock %}
@@ -16,36 +12,12 @@
 </head>
 {% block bodyOuter %}
     <body class="cms-page">
-    <menu {% if cmsStructure[currentPathSections[0]].sections %}class="has-sub-menu"{% endif %}>
-        <div class="logo-bar">
-            <a href="/cms/" class="logo" title="Facepalm CMS"></a>
-        </div>
-        <ul class="top-menu clearfix">
-            {% for sectionName, sectionInfo in cmsStructure %}
-                <li{% if currentPathSections[0] == sectionName %} class="active"{% endif %}>
-                    <a href="/cms/{{ sectionName }}/">
-                        {% if sectionInfo.icon %}<i class="fa fa-fw fa-{{ sectionInfo.icon }}"></i>{% endif %}
-                        {{ sectionInfo.title }}
-                    </a>
-                    {% if sectionName == currentPathSections[0] %}
-                        {% if cmsStructure[currentPathSections[0]].sections %}
-                            <ul class="sub-menu clearfix">
-                                {% for subSectionName, subSectionInfo in cmsStructure[currentPathSections[0]].sections %}
-                                    <li {% if currentPathSections[1] == subSectionName %}class="active"{% endif %} >
-                                        <a href="/cms/{{ currentPathSections[0] }}/{{ subSectionName }}/">
-                                            {{ subSectionInfo.title }}
-                                        </a>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
-                    {% endif %}
-                </li>
-            {% endfor %}
-        </ul>
-    </menu>
+    {% include 'menu.twig' %}
     <main>
         {% block moduleContentOuter %}
+            <div class="top-bar">
+
+            </div>
             <div class="module-content">
                 {% block moduleContent %}
                 {% endblock moduleContent %}
