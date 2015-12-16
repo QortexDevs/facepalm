@@ -13,7 +13,7 @@ class CmsCommon
     const COLUMN_TYPE_DATETIME = 'datetime';
     const COLUMN_TYPE_TEXT = 'text';
     const COLUMN_TYPE_DICTIONARY = 'dictionary';
-    const COLUMN_TYPE_RELATED = 'relation';
+    const COLUMN_TYPE_RELATION = 'relation';
     const COLUMN_TYPE_ACTION_BUTTON = 'button';
 
     const COLUMN_TYPE_DEFAULT = self::COLUMN_TYPE_STRING;
@@ -30,6 +30,28 @@ class CmsCommon
         return Str::contains($columnName, '.');
     }
 
+
+    /**
+     * @param $modelName
+     * @return null|string
+     */
+    public static function getFullModelClassName($modelName)
+    {
+        if ($modelName) {
+            $modelName = 'App\Models\\' . Str::studly($modelName);
+        }
+        if (class_exists($modelName)) {
+            return $modelName;
+        }
+
+        return null;
+    }
+
+    /**
+     * @param $fields
+     * @param $titles
+     * @return array
+     */
     public static function processFieldsList($fields, $titles)
     {
         $output = [
@@ -69,15 +91,19 @@ class CmsCommon
                         }
                     }
                 }
+
+                if (self::isRelationColumn($columnName)) {
+                    $column['type'] = CmsCommon::COLUMN_TYPE_RELATION;
+                    $column['foreignModel'] = explode('.', $columnName)[0];
+                    $column['foreignDisplayName'] = explode('.', $columnName)[1];
+                    $output['relatedModels'][] = $column['foreignModel'];
+                }
+
                 if (!Arr::has($column, 'type') || !$column['type']) {
                     $column['type'] = CmsCommon::COLUMN_TYPE_DEFAULT;
                 }
 
                 $output['fields'][$columnName] = $column;
-                if (self::isRelationColumn($columnName)) {
-                    $output['relatedModels'][] = explode('.', $columnName)[0];
-                }
-
                 $counter++;
             }
         }

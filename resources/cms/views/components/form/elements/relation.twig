@@ -1,0 +1,12 @@
+{# !!!!! todo: правильный field_name, а также правильный при проверки выделенности !!!!!!!! #}
+<select class="text" name="{{ form.meta.fieldNameBase }}[{{ field }}]">
+    {% if not fieldParams.noEmpty %}
+        <option></option>
+    {% endif %}
+    {% for id,name in fieldParams.dictionary %}
+        {#form.object.__get(field)#}
+        <option value="{{ id }}" {% if id in fieldParams.bindedItems %}selected{% endif %}>
+            {{ name }}
+        </option>
+    {% endfor %}
+</select>

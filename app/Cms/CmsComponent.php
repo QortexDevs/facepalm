@@ -22,14 +22,14 @@ class CmsComponent
      */
     public function setMainModel($modelName)
     {
+        $modelName = CmsCommon::getFullModelClassName($modelName);
+
         if ($modelName) {
-            $modelName = 'App\Models\\' . Str::studly($modelName);
-        }
-        if (class_exists($modelName)) {
             $this->modelName = $modelName;
         } else {
             throw new \Exception('Cannot find class ' . $modelName);
         }
+        
         return $this;
     }
 }

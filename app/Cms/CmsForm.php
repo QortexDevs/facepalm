@@ -29,6 +29,7 @@ use Mockery\CountValidator\Exception;
 class CmsForm extends CmsComponent
 {
     protected $fields = [];
+    protected $relatedModels = [];
     protected $modelName = null;
     protected $editedObject = null;
 
@@ -48,6 +49,7 @@ class CmsForm extends CmsComponent
     {
         $processed = CmsCommon::processFieldsList($fields, $titles);
         $this->fields = $processed['fields'];
+        $this->relatedModels = $processed['relatedModels'];
 
         return $this;
     }
@@ -78,6 +80,26 @@ class CmsForm extends CmsComponent
         // get query builder with all records (dummy clause)
         if (!$this->modelName) {
             throw new \Exception('No model defined');
+        }
+
+        $relatedDictionaries = [];
+        if ($this->relatedModels) {
+            foreach ($this->relatedModels as $relatedModelName) {
+                //todo: add query conditions
+                $relatedDictionaries[$relatedModelName] = call_user_func([
+                    CmsCommon::getFullModelClassName($relatedModelName),
+                    'all'
+                ]);
+            }
+        }
+
+        foreach ($this->fields as $fieldName => $field) {
+            if ($field['type'] == CmsCommon::COLUMN_TYPE_RELATION) {
+                $this->fields[$fieldName]['dictionary'] = [];
+                foreach ($relatedDictionaries[$this->fields[$fieldName]['foreignModel']] as $item) {
+                    $this->fields[$fieldName]['dictionary'][$item->id] = $item->__get($this->fields[$fieldName]['foreignDisplayName']);
+                }
+            }
         }
 
         $output = [
