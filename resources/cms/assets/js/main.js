@@ -5,6 +5,8 @@
 //= ../../../../bower_components/jquery/dist/jquery.js
 //= ../../../../bower_components/underscore/underscore.js
 //= ../../../../bower_components/underscore.string/dist/underscore.string.js
+//= ../../../../bower_components/moment/moment.js
+//= ../../../../bower_components/pikaday-time/pikaday.js
 
 $(document).ready(function () {
 
@@ -19,6 +21,35 @@ $(document).ready(function () {
         });
 
     });
+
+    $('.datepicker').each(function () {
+        var options = {
+            field: $(this)[0],
+            theme: 'dark-theme',
+            format: 'DD.MM.YYYY HH:mm',
+            firstDay: 1,
+            i18n: {
+                previousMonth: 'Предыдущий месяц',
+                nextMonth: 'Следующий месяц',
+                months: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+                weekdays: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'],
+                weekdaysShort: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб']
+            }
+        };
+        if ($(this).is('.datetime')) {
+            options = _.extend(options, {
+                showTime: true,
+                showSeconds: false,
+                use24hour: true
+            })
+        }
+        var picker = new Pikaday(options);
+    });
+    $('.datepicker + .clear-date').on('click', function () {
+        $(this).prev().val('');
+    });
+
+
 });
 
 function getCsrfTokenParameter() {

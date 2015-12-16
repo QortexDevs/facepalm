@@ -1,0 +1,5 @@
+<label>
+    <input type="checkbox" name="{{ form.meta.fieldNameBase }}[{{ field }}]" value="1"
+           {% if form.object.__get(field) %}checked{% endif %} />
+    {{ fieldParams.title }}
+</label>

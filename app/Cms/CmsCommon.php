@@ -7,15 +7,14 @@ use Illuminate\Support\Str;
 
 class CmsCommon
 {
-    const COLUMN_TYPE_STRING = 1;
-    const COLUMN_TYPE_ID = 2;
-    const COLUMN_TYPE_DATE = 3;
-    const COLUMN_TYPE_DATETIME = 4;
-    const COLUMN_TYPE_TEXT = 5;
-    const COLUMN_TYPE_DICTIONARY = 6;
-    const COLUMN_TYPE_RELATED = 7;
-    const COLUMN_TYPE_RELATED_MULTIPLE = 8;
-    const COLUMN_TYPE_ACTION_BUTTON = 9;
+    const COLUMN_TYPE_STRING = 'string';
+    const COLUMN_TYPE_ID = 'id';
+    const COLUMN_TYPE_DATE = 'date';
+    const COLUMN_TYPE_DATETIME = 'datetime';
+    const COLUMN_TYPE_TEXT = 'text';
+    const COLUMN_TYPE_DICTIONARY = 'dictionary';
+    const COLUMN_TYPE_RELATED = 'relation';
+    const COLUMN_TYPE_ACTION_BUTTON = 'button';
 
     const COLUMN_TYPE_DEFAULT = self::COLUMN_TYPE_STRING;
 

@@ -81,8 +81,9 @@ class Controller extends BaseController
 
     protected function processParameters($params)
     {
+        $params = explode('/', trim($params, '/ '));
         // todo: корректная обработка, если у нас добавляется уровень там (или не один)
-        if ($params == 'create') {
+        if ($params[0] == 'create') {
             $this->objectId = null;
             $this->action = self::ACTION_CREATE_OBJECT;
             array_shift($params);
@@ -158,6 +159,7 @@ class Controller extends BaseController
         $listData = $list->display();
         $params = [
             'list' => $listData,
+            'pageTitle' => $this->config->get('strings.title') ?: 'Список объектов'
         ];
 
 
@@ -166,14 +168,14 @@ class Controller extends BaseController
 
     protected function showEditObjectFormPage()
     {
-        $form = new CmsForm($this->config->part('module'));
+        $form = (new CmsForm($this->config->part('module')))->setEditedObject($this->objectId);
         $formData = $form->display();
         $params = [
-            'list' => $formData,
+            'form' => $formData,
+            'pageTitle' => $this->config->get('strings.editTitle') ?: 'Редактирование объекта'
         ];
 
-
-        return $this->renderPage('listPage', $params);
+        return $this->renderPage('formPage', $params);
     }
 
     protected function renderPage($template, $params)

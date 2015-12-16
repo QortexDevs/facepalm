@@ -10,6 +10,7 @@
     "require": {
         "php": ">=5.5.9",
         "laravel/framework": "5.1.*",
+        "twig/twig": "~1.23",
         "rcrowe/twigbridge": "0.9.x"
     },
     "require-dev": {

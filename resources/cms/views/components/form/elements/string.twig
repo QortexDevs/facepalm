@@ -1,0 +1,5 @@
+<input type="text" class="text"
+       name="{{ form.meta.fieldNameBase }}[{{ field }}]"
+       value="{{ form.object.__get(field) }}"
+       {% if fieldParams.width %}style="width: {{ fieldParams.width }}"{% endif %}
+/>

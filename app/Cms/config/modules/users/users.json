@@ -28,15 +28,21 @@
         "fields": {
             "email": true,
             "password": {
+                "type": "password",
                 "width": "200px"
             },
-            "type": {
-                "type": "select",
-                "noEmpty": true,
-                "options": {
-                    "50": "Администратор",
-                    "100": "Суперпользователь"
-                }
+            "role.name": {
+
+            },
+            "status": {
+                "type": "checkbox"
+            },
+            "updated_at": {
+                "type": "datetime"
+            },
+            "text": {
+                "type":"text",
+                "width": "500px"
             },
             "acl": {
                 "type": "custom",

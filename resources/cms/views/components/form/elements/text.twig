@@ -1,0 +1,4 @@
+<textarea name="{{ form.meta.fieldNameBase }}[{{ field }}]"
+          style="{% if fieldParams.width %}width:{{ fieldParams.width }}; {% endif %}
+                  {% if fieldParams.height %}height:{{ fieldParams.height }}; {% endif %}"
+>{{ form.object.__get(field) }}</textarea>

@@ -1,0 +1,35 @@
+<div class="cms-module-form">
+    <form id="SaveForm" action="./" enctype="multipart/form-data" method="post">
+        <input style="display:none" type="text" name="fakeusernameremembered"/>
+        <input style="display:none" type="password" name="fakepasswordremembered"/>
+        <table>
+            {% for field, fieldParams in form.meta.fields %}
+                <tr data-row-for-field="{{ field }}">
+                    <td class="caption">
+                        {% if fieldParams.type != 'checkbox' %}
+                            <div class="caption">{{ fieldParams.title }}</div>
+                        {% endif %}
+                    </td>
+                    <td class="field">
+                        {% if fieldParams.type == 'custom' %}
+                            {{ fieldParams.html|raw }}
+                        {% else %}
+                            {% include( [ 'components/form/elements/' ~  fieldParams.type ~ '.twig', 'components/form/elements/unknown.twig'] ) %}
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td></td>
+                <td>
+                    <div class="form-buttons">
+                        <input type="submit" value="Сохранить"/>
+                        {% autoescape false %}
+                            {{ additionalButtons }}
+                        {% endautoescape %}
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>

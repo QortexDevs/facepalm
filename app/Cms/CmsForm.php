@@ -17,18 +17,20 @@
  * ->setMainModel('User'); *
  */
 
-namespace app\Cms;
+namespace App\Cms;
 
 use Carbon\Carbon;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Mockery\CountValidator\Exception;
 
 class CmsForm extends CmsComponent
 {
     protected $fields = [];
     protected $modelName = null;
+    protected $editedObject = null;
 
 
     /**
@@ -37,9 +39,35 @@ class CmsForm extends CmsComponent
      */
     public function buildFromConfig($config)
     {
+        $this->setFields($config->get('form.fields'), $config->get('titles'))
+            ->setMainModel($config->get('model'));
         return $this;
     }
 
+    public function setFields($fields, $titles = null)
+    {
+        $processed = CmsCommon::processFieldsList($fields, $titles);
+        $this->fields = $processed['fields'];
+
+        return $this;
+    }
+
+    public function setEditedObject($object)
+    {
+        if ($object) {
+            if ($object instanceof $this->modelName) {
+                $this->editedObject = $object;
+            } elseif ((int)$object) {
+                if ($this->modelName) {
+                    $this->editedObject = call_user_func([$this->modelName, 'find'], $object);
+                    if (!$this->editedObject) {
+                        throw new Exception('Object with id:' . $object . ' not found');
+                    }
+                }
+            }
+        }
+        return $this;
+    }
 
     /**
      * @return array
@@ -53,8 +81,16 @@ class CmsForm extends CmsComponent
         }
 
         $output = [
-        ];
+            'settings' => [
+            ],
+            'meta' => [
+                'model' => class_basename($this->modelName),
+                'fields' => $this->fields,
+                'fieldNameBase' => 'save[' . class_basename($this->modelName) . '][' . $this->editedObject->id . ']'
+            ],
+            'object' => $this->editedObject
 
+        ];
         return $output;
     }
 
