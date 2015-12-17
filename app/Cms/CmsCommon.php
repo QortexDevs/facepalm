@@ -96,12 +96,13 @@ class CmsCommon
                     $column['type'] = CmsCommon::COLUMN_TYPE_RELATION;
                     $column['foreignModel'] = explode('.', $columnName)[0];
                     $column['foreignDisplayName'] = explode('.', $columnName)[1];
-                    if ($column['cardinality'] == 'many') {
+                    if (Arr::has($column, 'cardinality') && $column['cardinality'] == 'many') {
                         // todo: возможность переопределения
                         $column['collectionName'] = Str::snake($column['foreignModel']) . 's';
                     } else {
                         // todo: возможность переопределения
                         $column['foreignKey'] = Str::snake($column['foreignModel']) . '_id';
+                        $column['cardinality'] = 'one';
                     }
                     $output['relatedModels'][] = $column['foreignModel'];
 

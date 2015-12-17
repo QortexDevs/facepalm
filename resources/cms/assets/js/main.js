@@ -19,14 +19,18 @@ $(document).ready(function () {
         $.post('./', payload, 'json').done(function (result) {
             $tr.toggleClass('inactive', !result);
         });
-
+        return false;
+    });
+    $(document).on('click', '.add-new-item', function () {
+        document.location.href = $(this).data('base-url') + '/create/';
+        return false;
     });
 
     $('.datepicker').each(function () {
         var options = {
             field: $(this)[0],
             theme: 'dark-theme',
-            format: 'DD.MM.YYYY HH:mm',
+            format: 'DD.MM.YYYY',
             firstDay: 1,
             i18n: {
                 previousMonth: 'Предыдущий месяц',
@@ -38,6 +42,7 @@ $(document).ready(function () {
         };
         if ($(this).is('.datetime')) {
             options = _.extend(options, {
+                format: 'DD.MM.YYYY HH:mm',
                 showTime: true,
                 showSeconds: false,
                 use24hour: true

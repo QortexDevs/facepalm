@@ -37,6 +37,11 @@ class User extends Model implements AuthenticatableContract,
      */
     protected $hidden = ['password', 'remember_token'];
 
+    protected $casts = [
+        'status' => 'boolean',
+    ];
+//    protected $dateFormat = 'd.m.Y H:i:s';
+
     public function role()
     {
         return $this->belongsTo('App\Models\Role');

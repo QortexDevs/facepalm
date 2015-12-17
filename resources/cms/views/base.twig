@@ -14,19 +14,21 @@
     <body class="cms-page">
     {% include 'menu.twig' %}
     <main>
-        {{ csrf_field() }}
-        {% block moduleContentOuter %}
-            <div class="top-bar">
-                <h1>{{ pageTitle }}</h1>
-                <div class="right">
-                    <i class="fa fa-user"></i>
+        <form action="./" enctype="multipart/form-data" method="post">
+            {{ csrf_field() }}
+            {% block moduleContentOuter %}
+                <div class="top-bar">
+                    <h1>{{ pageTitle }}</h1>
+                    <div class="right">
+                        <i class="fa fa-user"></i>
+                    </div>
                 </div>
-            </div>
-            <div class="module-content">
-                {% block moduleContent %}
-                {% endblock moduleContent %}
-            </div>
-        {% endblock moduleContentOuter %}
+                <div class="module-content">
+                    {% block moduleContent %}
+                    {% endblock moduleContent %}
+                </div>
+            {% endblock moduleContentOuter %}
+        </form>
     </main>
     </body>
 {% endblock bodyOuter %}

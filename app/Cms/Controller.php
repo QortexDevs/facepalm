@@ -8,9 +8,12 @@
 
 namespace App\Cms;
 
+use Faker\Provider\tr_TR\DateTime;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Debug\Dumper;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
 use TwigBridge\Facade\Twig;
@@ -68,7 +71,7 @@ class Controller extends BaseController
         }
 
         //todo: сомнения в красоте
-        $this->config->set('module.baseUrl', '/cms/' . $group . '/' . $module . '/');
+        $this->config->set('module.baseUrl', '/cms/' . $group . '/' . $module);
 
         $this->parameters = $this->processParameters($params);
 
@@ -116,6 +119,7 @@ class Controller extends BaseController
                 return $this->showEditObjectFormPage();
                 break;
             case self::ACTION_CREATE_OBJECT:
+                return $this->showCreateObjectFormPage();
                 break;
         }
     }
@@ -160,6 +164,65 @@ class Controller extends BaseController
                 return response()->json($toggleResult);
             }
         }
+        if (Arr::has($input, 'create')) {
+            foreach ($input['create'] as $modelName => $data) {
+                $fullModelName = 'App\Models\\' . Str::studly($modelName);
+                if (!class_exists($fullModelName)) {
+                    throw new \Exception('Cannot find class ' . $fullModelName);
+                }
+                if (is_array($data)) {
+                    foreach ($data as $keyValue) {
+                        /** @var Model $object */
+                        $object = new $fullModelName();
+                        foreach ($keyValue as $fieldName => $value) {
+                            if (!$object->$fieldName instanceof \Illuminate\Database\Eloquent\Collection) {
+                                // todo: учитывать описания полей из общей схемы данных (которой пока нет :))
+                                if (in_array($fieldName, $object->getDates())) {
+                                    $object->$fieldName = (new \DateTime($value))->format('Y-m-d H:i:s');
+                                } else {
+                                    $object->$fieldName = $value;
+                                }
+                            }
+                        }
+                        $object->save();
+                        foreach ($keyValue as $fieldName => $value) {
+                            if ($object->$fieldName instanceof \Illuminate\Database\Eloquent\Collection) {
+                                $object->$fieldName()->sync(array_keys($value));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if (Arr::has($input, 'save')) {
+            foreach ($input['save'] as $modelName => $data) {
+                $fullModelName = 'App\Models\\' . Str::studly($modelName);
+                if (!class_exists($fullModelName)) {
+                    throw new \Exception('Cannot find class ' . $fullModelName);
+                }
+                if (is_array($data)) {
+                    foreach ($data as $id => $keyValue) {
+                        /** @var Model $object */
+                        $object = call_user_func([$fullModelName, 'find'], $id);
+                        if ($object) {
+                            foreach ($keyValue as $fieldName => $value) {
+                                if ($object->$fieldName instanceof \Illuminate\Database\Eloquent\Collection) {
+                                    $object->$fieldName()->sync(array_keys($value));
+                                } else {
+                                    // todo: учитывать описания полей из общей схемы данных (которой пока нет :))
+                                    if (in_array($fieldName, $object->getDates())) {
+                                        $object->$fieldName = (new \DateTime($value))->format('Y-m-d H:i:s');
+                                    } else {
+                                        $object->$fieldName = $value;
+                                    }
+                                }
+                            }
+                            $object->save();
+                        }
+                    }
+                }
+            }
+        }
     }
 
     protected function showObjectsListPage()
@@ -178,6 +241,18 @@ class Controller extends BaseController
     protected function showEditObjectFormPage()
     {
         $form = (new CmsForm($this->config->part('module')))->setEditedObject($this->objectId);
+        $formData = $form->display();
+        $params = [
+            'form' => $formData,
+            'pageTitle' => $this->config->get('strings.editTitle') ?: 'Редактирование объекта'
+        ];
+
+        return $this->renderPage('formPage', $params);
+    }
+
+    protected function showCreateObjectFormPage()
+    {
+        $form = (new CmsForm($this->config->part('module')));
         $formData = $form->display();
         $params = [
             'form' => $formData,

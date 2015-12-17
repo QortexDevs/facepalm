@@ -119,7 +119,10 @@ class CmsForm extends CmsComponent
             'meta' => [
                 'model' => class_basename($this->modelName),
                 'fields' => $this->fields,
-                'fieldNameBase' => 'save[' . class_basename($this->modelName) . '][' . $this->editedObject->id . ']'
+                'fieldNameBase' =>
+                    $this->editedObject
+                        ? 'save[' . class_basename($this->modelName) . '][' . $this->editedObject->id . ']'
+                        : 'create[' . class_basename($this->modelName) . '][' . Str::quickRandom() . ']'
             ],
             'object' => $this->editedObject
 

@@ -41,10 +41,6 @@
             "updated_at": {
                 "type": "datetime"
             },
-            "text": {
-                "type": "text",
-                "width": "500px"
-            },
             "acl": {
                 "type": "custom",
                 "title": "Доступ"
