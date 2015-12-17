@@ -22,7 +22,7 @@
     {% for object in list.rows %}
         <tr {% if list.settings.showStatusButton and not object['status'] %}class="inactive"{% endif %}
             data-id="{{ object.id }}">
-            <td><a href='./{{ object.id }}/'>{{ object.id }}</a></td>
+            <td><a href='{{ moduleConfig.baseUrl }}{{ object.id }}/'>{{ object.id }}</a></td>
             {% for column, columnInfo in list.meta.columns %}
                 <td>
                     {% if columnInfo.type == 'text' %}
@@ -32,14 +32,14 @@
                     {% elseif columnInfo.type == 'date' %}
                         {{ object[column]=='0000-01-01 00:00:00'?'':object[column]|date('d.m.Y') }}
                     {% else %}
-                        <a href='./{{ object.id }}/'>{{ object[column] }}</a>
+                        <a href='{{ moduleConfig.baseUrl }}{{ object.id }}/'>{{ object[column] }}</a>
                     {% endif %}
                 </td>
             {% endfor %}
             {# todo: custom url for edit #}
             {% if list.settings.showEditButton %}
                 <td class="buttons">
-                    <a class="edit button fa fa-pencil" href="./{{ object.id }}/edit/"></a>
+                    <a class="edit button fa fa-pencil" href="{{ moduleConfig.baseUrl }}{{ object.id }}"></a>
                 </td>
             {% endif %}
             {% if list.settings.showStatusButton %}

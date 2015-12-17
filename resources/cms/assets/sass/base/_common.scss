@@ -41,7 +41,12 @@ html, body {
 
 input, select, textarea {
     font: $mainFont;
-    color: #333;
+    color: #232323;
+    background: white;
+
+    &.pika-select {
+        font-size:14px;
+    }
 }
 
 .cms-button {

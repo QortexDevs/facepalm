@@ -41,4 +41,9 @@ class User extends Model implements AuthenticatableContract,
     {
         return $this->belongsTo('App\Models\Role');
     }
+
+    public function roles()
+    {
+        return $this->belongsToMany('App\Models\Role');
+    }
 }

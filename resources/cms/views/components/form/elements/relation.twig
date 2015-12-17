@@ -1,12 +1,25 @@
-{# !!!!! todo: правильный field_name, а также правильный при проверки выделенности !!!!!!!! #}
-<select class="text" name="{{ form.meta.fieldNameBase }}[{{ field }}]">
-    {% if not fieldParams.noEmpty %}
-        <option></option>
-    {% endif %}
-    {% for id,name in fieldParams.dictionary %}
-        {#form.object.__get(field)#}
-        <option value="{{ id }}" {% if id in fieldParams.bindedItems %}selected{% endif %}>
-            {{ name }}
-        </option>
-    {% endfor %}
-</select>
+{% if fieldParams.cardinality=='many' %}
+    <ul>
+        {% for id,name in fieldParams.dictionary %}
+            <li>
+                <label>
+                    <input type="checkbox" name="{{ form.meta.fieldNameBase }}[{{ fieldParams.collectionName }}][{{ id }}]"
+                           value="1" {% if id in fieldParams.relations %}checked{% endif %} />
+                    {{ name }}
+                </label>
+            </li>
+        {% endfor %}
+    </ul>
+
+{% else %}
+    <select class="text" name="{{ form.meta.fieldNameBase }}[{{ fieldParams.foreignKey }}]">
+        {% if not fieldParams.noEmpty %}
+            <option></option>
+        {% endif %}
+        {% for id,name in fieldParams.dictionary %}
+            <option value="{{ id }}" {% if id == form.object.__get(fieldParams.foreignModel).id %}selected{% endif %}>
+                {{ name }}
+            </option>
+        {% endfor %}
+    </select>
+{% endif %}

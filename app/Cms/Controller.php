@@ -11,6 +11,7 @@ namespace App\Cms;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
 use TwigBridge\Facade\Twig;
 
@@ -39,7 +40,6 @@ class Controller extends BaseController
     /** @var  Request */
     protected $request;
 
-
     /**
      * Get module
      *
@@ -56,10 +56,19 @@ class Controller extends BaseController
         $this->request = $request;
 
         $this->config = (new Config())->load($group, $module);
+        if ($group && !$module) {
+            //todo: laravel trims trailing slash
+            return Redirect::to('/cms/' . $group . '/' . array_keys($this->config->get('structure')[$group]['sections'])[0]);
+
+        }
+
         if ($group && $module && !$this->config->get('module')) {
             // todo: это необязательно, если у нас полностью кастомный обработчик
             abort(404);
         }
+
+        //todo: сомнения в красоте
+        $this->config->set('module.baseUrl', '/cms/' . $group . '/' . $module . '/');
 
         $this->parameters = $this->processParameters($params);
 
@@ -185,6 +194,7 @@ class Controller extends BaseController
             'cmsStructure' => $this->config->get('structure'),
             'moduleConfig' => $this->config->get('module'),
         ]);
+
         return Twig::render($template, $params);
 
     }

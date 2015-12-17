@@ -44,6 +44,15 @@ class Config
 
     /**
      * @param $key
+     * @param $value
+     */
+    public function set($key, $value)
+    {
+        $this->configRepository->set($key, $value);
+    }
+
+    /**
+     * @param $key
      * @return Repository
      */
     public function part($key)

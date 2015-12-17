@@ -94,10 +94,21 @@ class CmsForm extends CmsComponent
         }
 
         foreach ($this->fields as $fieldName => $field) {
+            //todo: format displayname in config with placeholders-string
             if ($field['type'] == CmsCommon::COLUMN_TYPE_RELATION) {
                 $this->fields[$fieldName]['dictionary'] = [];
                 foreach ($relatedDictionaries[$this->fields[$fieldName]['foreignModel']] as $item) {
                     $this->fields[$fieldName]['dictionary'][$item->id] = $item->__get($this->fields[$fieldName]['foreignDisplayName']);
+                }
+                if ($field['cardinality'] == 'many') {
+                    //todo: тоже что-то не очень нравится :(
+                    if ($this->editedObject) {
+                        $this->fields[$fieldName]['relations'] = [];
+                        $relatedItems = $this->editedObject->__get($field['collectionName']);
+                        foreach ($relatedItems as $relatedItem) {
+                            $this->fields[$fieldName]['relations'][] = $relatedItem->id;
+                        }
+                    }
                 }
             }
         }
@@ -113,6 +124,9 @@ class CmsForm extends CmsComponent
             'object' => $this->editedObject
 
         ];
+
+//        dd((new \App\Models\User())->roles instanceof \Illuminate\Database\Eloquent\Collection);
+
         return $output;
     }
 
