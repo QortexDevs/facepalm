@@ -8,12 +8,12 @@
 
 namespace App\Cms;
 
-use Faker\Provider\tr_TR\DateTime;
+use App\Cms\Components\CmsList;
+use App\Cms\Components\CmsForm;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Debug\Dumper;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
 use TwigBridge\Facade\Twig;
@@ -60,8 +60,7 @@ class Controller extends BaseController
 
         $this->config = (new Config())->load($group, $module);
         if ($group && !$module) {
-            //todo: laravel trims trailing slash
-            return Redirect::to('/cms/' . $group . '/' . array_keys($this->config->get('structure')[$group]['sections'])[0]);
+            return redirect('/cms/' . $group . '/' . array_keys($this->config->get('structure')[$group]['sections'])[0]);
 
         }
 

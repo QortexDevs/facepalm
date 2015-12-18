@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Cms;
+namespace App\Cms\Components;
 
+use App\Cms\CmsCommon;
 use Illuminate\Support\Str;
 
 class CmsComponent
@@ -29,7 +30,7 @@ class CmsComponent
         } else {
             throw new \Exception('Cannot find class ' . $modelName);
         }
-        
+
         return $this;
     }
 }

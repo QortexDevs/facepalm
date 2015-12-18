@@ -2,7 +2,7 @@
 namespace Tests;
 
 use App\Cms\CmsCommon;
-use App\Cms\CmsList;
+use App\Cms\Components\CmsList;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Str;

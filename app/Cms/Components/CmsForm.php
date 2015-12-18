@@ -17,8 +17,9 @@
  * ->setMainModel('User'); *
  */
 
-namespace App\Cms;
+namespace App\Cms\Components;
 
+use App\Cms\CmsCommon;
 use Carbon\Carbon;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Database\Eloquent\Model;
