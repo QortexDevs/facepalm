@@ -78,43 +78,14 @@ class CmsForm extends CmsComponent
             throw new \Exception('No model defined');
         }
 
-        //todo: prepareData();
-//        $relatedDictionaries = [];
-//        if ($this->relatedModels) {
-//            foreach ($this->relatedModels as $relatedModelName) {
-//                //todo: add query conditions
-//                $relatedDictionaries[$relatedModelName] = call_user_func([
-//                    CmsCommon::getFullModelClassName($relatedModelName),
-//                    'all'
-//                ]);
-//            }
-//        }
-
         foreach ($this->fieldsProcessor->getFields() as $field) {
             $field->setParameters([
                 'fieldNameBase' => $this->editedObject
                     ? 'save[' . class_basename($this->modelName) . '][' . $this->editedObject->id . ']'
                     : 'create[' . class_basename($this->modelName) . '][' . Str::quickRandom() . ']'
             ]);
+            $field->prepareData($this->editedObject);
 
-            //todo: format displayname in config with placeholders-string
-            //todo: перенести это все потом внутрь самого поля!
-            if ($field instanceof RelationField) {
-//                $this->fields[$field->name]['dictionary'] = [];
-//                foreach ($relatedDictionaries[$this->fields[$field->name]['foreignModel']] as $item) {
-//                    $this->fields[$field->name]['dictionary'][$item->id] = $item->__get($this->fields[$field->name]['foreignDisplayName']);
-//                }
-//                if ($field['cardinality'] == 'many') {
-//                    //todo: тоже что-то не очень нравится :(
-//                    if ($this->editedObject) {
-//                        $this->fields[$field->name]['relations'] = [];
-//                        $relatedItems = $this->editedObject->__get($field['collectionName']);
-//                        foreach ($relatedItems as $relatedItem) {
-//                            $this->fields[$field->name]['relations'][] = $relatedItem->id;
-//                        }
-//                    }
-//                }
-            }
         }
 
         $output = [

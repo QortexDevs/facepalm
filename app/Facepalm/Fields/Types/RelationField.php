@@ -9,15 +9,20 @@
 namespace App\Facepalm\Fields\Types;
 
 
+use App\Facepalm\CmsCommon;
 use App\Facepalm\Fields\AbstractField;
-use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property mixed foreignDisplayName
  * @property mixed foreignModel
+ * @property mixed cardinality
+ * @property mixed collectionName
+ * @property mixed foreignName
  */
 class RelationField extends AbstractField
 {
+    protected $templateName = 'components/form/elements/relation.twig';
+
     /**
      * @param \Illuminate\Database\Eloquent\Model $object
      * @return string
@@ -29,5 +34,32 @@ class RelationField extends AbstractField
         }
         return '';
     }
+
+    /**
+     * @param null $object
+     */
+    public function prepareData($object = null)
+    {
+        //todo: add query conditions
+        foreach (call_user_func([
+            CmsCommon::getFullModelClassName($this->foreignModel),
+            'all'
+        ]) as $foreignObject) {
+            $this->parameters['dictionary'][$foreignObject->{CmsCommon::COLUMN_NAME_ID}] = $foreignObject->{$this->foreignDisplayName};
+        }
+
+        if ($this->cardinality == 'many') {
+            if ($object) {
+                //todo: format displayname in config with placeholders-string
+                //todo: add query conditions
+
+                $relatedItems = $object->{$this->collectionName};
+                foreach ($relatedItems as $relatedItem) {
+                    $this->parameters['relations'][] = $relatedItem->{CmsCommon::COLUMN_NAME_ID};
+                }
+            }
+        }
+    }
+
 
 }

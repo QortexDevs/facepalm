@@ -22,15 +22,24 @@ class FieldFactory
      */
     public function get($type, $params = [])
     {
-        //todo: aliases, instead of hardcode
-        if ($type == 'checkbox') {
-            $type = 'boolean';
-        }
-        $className = '\App\Facepalm\Fields\Types\\' . Str::ucfirst($type) . 'Field';
+        $className = '\App\Facepalm\Fields\Types\\' . $this->canonize($type) . 'Field';
         if (class_exists($className)) {
             return new $className($params);
         }
         return new UnknownField();
+    }
+
+    /**
+     * @param $type
+     * @return string
+     */
+    private function canonize($type)
+    {
+        //todo: aliases, instead of hardcode
+        if ($type == 'checkbox') {
+            $type = 'boolean';
+        }
+        return Str::ucfirst($type);
     }
 
 

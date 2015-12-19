@@ -126,6 +126,14 @@ abstract class AbstractField implements \ArrayAccess
     }
 
     /**
+     *
+     */
+    public function prepareData()
+    {
+
+    }
+
+    /**
      * @param Model $object
      * @param array $parameters
      * @param string $template
@@ -139,6 +147,7 @@ abstract class AbstractField implements \ArrayAccess
             return Twig::render($template, [
                     'object' => $object,
                     'field' => $this->name,
+                    'fieldNameBase' => $this->fieldNameBase,
                     'inputName' => $this->fieldNameBase . '[' . $this->name . ']',
                     'parameters' => $this->parameters,
                 ] + $parameters);
