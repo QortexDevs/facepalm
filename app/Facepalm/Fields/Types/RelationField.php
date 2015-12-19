@@ -36,7 +36,7 @@ class RelationField extends AbstractField
     }
 
     /**
-     * @param null $object
+     * @param null|Model $object
      */
     public function prepareData($object = null)
     {

@@ -126,9 +126,9 @@ abstract class AbstractField implements \ArrayAccess
     }
 
     /**
-     *
+     * @param null|Model $object
      */
-    public function prepareData()
+    public function prepareData($object = null)
     {
 
     }
