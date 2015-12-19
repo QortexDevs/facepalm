@@ -5,9 +5,9 @@
             {% for field in form.fields %}
                 <tr data-row-for-field="{{ field.name }}">
                     <td class="caption">
-                        {#{% if fieldParams.type != 'checkbox' %}#}
+                        {% if not field.doNotShowTitle %}
                             <div class="caption">{{ field.title }}</div>
-                        {#{% endif %}#}
+                        {% endif %}
                     </td>
                     <td class="field">
                         {{ field.renderFormField(form.object)|raw }}

@@ -14,5 +14,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class BooleanField extends AbstractField
 {
+    protected function getDefaults()
+    {
+        return array_replace(parent::getDefaults(), [
+            'doNotShowTitle' => true
+        ]);
+    }
     protected $templateName = 'components/form/elements/checkbox.twig';
 }
