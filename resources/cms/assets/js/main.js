@@ -32,6 +32,7 @@ $(document).ready(function () {
             theme: 'dark-theme',
             format: 'DD.MM.YYYY',
             firstDay: 1,
+            showTime: false,
             i18n: {
                 previousMonth: 'Предыдущий месяц',
                 nextMonth: 'Следующий месяц',
@@ -48,6 +49,7 @@ $(document).ready(function () {
                 use24hour: true
             })
         }
+
         var picker = new Pikaday(options);
     });
     $('.datepicker + .clear-date').on('click', function () {

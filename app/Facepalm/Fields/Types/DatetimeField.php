@@ -17,6 +17,7 @@ class DatetimeField extends AbstractField
 {
     //todo: в параметры его втащить?
     protected $listFormat = 'd.m.Y H:i';
+    protected $templateName = 'components/form/elements/datetime.twig';
 
     /**
      * @param Model $object
@@ -31,5 +32,4 @@ class DatetimeField extends AbstractField
             return (new \DateTime($value))->format($this->listFormat);
         }
     }
-
 }

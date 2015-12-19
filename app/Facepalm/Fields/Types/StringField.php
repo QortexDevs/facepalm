@@ -13,6 +13,7 @@ use App\Facepalm\Fields\AbstractField;
 
 class StringField extends AbstractField
 {
+    protected $templateName = 'components/form/elements/string.twig';
 
     protected function getDefaults()
     {
@@ -20,6 +21,4 @@ class StringField extends AbstractField
             'isLinkInList' => true
         ]);
     }
-
-
 }

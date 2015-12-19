@@ -5,6 +5,7 @@ namespace App\Facepalm\Fields;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use TwigBridge\Facade\Twig;
 
 /**
  * Class AbstractField
@@ -13,10 +14,12 @@ use Illuminate\Support\Str;
  * @property string name
  * @property string title
  * @property mixed isLinkInList
+ * @property mixed fieldNameBase
  */
 abstract class AbstractField implements \ArrayAccess
 {
     protected $parameters = [];
+    protected $templateName;
 
     /**
      * AbstractField constructor.
@@ -120,6 +123,26 @@ abstract class AbstractField implements \ArrayAccess
     protected function getDefaults()
     {
         return [];
+    }
+
+    /**
+     * @param Model $object
+     * @param array $parameters
+     * @param string $template
+     * @return
+     */
+    public function renderFormField($object, $parameters = [], $template = '')
+    {
+        $template = $template ?: $this->templateName;
+
+        if ($template) {
+            return Twig::render($template, [
+                    'object' => $object,
+                    'field' => $this->name,
+                    'inputName' => $this->fieldNameBase . '[' . $this->name . ']',
+                    'parameters' => $this->parameters,
+                ] + $parameters);
+        }
     }
 
 }

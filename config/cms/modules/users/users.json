@@ -41,10 +41,10 @@
                 "title": "Роль"
             },
             "status": {
-                "type": "checkbox"
+                "type": "boolean"
             },
             "updated_at": {
-                "type": "datetime"
+                "type": "date"
             },
             "acl": {
                 "type": "custom",

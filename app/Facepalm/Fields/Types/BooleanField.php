@@ -10,8 +10,9 @@ namespace App\Facepalm\Fields\Types;
 
 
 use App\Facepalm\Fields\AbstractField;
+use Illuminate\Database\Eloquent\Model;
 
 class BooleanField extends AbstractField
 {
-
+    protected $templateName = 'components/form/elements/checkbox.twig';
 }

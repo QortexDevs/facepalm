@@ -10,10 +10,12 @@ namespace App\Facepalm\Fields\Types;
 
 
 use App\Facepalm\Fields\AbstractField;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 class TextField extends AbstractField
 {
+    protected $templateName = 'components/form/elements/text.twig';
 
     /**
      * @param \Illuminate\Database\Eloquent\Model $object
@@ -23,5 +25,4 @@ class TextField extends AbstractField
     {
         return Str::limit(parent::getValueForList($object), 20);
     }
-
 }

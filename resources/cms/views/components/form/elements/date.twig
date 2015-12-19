@@ -1,4 +1,4 @@
-<input type="text" class="text datepicker" data-year-range="{{ fieldParams.yearRange }}" readonly
-       name="{{ form.meta.fieldNameBase }}[{{ field }}]"
-       value="{{ form.object.__get(field)=='0000-01-01 00:00:00'?'':form.object.__get(field)|date('d.m.Y') }}"/>
+<input type="text" class="text datepicker" data-year-range="{{ parameters.yearRange }}" readonly
+       name="{{ inputName }}"
+       value="{{ object.__get(field)=='0000-01-01 00:00:00'?'':object.__get(field)|date('d.m.Y') }}"/>
 <i class="fa fa-times clear-date" title="Сбросить дату"></i>

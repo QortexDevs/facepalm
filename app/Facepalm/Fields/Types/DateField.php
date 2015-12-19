@@ -15,5 +15,6 @@ class DateField extends DatetimeField
 {
     //todo: в параметры его втащить?
     protected $listFormat = 'd.m.Y';
+    protected $templateName = 'components/form/elements/date.twig';
 
 }

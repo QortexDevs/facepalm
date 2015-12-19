@@ -29,17 +29,6 @@ class CmsList extends CmsComponent
     protected $relatedModels = [];
     const DEFAULT_ORDERING = 'desc';
 
-    /** @var FieldListProcessor */
-    protected $fieldsProcessor = null;
-
-    protected $baseUrl = '.';
-
-    public function __construct($config = null)
-    {
-        $this->fieldsProcessor = new FieldListProcessor();
-        parent::__construct($config);
-    }
-
 
     /**
      * @param Repository $config
@@ -58,24 +47,6 @@ class CmsList extends CmsComponent
         return $this;
     }
 
-    public function setBaseUrl($baseUrl)
-    {
-        $this->baseUrl = $baseUrl;
-        return $this;
-    }
-
-    /**
-     * todo: описать в документации, как можно передавать разные параметры
-     * @param $columns
-     * @param null $titles
-     * @return $this
-     */
-    public function setColumns($columns, $titles = null)
-    {
-        $this->fieldsProcessor->process($columns, $titles);
-
-        return $this;
-    }
 
     /**
      * @param bool $display

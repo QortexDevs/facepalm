@@ -2,19 +2,15 @@
         <input style="display:none" type="text" name="fakeusernameremembered"/>
         <input style="display:none" type="password" name="fakepasswordremembered"/>
         <table>
-            {% for field, fieldParams in form.meta.fields %}
-                <tr data-row-for-field="{{ field }}">
+            {% for field in form.fields %}
+                <tr data-row-for-field="{{ field.name }}">
                     <td class="caption">
-                        {% if fieldParams.type != 'checkbox' %}
-                            <div class="caption">{{ fieldParams.title }}</div>
-                        {% endif %}
+                        {#{% if fieldParams.type != 'checkbox' %}#}
+                            <div class="caption">{{ field.title }}</div>
+                        {#{% endif %}#}
                     </td>
                     <td class="field">
-                        {% if fieldParams.type == 'custom' %}
-                            {{ fieldParams.html|raw }}
-                        {% else %}
-                            {% include( [ 'components/form/elements/' ~  fieldParams.type ~ '.twig', 'components/form/elements/unknown.twig'] ) %}
-                        {% endif %}
+                        {{ field.renderFormField(form.object)|raw }}
                     </td>
                 </tr>
             {% endfor %}
