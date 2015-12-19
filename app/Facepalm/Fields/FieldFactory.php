@@ -14,17 +14,6 @@ use Illuminate\Support\Str;
 
 class FieldFactory
 {
-
-    const TYPE_STRING = 'string';
-    const TYPE_DATE = 'date';
-    const TYPE_DATETIME = 'datetime';
-    const TYPE_TEXT = 'text';
-    const TYPE_INTEGER = 'integer';
-    const TYPE_DICTIONARY = 'dictionary';
-    const TYPE_RELATION = 'relation';
-    const TYPE_PASSWORD = 'password';
-    const TYPE_BOOLEAN = 'boolean';
-
     /**
      * todo: подумать, как использовать ДИ-контейнер, чтобыне напрямую создавать, а через сервисы, чтоб можно было подменить
      * @param $type
@@ -33,6 +22,10 @@ class FieldFactory
      */
     public function get($type, $params = [])
     {
+        //todo: aliases, instead of hardcode
+        if ($type == 'checkbox') {
+            $type = 'boolean';
+        }
         $className = '\App\Facepalm\Fields\Types\\' . Str::ucfirst($type) . 'Field';
         if (class_exists($className)) {
             return new $className($params);
