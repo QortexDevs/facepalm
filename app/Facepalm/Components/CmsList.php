@@ -1,11 +1,15 @@
 <?php
 
-namespace App\Cms\Components;
+namespace App\Facepalm\Components;
 
-use App\Cms\CmsCommon;
+use App\Facepalm\CmsCommon;
+use App\Facepalm\Fields\AbstractField;
+use App\Facepalm\Fields\FieldListProcessor;
+use App\Facepalm\Fields\Types\RelationField;
 use Carbon\Carbon;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
@@ -23,6 +27,18 @@ class CmsList extends CmsComponent
     protected $showEditButton = false;
 
     protected $relatedModels = [];
+    const DEFAULT_ORDERING = 'desc';
+
+    /** @var FieldListProcessor */
+    protected $fieldsProcessor = null;
+
+    protected $baseUrl = '.';
+
+    public function __construct($config = null)
+    {
+        $this->fieldsProcessor = new FieldListProcessor();
+        parent::__construct($config);
+    }
 
 
     /**
@@ -32,12 +48,19 @@ class CmsList extends CmsComponent
     public function buildFromConfig($config)
     {
         $this->setColumns($config->get('list.columns'), $config->get('titles'))
+            ->setBaseUrl($config->get('baseUrl'))
             ->setMainModel($config->get('model'))
             ->toggleIdColumn($config->get('list.showId') !== false)
             ->toggleStatusButtonColumn($config->get('list.showStatus') !== false)
             ->toggleDeleteButtonColumn($config->get('list.showDelete') !== false)
             ->toggleEditButtonColumn($config->get('list.showEdit') == true);
 
+        return $this;
+    }
+
+    public function setBaseUrl($baseUrl)
+    {
+        $this->baseUrl = $baseUrl;
         return $this;
     }
 
@@ -49,9 +72,7 @@ class CmsList extends CmsComponent
      */
     public function setColumns($columns, $titles = null)
     {
-        $processed = CmsCommon::processFieldsList($columns, $titles);
-        $this->columns = $processed['fields'];
-        $this->relatedModels = $processed['relatedModels'];
+        $this->fieldsProcessor->process($columns, $titles);
 
         return $this;
     }
@@ -101,42 +122,41 @@ class CmsList extends CmsComponent
      * @return array
      * @throws \Exception
      */
-    public function display()
+    public function prepareData()
     {
-        // get query builder with all records (dummy clause)
         if (!$this->modelName) {
             throw new \Exception('No model defined');
         }
-        $queryBuilder = call_user_func([$this->modelName, 'where'], 'id', '>', '0');
+
+        // get query builder with all records (dummy clause)
+        /** @var Builder $queryBuilder */
+        $queryBuilder = call_user_func([$this->modelName, 'where'], CmsCommon::COLUMN_NAME_ID, '>', '0');
 
         // todo: сортировка из настроек
-        $queryBuilder = $queryBuilder->orderBy('id', 'desc');
-        if ($this->relatedModels) {
-            foreach ($this->relatedModels as $relatedModel) {
+        $queryBuilder = $queryBuilder->orderBy(CmsCommon::COLUMN_NAME_ID, self::DEFAULT_ORDERING);
+
+        // eager loading of related models
+        if ($this->fieldsProcessor->getRelatedModels()) {
+            foreach ($this->fieldsProcessor->getRelatedModels() as $relatedModel) {
                 $queryBuilder->with($relatedModel);
             }
         }
+
+        // do query
         $objects = $queryBuilder->get();
 
         $rows = [];
         /** @var Model $object */
         foreach ($objects as $object) {
             $row = [
-                CmsCommon::COLUMN_NAME_ID => $object->id,
-                CmsCommon::COLUMN_NAME_STATUS => $object->status
+                CmsCommon::COLUMN_NAME_ID => $object->{CmsCommon::COLUMN_NAME_ID},
+                CmsCommon::COLUMN_NAME_STATUS => $object->{CmsCommon::COLUMN_NAME_STATUS}
             ];
-            foreach ($this->columns as $columnName => $column) {
-                if (CmsCommon::isRelationColumn($columnName)) {
-                    // todo: refactor this. Store this explodes in inner fields;
-                    $path = explode('.', $columnName);
-                    if ($object->{$path[0]}) {
-                        $row[$columnName] = $object->{$path[0]}->{$path[1]};
-                    }
-                } else {
-                    $row[$columnName] = $object->getAttribute($columnName);
-                }
-
-                $row[$columnName] = $this->formatColumn($row[$columnName], $column);
+            /** @var AbstractField $column */
+            foreach ($this->fieldsProcessor->getFields() as $column) {
+                //todo: row - сделать классом, а не массивом
+                $row[$column->name] = $column->getValueForList($object);
+                $row['editUrl'] = $this->baseUrl . '/' . $object->{CmsCommon::COLUMN_NAME_ID} . '/';
             }
             $rows[] = $row;
         }
@@ -150,7 +170,7 @@ class CmsList extends CmsComponent
             ],
             'meta' => [
                 'model' => class_basename($this->modelName),
-                'columns' => $this->columns
+                'columns' => $this->fieldsProcessor->getFields()
             ],
             'rows' => $rows
 
@@ -158,63 +178,4 @@ class CmsList extends CmsComponent
 
         return $output;
     }
-
-
-
-
-    /**
-     * @param $value
-     * @param $column
-     * @return mixed
-     */
-    protected function formatColumn($value, $column)
-    {
-        switch ($column['type']) {
-            case CmsCommon::COLUMN_TYPE_DATETIME:
-                return $this->formatDatetime($value);
-                break;
-            case CmsCommon::COLUMN_TYPE_DATE:
-                return $this->formatDate($value);
-                break;
-            case CmsCommon::COLUMN_TYPE_TEXT:
-                return $this->formatText($value);
-                break;
-            default:
-                return $value;
-        }
-    }
-
-    /**
-     * @param Carbon $value
-     * @param string $format
-     * @return mixed
-     */
-    protected function formatDatetime($value, $format = 'd.m.Y H:i')
-    {
-
-        if (Str::startsWith($value->year, '-')) {
-            return null;
-        }
-        $value = $value->format($format);
-        return $value;
-    }
-
-    /**
-     * @param Carbon $value
-     * @return mixed
-     */
-    protected function formatDate($value)
-    {
-        return $this->formatDatetime($value, 'd.m.Y');
-    }
-
-    /**
-     * @param $value
-     * @return string
-     */
-    protected function formatText($value)
-    {
-        return Str::limit($value, 20);
-    }
-
 }

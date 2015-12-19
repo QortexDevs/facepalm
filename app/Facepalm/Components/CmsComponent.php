@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Cms\Components;
+namespace App\Facepalm\Components;
 
-use App\Cms\CmsCommon;
-use Illuminate\Support\Str;
+use App\Facepalm\CmsCommon;
 
 class CmsComponent
 {
@@ -32,5 +31,12 @@ class CmsComponent
         }
 
         return $this;
+    }
+
+    /**
+     * @param $config
+     */
+    public function buildFromConfig($config)
+    {
     }
 }

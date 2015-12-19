@@ -6,10 +6,10 @@
  * Time: 17:12
  */
 
-namespace App\Cms;
+namespace App\Facepalm;
 
-use App\Cms\Components\CmsList;
-use App\Cms\Components\CmsForm;
+use App\Facepalm\Components\CmsList;
+use App\Facepalm\Components\CmsForm;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
@@ -227,7 +227,7 @@ class Controller extends BaseController
     protected function showObjectsListPage()
     {
         $list = new CmsList($this->config->part('module'));
-        $listData = $list->display();
+        $listData = $list->prepareData();
         $params = [
             'list' => $listData,
             'pageTitle' => $this->config->get('strings.title') ?: 'Список объектов'

@@ -1,16 +1,17 @@
 <?php
 namespace Tests;
 
-use App\Cms\Fields\FieldFactory;
-use app\Cms\Fields\Types\BooleanField;
-use app\Cms\Fields\Types\DateField;
-use app\Cms\Fields\Types\DatetimeField;
-use app\Cms\Fields\Types\DictionaryField;
-use app\Cms\Fields\Types\IntegerField;
-use App\Cms\Fields\Types\PasswordField;
-use app\Cms\Fields\Types\RelationField;
-use app\Cms\Fields\Types\StringField;
-use app\Cms\Fields\Types\TextField;
+use App\Facepalm\Fields\FieldFactory;
+use App\Facepalm\Fields\Types\BooleanField;
+use App\Facepalm\Fields\Types\DateField;
+use App\Facepalm\Fields\Types\DatetimeField;
+use App\Facepalm\Fields\Types\DictionaryField;
+use App\Facepalm\Fields\Types\IntegerField;
+use App\Facepalm\Fields\Types\PasswordField;
+use App\Facepalm\Fields\Types\RelationField;
+use App\Facepalm\Fields\Types\StringField;
+use App\Facepalm\Fields\Types\TextField;
+use App\Facepalm\Fields\Types\UnknownField;
 
 class FieldFactoryTest extends TestCase
 {
@@ -31,7 +32,7 @@ class FieldFactoryTest extends TestCase
     {
         $factory = new FieldFactory();
         $field = $factory->get('sgaasdgn#sdfg');
-        $this->assertEquals(null, $field);
+        $this->assertTrue($field instanceof UnknownField);
     }
 
     /**

@@ -14,6 +14,11 @@
     "list": {
         "columns": {
             "email": true,
+            "updated_at":{
+                "title":"Upd",
+                "type":"date"
+            },
+            "role.name":true,
             "type": {
                 "type": "select",
                 "options": {

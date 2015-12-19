@@ -6,9 +6,10 @@
  * Time: 19:03
  */
 
-namespace App\Cms\Fields;
+namespace App\Facepalm\Fields;
 
 
+use App\Facepalm\Fields\Types\UnknownField;
 use Illuminate\Support\Str;
 
 class FieldFactory
@@ -32,20 +33,12 @@ class FieldFactory
      */
     public function get($type, $params = [])
     {
-        $className = '\App\Cms\Fields\Types\\' . Str::ucfirst($type) . 'Field';
+        $className = '\App\Facepalm\Fields\Types\\' . Str::ucfirst($type) . 'Field';
         if (class_exists($className)) {
             return new $className($params);
         }
-        return null;
+        return new UnknownField();
     }
 
-    /**
-     * @param $columnName
-     * @return bool
-     */
-    protected function isRelationColumn($columnName)
-    {
-        return Str::contains($columnName, '.');
-    }
 
 }

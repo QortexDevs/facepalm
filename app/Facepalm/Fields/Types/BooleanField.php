@@ -6,10 +6,10 @@
  * Time: 18:51
  */
 
-namespace App\Cms\Fields\Types;
+namespace App\Facepalm\Fields\Types;
 
 
-use App\Cms\Fields\AbstractField;
+use App\Facepalm\Fields\AbstractField;
 
 class BooleanField extends AbstractField
 {

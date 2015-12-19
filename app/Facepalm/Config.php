@@ -6,14 +6,14 @@
  * Time: 19:53
  */
 
-namespace App\Cms;
+namespace App\Facepalm;
 
 use Illuminate\Config\Repository;
 
 
 class Config
 {
-    const CONFIG_PATH = 'cms/config/';
+    const CONFIG_PATH = 'cms/';
     const DEFAULT_CONFIG_NAME = 'cms.json';
     const MODULES_CONFIGS_FOLDER = 'modules';
 
@@ -65,7 +65,7 @@ class Config
      */
     protected function getConfigPath()
     {
-        return app()->path() . DIRECTORY_SEPARATOR . self::CONFIG_PATH;
+        return app()->configPath() . DIRECTORY_SEPARATOR . self::CONFIG_PATH;
     }
 
     /**

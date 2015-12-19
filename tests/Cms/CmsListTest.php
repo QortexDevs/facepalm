@@ -1,8 +1,10 @@
 <?php
 namespace Tests;
 
-use App\Cms\CmsCommon;
-use App\Cms\Components\CmsList;
+use App\Facepalm\CmsCommon;
+use App\Facepalm\Components\CmsList;
+use App\Facepalm\Fields\Types\StringField;
+use App\Facepalm\Fields\Types\TextField;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Str;
@@ -16,7 +18,7 @@ class CmsListTest extends TestCase
     public function testCmsListRequireModelDefinition()
     {
         $this->setExpectedException('Exception', 'No model defined');
-        (new CmsList())->display();
+        (new CmsList())->prepareData();
     }
 
     /**
@@ -26,7 +28,7 @@ class CmsListTest extends TestCase
     {
         $result = (new CmsList())
             ->setMainModel('User')
-            ->display();
+            ->prepareData();
         $this->assertTrue(is_array($result));
         $this->assertArrayHasKey('meta', $result);
         $this->assertEquals('User', $result['meta']['model']);
@@ -39,7 +41,7 @@ class CmsListTest extends TestCase
     {
         $result = (new CmsList())
             ->setMainModel('user')
-            ->display();
+            ->prepareData();
         $this->assertTrue(is_array($result));
         $this->assertArrayHasKey('meta', $result);
         $this->assertEquals('User', $result['meta']['model']);
@@ -53,7 +55,7 @@ class CmsListTest extends TestCase
         $this->setExpectedException('Exception', 'Cannot find class');
         (new CmsList())
             ->setMainModel('user2')
-            ->display();
+            ->prepareData();
     }
 
     /**
@@ -64,7 +66,7 @@ class CmsListTest extends TestCase
         $this->createDummyUsersData();
         $result = (new CmsList())
             ->setMainModel('User')
-            ->display();
+            ->prepareData();
         $this->assertTrue(is_array($result));
         $this->assertArrayHasKey('settings', $result);
         $this->assertArrayHasKey('rows', $result);
@@ -81,12 +83,12 @@ class CmsListTest extends TestCase
 
         $result = $list
             ->toggleIdColumn(false)
-            ->display();
+            ->prepareData();
         $this->assertFalse($result['settings']['showIdColumn']);
 
         $result = $list
             ->toggleIdColumn(true)
-            ->display();
+            ->prepareData();
         $this->assertTrue($result['settings']['showIdColumn']);
     }
 
@@ -100,12 +102,12 @@ class CmsListTest extends TestCase
 
         $result = $list
             ->toggleDeleteButtonColumn(false)
-            ->display();
+            ->prepareData();
         $this->assertFalse($result['settings']['showDeleteButton']);
 
         $result = $list
             ->toggleDeleteButtonColumn(true)
-            ->display();
+            ->prepareData();
         $this->assertTrue($result['settings']['showDeleteButton']);
     }
 
@@ -119,12 +121,12 @@ class CmsListTest extends TestCase
 
         $result = $list
             ->toggleStatusButtonColumn(false)
-            ->display();
+            ->prepareData();
         $this->assertFalse($result['settings']['showStatusButton']);
 
         $result = $list
             ->toggleStatusButtonColumn(true)
-            ->display();
+            ->prepareData();
         $this->assertTrue($result['settings']['showStatusButton']);
     }
 
@@ -139,12 +141,12 @@ class CmsListTest extends TestCase
 
         $result = $list
             ->toggleEditButtonColumn(false)
-            ->display();
+            ->prepareData();
         $this->assertFalse($result['settings']['showEditButton']);
 
         $result = $list
             ->toggleEditButtonColumn(true)
-            ->display();
+            ->prepareData();
         $this->assertTrue($result['settings']['showEditButton']);
     }
 
@@ -164,14 +166,14 @@ class CmsListTest extends TestCase
                     'title' => 'Name'
                 ],
             ])
-            ->display();
+            ->prepareData();
 
         $this->assertEquals(2, count($result['meta']['columns']));
         $this->assertArrayHasKey('email', $result['meta']['columns']);
         $this->assertArrayHasKey('name', $result['meta']['columns']);
         $this->assertEquals('E-mail', $result['meta']['columns']['email']['title']);
         $this->assertEquals('Name', $result['meta']['columns']['name']['title']);
-        $this->assertEquals(CmsCommon::COLUMN_TYPE_DEFAULT, $result['meta']['columns']['name']['type']);
+        $this->assertTrue($result['meta']['columns']['name'] instanceof StringField);
         $this->assertArrayHasKey('id', $result['rows'][0]);
         $this->assertArrayHasKey('email', $result['rows'][0]);
         $this->assertArrayHasKey('name', $result['rows'][0]);
@@ -195,7 +197,7 @@ class CmsListTest extends TestCase
                 'email' => 'E-mail',
                 'name' => 'WrongName'
             ])
-            ->display();
+            ->prepareData();
 
         $this->assertEquals('E-mail', $result['meta']['columns']['email']['title']);
         $this->assertEquals('Name', $result['meta']['columns']['name']['title']);
@@ -218,7 +220,7 @@ class CmsListTest extends TestCase
                 'E-mail',
                 'Name'
             ])
-            ->display();
+            ->prepareData();
 
         $this->assertEquals('E-mail', $result['meta']['columns']['email']['title']);
         $this->assertEquals('Name', $result['meta']['columns']['name']['title']);
@@ -239,7 +241,7 @@ class CmsListTest extends TestCase
                 'E-mail',
                 'Name'
             ])
-            ->display();
+            ->prepareData();
 
         $this->assertEquals('E-mail', $result['meta']['columns']['email']['title']);
         $this->assertEquals('Name', $result['meta']['columns']['name']['title']);
@@ -257,7 +259,7 @@ class CmsListTest extends TestCase
                 'email',
                 'name'
             ])
-            ->display();
+            ->prepareData();
 
         $this->assertEquals(2, count($result['meta']['columns']));
         $this->assertArrayHasKey('email', $result['meta']['columns']);
@@ -277,7 +279,7 @@ class CmsListTest extends TestCase
             ->setColumns([
                 'email'
             ])
-            ->display();
+            ->prepareData();
 
         $this->assertEquals(1, count($result['meta']['columns']));
         $this->assertArrayHasKey('email', $result['meta']['columns']);
@@ -296,10 +298,10 @@ class CmsListTest extends TestCase
                 'email' => [
                 ],
                 'name' => [
-                    'name'=>'NewName'
+                    'name' => 'NewName'
                 ],
             ])
-            ->display();
+            ->prepareData();
 
         $this->assertArrayNotHasKey('name', $result['meta']['columns']);
         $this->assertArrayHasKey('NewName', $result['meta']['columns']);
@@ -318,13 +320,13 @@ class CmsListTest extends TestCase
                 'email' => [
                 ],
                 'name' => [
-                    'type'=>CmsCommon::COLUMN_TYPE_TEXT
+                    'type' => CmsCommon::COLUMN_TYPE_TEXT
                 ],
             ])
-            ->display();
+            ->prepareData();
 
-        $this->assertEquals(CmsCommon::COLUMN_TYPE_DEFAULT, $result['meta']['columns']['email']['type']);
-        $this->assertEquals(CmsCommon::COLUMN_TYPE_TEXT, $result['meta']['columns']['name']['type']);
+        $this->assertTrue($result['meta']['columns']['email'] instanceof StringField);
+        $this->assertTrue($result['meta']['columns']['name'] instanceof TextField);
     }
 
 

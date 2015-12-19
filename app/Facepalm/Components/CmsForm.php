@@ -17,13 +17,11 @@
  * ->setMainModel('User'); *
  */
 
-namespace App\Cms\Components;
+namespace App\Facepalm\Components;
 
-use App\Cms\CmsCommon;
-use Carbon\Carbon;
+use App\Facepalm\CmsCommon;
+use App\Facepalm\Fields\FieldListProcessor;
 use Illuminate\Contracts\Config\Repository;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Mockery\CountValidator\Exception;
 
@@ -33,6 +31,7 @@ class CmsForm extends CmsComponent
     protected $relatedModels = [];
     protected $modelName = null;
     protected $editedObject = null;
+    protected $fieldsProcessor = null;
 
 
     /**
@@ -48,9 +47,7 @@ class CmsForm extends CmsComponent
 
     public function setFields($fields, $titles = null)
     {
-        $processed = CmsCommon::processFieldsList($fields, $titles);
-        $this->fields = $processed['fields'];
-        $this->relatedModels = $processed['relatedModels'];
+        $this->fieldsProcessor = (new FieldListProcessor())->process($fields, $titles);
 
         return $this;
     }
@@ -58,6 +55,7 @@ class CmsForm extends CmsComponent
     public function setEditedObject($object)
     {
         if ($object) {
+            // todo: когда будем делать аозможность "неуказания" модели, не забыть исправить это
             if ($object instanceof $this->modelName) {
                 $this->editedObject = $object;
             } elseif ((int)$object) {
@@ -78,7 +76,6 @@ class CmsForm extends CmsComponent
      */
     public function display()
     {
-        // get query builder with all records (dummy clause)
         if (!$this->modelName) {
             throw new \Exception('No model defined');
         }

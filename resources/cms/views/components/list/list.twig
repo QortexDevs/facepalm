@@ -2,9 +2,9 @@
     <thead>
     <tr>
         <th>ID</th>
-        {% for column, columnInfo in list.meta.columns %}
+        {% for fieldObject in list.meta.columns %}
             <th>
-                {{ columnInfo.title }}
+                {{ fieldObject.title }}
             </th>
         {% endfor %}
         {% if list.settings.showEditButton %}
@@ -20,26 +20,17 @@
     </thead>
     <tbody>
     {% for object in list.rows %}
-        <tr {% if list.settings.showStatusButton and not object['status'] %}class="inactive"{% endif %}
+        <tr {% if list.settings.showStatusButton and not object.status %}class="inactive"{% endif %}
             data-id="{{ object.id }}">
-            <td><a href='{{ moduleConfig.baseUrl }}/{{ object.id }}/'>{{ object.id }}</a></td>
-            {% for column, columnInfo in list.meta.columns %}
+            <td><a href='{{ object.editUrl }}'>{{ object.id }}</a></td>
+            {% for fieldObject in list.meta.columns %}
                 <td>
-                    {% if columnInfo.type == 'text' %}
-                        {{ object[column]|slice(0, 20) }}
-                    {% elseif columnInfo.type == 'select' %}
-                        {{ columnInfo['options'][object[column]] }}
-                    {% elseif columnInfo.type == 'date' %}
-                        {{ object[column]=='0000-01-01 00:00:00'?'':object[column]|date('d.m.Y') }}
-                    {% else %}
-                        <a href='{{ moduleConfig.baseUrl }}/{{ object.id }}/'>{{ object[column] }}</a>
-                    {% endif %}
+                    {{ fieldObject.renderForList(object)|raw }}
                 </td>
             {% endfor %}
-            {# todo: custom url for edit #}
             {% if list.settings.showEditButton %}
                 <td class="buttons">
-                    <a class="edit button fa fa-pencil" href="{{ moduleConfig.baseUrl }}/{{ object.id }}"></a>
+                    <a class="edit button fa fa-pencil" href="{{ object.editUrl }}"></a>
                 </td>
             {% endif %}
             {% if list.settings.showStatusButton %}
