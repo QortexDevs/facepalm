@@ -13,6 +13,13 @@ use App\Facepalm\Fields\AbstractField;
 
 class StringField extends AbstractField
 {
-    protected $isLinkInList = true;
+
+    protected function getDefaults()
+    {
+        return array_replace(parent::getDefaults(), [
+            'isLinkInList' => true
+        ]);
+    }
+
 
 }

@@ -16,8 +16,6 @@ use Illuminate\Support\Str;
  */
 abstract class AbstractField implements \ArrayAccess
 {
-    protected $name = '';
-    protected $title = '';
     protected $parameters = [];
 
     /**
@@ -25,6 +23,7 @@ abstract class AbstractField implements \ArrayAccess
      */
     public function __construct()
     {
+        $this->setParameters($this->getDefaults());
     }
 
     /**
@@ -33,7 +32,7 @@ abstract class AbstractField implements \ArrayAccess
      */
     public function setName($name)
     {
-        $this->name = $name;
+        $this->parameters['name'] = $name;
         return $this;
     }
 
@@ -43,7 +42,7 @@ abstract class AbstractField implements \ArrayAccess
      */
     public function setTitle($title)
     {
-        $this->title = $title;
+        $this->parameters['title'] = $title;
         return $this;
     }
 
@@ -53,7 +52,7 @@ abstract class AbstractField implements \ArrayAccess
      */
     public function setParameters($parameters)
     {
-        $this->parameters = $parameters;
+        $this->parameters = array_replace($this->parameters, $parameters);
         return $this;
     }
 
@@ -63,14 +62,7 @@ abstract class AbstractField implements \ArrayAccess
      */
     public function __get($field)
     {
-        switch ($field) {
-            case 'name':
-            case 'title':
-                return $this->{$field};
-                break;
-            default:
-                return Arr::get($this->parameters, $field, null);
-        }
+        return Arr::get($this->parameters, $field, null);
     }
 
     /**
@@ -79,14 +71,7 @@ abstract class AbstractField implements \ArrayAccess
      */
     public function __isset($field)
     {
-        switch ($field) {
-            case 'name':
-            case 'title':
-                return true;
-                break;
-            default:
-                return Arr::has($this->parameters, $field);
-        }
+        return Arr::has($this->parameters, $field);
     }
 
     public function offsetGet($offset)
@@ -128,5 +113,13 @@ abstract class AbstractField implements \ArrayAccess
         }
     }
 
+
+    /**
+     * @return array
+     */
+    protected function getDefaults()
+    {
+        return [];
+    }
 
 }
