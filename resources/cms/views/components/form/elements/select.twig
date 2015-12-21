@@ -1,0 +1,10 @@
+<select class="text" name="{{ inputName }}">
+    {% if not parameters.noEmpty %}
+        <option></option>
+    {% endif %}
+    {% for id,name in parameters.dictionary %}
+        <option value="{{ id }}" {% if id == object.__get(field) %}selected{% endif %}>
+            {{ name }}
+        </option>
+    {% endfor %}
+</select>

@@ -9,6 +9,7 @@ use App\Facepalm\Fields\Types\DictionaryField;
 use App\Facepalm\Fields\Types\IntegerField;
 use App\Facepalm\Fields\Types\PasswordField;
 use App\Facepalm\Fields\Types\RelationField;
+use App\Facepalm\Fields\Types\SelectField;
 use App\Facepalm\Fields\Types\StringField;
 use App\Facepalm\Fields\Types\TextField;
 use App\Facepalm\Fields\Types\UnknownField;
@@ -86,7 +87,9 @@ class FieldFactoryTest extends TestCase
     {
         $factory = new FieldFactory();
         $field = $factory->get('dictionary');
-        $this->assertTrue($field instanceof DictionaryField);
+        $this->assertTrue($field instanceof SelectField);
+        $field = $factory->get('select');
+        $this->assertTrue($field instanceof SelectField);
     }
 
     /**

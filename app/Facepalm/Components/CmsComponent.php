@@ -3,6 +3,7 @@
 namespace App\Facepalm\Components;
 
 use App\Facepalm\CmsCommon;
+use App\Facepalm\Config;
 use App\Facepalm\Fields\FieldListProcessor;
 
 class CmsComponent
@@ -14,10 +15,15 @@ class CmsComponent
     protected $fieldsProcessor = null;
 
 
+    /**
+     * CmsComponent constructor.
+     * @param Config $config
+     */
     public function __construct($config = null)
     {
         $this->fieldsProcessor = new FieldListProcessor();
         if ($config) {
+            $this->fieldsProcessor->setDictionaries($config->get('dictionaries', []));
             $this->buildFromConfig($config);
         }
     }

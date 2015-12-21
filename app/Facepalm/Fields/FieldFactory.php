@@ -39,6 +39,9 @@ class FieldFactory
         if ($type == 'checkbox') {
             $type = 'boolean';
         }
+        if ($type == 'dictionary') {
+            $type = 'select';
+        }
         return Str::ucfirst($type);
     }
 

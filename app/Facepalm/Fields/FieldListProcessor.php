@@ -2,6 +2,7 @@
 namespace App\Facepalm\Fields;
 
 
+use App\Facepalm\Fields\Types\SelectField;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
@@ -12,15 +13,18 @@ class FieldListProcessor
     const CARDINALITY_ONE = 'one';
     const CARDINALITY_MANY = 'many';
 
+    /** @var AbstractField[] */
     protected $fields = [];
+
     protected $relatedModels = [];
+    protected $dictionaries = [];
 
     /**
      * @param $fields
      * @param $titles
      * @return FieldListProcessor $this
      */
-    public function process($fields, $titles)
+    public function process($fields, $titles = [])
     {
         $factory = new FieldFactory();
 
@@ -67,12 +71,26 @@ class FieldListProcessor
                     $type = Arr::get($parameters, 'type', self::FIELD_TYPE_DEFAULT);
                 }
 
-
                 // todo: подумтаь насчет ключа все же
                 $this->fields[$name] = $factory->get($type)
                     ->setName($name)
                     ->setTitle($title)
                     ->setParameters($parameters);
+
+                //todo: перенести в сам класс типа поля
+
+                if ($this->fields[$name] instanceof SelectField) {
+                    if (!$this->fields[$name]->dictionary) {
+                        if ($this->fields[$name]->options) {
+                            $this->fields[$name]->setParameters(['dictionary' => $this->fields[$name]->options]);
+                        } else {
+                            $this->fields[$name]->setParameters([
+                                'dictionary' => Arr::get($this->dictionaries, $name, [])
+                            ]);
+                        }
+                    }
+                }
+
 
                 $counter++;
             }
@@ -137,5 +155,15 @@ class FieldListProcessor
             }
         }
         return null;
+    }
+
+    /**
+     * @param array $dictionaries
+     * @return FieldListProcessor
+     */
+    public function setDictionaries($dictionaries)
+    {
+        $this->dictionaries = $dictionaries;
+        return $this;
     }
 }
