@@ -3,8 +3,9 @@
 <head>
     <meta charset="utf-8"/>
     <title>Facepalm CMS</title>
-    <link rel="stylesheet" href="/assets/build/cms/css/vendor.css"/>
-    <link rel="stylesheet" href="/assets/build/cms/css/main.css"/>
+    <link rel="stylesheet"
+          href="/assets/build/cms/css/vendor.css?{{ assetsBusters['assets/build/cms/css/vendor.css'] }}"/>
+    <link rel="stylesheet" href="/assets/build/cms/css/main.css?{{ assetsBusters['assets/build/cms/css/main.css'] }}"/>
     {% block cssFile %}{% endblock %}
 
     <script></script>
@@ -33,7 +34,7 @@
     </body>
 {% endblock bodyOuter %}
 {#<div id="ohsnap"></div>#}
-<script src="/assets/build/cms/js/all.js"></script>
+<script src="/assets/build/cms/js/all.js?{{ assetsBusters['assets/build/cms/js/all.js'] }}"></script>
 {% block jsFile %}{% endblock %}
 
 </html>

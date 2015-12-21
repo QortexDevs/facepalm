@@ -105,7 +105,7 @@ modulesToBuild.map(function (module) {
             //.pipe(uglify())
             .pipe(sourcemaps.write())
             .pipe(gulp.dest(getBuildPath(module, 'js')))
-            .pipe(bust())
+            .pipe(bust({length:5}))
             .pipe(gulp.dest('.'))
     });
 });
@@ -121,7 +121,7 @@ modulesToBuild.map(function (module) {
             //.pipe(cssmin())
             .pipe(sourcemaps.write())
             .pipe(gulp.dest(getBuildPath(module, 'styles')))
-            .pipe(bust())
+            .pipe(bust({length:5}))
             .pipe(gulp.dest('.'))
     });
 });
@@ -133,7 +133,7 @@ modulesToBuild.map(function (module) {
             .pipe(rigger())
             //.pipe(cssmin())
             .pipe(gulp.dest(getBuildPath(module, 'styles')))
-            .pipe(bust())
+            .pipe(bust({length:5}))
             .pipe(gulp.dest('.'))
     });
 });
