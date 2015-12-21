@@ -2,7 +2,6 @@
 
 namespace App\Facepalm;
 
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 class CmsCommon
@@ -28,7 +27,7 @@ class CmsCommon
      */
     public static function getFullModelClassName($modelName)
     {
-        if ($modelName) {
+        if ($modelName && !Str::startsWith($modelName, 'App\Models\\')) {
             $modelName = 'App\Models\\' . Str::studly($modelName);
         }
         if (class_exists($modelName)) {

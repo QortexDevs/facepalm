@@ -22,6 +22,7 @@ namespace App\Facepalm\Components;
 use App\Facepalm\CmsCommon;
 use App\Facepalm\Fields\FieldListProcessor;
 use App\Facepalm\Fields\Types\RelationField;
+use App\Facepalm\ModelFactory;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -59,7 +60,7 @@ class CmsForm extends CmsComponent
                 $this->editedObject = $object;
             } elseif ((int)$object) {
                 if ($this->modelName) {
-                    $this->editedObject = call_user_func([$this->modelName, 'find'], $object);
+                    $this->editedObject = ModelFactory::getById($this->modelName, $object);
                     if (!$this->editedObject) {
                         throw new Exception('Object with id:' . $object . ' not found');
                     }

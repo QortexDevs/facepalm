@@ -42,6 +42,9 @@
                 "type": "password",
                 "width": "200px"
             },
+            "role.name":{
+                "cardinality":"many"
+            },
             "type": {
                 "title": "Роль",
                 "type": "select"

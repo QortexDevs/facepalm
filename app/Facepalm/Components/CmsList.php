@@ -6,6 +6,7 @@ use App\Facepalm\CmsCommon;
 use App\Facepalm\Fields\AbstractField;
 use App\Facepalm\Fields\FieldListProcessor;
 use App\Facepalm\Fields\Types\RelationField;
+use App\Facepalm\ModelFactory;
 use Carbon\Carbon;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Database\Eloquent\Model;
@@ -101,7 +102,7 @@ class CmsList extends CmsComponent
 
         // get query builder with all records (dummy clause)
         /** @var Builder $queryBuilder */
-        $queryBuilder = call_user_func([$this->modelName, 'where'], CmsCommon::COLUMN_NAME_ID, '>', '0');
+        $queryBuilder = ModelFactory::getBuilderForModel($this->modelName);
 
         // todo: сортировка из настроек
         $queryBuilder = $queryBuilder->orderBy(CmsCommon::COLUMN_NAME_ID, self::DEFAULT_ORDERING);

@@ -11,6 +11,7 @@ namespace App\Facepalm\Fields\Types;
 
 use App\Facepalm\CmsCommon;
 use App\Facepalm\Fields\AbstractField;
+use App\Facepalm\ModelFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -42,10 +43,8 @@ class RelationField extends AbstractField
     public function prepareData($object = null)
     {
         //todo: add query conditions
-        foreach (call_user_func([
-            CmsCommon::getFullModelClassName($this->foreignModel),
-            'all'
-        ]) as $foreignObject) {
+        //todo: переделать статический вызов на di
+        foreach (ModelFactory::getAll($this->foreignModel) as $foreignObject) {
             $this->parameters['dictionary'][$foreignObject->{CmsCommon::COLUMN_NAME_ID}] = $foreignObject->{$this->foreignDisplayName};
         }
 
