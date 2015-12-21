@@ -11,6 +11,7 @@ namespace App\Facepalm\Fields\Types;
 
 use App\Facepalm\CmsCommon;
 use App\Facepalm\Fields\AbstractField;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property mixed foreignDisplayName

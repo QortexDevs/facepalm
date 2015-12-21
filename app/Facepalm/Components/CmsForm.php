@@ -23,6 +23,7 @@ use App\Facepalm\CmsCommon;
 use App\Facepalm\Fields\FieldListProcessor;
 use App\Facepalm\Fields\Types\RelationField;
 use Illuminate\Contracts\Config\Repository;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Mockery\CountValidator\Exception;
 
@@ -47,7 +48,7 @@ class CmsForm extends CmsComponent
     }
 
     /**
-     * @param $object
+     * @param int|null|Model $object
      * @return $this
      */
     public function setEditedObject($object)
@@ -82,7 +83,7 @@ class CmsForm extends CmsComponent
             $field->setParameters([
                 'fieldNameBase' => $this->editedObject
                     ? 'save[' . class_basename($this->modelName) . '][' . $this->editedObject->id . ']'
-                    : 'create[' . class_basename($this->modelName) . '][' . Str::quickRandom() . ']'
+                    : 'create[' . class_basename($this->modelName) . '][%CREATE_' . Str::quickRandom(6) . '%]'
             ]);
             $field->prepareData($this->editedObject);
 

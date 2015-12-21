@@ -124,106 +124,33 @@ class Controller extends BaseController
     }
 
     /**
+     * AMF (Action-Model-Fields) processing
      * toggle[model][id][field]=..
      * save[model][id][field]=..
      * add[model][][field]=..
-     *
-     * todo: вынести все эти ебические циклы в общий алгоритм, куда просто передавать колбэк
      */
     protected function post()
     {
-        $input = $this->request->all();
-        $countOfSets = 0;
-        if (Arr::has($input, 'toggle')) {
-            $toggleResult = [];
-            foreach ($input['toggle'] as $modelName => $data) {
-                $fullModelName = 'App\Models\\' . Str::studly($modelName);
-                if (!class_exists($fullModelName)) {
-                    throw new \Exception('Cannot find class ' . $fullModelName);
-                }
-                if (is_array($data)) {
-                    foreach ($data as $id => $keyValue) {
-                        $object = call_user_func([$fullModelName, 'find'], $id);
-                        if ($object) {
-                            foreach (array_keys($keyValue) as $fieldName) {
-                                $countOfSets++;
-                                $object->$fieldName ^= 1;
-                                $toggleResult[$modelName][$id][$fieldName] = $object->$fieldName;
-                            }
-                            $object->save();
-                        }
-                    }
-                }
-            }
-            if ($countOfSets == 1) {
+        $amfProcessor = new AmfProcessor();
+        $amfProcessor->process($this->request->all());
+
+        //todo: продумать нормальный возврат!
+        //todo: события до, после и вместо!!!!
+        if ($amfProcessor->getToggledFields()) {
+            if ($amfProcessor->getAffectedFieldsCount() == 1) {
                 // адская конструкция для доступа к конкретному единственному значению многомерного массива
-                $singleElementFieldValue = array_values(array_values(array_values($toggleResult)[0])[0])[0];
+                $singleElementFieldValue = array_values(array_values(array_values($amfProcessor->getToggledFields())[0])[0])[0];
                 return response()->json($singleElementFieldValue);
             } else {
-                return response()->json($toggleResult);
-            }
-        }
-        if (Arr::has($input, 'create')) {
-            foreach ($input['create'] as $modelName => $data) {
-                $fullModelName = 'App\Models\\' . Str::studly($modelName);
-                if (!class_exists($fullModelName)) {
-                    throw new \Exception('Cannot find class ' . $fullModelName);
-                }
-                if (is_array($data)) {
-                    foreach ($data as $keyValue) {
-                        /** @var Model $object */
-                        $object = new $fullModelName();
-                        foreach ($keyValue as $fieldName => $value) {
-                            if (!$object->$fieldName instanceof \Illuminate\Database\Eloquent\Collection) {
-                                // todo: учитывать описания полей из общей схемы данных (которой пока нет :))
-                                if (in_array($fieldName, $object->getDates())) {
-                                    $object->$fieldName = (new \DateTime($value))->format('Y-m-d H:i:s');
-                                } else {
-                                    $object->$fieldName = $value;
-                                }
-                            }
-                        }
-                        $object->save();
-                        foreach ($keyValue as $fieldName => $value) {
-                            if ($object->$fieldName instanceof \Illuminate\Database\Eloquent\Collection) {
-                                $object->$fieldName()->sync(array_keys($value));
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        if (Arr::has($input, 'save')) {
-            foreach ($input['save'] as $modelName => $data) {
-                $fullModelName = 'App\Models\\' . Str::studly($modelName);
-                if (!class_exists($fullModelName)) {
-                    throw new \Exception('Cannot find class ' . $fullModelName);
-                }
-                if (is_array($data)) {
-                    foreach ($data as $id => $keyValue) {
-                        /** @var Model $object */
-                        $object = call_user_func([$fullModelName, 'find'], $id);
-                        if ($object) {
-                            foreach ($keyValue as $fieldName => $value) {
-                                if ($object->$fieldName instanceof \Illuminate\Database\Eloquent\Collection) {
-                                    $object->$fieldName()->sync(array_keys($value));
-                                } else {
-                                    // todo: учитывать описания полей из общей схемы данных (которой пока нет :))
-                                    if (in_array($fieldName, $object->getDates())) {
-                                        $object->$fieldName = (new \DateTime($value))->format('Y-m-d H:i:s');
-                                    } else {
-                                        $object->$fieldName = $value;
-                                    }
-                                }
-                            }
-                            $object->save();
-                        }
-                    }
-                }
+                return response()->json($amfProcessor->getToggledFields());
             }
         }
     }
 
+    /**
+     * @return mixed
+     * @throws \Exception
+     */
     protected function showObjectsListPage()
     {
         $list = new CmsList($this->config->part('module'));
@@ -237,6 +164,10 @@ class Controller extends BaseController
         return $this->renderPage('listPage', $params);
     }
 
+    /**
+     * @return mixed
+     * @throws \Exception
+     */
     protected function showEditObjectFormPage()
     {
         $form = (new CmsForm($this->config->part('module')))->setEditedObject($this->objectId);
@@ -249,6 +180,10 @@ class Controller extends BaseController
         return $this->renderPage('formPage', $params);
     }
 
+    /**
+     * @return mixed
+     * @throws \Exception
+     */
     protected function showCreateObjectFormPage()
     {
         $form = (new CmsForm($this->config->part('module')));
@@ -261,6 +196,11 @@ class Controller extends BaseController
         return $this->renderPage('formPage', $params);
     }
 
+    /**
+     * @param $template
+     * @param $params
+     * @return mixed
+     */
     protected function renderPage($template, $params)
     {
         $params = array_merge($params, [
