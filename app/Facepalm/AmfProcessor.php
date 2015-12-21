@@ -23,6 +23,14 @@ class AmfProcessor
     protected $affectedFieldsCount = 0;
     protected $toggledFields = [];
 
+    /**
+     * Run through AMF input array
+     *
+     * AMF is: action[Model][id][field]=value,
+     * e.g.: save[User][2][email]='..',save[User][2][name]='..', etc
+     *
+     * @param $amf
+     */
     public function process($amf)
     {
         foreach ($amf as $action => $input) {
