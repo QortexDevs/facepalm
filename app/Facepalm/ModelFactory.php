@@ -4,6 +4,14 @@ namespace App\Facepalm;
 
 use Illuminate\Database\Eloquent\Builder;
 
+/**
+ * Class ModelFactory
+ * @package App\Facepalm
+ *
+ * @method find(string $modelName)
+ * @method all(string $modelName)
+ * @method where(string $modelName, mixed ...$arguments)
+ */
 class ModelFactory
 {
 

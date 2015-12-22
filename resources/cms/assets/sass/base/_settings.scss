@@ -7,10 +7,12 @@ $menuActiveItemBackgroundColor: #1f222d;
 $menuSubItemColor: #74808f;
 $menuActiveSubItemColor: $mainThemeColor;
 
-$mainButtonBackgroundColor: #24b685;
+$successColor: #24b685;
+$errorColor: #ea5a5a;
+
+$mainButtonBackgroundColor: $successColor;
 $mainButtonTextColor: #fff;
 
-$errorColor: #ea5a5a;
 
 $topBarBackgroundColor: #4b5266;
 

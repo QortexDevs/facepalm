@@ -2,6 +2,10 @@
  * Created by xpundel on 14.12.15.
  */
 
+/**
+ * @method setWithPath
+ * Sets the nested property of object
+ */
 Object.defineProperty(Object.prototype, 'setWithPath', {
     value: function (path, value) { /* Makes breakfast, solves world peace, takes out trash */
         if (typeof  path == 'string') {
@@ -23,3 +27,11 @@ Object.defineProperty(Object.prototype, 'setWithPath', {
     configurable: false,
     enumerable: false
 });
+
+function delay(ms) {
+    var d = $.Deferred();
+    setTimeout(function () {
+        d.resolve();
+    }, ms);
+    return d.promise();
+}

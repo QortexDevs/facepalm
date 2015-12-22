@@ -7,6 +7,7 @@
 //= ../../../../bower_components/underscore.string/dist/underscore.string.js
 //= ../../../../bower_components/moment/moment.js
 //= ../../../../bower_components/pikaday-time/pikaday.js
+//= ../../../../bower_components/growl/javascripts/jquery.growl.js
 
 $(document).ready(function () {
 
@@ -21,10 +22,28 @@ $(document).ready(function () {
         });
         return false;
     });
+
+    $(document).on('click', '.form-buttons button.save-button', function () {
+        var formData = $('.main-cms-form').serialize();
+
+        toggleSpinner(true);
+        toggleFormButtons(false);
+
+        // Minimum delay to avoid unpleasant blinking
+        $.when($.post('./', formData), delay(800)).then(function () {
+                $.growl.notice({title: '', message: "Cохранено"});
+                toggleSpinner(false);
+                toggleFormButtons(true);
+            }
+        );
+        return false;
+    });
+
     $(document).on('click', '.add-new-item', function () {
         document.location.href = $(this).data('base-url') + '/create/';
         return false;
     });
+
 
     $('.datepicker').each(function () {
         var options = {
@@ -58,6 +77,14 @@ $(document).ready(function () {
 
 
 });
+
+function toggleSpinner(show) {
+    $('#spinner').toggleClass('show', show);
+}
+
+function toggleFormButtons(enable) {
+    $('.form-buttons button').prop('disabled', !enable);
+}
 
 function getCsrfTokenParameter() {
     return {'_token': $('input:hidden[name=_token]').val()};
