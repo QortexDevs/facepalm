@@ -44,7 +44,7 @@ class RelationField extends AbstractField
     {
         //todo: add query conditions
         //todo: переделать статический вызов на di
-        foreach (ModelFactory::getAll($this->foreignModel) as $foreignObject) {
+        foreach (ModelFactory::all($this->foreignModel) as $foreignObject) {
             $this->parameters['dictionary'][$foreignObject->{CmsCommon::COLUMN_NAME_ID}] = $foreignObject->{$this->foreignDisplayName};
         }
 

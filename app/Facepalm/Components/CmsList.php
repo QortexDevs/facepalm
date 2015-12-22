@@ -102,7 +102,7 @@ class CmsList extends CmsComponent
 
         // get query builder with all records (dummy clause)
         /** @var Builder $queryBuilder */
-        $queryBuilder = ModelFactory::getBuilderForModel($this->modelName);
+        $queryBuilder = ModelFactory::builderFor($this->modelName);
 
         // todo: сортировка из настроек
         $queryBuilder = $queryBuilder->orderBy(CmsCommon::COLUMN_NAME_ID, self::DEFAULT_ORDERING);

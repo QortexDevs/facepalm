@@ -60,7 +60,7 @@ class CmsForm extends CmsComponent
                 $this->editedObject = $object;
             } elseif ((int)$object) {
                 if ($this->modelName) {
-                    $this->editedObject = ModelFactory::getById($this->modelName, $object);
+                    $this->editedObject = ModelFactory::find($this->modelName, $object);
                     if (!$this->editedObject) {
                         throw new Exception('Object with id:' . $object . ' not found');
                     }

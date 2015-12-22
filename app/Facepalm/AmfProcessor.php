@@ -43,7 +43,7 @@ class AmfProcessor
                             foreach ($data as $id => $keyValue) {
                                 /** @var Model $object */
                                 if ((int)$id) {
-                                    $object = ModelFactory::getById($fullModelName, $id);
+                                    $object = ModelFactory::find($fullModelName, $id);
                                 } elseif (preg_match('/\%CREATE_[\w]{6}\%/i', $id)) {
                                     $object = new $fullModelName();
                                 }
@@ -166,7 +166,7 @@ class AmfProcessor
     {
         $relationMethod = Str::substr($fieldName, 0, -3);
         if ($value) {
-            $foreignObject = ModelFactory::getById($relationMethod, $value);
+            $foreignObject = ModelFactory::find($relationMethod, $value);
             if ($foreignObject) {
                 $object->$relationMethod()->associate($foreignObject);
             }
