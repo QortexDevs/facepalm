@@ -1,8 +1,9 @@
 <div class="cms-module-list">
-    <input type="button"
-           value="Создать{{ moduleConfig.strings['accusative'] ? (" "~moduleConfig.strings['accusative']):"" }}"
-           class="cms-button add-new-item"
-           data-base-url="{{ moduleConfig.baseUrl }}"
-           {% if listConfig.editButton %}data-edit-button="{{ listConfig.editButton }}"{% endif %} >
+    <button type="button"
+            class="cms-button add-new-item"
+            data-base-url="{{ moduleConfig.baseUrl }}"
+            {% if listConfig.editButton %}data-edit-button="{{ listConfig.editButton }}"{% endif %} >
+        Создать{{ moduleConfig.strings['accusative'] ? (" "~moduleConfig.strings['accusative']):"" }}
+    </button>
     {% include "components/list/list.twig" %}
 </div>
