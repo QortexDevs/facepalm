@@ -1,3 +1,5 @@
+$mainTextColor: #232323;
+
 $mainThemeColor: #6484cc;
 $menuItemColor: white;
 $menuBackgroundColor: #282c37;
@@ -5,9 +7,19 @@ $menuActiveItemBackgroundColor: #1f222d;
 $menuSubItemColor: #74808f;
 $menuActiveSubItemColor: $mainThemeColor;
 
+$mainButtonBackgroundColor: #24b685;
+$mainButtonTextColor: #fff;
+
+$errorColor: #ea5a5a;
+
 $topBarBackgroundColor: #4b5266;
 
-$mainFont: 300 16px/20px 'Lato' sans-serif;
-$menuFont: 400 16px/20px 'Cuprum';
+$captionsColor: #bbc0cc;
+
+$mainFontName: 'Lato';
+$additionalFontName: 'Cuprum';
+
+$mainFont: 300 16px/20px $mainFontName sans-serif;
+$menuFont: 400 16px/20px $additionalFontName;
 
 $leftMenuWidth: 250px;

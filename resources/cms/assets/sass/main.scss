@@ -1,16 +1,15 @@
 @import "base/reset";
 @import "base/fonts";
 @import "base/settings";
+@import "base/utility";
 @import "base/common";
 @import "base/layouts/layout";
 @import "base/layouts/menu";
 @import "base/layouts/two-column";
 @import "base/components/alerts";
 @import "base/components/list";
-@import "base/components/login";
 @import "base/components/form";
-@import "base/components/file";
-@import "base/components/image";
+@import "base/components/login";
 
 //@import "modules/company-services-form";
 //@import "modules/users";

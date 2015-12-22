@@ -1,13 +1,15 @@
+.cms-module-list-page {
+    margin-top: 4px;
+}
+
 .cms-module-list {
-    margin-top:4px;
 
     .multiple-lists {
-
         .one-list {
             padding-bottom: 40px;
 
             h2 {
-                font: 20px Cuprum;
+                font: 20px $additionalFontName;
                 margin-bottom: 15px;
             }
         }

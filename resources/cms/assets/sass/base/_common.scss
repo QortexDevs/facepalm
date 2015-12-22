@@ -1,19 +1,3 @@
-.clearfix:after {
-    visibility: hidden;
-    display: block;
-    content: "";
-    clear: both;
-    height: 0;
-}
-
-* html .clearfix {
-    zoom: 1;
-}
-
-*:first-child + html .clearfix {
-    zoom: 1;
-}
-
 html, body {
     margin: 0;
     width: 100%;
@@ -22,29 +6,34 @@ html, body {
     line-height: 19px;
     font: $mainFont;
     font-stretch: normal;
-    color: #333;
+    color: $mainTextColor;
+}
 
-    a {
-        color: #74808f;
-        text-decoration: none;
-        transition: all 0.2s ease;
+a {
+    color: #74808f;
+    text-decoration: none;
+    transition: all 0.2s ease;
 
-        &:hover {
-            color: $mainThemeColor;
-            opacity: 0.8;
-        }
-    }
-
-    &.stop-scrolling {
-        overflow: auto;
+    &:hover {
+        color: $mainThemeColor;
+        opacity: 0.8;
     }
 }
 
 input, select, textarea {
     font: $mainFont;
-    color: #232323;
+    color: $mainTextColor;
     background: white;
     outline: none;
+
+    border-radius: 2px;
+    padding: 5px;
+    border: 1px solid #dddde5;
+
+    &:-webkit-autofill {
+        -webkit-box-shadow: 0 0 0 1000px #fff inset;
+        -webkit-text-fill-color: #333;
+    }
 
     &.pika-select {
         font-size: 14px;
@@ -55,20 +44,32 @@ input, select, textarea {
     }
 }
 
+h1 {
+    font: 100 30px/40px $mainFontName;
+    margin-bottom: 5px;
+    color: white;
+}
+
+h2 {
+    font: 400 24px/28px $additionalFontName;
+    margin-bottom: 15px;
+}
+
 .cms-button {
     border: none;
-    padding: 8px 40px;
-    background: #24b685;
-    font: 400 16px/20px Cuprum;
-    color: #fff;
-    border-radius: 15px;
-    cursor: pointer;
     outline: none;
+    cursor: pointer;
+    padding: 8px 40px;
+    border-radius: 15px;
+    font: 400 16px/20px Cuprum;
+    color: $mainButtonTextColor;
+    background: $mainButtonBackgroundColor;
     box-shadow: 0 0 10px -2px rgba(0, 0, 0, 0.6);
 
     &:hover {
         opacity: 0.9;
     }
+
     &:active {
         margin-top: 1px;
         margin-bottom: -1px;

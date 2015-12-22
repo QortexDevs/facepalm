@@ -13,7 +13,7 @@
 </head>
 {% block bodyOuter %}
     <body class="cms-page">
-    {% include 'menu.twig' %}
+    {% include 'leftMenu.twig' %}
     <main>
         <form action="./" enctype="multipart/form-data" method="post">
             {{ csrf_field() }}
@@ -21,7 +21,7 @@
                 <div class="top-bar">
                     <h1>{{ pageTitle }}</h1>
                     <div class="right">
-                        <i class="fa fa-user"></i>
+                        <div class="user-icon fa fa-user"></div>
                     </div>
                 </div>
                 <div class="module-content">
