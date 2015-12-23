@@ -8,21 +8,21 @@
 
 namespace App\Facepalm\Models;
 
+use App\Facepalm\Models\Foundation\BindableEntity;
 
-use Illuminate\Database\Eloquent\Model;
 
 /**
+ * @property integer bind_id
+ * @property integer bind_type
  * @property string group
+ * @property integer width
+ * @property integer height
+ * @property integer original_width
+ * @property integer original_height
+ * @property string ext
+ * @property string original_name
  */
-class Image extends Model
+class Image extends BindableEntity
 {
-    protected $fillable = ['group'];
-
-    /**
-     * Get all of the owning binded models.
-     */
-    public function bind()
-    {
-        return $this->morphTo();
-    }
+    protected $fillable = ['group', 'width', 'height', 'original_width', 'original_height', 'ext', 'original_name'];
 }

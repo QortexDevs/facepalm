@@ -81,6 +81,8 @@ class CmsForm extends CmsComponent
      */
     public function display()
     {
+        $this->editedObject->images()->create(['group' => 'new']);
+
         if (!$this->modelName) {
             throw new \Exception('No model defined');
         }

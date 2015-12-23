@@ -6,15 +6,15 @@
  * Time: 16:33
  */
 
-namespace App\Facepalm\Models;
+namespace App\Facepalm\Models\Foundation;
 
 
 use Illuminate\Database\Eloquent\Model;
 
-abstract class BaseEntity extends Model
+abstract class BaseEntity extends AbstractEntity
 {
     /**
-     * Get all of the owning binded models.
+     * Get all binded images
      */
     public function images()
     {

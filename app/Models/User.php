@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Facepalm\Models\BaseEntity;
+use App\Facepalm\Models\Foundation\BaseEntity;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Foundation\Auth\Access\Authorizable;
