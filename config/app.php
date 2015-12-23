@@ -146,7 +146,6 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         'TwigBridge\ServiceProvider',
-
     ],
 
     /*

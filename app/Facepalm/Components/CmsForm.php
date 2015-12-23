@@ -23,8 +23,11 @@ use App\Facepalm\CmsCommon;
 use App\Facepalm\Fields\FieldListProcessor;
 use App\Facepalm\Fields\Types\RelationField;
 use App\Facepalm\ModelFactory;
+use App\Facepalm\Models\BaseEntity;
+use App\Facepalm\Models\Image;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Mockery\CountValidator\Exception;
 
@@ -33,6 +36,8 @@ class CmsForm extends CmsComponent
     protected $fields = [];
     protected $relatedModels = [];
     protected $modelName = null;
+
+    /** @var BaseEntity */
     protected $editedObject = null;
 
 
