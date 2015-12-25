@@ -146,6 +146,7 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         'TwigBridge\ServiceProvider',
+        'Intervention\Image\ImageServiceProvider',
     ],
 
     /*
@@ -194,6 +195,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Twig' => 'TwigBridge\Facade\Twig',
+        'Imaging' => 'Intervention\Image\Facades\Image',
     ],
 
 ];

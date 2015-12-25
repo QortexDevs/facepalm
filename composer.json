@@ -9,9 +9,10 @@
     "type": "project",
     "require": {
         "php": ">=5.5.9",
-        "laravel/framework": "5.2.*",
+        "laravel/framework": "5.1.*",
         "twig/twig": "~1.23",
-        "rcrowe/twigbridge": "0.9.x"
+        "rcrowe/twigbridge": "0.9.x",
+        "intervention/image": "^2.3"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

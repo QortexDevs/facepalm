@@ -19,15 +19,10 @@
 
 namespace App\Facepalm\Components;
 
-use App\Facepalm\CmsCommon;
-use App\Facepalm\Fields\FieldListProcessor;
-use App\Facepalm\Fields\Types\RelationField;
 use App\Facepalm\ModelFactory;
-use App\Facepalm\Models\BaseEntity;
 use App\Facepalm\Models\Image;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Mockery\CountValidator\Exception;
 
@@ -81,7 +76,12 @@ class CmsForm extends CmsComponent
      */
     public function display()
     {
-        $this->editedObject->images()->create(['group' => 'new']);
+//        $image = new Image();
+//        $image->save();
+//        $image->group = 'trololo3';
+//        $image->name = 'test';
+//        $this->editedObject->images()->save($image);
+//        $img = Image::make('foo.jpg')->resize(300, 200);
 
         if (!$this->modelName) {
             throw new \Exception('No model defined');

@@ -19,6 +19,7 @@ class CreateImagesTable extends Migration
             $table->integer('bind_id');
             $table->string('bind_type');
             $table->string('group');
+            $table->string('name');
             $table->integer('width');
             $table->integer('height');
             $table->integer('original_width');
@@ -26,6 +27,7 @@ class CreateImagesTable extends Migration
             $table->string('ext');
             $table->string('original_name');
             $table->timestamps();
+            $table->unique('name');
         });
     }
 
