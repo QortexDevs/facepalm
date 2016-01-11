@@ -195,7 +195,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Twig' => 'TwigBridge\Facade\Twig',
-        'Imaging' => 'Intervention\Image\Facades\Image',
+        'Image' => 'Intervention\Image\Facades\Image',
     ],
 
 ];

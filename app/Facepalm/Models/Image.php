@@ -10,6 +10,9 @@ namespace App\Facepalm\Models;
 
 use App\Facepalm\Models\Foundation\BindableEntity;
 use App\Facepalm\Path;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
+use Mockery\CountValidator\Exception;
 
 
 /**
@@ -26,7 +29,16 @@ use App\Facepalm\Path;
  */
 class Image extends BindableEntity
 {
-    protected $fillable = ['group', 'width', 'height', 'original_width', 'original_height', 'ext', 'original_name'];
+    protected $fillable = [
+        'group',
+        'width',
+        'height',
+        'status',
+        'original_width',
+        'original_height',
+        'ext',
+        'original_name'
+    ];
 
     /**
      *
@@ -39,38 +51,163 @@ class Image extends BindableEntity
         self::creating(function (Image $image) {
             $image->generateName();
         });
+
+        //todo: событие на удаление
     }
+
+    public static function createFromUpload($name)
+    {
+        return self::createFromFile($_FILES[$name]['tmp_name'], $_FILES[$name]['name']);
+    }
+
+    //todo: make from url
+    public static function createFromFile($srcFile, $originalName = '')
+    {
+        $size = getimagesize($srcFile);
+        if ($size) {
+            $image = new Image();
+            $image->generateName();
+
+            if (is_uploaded_file($srcFile)) {
+                $image->original_name = $originalName;
+            } else {
+                $image->original_name = basename($srcFile);
+            }
+
+            $image->ext = self::getExtension($image->original_name);
+            $image->status = 1;
+            $image->original_width = $size[0];
+            $image->original_height = $size[1];
+
+            //todo: think about it
+            mkdir(dirname($image->getPhysicalPath('original')), 0755, true);
+
+            if (is_uploaded_file($srcFile)) {
+                move_uploaded_file($srcFile, $image->getPhysicalPath('original'));
+            } else {
+                copy($srcFile, $image->getPhysicalPath('original'));
+            }
+
+            return $image;
+        } else {
+            throw new Exception('Not an image');
+        }
+    }
+
+    /**
+     * todo: вынести пути в конфиги
+     * @param $suffix
+     * @return string
+     */
+    public function getUri($suffix)
+    {
+        $path = $this->getRelativePath($suffix);
+        if ($path) {
+            return '/media/images/' . $path;
+        }
+    }
+
+    /**
+     * Allowed formats:
+     *
+     * 200x300
+     * 200
+     * x300
+     * todo: think about non-proportional resize
+     *
+     * @param $sizeString
+     * @return $this
+     */
+    public function generateSize($sizeString)
+    {
+        $width = $height = null;
+        $size = explode('x', $sizeString);
+        if (isset($size[0]) && (int)$size[0] > 0) {
+            $width = (int)$size[0];
+        }
+        if (isset($size[1]) && (int)$size[1] > 0) {
+            $height = (int)$size[1];
+        }
+        if ($width || $height) {
+            $image = \Intervention\Image\Facades\Image::make($this->getPhysicalPath('original'));
+            if ($width && $height) {
+                $image->fit($width, $height);
+            } else {
+                $image->resize($width, $height, function ($constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                });
+            }
+            $image->save($this->getPhysicalPath($sizeString));
+        }
+        return $this;
+    }
+
 
     /**
      * Cheating own protective mutator
      */
     protected function generateName()
     {
-        $this->attributes['name'] = md5(uniqid(microtime(true), true));
+        if (!$this->name) {
+            $this->attributes['name'] = md5(uniqid(microtime(true), true));
+        }
     }
 
     /**
      * Protect name from external changing
-     *
-     * @param $value
      * @return bool
      */
-    public function setNameAttribute($value)
+    protected function setNameAttribute()
     {
         return false;
     }
 
     /**
+     * todo: а оно точно должно быть статическим? наверное да, но подумать. Или переименовать
+     * @param $filename
+     * @return mixed|string
+     */
+    protected static function getExtension($filename)
+    {
+        //todo: подумать, конечео, на эту тему. Уныло это.
+        $allowed = ['jpg', 'png', 'gif'];
+        $replaceable = [
+            'jpeg' => 'jpg'
+        ];
+
+        $ext = Str::lower(substr($filename, strrpos($filename, '.') + 1));
+        $ext = Arr::get($replaceable, $ext, $ext);
+        $ext = Arr::has($allowed, $ext) ? $ext : array_shift($allowed);
+
+        return $ext;
+    }
+
+
+    /**
+     * todo: вынести пути в конфиги
      * @param string $suffix
      * @return string
      */
-    public function getFullPath($suffix = '')
+    protected function getPhysicalPath($suffix = '')
+    {
+        $path = $this->getRelativePath($suffix);
+        if ($path) {
+            return app()->publicPath() . DIRECTORY_SEPARATOR . 'media' . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . $path;
+        }
+    }
+
+
+    /**
+     * @param string $suffix
+     * @return string
+     */
+    protected function getRelativePath($suffix = '')
     {
         if ($this->name) {
             return Path::generateHierarchicalPrefix($this->name)
             . ($suffix ? ('_' . $suffix) : '')
             . ($this->ext ? ('.' . $this->ext) : '');
-
         }
     }
 
