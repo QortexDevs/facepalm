@@ -3,6 +3,7 @@
 /bower_components
 
 /public/assets/build
+/public/media/
 
 Homestead.yaml
 Homestead.json

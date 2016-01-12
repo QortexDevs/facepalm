@@ -20,11 +20,11 @@
     "list": {
         "columns": {
             "email": true,
-            "updated_at":{
-                "title":"Upd",
-                "type":"date"
+            "updated_at": {
+                "title": "Upd",
+                "type": "date"
             },
-            "role.name":true,
+            "role.name": true,
             "type": {
                 "type": "select",
                 "options": {
@@ -42,12 +42,16 @@
                 "type": "password",
                 "width": "200px"
             },
-            "role.name":{
-                "cardinality":"many"
+            "role.name": {
+                "cardinality": "many"
             },
             "type": {
                 "title": "Роль",
                 "type": "select"
+            },
+            "avatar": {
+                "type": "image",
+                "title": "Аватарко"
             },
             "status": {
                 "type": "boolean"

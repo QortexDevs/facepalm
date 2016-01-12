@@ -8,6 +8,7 @@
 //= ../../../../bower_components/moment/moment.js
 //= ../../../../bower_components/pikaday-time/pikaday.js
 //= ../../../../bower_components/growl/javascripts/jquery.growl.js
+//= ../../../../bower_components/dropzone/dist/dropzone.js
 
 $(document).ready(function () {
 
@@ -74,6 +75,23 @@ $(document).ready(function () {
     $('.datepicker + .clear-date').on('click', function () {
         $(this).prev().val('');
     });
+
+    Dropzone.autoDiscover = false;
+    $(".dropzone").each(function () {
+        $(this).dropzone({
+            url: "./?_token=" + $('input:hidden[name=_token]').val(),
+            paramName: $(this).data('input-name'),
+            //maxFilesize: 2, // MB
+            //uploadMultiple:true,
+            //addRemoveLinks:true,
+            //accept: function(file, done) {
+            //    if (file.name == "justinbieber.jpg") {
+            //        done("Naha, you don't.");
+            //    }
+            //    else { done(); }
+            //}
+        });
+    })
 
 
 });

@@ -7,12 +7,16 @@ namespace App\Facepalm;
 
 use App\Facepalm\Components\CmsList;
 use App\Facepalm\Components\CmsForm;
+use App\Facepalm\Models\Foundation\AbstractEntity;
+use App\Facepalm\Models\Foundation\BaseEntity;
+use App\Facepalm\Models\Image;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
 use TwigBridge\Facade\Twig;
@@ -92,6 +96,10 @@ class AmfProcessor
     {
         // Run through all incoming fields except Many-to-Many relations and set it
         foreach ($keyValue as $fieldName => $value) {
+            //todo: а всякие параметры как передавать сюда?
+            if ($this->isImageUploadField($fieldName)) {
+                $this->handleImageUpload($object, $value);
+            }
             if (!$this->isManyToMany($object, $fieldName)) {
                 // todo: учитывать описания полей из общей схемы данных (которой пока нет :))
                 if ($this->isBelongsToField($object, $fieldName)) {
@@ -194,5 +202,34 @@ class AmfProcessor
     protected function isManyToMany($object, $fieldName)
     {
         return $object->$fieldName instanceof Collection;
+    }
+
+    /**
+     * @param $fieldName
+     * @return bool
+     */
+    private function isImageUploadField($fieldName)
+    {
+        return $fieldName == '__image__';
+    }
+
+    /**
+     * @param $object
+     * @param $value
+     */
+    private function handleImageUpload(BaseEntity $object, $value)
+    {
+        if (is_array($value)) {
+            foreach ($value as $imageName => $file) {
+                //todo: проверить если multiple
+                $img = Image::createFromUpload($file)
+                    ->setAttribute('group', $imageName);
+                $img->save();
+                $object->images()->save($img);
+
+            }
+        }
+
+        dd($object, $value);
     }
 }

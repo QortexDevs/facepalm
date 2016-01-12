@@ -13,6 +13,7 @@ use App\Facepalm\Path;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Mockery\CountValidator\Exception;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 
 /**
@@ -55,9 +56,13 @@ class Image extends BindableEntity
         //todo: событие на удаление
     }
 
-    public static function createFromUpload($name)
+    public static function createFromUpload($file)
     {
-        return self::createFromFile($_FILES[$name]['tmp_name'], $_FILES[$name]['name']);
+        if ($file instanceof UploadedFile) {
+            return self::createFromFile($file->getPathName(), $file->getClientOriginalName());
+        } else {
+            return self::createFromFile($_FILES[$file]['tmp_name'], $_FILES[$file]['name']);
+        }
     }
 
     //todo: make from url

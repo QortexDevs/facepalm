@@ -76,14 +76,6 @@ class CmsForm extends CmsComponent
      */
     public function display()
     {
-        Image::createFromFile('/Users/xpundel/Downloads/PICT0025.JPG')
-            ->setAttribute('group', 'avatar')
-            ->generateSize('200x200')
-            ->generateSize('200x400')
-            ->generateSize('x400')
-            ->generateSize('300')
-            ->save();
-
         if (!$this->modelName) {
             throw new \Exception('No model defined');
         }
