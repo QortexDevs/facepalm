@@ -53,6 +53,10 @@
                 "type": "image",
                 "title": "Аватарко"
             },
+            "avatar2": {
+                "type": "image",
+                "title": "Аватарко2"
+            },
             "status": {
                 "type": "boolean"
             },

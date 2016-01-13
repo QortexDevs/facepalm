@@ -81,9 +81,21 @@ $(document).ready(function () {
         $(this).dropzone({
             url: "./?_token=" + $('input:hidden[name=_token]').val(),
             paramName: $(this).data('input-name'),
-            //maxFilesize: 2, // MB
-            //uploadMultiple:true,
-            //addRemoveLinks:true,
+            uploadMultiple: true,
+            addRemoveLinks: true,
+            createImageThumbnails: false,
+            acceptedFiles: 'image/*',
+            //previewTemplate: '<div class="dz-preview dz-file-preview">' +
+            //'<div class="dz-details">' +
+            //'<div class="dz-filename"><span data-dz-name></span></div>' +
+            //'<div class="dz-size" data-dz-size></div>' +
+            //'</div>' +
+            //'<div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>' +
+            //'</div>',
+            success: function (file, response) {
+                this.removeFile(file);
+                console.log(file, response);
+            }
             //accept: function(file, done) {
             //    if (file.name == "justinbieber.jpg") {
             //        done("Naha, you don't.");

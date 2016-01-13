@@ -3,7 +3,7 @@
     padding-bottom: 85px;
 
     .form-buttons {
-        margin-left:-50px;
+        margin-left: -50px;
         background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 22%);
         width: 100%;
         position: fixed;
@@ -11,9 +11,9 @@
         padding: 20px 0 0px 0px;
 
         .inner-container {
-            box-shadow: 0 -1px 30px -10px rgba(0,0,0,0.07);
+            box-shadow: 0 -1px 30px -10px rgba(0, 0, 0, 0.07);
             border-top: 1px solid #f4f7fa;
-            padding:15px 30px;
+            padding: 15px 30px;
         }
     }
 }
@@ -33,7 +33,7 @@
                 padding-bottom: 30px;
 
                 .caption {
-                    font:400 15px $additionalFontName;
+                    font: 400 15px $additionalFontName;
                     color: $captionsColor;
                     padding: 3px 20px;
                     margin-top: 3px;
@@ -48,7 +48,7 @@
 
             &.field {
                 padding-bottom: 30px;
-                width:100%;
+                width: 100%;
 
                 &.red {
                     p {
@@ -111,3 +111,9 @@
     }
 }
 
+.dropzone {
+    border: 1px dotted #6484CC;
+    background: white;
+    padding: 0;
+    min-height: 0;
+}

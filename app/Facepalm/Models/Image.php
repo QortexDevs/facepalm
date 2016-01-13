@@ -85,7 +85,9 @@ class Image extends BindableEntity
             $image->original_height = $size[1];
 
             //todo: think about it
-            mkdir(dirname($image->getPhysicalPath('original')), 0755, true);
+            if (!is_dir(dirname($image->getPhysicalPath('original')))) {
+                mkdir(dirname($image->getPhysicalPath('original')), 0755, true);
+            }
 
             if (is_uploaded_file($srcFile)) {
                 move_uploaded_file($srcFile, $image->getPhysicalPath('original'));

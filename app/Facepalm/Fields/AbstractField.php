@@ -15,11 +15,29 @@ use TwigBridge\Facade\Twig;
  * @property string title
  * @property mixed isLinkInList
  * @property mixed fieldNameBase
+ * @property mixed uploadName
  */
 abstract class AbstractField implements \ArrayAccess
 {
     protected $parameters = [];
     protected $templateName;
+    protected $skipped = false;
+
+    /**
+     * @return boolean
+     */
+    public function isSkipped()
+    {
+        return $this->skipped;
+    }
+
+    /**
+     * @param boolean $skipped
+     */
+    public function setSkipped($skipped)
+    {
+        $this->skipped = $skipped;
+    }
 
     /**
      * AbstractField constructor.
@@ -147,6 +165,7 @@ abstract class AbstractField implements \ArrayAccess
             return Twig::render($template, [
                     'object' => $object,
                     'field' => $this->name,
+                    'uploadName' => $this->uploadName,
                     'fieldNameBase' => $this->fieldNameBase,
                     'inputName' => $this->fieldNameBase . '[' . $this->name . ']',
                     'parameters' => $this->parameters,

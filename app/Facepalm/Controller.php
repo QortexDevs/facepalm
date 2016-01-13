@@ -146,6 +146,9 @@ class Controller extends BaseController
                 return response()->json($amfProcessor->getToggledFields());
             }
         }
+        if ($files = $amfProcessor->getUploadedFiles()) {
+            return response()->json($files);
+        }
     }
 
     /**

@@ -19,6 +19,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use TwigBridge\Facade\Twig;
 
 class AmfProcessor
@@ -26,6 +27,7 @@ class AmfProcessor
     protected $affectedObjectsCount = 0;
     protected $affectedFieldsCount = 0;
     protected $toggledFields = [];
+    protected $uploadedFiles = [];
 
     /**
      * Run through AMF input array
@@ -87,6 +89,14 @@ class AmfProcessor
         return $this->toggledFields;
     }
 
+    /**
+     * @return array
+     */
+    public function getUploadedFiles()
+    {
+        return $this->uploadedFiles;
+    }
+
 
     /**
      * @param Model $object
@@ -96,10 +106,6 @@ class AmfProcessor
     {
         // Run through all incoming fields except Many-to-Many relations and set it
         foreach ($keyValue as $fieldName => $value) {
-            //todo: а всякие параметры как передавать сюда?
-            if ($this->isImageUploadField($fieldName)) {
-                $this->handleImageUpload($object, $value);
-            }
             if (!$this->isManyToMany($object, $fieldName)) {
                 // todo: учитывать описания полей из общей схемы данных (которой пока нет :))
                 if ($this->isBelongsToField($object, $fieldName)) {
@@ -146,6 +152,21 @@ class AmfProcessor
         }
         $object->save();
 
+    }
+
+    /**
+     * @param $object
+     * @param $keyValue
+     */
+    protected function processObjectUpload($object, $keyValue)
+    {
+        // Run through all incoming fields except Many-to-Many relations and set it
+        foreach ($keyValue as $fieldName => $value) {
+            //todo: а всякие параметры как передавать сюда?
+            if ($this->isImageUploadField($fieldName)) {
+                $this->handleImageUpload($object, $value);
+            }
+        }
     }
 
     /**
@@ -210,26 +231,35 @@ class AmfProcessor
      */
     private function isImageUploadField($fieldName)
     {
-        return $fieldName == '__image__';
+        return $fieldName == 'image';
     }
 
     /**
      * @param $object
      * @param $value
+     * @return array
      */
     private function handleImageUpload(BaseEntity $object, $value)
     {
         if (is_array($value)) {
-            foreach ($value as $imageName => $file) {
-                //todo: проверить если multiple
-                $img = Image::createFromUpload($file)
-                    ->setAttribute('group', $imageName);
-                $img->save();
-                $object->images()->save($img);
+            foreach ($value as $imageName => $files) {
+                if ($files instanceof UploadedFile) {
+                    $files = [$files];
+                }
+                foreach ($files as $file) {
+                    //todo: проверить если multiple
+                    $img = Image::createFromUpload($file)
+                        ->setAttribute('group', $imageName);
+                    $img->save();
+                    $object->images()->save($img);
+                    $this->uploadedFiles[] = [
+                        'id' => $img->id,
+                        'pathThumbnail' => $img->getUri('80x80'),
+                        'pathFull' => $img->getUri('original'),
+                    ];
+                }
 
             }
         }
-
-        dd($object, $value);
     }
 }
