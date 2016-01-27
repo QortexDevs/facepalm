@@ -18,4 +18,9 @@ abstract class BindableEntity extends AbstractEntity
     {
         return $this->morphTo();
     }
+
+    public function scopeOfGroup($query, $group)
+    {
+        return $query->where('group', $group);
+    }
 }

@@ -20,6 +20,7 @@ use TwigBridge\Facade\Twig;
 abstract class AbstractField implements \ArrayAccess
 {
     protected $parameters = [];
+    protected $data = [];
     protected $templateName;
     protected $skipped = false;
 
@@ -169,6 +170,7 @@ abstract class AbstractField implements \ArrayAccess
                     'fieldNameBase' => $this->fieldNameBase,
                     'inputName' => $this->fieldNameBase . '[' . $this->name . ']',
                     'parameters' => $this->parameters,
+                    'data' => $this->data,
                 ] + $parameters);
         }
     }

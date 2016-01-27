@@ -54,7 +54,7 @@ class AmfProcessor
                                     $object = new $fullModelName();
                                 }
                                 if ($object) {
-                                    $this->{$processMethod}($object, $keyValue);
+                                    $this->{$processMethod}($object, $keyValue, $amf);
                                 }
                             }
                         }
@@ -102,7 +102,7 @@ class AmfProcessor
      * @param Model $object
      * @param $keyValue
      */
-    protected function processObjectSave($object, $keyValue)
+    protected function processObjectSave($object, $keyValue, $requestRawData)
     {
         // Run through all incoming fields except Many-to-Many relations and set it
         foreach ($keyValue as $fieldName => $value) {
@@ -134,16 +134,16 @@ class AmfProcessor
      * @param $object
      * @param $keyValue
      */
-    protected function processObjectCreate($object, $keyValue)
+    protected function processObjectCreate($object, $keyValue, $requestRawData)
     {
-        $this->processObjectSave($object, $keyValue);
+        $this->processObjectSave($object, $keyValue, $requestRawData);
     }
 
     /**
      * @param $object
      * @param $keyValue
      */
-    protected function processObjectToggle($object, $keyValue)
+    protected function processObjectToggle($object, $keyValue, $requestRawData)
     {
         foreach (array_keys($keyValue) as $fieldName) {
             $this->affectedFieldsCount++;
@@ -154,17 +154,22 @@ class AmfProcessor
 
     }
 
+    protected function processObjectDelete($object, $keyValue, $requestRawData)
+    {
+        $object->delete();
+    }
+
     /**
      * @param $object
      * @param $keyValue
      */
-    protected function processObjectUpload($object, $keyValue)
+    protected function processObjectUpload($object, $keyValue, $requestRawData)
     {
         // Run through all incoming fields except Many-to-Many relations and set it
         foreach ($keyValue as $fieldName => $value) {
             //todo: а всякие параметры как передавать сюда?
             if ($this->isImageUploadField($fieldName)) {
-                $this->handleImageUpload($object, $value);
+                $this->handleImageUpload($object, $value, $requestRawData);
             }
         }
     }
@@ -239,7 +244,7 @@ class AmfProcessor
      * @param $value
      * @return array
      */
-    private function handleImageUpload(BaseEntity $object, $value)
+    private function handleImageUpload(BaseEntity $object, $value, $requestRawData)
     {
         if (is_array($value)) {
             foreach ($value as $imageName => $files) {
@@ -247,15 +252,28 @@ class AmfProcessor
                     $files = [$files];
                 }
                 foreach ($files as $file) {
-                    //todo: проверить если multiple
+                    if (!Arr::get($requestRawData, 'multiple', false)) {
+                        //удаляем предыдущие картинки
+                        $object->images()->ofGroup($imageName)->delete();
+                    }
+
+                    // todo: вынести в конфиг дефолтный
+                    $previewSize = Arr::get($requestRawData, 'previewSize', '80x80');
+
                     $img = Image::createFromUpload($file)
-                        ->setAttribute('group', $imageName);
+                        ->setAttribute('group', $imageName)
+                        ->generateSize($previewSize);
+
+                    //todo: дополнительные прегенерируемые размеры
+
                     $img->save();
                     $object->images()->save($img);
                     $this->uploadedFiles[] = [
-                        'id' => $img->id,
-                        'pathThumbnail' => $img->getUri('80x80'),
-                        'pathFull' => $img->getUri('original'),
+                        'image' => [
+                            'id' => $img->id,
+                            'preview' => $img->getUri($previewSize),
+                            'full' => $img->getUri('original'),
+                        ]
                     ];
                 }
 

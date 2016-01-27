@@ -9,6 +9,7 @@
 //= ../../../../bower_components/pikaday-time/pikaday.js
 //= ../../../../bower_components/growl/javascripts/jquery.growl.js
 //= ../../../../bower_components/dropzone/dist/dropzone.js
+//= ../../../../bower_components/twig.js/twig.js
 
 $(document).ready(function () {
 
@@ -77,11 +78,36 @@ $(document).ready(function () {
     });
 
     Dropzone.autoDiscover = false;
+    var template = twig({
+        data: $('#image-preview-template').html()
+    });
+
+
+    $(document).on('click', '.images-list .image .delete', function () {
+        if (confirm('Sure?')) {
+            var $image = $(this).closest('.image');
+            var id = $image.data('id');
+            var model = 'image';
+            var payload = _.extend({}.setWithPath(['delete', model, id], 1), getCsrfTokenParameter());
+            $.post('./', payload, 'json').done(function (result) {
+                $image.fadeOut(function () {
+                    $(this).remove();
+                });
+            });
+            return false;
+
+        }
+    });
+
     $(".dropzone").each(function () {
+        var $dropzone = $(this);
+        var isMultiple = $dropzone.data('multiple') == "1";
         $(this).dropzone({
-            url: "./?_token=" + $('input:hidden[name=_token]').val(),
+            url: "./?_token=" + $('input:hidden[name=_token]').val() + $dropzone.data('parameters'),
             paramName: $(this).data('input-name'),
-            uploadMultiple: true,
+            parallelUploads: 3,
+            maxFiles: isMultiple ? null : 1,
+            uploadMultiple: isMultiple,
             addRemoveLinks: true,
             createImageThumbnails: false,
             acceptedFiles: 'image/*',
@@ -94,7 +120,14 @@ $(document).ready(function () {
             //'</div>',
             success: function (file, response) {
                 this.removeFile(file);
-                console.log(file, response);
+                if (!isMultiple) {
+                    $dropzone.prev().empty();
+                }
+                for (var i in response) {
+                    if (!$('.images-list .image[data-id=' + response[i].image.id + ']').length) {
+                        $dropzone.prev().append(template.render(response[i]))
+                    }
+                }
             }
             //accept: function(file, done) {
             //    if (file.name == "justinbieber.jpg") {

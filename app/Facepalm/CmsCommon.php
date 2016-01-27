@@ -27,11 +27,21 @@ class CmsCommon
      */
     public static function getFullModelClassName($modelName)
     {
-        if ($modelName && !Str::startsWith($modelName, 'App\Models\\')) {
-            $modelName = 'App\Models\\' . Str::studly($modelName);
+        $fullModelName = $modelName;
+        //todo: change namespace!!!!
+        if ($modelName
+            && !Str::startsWith($modelName, 'App\Models\\')
+            && !Str::startsWith($modelName, 'App\Facepalm\Models\\')
+        ) {
+            $fullModelName = 'App\Models\\' . Str::studly($modelName);
         }
-        if (class_exists($modelName)) {
-            return $modelName;
+        if (class_exists($fullModelName)) {
+            return $fullModelName;
+        } else {
+            $fullModelName = 'App\Facepalm\Models\\' . Str::studly($modelName);
+            if (class_exists($fullModelName)) {
+                return $fullModelName;
+            }
         }
 
         return null;

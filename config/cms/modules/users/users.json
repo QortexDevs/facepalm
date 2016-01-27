@@ -51,11 +51,14 @@
             },
             "avatar": {
                 "type": "image",
-                "title": "Аватарко"
+                "title": "Аватарко",
+                "multiple": true,
+                "custom":"fucker"
             },
             "avatar2": {
                 "type": "image",
-                "title": "Аватарко2"
+                "title": "Аватарко2",
+                "previewSize":"100x100"
             },
             "status": {
                 "type": "boolean"
