@@ -44,7 +44,8 @@ class ImageField extends AbstractField
                 $this->data['images'][] = [
                     'id' => $image->id,
                     'preview' => $image->getUri($this->parameters['previewSize']),
-                    'full' => $image->getUri('original')
+                    'full' => $image->getUri('original'),
+                    'group' => $this->parameters['name']
                     // todo: показывать не оригинал по клику, а другой размер?
                 ];
             }

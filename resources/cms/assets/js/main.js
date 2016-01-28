@@ -11,6 +11,7 @@
 //= ../../../../bower_components/dropzone/dist/dropzone.js
 //= ../../../../bower_components/twig.js/twig.js
 //= ../../../../bower_components/Sortable/Sortable.js
+//= ../../../../bower_components/fancybox/source/jquery.fancybox.pack.js
 
 $(document).ready(function () {
 
@@ -99,8 +100,19 @@ $(document).ready(function () {
 
         }
     });
-
     $('.images-list').each(function () {
+        $(this).find('.image > a').fancybox({
+            padding : 1,
+            openEffect  : 'elastic',
+            helpers: {
+                overlay: {
+                    locked: false,
+                    css: {
+                        'background': 'rgba(0,0,0,0.5)'
+                    }
+                }
+            }
+        });
         var sortable = Sortable.create($(this)[0], {
             animation: 200,
             scroll: true,

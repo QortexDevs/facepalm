@@ -276,6 +276,7 @@ class AmfProcessor
                             'id' => $img->id,
                             'preview' => $img->getUri($previewSize),
                             'full' => $img->getUri('original'),
+                            'group' => $imageName
                         ]
                     ];
                 }

@@ -1,4 +1,6 @@
 <div class="image" data-id="{{ image.id }}">
     <button type="button" class="delete fa fa-times"></button>
-    <a href="{{ image.full }}" target="_blank"><img src="{{ image.preview }}"></a>
+    <a href="{{ image.full }}" target="_blank" data-fancybox-group="{{ image.group }}">
+        <img src="{{ image.preview }}">
+    </a>
 </div>
