@@ -22,6 +22,7 @@
     "moment": "~2.10.*",
     "pikaday-time": "~1.*",
     "dropzone": "enyo/dropzone#~4.2.0",
-    "twig.js": "~0.8.7"
+    "twig.js": "~0.8.7",
+    "Sortable": "~1.4.2"
   }
 }

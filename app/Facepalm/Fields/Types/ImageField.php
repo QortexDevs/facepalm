@@ -28,13 +28,13 @@ class ImageField extends AbstractField
 
         $this->data['skipTransferringParameters'] = ['name', 'title', 'type', 'uploadName', 'fieldNameBase'];
         if (!Arr::has($this->parameters, 'previewSize')) {
-            $this->parameters['previewSize'] = '80x80'; //todo: вынести в дефорлтные приложения параметры
+            $this->parameters['previewSize'] = config('app.defaultThumbnailSize');
         }
 
         if ($object) {
             $images = $object->images()->ofGroup($this->parameters['name']);
             if (Arr::get($this->parameters, 'multiple', false)) {
-                $images = $images->orderBy('id', 'asc');
+                $images = $images->orderBy('show_order', 'asc');
             } else {
                 $images = $images->orderBy('id', 'desc')->limit(1);
             }

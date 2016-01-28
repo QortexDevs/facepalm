@@ -10,6 +10,7 @@
 //= ../../../../bower_components/growl/javascripts/jquery.growl.js
 //= ../../../../bower_components/dropzone/dist/dropzone.js
 //= ../../../../bower_components/twig.js/twig.js
+//= ../../../../bower_components/Sortable/Sortable.js
 
 $(document).ready(function () {
 
@@ -97,6 +98,24 @@ $(document).ready(function () {
             return false;
 
         }
+    });
+
+    $('.images-list').each(function () {
+        var sortable = Sortable.create($(this)[0], {
+            animation: 200,
+            scroll: true,
+            onUpdate: function (/**Event*/evt) {
+                var orderArray = sortable.toArray();
+                var model = 'image';
+                var payload = _.extend({save: {image: {}}}, getCsrfTokenParameter());
+                for (var i in orderArray) {
+                    payload['save']['image'][orderArray[i]] = {'show_order': parseInt(i) + 1};
+                }
+                //console.log(payload);
+                $.post('./', payload, 'json');
+            },
+        });
+
     });
 
     $(".dropzone").each(function () {

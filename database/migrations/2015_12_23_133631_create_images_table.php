@@ -16,6 +16,7 @@ class CreateImagesTable extends Migration
             $table->increments('id');
             $table->integer('parent_id');
             $table->integer('status');
+            $table->integer('show_order');
             $table->integer('bind_id');
             $table->string('bind_type');
             $table->string('group');

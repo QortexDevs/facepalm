@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
@@ -257,16 +258,18 @@ class AmfProcessor
                         $object->images()->ofGroup($imageName)->delete();
                     }
 
-                    // todo: вынести в конфиг дефолтный
-                    $previewSize = Arr::get($requestRawData, 'previewSize', '80x80');
+                    $previewSize = Arr::get($requestRawData, 'previewSize', config('app.defaultThumbnailSize'));
 
                     $img = Image::createFromUpload($file)
                         ->setAttribute('group', $imageName)
                         ->generateSize($previewSize);
 
                     //todo: дополнительные прегенерируемые размеры
+                    DB::transaction(function () use ($img) {
+                        $img->show_order = Image::max('show_order') + 1;
+                        $img->save();
+                    });
 
-                    $img->save();
                     $object->images()->save($img);
                     $this->uploadedFiles[] = [
                         'image' => [

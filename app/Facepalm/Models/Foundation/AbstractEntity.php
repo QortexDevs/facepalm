@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property integer id
  * @property integer parent_id
+ * @property integer show_order
  * @property boolean status
  * @property string created_at
  * @property string updated_at

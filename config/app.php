@@ -2,6 +2,8 @@
 
 return [
 
+    'defaultThumbnailSize' => '80x80',
+
     /*
     |--------------------------------------------------------------------------
     | Application Debug Mode
