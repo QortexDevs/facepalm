@@ -21,23 +21,19 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @property integer bind_type
  * @property string group
  * @property string name
- * @property integer width
- * @property integer height
- * @property integer original_width
- * @property integer original_height
- * @property string ext
+ * @property integer size
+ * @property integer type
  * @property string original_name
+ * @property string display_name
  */
-class Image extends BindableEntity
+class File extends BindableEntity
 {
     protected $fillable = [
         'group',
         'width',
         'height',
         'status',
-        'original_width',
-        'original_height',
-        'ext',
+        'size',
         'original_name'
     ];
 
@@ -49,19 +45,12 @@ class Image extends BindableEntity
         parent::boot();
 
         // generate name on model creating
-        self::creating(function (Image $image) {
-            $image->generateName();
+        self::creating(function (File $file) {
+            $file->generateName();
         });
-        self::deleted(function (Image $image) {
-            $files = glob($image->getPhysicalPath('*'));
-            if ($files) {
-                foreach ($files as $file) {
-                    @unlink($file);
-                }
-            }
+        self::deleted(function (File $file) {
+            @unlink($file->getPhysicalPath());
         });
-
-        //todo: событие на удаление
     }
 
     public static function createFromUpload($file)
@@ -76,49 +65,48 @@ class Image extends BindableEntity
     //todo: make from url
     public static function createFromFile($srcFile, $originalName = '')
     {
-        $size = getimagesize($srcFile);
+        $size = filesize($srcFile);
         if ($size) {
-            $image = new Image();
-            $image->generateName();
+            $file = new File();
+            $file->generateName();
 
             if (is_uploaded_file($srcFile)) {
-                $image->original_name = $originalName;
+                $file->original_name = $originalName;
             } else {
-                $image->original_name = basename($srcFile);
+                $file->original_name = basename($srcFile);
             }
 
-            $image->ext = self::getExtension($image->original_name);
-            $image->status = 1;
-            $image->original_width = $size[0];
-            $image->original_height = $size[1];
+            $file->type = $file->getExtension();
+            $file->display_name = substr($file->original_name, 0, -strlen($file->type) - 1);
+            $file->status = 1;
+            $file->size = $size;
 
             //todo: think about it
-            if (!is_dir(dirname($image->getPhysicalPath('original')))) {
-                mkdir(dirname($image->getPhysicalPath('original')), 0755, true);
+            if (!is_dir(dirname($file->getPhysicalPath()))) {
+                mkdir(dirname($file->getPhysicalPath()), 0755, true);
             }
 
             if (is_uploaded_file($srcFile)) {
-                move_uploaded_file($srcFile, $image->getPhysicalPath('original'));
+                move_uploaded_file($srcFile, $file->getPhysicalPath());
             } else {
-                copy($srcFile, $image->getPhysicalPath('original'));
+                copy($srcFile, $file->getPhysicalPath());
             }
 
-            return $image;
+            return $file;
         } else {
-            throw new Exception('Not an image');
+            throw new Exception('Empty file');
         }
     }
 
     /**
      * todo: вынести пути в конфиги
-     * @param $suffix
      * @return string
      */
-    public function getUri($suffix)
+    public function getUri()
     {
-        $path = $this->getRelativePath($suffix);
+        $path = $this->getRelativePath();
         if ($path) {
-            return '/media/images/' . $path;
+            return '/media/files/' . $path . '/' . $this->display_name . '.' . $this->type;
         }
     }
 
@@ -180,20 +168,11 @@ class Image extends BindableEntity
 
     /**
      * todo: а оно точно должно быть статическим? наверное да, но подумать. Или переименовать
-     * @param $filename
      * @return mixed|string
      */
-    protected static function getExtension($filename)
+    public function getExtension()
     {
-        //todo: подумать, конечео, на эту тему. Уныло это.
-        $allowed = ['jpg', 'png', 'gif'];
-        $replaceable = [
-            'jpeg' => 'jpg'
-        ];
-
-        $ext = Str::lower(substr($filename, strrpos($filename, '.') + 1));
-        $ext = Arr::get($replaceable, $ext, $ext);
-        $ext = Arr::has($allowed, $ext) ? $ext : array_shift($allowed);
+        $ext = Str::lower(substr($this->original_name, strrpos($this->original_name, '.') + 1));
 
         return $ext;
     }
@@ -201,28 +180,24 @@ class Image extends BindableEntity
 
     /**
      * todo: вынести пути в конфиги
-     * @param string $suffix
      * @return string
      */
-    protected function getPhysicalPath($suffix = '')
+    protected function getPhysicalPath()
     {
-        $path = $this->getRelativePath($suffix);
+        $path = $this->getRelativePath();
         if ($path) {
-            return app()->publicPath() . DIRECTORY_SEPARATOR . 'media' . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . $path;
+            return app()->storagePath() . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'media' . DIRECTORY_SEPARATOR . 'files' . DIRECTORY_SEPARATOR . $path;
         }
     }
 
 
     /**
-     * @param string $suffix
      * @return string
      */
-    protected function getRelativePath($suffix = '')
+    protected function getRelativePath()
     {
         if ($this->name) {
-            return Path::generateHierarchicalPrefix($this->name)
-            . ($suffix ? ('_' . $suffix) : '')
-            . ($this->ext ? ('.' . $this->ext) : '');
+            return Path::generateHierarchicalPrefix($this->name);
         }
     }
 

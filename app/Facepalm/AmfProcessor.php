@@ -7,6 +7,7 @@ namespace App\Facepalm;
 
 use App\Facepalm\Components\CmsList;
 use App\Facepalm\Components\CmsForm;
+use App\Facepalm\Models\File;
 use App\Facepalm\Models\Foundation\AbstractEntity;
 use App\Facepalm\Models\Foundation\BaseEntity;
 use App\Facepalm\Models\Image;
@@ -171,6 +172,8 @@ class AmfProcessor
             //todo: а всякие параметры как передавать сюда?
             if ($this->isImageUploadField($fieldName)) {
                 $this->handleImageUpload($object, $value, $requestRawData);
+            } elseif ($this->isFileUploadField($fieldName)) {
+                $this->handleFileUpload($object, $value, $requestRawData);
             }
         }
     }
@@ -241,6 +244,15 @@ class AmfProcessor
     }
 
     /**
+     * @param $fieldName
+     * @return bool
+     */
+    private function isFileUploadField($fieldName)
+    {
+        return $fieldName == 'file';
+    }
+
+    /**
      * @param $object
      * @param $value
      * @return array
@@ -255,7 +267,9 @@ class AmfProcessor
                 foreach ($files as $file) {
                     if (!Arr::get($requestRawData, 'multiple', false)) {
                         //удаляем предыдущие картинки
-                        $object->images()->ofGroup($imageName)->delete();
+                        $object->images()->ofGroup($imageName)->get()->each(function ($image) {
+                            $image->delete();
+                        });
                     }
 
                     $previewSize = Arr::get($requestRawData, 'previewSize', config('app.defaultThumbnailSize'));
@@ -277,6 +291,46 @@ class AmfProcessor
                             'preview' => $img->getUri($previewSize),
                             'full' => $img->getUri('original'),
                             'group' => $imageName
+                        ]
+                    ];
+                }
+
+            }
+        }
+    }
+
+    private function handleFileUpload(BaseEntity $object, $value, $requestRawData)
+    {
+        if (is_array($value)) {
+            foreach ($value as $fileName => $files) {
+                if ($files instanceof UploadedFile) {
+                    $files = [$files];
+                }
+                foreach ($files as $file) {
+                    if (!Arr::get($requestRawData, 'multiple', false)) {
+                        //удаляем предыдущие картинки
+                        $object->files()->ofGroup($fileName)->get()->each(function ($file) {
+                            $file->delete();
+                        });
+                    }
+
+                    $fileObj = File::createFromUpload($file)
+                        ->setAttribute('group', $fileName);
+
+                    //todo: дополнительные прегенерируемые размеры
+                    DB::transaction(function () use ($fileObj) {
+                        $fileObj->show_order = File::max('show_order') + 1;
+                        $fileObj->save();
+                    });
+
+                    $object->files()->save($fileObj);
+                    $this->uploadedFiles[] = [
+                        'file' => [
+                            'id' => $fileObj->id,
+                            'type' => $fileObj->type,
+                            'name' => $fileObj->display_name,
+                            'uri' => $fileObj->getUri(),
+                            'group' => $fileName
                         ]
                     ];
                 }

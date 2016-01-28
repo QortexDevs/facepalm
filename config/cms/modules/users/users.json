@@ -60,6 +60,11 @@
                 "title": "Аватарко2",
                 "previewSize":"100x100"
             },
+            "pricelist": {
+                "multiple": true,
+                "type": "file",
+                "title": "Прайслист"
+            },
             "status": {
                 "type": "boolean"
             },

@@ -1,11 +1,11 @@
-<div class="images-list">
-    {% for image in data.images %}
-        {% include "components/form/imagePreview.twig" %}
+<div class="files-list">
+    {% for file in data.files %}
+        {% include "components/form/filePreview.twig" %}
     {% endfor %}
 </div>
 {#{{ dump(parameters) }}#}
 <div class="dropzone" data-input-name="{{ uploadName }}[{{ parameters.type }}][{{ parameters.name }}]"
-     data-type="image"
+     data-type="file"
      data-multiple="{{ parameters.multiple ? 1 : 0 }}"
      data-parameters="{% for parameterName,parameterValue in parameters %}{% if parameterName not in data.skipTransferringParameters %}&{{ parameterName }}={{ parameterValue }}{% endif %}{% endfor %}">
 </div>

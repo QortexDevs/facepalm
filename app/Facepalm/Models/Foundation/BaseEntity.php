@@ -20,4 +20,12 @@ abstract class BaseEntity extends AbstractEntity
     {
         return $this->morphMany('App\Facepalm\Models\Image', 'bind');
     }
+
+    /**
+     * Get all binded images
+     */
+    public function files()
+    {
+        return $this->morphMany('App\Facepalm\Models\File', 'bind');
+    }
 }
