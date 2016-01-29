@@ -10,6 +10,7 @@ namespace App\Facepalm;
 
 use App\Facepalm\Components\CmsList;
 use App\Facepalm\Components\CmsForm;
+use App\Facepalm\Models\File;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
@@ -17,6 +18,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
 use TwigBridge\Facade\Twig;
 
 class Controller extends BaseController
@@ -89,6 +91,27 @@ class Controller extends BaseController
         }
 
         return '';
+    }
+
+    //todo: вынести это в трейты
+    public function downloadFile(Request $request, $hash, $name = '')
+    {
+        /** @var File $file */
+        $file = File::where('name', $hash)->first();
+        if ($file) {
+            //todo: отдавать readfile
+            //todo: mime-type
+            $guesser = MimeTypeGuesser::getInstance();
+            if (strpos($request->server('SERVER_SOFTWARE'), 'nginx') !== false) {
+                header('Content-Disposition: attachment; filename="' . ($name ?: ($file->display_name . '.' . $file->type)) . '"');
+                header('Content-Type: ' . $guesser->guess($file->getPhysicalPath()));
+                header('X-Accel-Redirect: /_internal_files/' . $file->getRelativePath());
+                // header('X-Sendfile: ' . $file->getPhysicalPath()); //todo:for mode_sendfile
+                exit;
+            }
+        } else {
+            abort(404);
+        }
     }
 
     protected function processParameters($params)

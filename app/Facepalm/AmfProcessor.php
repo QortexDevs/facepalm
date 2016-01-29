@@ -317,7 +317,6 @@ class AmfProcessor
                     $fileObj = File::createFromUpload($file)
                         ->setAttribute('group', $fileName);
 
-                    //todo: дополнительные прегенерируемые размеры
                     DB::transaction(function () use ($fileObj) {
                         $fileObj->show_order = File::max('show_order') + 1;
                         $fileObj->save();
@@ -329,8 +328,8 @@ class AmfProcessor
                             'id' => $fileObj->id,
                             'icon' => $fileObj->getIconClass(),
                             'name' => $fileObj->display_name,
-                            'type' => $file->type,
-                            'size' => $file->getReadableSize(),
+                            'type' => $fileObj->type,
+                            'size' => $fileObj->getReadableSize(),
                             'uri' => $fileObj->getUri(),
                             'group' => $fileName
                         ]

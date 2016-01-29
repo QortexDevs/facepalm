@@ -126,10 +126,7 @@ class File extends BindableEntity
      */
     public function getUri()
     {
-        $path = $this->getRelativePath();
-        if ($path) {
-            return '/media/files/' . $path . '/' . $this->display_name . '.' . $this->type;
-        }
+        return '/media/files/' . $this->name . '/' . $this->display_name . '.' . $this->type;
     }
 
     /**
@@ -204,7 +201,7 @@ class File extends BindableEntity
      * todo: вынести пути в конфиги
      * @return string
      */
-    protected function getPhysicalPath()
+    public function getPhysicalPath()
     {
         $path = $this->getRelativePath();
         if ($path) {
@@ -216,7 +213,7 @@ class File extends BindableEntity
     /**
      * @return string
      */
-    protected function getRelativePath()
+    public function getRelativePath()
     {
         if ($this->name) {
             return Path::generateHierarchicalPrefix($this->name);
