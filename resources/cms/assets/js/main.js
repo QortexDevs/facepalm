@@ -103,6 +103,21 @@ $(document).ready(function () {
 
         }
     });
+    $(document).on('click', '.files-list .file .delete', function () {
+        if (confirm('Sure?')) {
+            var $file = $(this).closest('.file');
+            var id = $file.data('id');
+            var model = 'file';
+            var payload = _.extend({}.setWithPath(['delete', model, id], 1), getCsrfTokenParameter());
+            $.post('./', payload, 'json').done(function (result) {
+                $file.fadeOut(function () {
+                    $(this).remove();
+                });
+            });
+            return false;
+
+        }
+    });
     $('.images-list').each(function () {
         $(this).find('.image > a').fancybox({
             padding: 1,
@@ -126,7 +141,23 @@ $(document).ready(function () {
                 for (var i in orderArray) {
                     payload['save']['image'][orderArray[i]] = {'show_order': parseInt(i) + 1};
                 }
-                //console.log(payload);
+                $.post('./', payload, 'json');
+            },
+        });
+
+    });
+    $('.files-list').each(function () {
+        var sortable = Sortable.create($(this)[0], {
+            animation: 200,
+            handle: ".icon",
+            scroll: true,
+            onUpdate: function (/**Event*/evt) {
+                var orderArray = sortable.toArray();
+                var model = 'file';
+                var payload = _.extend({save: {file: {}}}, getCsrfTokenParameter());
+                for (var i in orderArray) {
+                    payload['save']['file'][orderArray[i]] = {'show_order': parseInt(i) + 1};
+                }
                 $.post('./', payload, 'json');
             },
         });

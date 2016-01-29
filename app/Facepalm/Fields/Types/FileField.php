@@ -39,8 +39,10 @@ class FileField extends AbstractField
             foreach ($files->get() as $file) {
                 $this->data['files'][] = [
                     'id' => $file->id,
-                    'type' => $file->type,
+                    'icon' => $file->getIconClass(),
                     'name' => $file->display_name,
+                    'type' => $file->type,
+                    'size' => $file->getReadableSize(),
                     'uri' => $file->getUri(),
                     'group' => $this->parameters['name']
                 ];

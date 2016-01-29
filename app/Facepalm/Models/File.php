@@ -37,12 +37,34 @@ class File extends BindableEntity
         'original_name'
     ];
 
+    protected static $icons = [
+        'file-archive-o' => ['zip', 'rar', '7z'],
+        'file-audio-o' => ['wav', 'mp3', 'ogg', 'm4a'],
+        'file-code-o' => ['php', 'py', 'c', 'cpp', 'h', 'rb', 'inc'],
+        'file-excel-o' => ['xls', 'xlsx'],
+        'file-image-o' => ['jpg', 'jpeg', 'png', 'gif', 'psd', 'tiff'],
+        'file-pdf-o' => ['pdf'],
+        'file-powerpoint-o' => ['ppt', 'pptx'],
+        'file-text-o' => ['txt'],
+        'file-video-o' => ['avi', 'mp4', 'mov'],
+        'file-word-o' => ['doc', 'docx'],
+    ];
+
+    protected static $iconsByExtension = [];
+
+
     /**
      *
      */
     protected static function boot()
     {
         parent::boot();
+
+        foreach (self::$icons as $icon => $extensions) {
+            foreach ($extensions as $ext) {
+                self::$iconsByExtension[$ext] = $icon;
+            }
+        }
 
         // generate name on model creating
         self::creating(function (File $file) {
@@ -201,5 +223,16 @@ class File extends BindableEntity
         }
     }
 
+    public function getIconClass()
+    {
+        return Arr::get(self::$iconsByExtension, $this->type, 'file-o');
+    }
+
+    public function getReadableSize($decimals = 2)
+    {
+        $size = array('B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
+        $factor = floor((strlen($this->size) - 1) / 3);
+        return sprintf("%.{$decimals}f", $this->size / pow(1024, $factor)) . @$size[$factor];
+    }
 
 }

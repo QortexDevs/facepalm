@@ -327,8 +327,10 @@ class AmfProcessor
                     $this->uploadedFiles[] = [
                         'file' => [
                             'id' => $fileObj->id,
-                            'type' => $fileObj->type,
+                            'icon' => $fileObj->getIconClass(),
                             'name' => $fileObj->display_name,
+                            'type' => $file->type,
+                            'size' => $file->getReadableSize(),
                             'uri' => $fileObj->getUri(),
                             'group' => $fileName
                         ]
