@@ -99,15 +99,19 @@ class Controller extends BaseController
         /** @var File $file */
         $file = File::where('name', $hash)->first();
         if ($file) {
-            //todo: отдавать readfile
-            //todo: mime-type
+            $fileName = ($name ?: ($file->display_name . '.' . $file->type));
             $guesser = MimeTypeGuesser::getInstance();
             if (strpos($request->server('SERVER_SOFTWARE'), 'nginx') !== false) {
-                header('Content-Disposition: attachment; filename="' . ($name ?: ($file->display_name . '.' . $file->type)) . '"');
-                header('Content-Type: ' . $guesser->guess($file->getPhysicalPath()));
-                header('X-Accel-Redirect: /_internal_files/' . $file->getRelativePath());
-                // header('X-Sendfile: ' . $file->getPhysicalPath()); //todo:for mode_sendfile
-                exit;
+                return response('', 200)
+                    ->header('Content-Disposition', 'attachment; filename="' . $fileName . '"')
+                    ->header('Content-Type', $guesser->guess($file->getPhysicalPath()))
+                    ->header('X-Accel-Redirect', '/_internal_files/' . $file->getRelativePath());
+            } else {
+                return response()->download(
+                    $file->getPhysicalPath(),
+                    $fileName,
+                    ['Content-Type' => $guesser->guess($file->getPhysicalPath())]
+                );
             }
         } else {
             abort(404);
