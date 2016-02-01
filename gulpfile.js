@@ -61,6 +61,7 @@ var path = {
     // additional to src-paths
     watch: {
         js: ['bower_components/**/*.js'],
+        vendorStyles: ['assets/vendorCss/**/*.css']
     },
 
     build: {
@@ -89,6 +90,17 @@ function getSrcPath(module, name) {
  * @param name
  * @returns {string}
  */
+function getWatchPath(module, name) {
+    var modulePath = module ? (module + '/') : '';
+    return SRC_PATH + modulePath + path.watch[name];
+}
+
+/**
+ *
+ * @param module
+ * @param name
+ * @returns {string}
+ */
 function getBuildPath(module, name) {
     var modulePath = module ? (module + '/') : '';
     return BUILD_PATH + modulePath + path.build[name];
@@ -105,7 +117,7 @@ modulesToBuild.map(function (module) {
             //.pipe(uglify())
             .pipe(sourcemaps.write())
             .pipe(gulp.dest(getBuildPath(module, 'js')))
-            .pipe(bust({length:5}))
+            .pipe(bust({length: 5}))
             .pipe(gulp.dest('.'))
     });
 });
@@ -121,7 +133,7 @@ modulesToBuild.map(function (module) {
             //.pipe(cssmin())
             .pipe(sourcemaps.write())
             .pipe(gulp.dest(getBuildPath(module, 'styles')))
-            .pipe(bust({length:5}))
+            .pipe(bust({length: 5}))
             .pipe(gulp.dest('.'))
     });
 });
@@ -133,7 +145,7 @@ modulesToBuild.map(function (module) {
             .pipe(rigger())
             //.pipe(cssmin())
             .pipe(gulp.dest(getBuildPath(module, 'styles')))
-            .pipe(bust({length:5}))
+            .pipe(bust({length: 5}))
             .pipe(gulp.dest('.'))
     });
 });
@@ -167,7 +179,8 @@ gulp.task('watch', function () {
             if (path.src.hasOwnProperty(key)) {
                 (function (key) {
                     var watchPath = getSrcPath(module, key)
-                    watch(watchPath, function (event, cb) {
+                    var watchPath2 = getWatchPath(module, key)
+                    watch([watchPath, watchPath2], function (event, cb) {
                         gulp.start(key + ':build:' + module);
                     });
                 })(key);

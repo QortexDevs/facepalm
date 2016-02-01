@@ -189,7 +189,7 @@ $(document).ready(function () {
                     $dropzone.prev().empty();
                 }
                 for (var i in response) {
-                    if($dropzone.data('type') == 'image') {
+                    if ($dropzone.data('type') == 'image') {
                         if (!$('.images-list .image[data-id=' + response[i].image.id + ']').length) {
                             $dropzone.prev().append(templateImage.render(response[i]))
                         }
@@ -199,13 +199,16 @@ $(document).ready(function () {
                         }
                     }
                 }
+            },
+            error: function (file, errorMessage, xhr) {
+                this.removeFile(file);
+                //todo: нормально обрабатывать и показывать ошибки
+                $.growl.error({
+                    title: 'Ошибка',
+                    message: 'Не удается загрузить файл на сервер. Неверный формат или слишком большой размер.',
+                    duration: 7000
+                });
             }
-            //accept: function(file, done) {
-            //    if (file.name == "justinbieber.jpg") {
-            //        done("Naha, you don't.");
-            //    }
-            //    else { done(); }
-            //}
         });
     })
 

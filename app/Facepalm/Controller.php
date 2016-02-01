@@ -11,6 +11,7 @@ namespace App\Facepalm;
 use App\Facepalm\Components\CmsList;
 use App\Facepalm\Components\CmsForm;
 use App\Facepalm\Models\File;
+use App\Facepalm\Models\Image;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
@@ -91,6 +92,27 @@ class Controller extends BaseController
         }
 
         return '';
+    }
+
+    //todo: вынести это в трейты
+    public function autoResizeImage(Request $request, $path, $name)
+    {
+        preg_match('/^(?<hash>[0-9a-f]+)(_(?<dimensions>[\dx]+))?\.(?<ext>jpg|png|gif)$/', $name, $matches);
+        if (Arr::has($matches, 'hash') & Arr::has($matches, 'dimensions')) {
+            if (in_array($matches['dimensions'], (array)config('app.allowedDimensions'))) {
+                /** @var Image $image */
+                $image = Image::where('name', $matches['hash'])->first();
+                if ($image) {
+                    $image->generateSize($matches['dimensions']);
+                    return redirect(
+                        $request->getUri(),
+                        302,
+                        ['Cache-Control' => 'no-store, no-cache, must-revalidate']
+                    );
+                }
+            }
+        }
+        abort(404);
     }
 
     //todo: вынести это в трейты
