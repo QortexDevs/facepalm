@@ -1,12 +1,14 @@
-<div class="files-list">
-    {% for file in data.files %}
-        {% include "components/form/filePreview.twig" %}
-    {% endfor %}
-</div>
-{#{{ dump(parameters) }}#}
-<div class="dropzone" data-input-name="{{ uploadName }}[{{ parameters.type }}][{{ parameters.name }}]"
-     data-type="file"
-     data-multiple="{{ parameters.multiple ? 1 : 0 }}"
-     data-parameters="{% for parameterName,parameterValue in parameters %}{% if parameterName not in data.skipTransferringParameters %}&{{ parameterName }}={{ parameterValue }}{% endif %}{% endfor %}">
-    <button class="dz-message cms-button" type="button" data-button-text="Выберите или перетащите файл" data-drop-text="Перетащите файл сюда">Выберите или перетащите файл</button>
+<div class="dropzone-container">
+    <div class="files-list">
+        {% for file in data.files %}
+            {% include "components/form/filePreview.twig" %}
+        {% endfor %}
+    </div>
+    <div class="dropzone" data-input-name="{{ uploadName }}[{{ parameters.type }}][{{ parameters.name }}]"
+         data-type="file"
+         data-multiple="{{ parameters.multiple ? 1 : 0 }}"
+         data-parameters="{% for parameterName,parameterValue in parameters %}{% if parameterName not in data.skipTransferringParameters %}&{{ parameterName }}={{ parameterValue }}{% endif %}{% endfor %}">
+        <button class="dz-message cms-button" type="button">Выберите или перетащите файл</button>
+    </div>
+    <div class="drop-note">Перетащите файл сюда</div>
 </div>
