@@ -14,7 +14,8 @@
 //= ../../../../bower_components/fancybox/source/jquery.fancybox.pack.js
 
 $(document).ready(function () {
-
+    //load underscore.string
+    _.mixin(s.exports());
 
     $(document).on('click', '.cms-module-list-content button.status', function () {
         var $tr = $(this).closest('tr[data-id]');
@@ -26,20 +27,49 @@ $(document).ready(function () {
         });
         return false;
     });
+    $(document).on('click', '.cms-module-list-content button.delete', function () {
+        if (confirm('Sure?')) {
+            var $tr = $(this).closest('tr[data-id]');
+            var id = $tr.data('id');
+            var model = $(this).closest('table[data-model]').data('model');
+            var payload = _.extend({}.setWithPath(['delete', model, id], 1), getCsrfTokenParameter());
+            $.post('./', payload, 'json').done(function (result) {
+                $tr.fadeOut('fast', function () {
+                    $(this).remove()
+                });
+            });
+        }
+        return false;
+    });
+
+    if ($('.cms-module-form-page').data('just-created')) {
+        $.growl.notice({title: '', message: "Объект создан"});
+    }
 
     $(document).on('click', '.form-buttons button.save-button', function () {
         var formData = $('.main-cms-form').serialize();
+        var createMode = $('.cms-module-form-page').data('create-mode');
 
         toggleSpinner(true);
         toggleFormButtons(false);
 
         // Minimum delay to avoid unpleasant blinking
-        $.when($.post('./', formData), delay(800)).then(function () {
+        $.when($.post('./', formData), delay(createMode ? 100 : 500)).then(function (result) {
+            var response = result[0];
+            if (createMode && parseInt(response) > 0) {
+                var url = _.rtrim(document.location.href, '/');
+                if (url.endsWith('/create')) {
+                    url = _.strLeftBack(url, '/');
+                }
+                document.location.href = url + '/' + response + '/';
+            } else {
                 $.growl.notice({title: '', message: "Cохранено"});
                 toggleSpinner(false);
                 toggleFormButtons(true);
             }
-        );
+        });
+
+
         return false;
     });
 
@@ -172,6 +202,7 @@ $(document).ready(function () {
             paramName: $(this).data('input-name'),
             parallelUploads: 3,
             maxFiles: isMultiple ? null : 1,
+            clickable: $(this).find("button.dz-message")[0],
             uploadMultiple: isMultiple,
             addRemoveLinks: true,
             createImageThumbnails: false,

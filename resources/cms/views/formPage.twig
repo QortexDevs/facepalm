@@ -1,6 +1,6 @@
 {% extends "base.twig" %}
 	{% block moduleContent %}
-        <div class="cms-module-form-page">
+        <div class="cms-module-form-page" data-create-mode="{{ form.object ? 0 : 1 }}" data-just-created="{{ justCreated }}">
             {% include "components/form/container.twig" %}
             {# todo: кнопок может не быть! #}
             <div class="form-buttons">

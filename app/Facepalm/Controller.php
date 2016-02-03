@@ -18,6 +18,7 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
 use TwigBridge\Facade\Twig;
@@ -184,6 +185,7 @@ class Controller extends BaseController
         $amfProcessor = new AmfProcessor();
         $amfProcessor->process($this->request->all());
 
+        //todo:
         //todo: продумать нормальный возврат!
         //todo: события до, после и вместо!!!!
         if ($amfProcessor->getToggledFields()) {
@@ -193,6 +195,12 @@ class Controller extends BaseController
                 return response()->json($singleElementFieldValue);
             } else {
                 return response()->json($amfProcessor->getToggledFields());
+            }
+        }
+        if ($amfProcessor->getAffectedObjects()) {
+            if ($amfProcessor->getAffectedObjectsCount() == 1) {
+                $id = array_values($amfProcessor->getAffectedObjects())[0][0];
+                return response()->json($id);
             }
         }
         if ($files = $amfProcessor->getUploadedFiles()) {
@@ -227,6 +235,7 @@ class Controller extends BaseController
         $formData = $form->display();
         $params = [
             'form' => $formData,
+            'justCreated' => Session::get('creatingObject'),
             'pageTitle' => $this->config->get('strings.editTitle') ?: 'Редактирование объекта'
         ];
 

@@ -112,14 +112,51 @@
 }
 
 .dropzone {
-    border: 1px dotted #6484CC;
-    background: white;
-    padding: 0;
+    border: 1px solid transparent;
+    background: none;
+    padding: 20px 0;
     min-height: 0;
+    transition: 0.2s;
+    margin-top: -20px;
 
     &.dz-drag-hover {
-        border-color: #bbc3d5;
-        background: #dbe3f5;
+        border: 1px dotted #bbc3d5;
+        background: #fafcfe;
+        padding: 40px 0;
+        margin-top: 0px;
+
+        button {
+            &.dz-message {
+                border: none;
+                background: none;
+                box-shadow: none;
+                color: $mainTextColor;
+                //
+                //&:before {
+                //    content: attr(data-drop-text);
+                //}
+            }
+        }
+    }
+
+    button {
+        &.dz-message {
+            transition: opacity 0.2s;
+            margin: 0;
+            background: $menuSubItemColor;
+            font-size: 14px;
+            padding: 3px 20px;
+            box-shadow: 0 0 4px -1px rgba(0, 0, 0, 0.3);
+
+            //&:before {
+            //    content: attr(data-button-text);
+            //}
+
+            &:active {
+                margin-top: 1px;
+                margin-bottom: -1px;
+            }
+        }
     }
 
     .dz-preview {

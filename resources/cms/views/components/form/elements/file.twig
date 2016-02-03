@@ -8,4 +8,5 @@
      data-type="file"
      data-multiple="{{ parameters.multiple ? 1 : 0 }}"
      data-parameters="{% for parameterName,parameterValue in parameters %}{% if parameterName not in data.skipTransferringParameters %}&{{ parameterName }}={{ parameterValue }}{% endif %}{% endfor %}">
+    <button class="dz-message cms-button" type="button" data-button-text="Выберите или перетащите файл" data-drop-text="Перетащите файл сюда">Выберите или перетащите файл</button>
 </div>

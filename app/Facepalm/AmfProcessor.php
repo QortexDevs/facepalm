@@ -5,8 +5,6 @@
 
 namespace App\Facepalm;
 
-use App\Facepalm\Components\CmsList;
-use App\Facepalm\Components\CmsForm;
 use App\Facepalm\Models\File;
 use App\Facepalm\Models\Foundation\AbstractEntity;
 use App\Facepalm\Models\Foundation\BaseEntity;
@@ -14,20 +12,17 @@ use App\Facepalm\Models\Image;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Http\Request;
-use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use TwigBridge\Facade\Twig;
 
 class AmfProcessor
 {
     protected $affectedObjectsCount = 0;
     protected $affectedFieldsCount = 0;
+    protected $affectedObjects = [];
     protected $toggledFields = [];
     protected $uploadedFiles = [];
 
@@ -49,14 +44,19 @@ class AmfProcessor
                     if ($fullModelName) {
                         if (is_array($data)) {
                             foreach ($data as $id => $keyValue) {
-                                /** @var Model $object */
+                                /** @var AbstractEntity $object */
                                 if ((int)$id) {
                                     $object = ModelFactory::find($fullModelName, $id);
                                 } elseif (preg_match('/\%CREATE_[\w]{6}\%/i', $id)) {
                                     $object = new $fullModelName();
+                                    Session::flash('creatingObject', true);
                                 }
                                 if ($object) {
                                     $this->{$processMethod}($object, $keyValue, $amf);
+                                    if ($processMethod == 'create') {
+                                        $this->affectedObjectsCount++;
+                                        $this->affectedObjects[$modelName][] = $object->id;
+                                    }
                                 }
                             }
                         }
@@ -66,6 +66,13 @@ class AmfProcessor
         }
     }
 
+    /**
+     * @return array
+     */
+    public function getAffectedObjects()
+    {
+        return $this->affectedObjects;
+    }
 
     /**
      * @return int
