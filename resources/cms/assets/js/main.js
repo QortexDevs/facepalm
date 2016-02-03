@@ -176,13 +176,6 @@ $(document).ready(function () {
             addRemoveLinks: true,
             createImageThumbnails: false,
             acceptedFiles: $dropzone.data('type') == 'image' ? 'image/*' : null,
-            //previewTemplate: '<div class="dz-preview dz-file-preview">' +
-            //'<div class="dz-details">' +
-            //'<div class="dz-filename"><span data-dz-name></span></div>' +
-            //'<div class="dz-size" data-dz-size></div>' +
-            //'</div>' +
-            //'<div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>' +
-            //'</div>',
             success: function (file, response) {
                 this.removeFile(file);
                 if (!isMultiple) {

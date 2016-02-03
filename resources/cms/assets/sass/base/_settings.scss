@@ -21,7 +21,7 @@ $captionsColor: #bbc0cc;
 $mainFontName: 'Lato';
 $additionalFontName: 'Cuprum';
 
-$mainFont: 300 16px/20px $mainFontName sans-serif;
+$mainFont: 300 16px/20px $mainFontName, sans-serif;
 $menuFont: 400 16px/20px $additionalFontName;
 
 $leftMenuWidth: 250px;

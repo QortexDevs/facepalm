@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Builder;
  * Class ModelFactory
  * @package App\Facepalm
  *
- * @method find(string $modelName)
- * @method all(string $modelName)
- * @method where(string $modelName, mixed ...$arguments)
+ * @method @static find(string $modelName, int $id)
+ * @method @static all(string $modelName)
+ * @method @static where(string $modelName, mixed ...$arguments)
  */
 class ModelFactory
 {

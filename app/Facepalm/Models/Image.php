@@ -129,6 +129,8 @@ class Image extends BindableEntity
      * 200
      * x300
      * todo: think about non-proportional resize
+     * todo: for imagick: $geometry = "{$dimension}^ -gravity North(Center, etc) -extent {$dimension}";
+     * todo: не увеличивать картинку, копировать картинку, если совпадают размеры
      *
      * @param $sizeString
      * @return $this

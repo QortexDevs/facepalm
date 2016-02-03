@@ -126,7 +126,8 @@ class AmfProcessor
         // And after saving process Many-to-Many relations
         foreach ($keyValue as $fieldName => $value) {
             if ($this->isManyToMany($object, $fieldName)) {
-                $object->$fieldName()->sync(array_keys($value));
+                // here we array_filter unchecked checkboxes (with 0 as value)
+                $object->$fieldName()->sync(array_keys(array_filter($value)));
             }
         }
     }

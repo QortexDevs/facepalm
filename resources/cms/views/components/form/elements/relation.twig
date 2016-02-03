@@ -3,6 +3,7 @@
         {% for id,name in parameters.dictionary %}
             <li>
                 <label>
+                    <input type="hidden" name="{{ fieldNameBase }}[{{ parameters.collectionName }}][{{ id }}]" value="0" checked/>
                     <input type="checkbox" name="{{ fieldNameBase }}[{{ parameters.collectionName }}][{{ id }}]"
                            value="1" {% if id in parameters.relations %}checked{% endif %} />
                     {{ name }}
