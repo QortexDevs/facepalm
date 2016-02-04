@@ -40,7 +40,7 @@ class AmfProcessor
             $processMethod = 'processObject' . Str::studly($action);
             if (method_exists($this, $processMethod)) {
                 foreach ($input as $modelName => $data) {
-                    $fullModelName = CmsCommon::getFullModelClassName($modelName);
+                    $fullModelName = ModelFactory::getFullModelClassName($modelName);
                     if ($fullModelName) {
                         if (is_array($data)) {
                             foreach ($data as $id => $keyValue) {

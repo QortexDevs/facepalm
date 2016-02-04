@@ -9,7 +9,7 @@
 namespace App\Facepalm\Models;
 
 use App\Facepalm\Models\Foundation\BindableEntity;
-use App\Facepalm\Path;
+use App\Facepalm\Tools\Path;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Mockery\CountValidator\Exception;

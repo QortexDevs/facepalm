@@ -2,7 +2,9 @@
 
 namespace App\Facepalm;
 
+use App\Facepalm\Cms\CmsCommon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Str;
 
 /**
  * Class ModelFactory
@@ -16,15 +18,6 @@ class ModelFactory
 {
 
     /**
-     * @param $modelName
-     * @return Builder
-     */
-    public static function builderFor($modelName)
-    {
-        return self::where($modelName, CmsCommon::COLUMN_NAME_ID, '>', '0');
-    }
-
-    /**
      * Forward static methods to appropriate model
      *
      * @param $name
@@ -34,10 +27,46 @@ class ModelFactory
     public static function __callStatic($name, $arguments)
     {
         $modelName = array_shift($arguments);
-        $fullModelName = CmsCommon::getFullModelClassName($modelName);
+        $fullModelName = self::getFullModelClassName($modelName);
         if ($fullModelName) {
             return call_user_func_array([$fullModelName, $name], $arguments);
         }
+        return null;
+    }
+
+    /**
+     * @param $modelName
+     * @return Builder
+     */
+    public static function builderFor($modelName)
+    {
+        return self::where($modelName, CmsCommon::COLUMN_NAME_ID, '>', '0');
+    }
+
+    /**
+     * @param $modelName
+     * @return null|string
+     */
+    public static function getFullModelClassName($modelName)
+    {
+        $fullModelName = $modelName;
+        //todo: change namespace!!!!
+        if ($modelName
+            && !Str::startsWith($modelName, 'App\Models\\')
+            && !Str::startsWith($modelName, 'App\Facepalm\Models\\')
+        ) {
+            $fullModelName = 'App\Models\\' . Str::studly($modelName);
+        }
+        if (class_exists($fullModelName)) {
+            return $fullModelName;
+        } else {
+            $fullModelName = 'App\Facepalm\Models\\' . Str::studly($modelName);
+            if (class_exists($fullModelName)) {
+                return $fullModelName;
+            }
+        }
+
+        return null;
     }
 
 }
