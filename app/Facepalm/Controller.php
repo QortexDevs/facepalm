@@ -8,8 +8,9 @@
 
 namespace App\Facepalm;
 
-use App\Facepalm\Components\CmsList;
-use App\Facepalm\Components\CmsForm;
+use App\Facepalm\Cms\Components\CmsList;
+use App\Facepalm\Cms\Components\CmsForm;
+use App\Facepalm\Cms\Config\Config;
 use App\Facepalm\Models\File;
 use App\Facepalm\Models\Image;
 use Illuminate\Database\Eloquent\Model;

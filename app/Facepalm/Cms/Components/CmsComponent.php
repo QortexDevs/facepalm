@@ -3,7 +3,7 @@
 namespace App\Facepalm\Cms\Components;
 
 use App\Facepalm\Cms\CmsCommon;
-use App\Facepalm\Cms\Config;
+use App\Facepalm\Cms\Config\Config;
 use App\Facepalm\Cms\Fields\FieldListProcessor;
 use App\Facepalm\ModelFactory;
 

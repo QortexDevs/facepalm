@@ -9,7 +9,7 @@
 namespace App\Facepalm\Cms\Fields\Types;
 
 
-use App\Facepalm\CmsCommon;
+use App\Facepalm\Cms\CmsCommon;
 use App\Facepalm\Cms\Fields\AbstractField;
 use App\Facepalm\ModelFactory;
 use Illuminate\Database\Eloquent\Model;

@@ -6,19 +6,44 @@
  * Time: 19:53
  */
 
-namespace App\Facepalm\Cms;
+namespace App\Facepalm\Cms\Config;
 
+use App\Facepalm\Cms\Config\ConfigLoaderInterface;
+use App\Facepalm\Cms\Config\JsonFileConfigLoader;
 use Illuminate\Config\Repository;
 
 
 class Config
 {
+    // todo: вынести в конфиги
+    // todo: сделать возможность загрузки из строки
     const CONFIG_PATH = 'cms/';
     const DEFAULT_CONFIG_NAME = 'cms.json';
     const MODULES_CONFIGS_FOLDER = 'modules';
 
     /** @var Repository */
     protected $configRepository;
+
+    /** @var  ConfigLoaderInterface */
+    protected $configLoader;
+
+    /**
+     * Config constructor.
+     * @param array|null $data
+     */
+    public function __construct($data = [])
+    {
+        $this->configRepository = new Repository($data);
+
+        //todo: стоит ли это здесь делать или все же передавать снаружи?
+        $this->setLoader(new JsonFileConfigLoader());
+    }
+
+    public function setLoader(ConfigLoaderInterface $configLoader)
+    {
+        $this->configLoader = $configLoader;
+    }
+
 
     public function load($group = null, $module = null)
     {
@@ -75,8 +100,6 @@ class Config
     protected function loadConfig($name)
     {
         $filePath = $this->getConfigPath() . $name;
-        if (file_exists($filePath)) {
-            return json_decode(file_get_contents($filePath), true);
-        }
+        return $this->configLoader->load($filePath);
     }
 }
