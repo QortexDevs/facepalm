@@ -10,11 +10,12 @@ namespace App\Facepalm\Cms\Fields\Types;
 
 
 use App\Facepalm\Cms\Fields\AbstractField;
+use App\Facepalm\Cms\Fields\UploadableField;
 use App\Facepalm\Models\File;
 use App\Facepalm\Models\Foundation\AbstractEntity;
 use Illuminate\Support\Arr;
 
-class FileField extends AbstractField
+class FileField extends UploadableField
 {
     protected $templateName = 'components/form/elements/file.twig';
 
@@ -25,18 +26,11 @@ class FileField extends AbstractField
     {
         parent::prepareData($object);
 
-        $this->data['skipTransferringParameters'] = ['name', 'title', 'type', 'uploadName', 'fieldNameBase'];
-
         if ($object) {
-            $files = $object->files()->ofGroup($this->parameters['name']);
-            if (Arr::get($this->parameters, 'multiple', false)) {
-                $files = $files->orderBy('show_order', 'asc');
-            } else {
-                $files = $files->orderBy('id', 'desc')->limit(1);
-            }
             $this->data['files'] = [];
+
             /** @var File $file */
-            foreach ($files->get() as $file) {
+            foreach ($this->getItems($object, 'files')->get() as $file) {
                 $this->data['files'][] = [
                     'id' => $file->id,
                     'icon' => $file->getIconClass(),
@@ -47,8 +41,6 @@ class FileField extends AbstractField
                     'group' => $this->parameters['name']
                 ];
             }
-        } else {
-            $this->setSkipped(true);
         }
     }
 

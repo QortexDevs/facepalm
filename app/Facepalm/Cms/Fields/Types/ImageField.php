@@ -9,13 +9,13 @@
 namespace App\Facepalm\Cms\Fields\Types;
 
 
-use App\Facepalm\Cms\Fields\AbstractField;
+use App\Facepalm\Cms\Fields\UploadableField;
 use App\Facepalm\Models\Foundation\AbstractEntity;
 use App\Facepalm\Models\Image;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 
-class ImageField extends AbstractField
+class ImageField extends UploadableField
 {
     protected $templateName = 'components/form/elements/image.twig';
 
@@ -26,21 +26,15 @@ class ImageField extends AbstractField
     {
         parent::prepareData($object);
 
-        $this->data['skipTransferringParameters'] = ['name', 'title', 'type', 'uploadName', 'fieldNameBase'];
-        if (!Arr::has($this->parameters, 'previewSize')) {
-            $this->parameters['previewSize'] = config('app.defaultThumbnailSize');
-        }
-
         if ($object) {
-            $images = $object->images()->ofGroup($this->parameters['name']);
-            if (Arr::get($this->parameters, 'multiple', false)) {
-                $images = $images->orderBy('show_order', 'asc');
-            } else {
-                $images = $images->orderBy('id', 'desc')->limit(1);
+            if (!Arr::has($this->parameters, 'previewSize')) {
+                $this->parameters['previewSize'] = config('app.defaultThumbnailSize');
             }
+
             $this->data['images'] = [];
+
             /** @var Image $image */
-            foreach ($images->get() as $image) {
+            foreach ($this->getItems($object, 'images')->get() as $image) {
                 $this->data['images'][] = [
                     'id' => $image->id,
                     'preview' => $image->getUri($this->parameters['previewSize']),
@@ -49,8 +43,6 @@ class ImageField extends AbstractField
                     // todo: показывать не оригинал по клику, а другой размер?
                 ];
             }
-        } else {
-            $this->setSkipped(true);
         }
     }
 
