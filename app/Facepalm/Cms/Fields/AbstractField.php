@@ -79,6 +79,17 @@ abstract class AbstractField implements \ArrayAccess
     }
 
     /**
+     * @param $name
+     * @param $value
+     * @return $this
+     */
+    public function setParameter($name, $value)
+    {
+        $this->parameters[$name] = $value;
+        return $this;
+    }
+
+    /**
      * @param $field
      * @return mixed
      */

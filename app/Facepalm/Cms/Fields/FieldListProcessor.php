@@ -58,14 +58,6 @@ class FieldListProcessor
                     $parameters['foreignModel'] = explode('.', $name)[0];
                     $parameters['foreignDisplayName'] = explode('.', $name)[1];
                     $parameters['cardinality'] = Arr::get($parameters, 'cardinality', self::CARDINALITY_ONE);
-
-                    if ($parameters['cardinality'] == self::CARDINALITY_MANY) {
-                        // todo: возможность переопределения в параметрах
-                        $parameters['collectionName'] = Str::snake($parameters['foreignModel']) . 's';
-                    } else {
-                        // todo: возможность переопределения в параметрах
-                        $parameters['foreignKey'] = Str::snake($parameters['foreignModel']) . '_id';
-                    }
                     $this->relatedModels[] = $parameters['foreignModel'];
                 } else {
                     $type = Arr::get($parameters, 'type', self::FIELD_TYPE_DEFAULT);

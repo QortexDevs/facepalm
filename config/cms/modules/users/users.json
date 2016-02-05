@@ -24,7 +24,9 @@
                 "title": "Upd",
                 "type": "date"
             },
-            "role.name": true,
+            "role.name": {
+                "cardinality": "many"
+            },
             "type": {
                 "type": "select",
                 "options": {
@@ -53,12 +55,12 @@
                 "type": "image",
                 "title": "Аватарко",
                 "multiple": true,
-                "custom":"fucker"
+                "custom": "fucker"
             },
             "avatar2": {
                 "type": "image",
                 "title": "Аватарко2",
-                "previewSize":"100x100"
+                "previewSize": "100x100"
             },
             "pricelist": {
                 "multiple": true,
