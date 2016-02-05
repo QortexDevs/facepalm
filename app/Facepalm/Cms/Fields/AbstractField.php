@@ -119,7 +119,7 @@ abstract class AbstractField implements \ArrayAccess
      */
     public function getValueForList($object)
     {
-        return $object->{$this->name};
+        return isset($object->{$this->name}) ? $object->{$this->name} : '';
     }
 
     /**

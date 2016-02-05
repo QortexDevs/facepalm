@@ -26,7 +26,20 @@ class SelectField extends AbstractField
      */
     public function getValueForList($object)
     {
+        if (!$this->name) {
+            return '';
+        }
         return Arr::get($this->dictionary, (int)$object->{$this->name}, '');
+    }
+
+    /**
+     * @param array $dictionary
+     * @return $this
+     */
+    public function setDictionary($dictionary)
+    {
+        $this->setParameters(['dictionary' => $dictionary]);
+        return $this;
     }
 
 }

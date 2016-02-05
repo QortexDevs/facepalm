@@ -6,6 +6,8 @@ use App\Facepalm\Cms\Fields\Types\BooleanField;
 use App\Facepalm\Cms\Fields\Types\DateField;
 use App\Facepalm\Cms\Fields\Types\DatetimeField;
 use App\Facepalm\Cms\Fields\Types\DictionaryField;
+use App\Facepalm\Cms\Fields\Types\FileField;
+use App\Facepalm\Cms\Fields\Types\ImageField;
 use App\Facepalm\Cms\Fields\Types\IntegerField;
 use App\Facepalm\Cms\Fields\Types\PasswordField;
 use App\Facepalm\Cms\Fields\Types\RelationField;
@@ -112,10 +114,31 @@ class FieldFactoryTest extends TestCase
 
     /**
      */
+    public function testCreateFileField()
+    {
+        $factory = new FieldFactory();
+        $field = $factory->get('file');
+        $this->assertTrue($field instanceof FileField);
+    }
+
+    /**
+     */
+    public function testCreateImageField()
+    {
+        $factory = new FieldFactory();
+        $field = $factory->get('image');
+        $this->assertTrue($field instanceof ImageField);
+    }
+
+    /**
+     */
     public function testCreateBooleanField()
     {
         $factory = new FieldFactory();
         $field = $factory->get('boolean');
         $this->assertTrue($field instanceof BooleanField);
+        $field = $factory->get('checkbox');
+        $this->assertTrue($field instanceof BooleanField);
     }
+
 }

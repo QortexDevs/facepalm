@@ -78,15 +78,12 @@ class FieldListProcessor
                     ->setParameters($parameters);
 
                 //todo: перенести в сам класс типа поля
-
                 if ($this->fields[$name] instanceof SelectField) {
                     if (!$this->fields[$name]->dictionary) {
                         if ($this->fields[$name]->options) {
-                            $this->fields[$name]->setParameters(['dictionary' => $this->fields[$name]->options]);
+                            $this->fields[$name]->setDictionary($this->fields[$name]->options);
                         } else {
-                            $this->fields[$name]->setParameters([
-                                'dictionary' => Arr::get($this->dictionaries, $name, [])
-                            ]);
+                            $this->fields[$name]->setDictionary(Arr::get($this->dictionaries, $name, []));
                         }
                     }
                 }

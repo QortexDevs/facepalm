@@ -26,7 +26,7 @@ class DatetimeField extends AbstractField
     public function getValueForList($object)
     {
         $value = parent::getValueForList($object);
-        if (Str::startsWith($value, '0000') || Str::startsWith($value, '-0001')) {
+        if (!$value || Str::startsWith($value, '0000') || Str::startsWith($value, '-0001')) {
             return '';
         } else {
             return (new \DateTime($value))->format($this->listFormat);
