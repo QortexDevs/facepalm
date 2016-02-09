@@ -5,82 +5,66 @@
 
 namespace App\Facepalm\PostProcessing;
 
-use App\Facepalm\Cms\CmsCommon;
-use App\Facepalm\Models\ModelFactory;
 use App\Facepalm\Models\File;
-use App\Facepalm\Models\Foundation\AbstractEntity;
 use App\Facepalm\Models\Foundation\BaseEntity;
 use App\Facepalm\Models\Image;
+use App\Facepalm\Models\ModelFactory;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class UploadProcessor
 {
     /**
-     * @param $fieldName
+     * @param $fieldName (image|file)
      * @param $object
      * @param $value
      * @param $requestRawData
      * @return array
      */
-    public function handle($fieldName, $object, $value, $requestRawData)
+    public function handle($fieldName, BaseEntity $object, $value, $requestRawData)
     {
-        $processedFiles = [];
-
-        if ($this->isImageUploadField($fieldName)) {
-            $processedFiles += $this->handleImageUpload($object, $value, $requestRawData);
-        } elseif ($this->isFileUploadField($fieldName)) {
-            $processedFiles += $this->handleFileUpload($object, $value, $requestRawData);
-        }
-
-        return $processedFiles;
-    }
-
-    /**
-     * @param BaseEntity $object
-     * @param $value
-     * @param $requestRawData
-     * @return array
-     */
-    protected function handleImageUpload(BaseEntity $object, $value, $requestRawData)
-    {
+        $relationMethodName = $fieldName . 's';
+        $className = Str::ucfirst($fieldName);
+        $resultMethodName = 'getResultArrayFor' . $className;
+        $afterSaveMethodName = 'processAfterSave' . $className;
         $processedFiles = [];
         if (is_array($value)) {
-            foreach ($value as $imageName => $files) {
-                if ($files instanceof UploadedFile) {
-                    $files = [$files];
+            foreach ($value as $groupName => $uploadedFiles) {
+                if ($uploadedFiles instanceof UploadedFile) {
+                    $uploadedFiles = [$uploadedFiles];
                 }
-                foreach ($files as $file) {
+                /** @var UploadedFile $uploadedFile */
+                foreach ($uploadedFiles as $uploadedFile) {
                     if (!Arr::get($requestRawData, 'multiple', false)) {
                         //удаляем предыдущие картинки
-                        $object->images()->ofGroup($imageName)->get()->each(function ($image) {
-                            $image->delete();
-                        });
+                        $object->{$relationMethodName}()
+                            ->ofGroup($groupName)
+                            ->get()
+                            ->each(function ($uploadableObject) {
+                                $uploadableObject->delete();
+                            });
                     }
 
-                    $previewSize = Arr::get($requestRawData, 'previewSize', config('app.defaultThumbnailSize'));
 
-                    $img = Image::createFromUpload($file)
-                        ->setAttribute('group', $imageName)
-                        ->generateSize($previewSize);
+                    /** @var Image|File $uploadableObject */
+                    $uploadableObject = ModelFactory::createFromUpload($className, $uploadedFile)
+                        ->setAttribute('group', $groupName);
 
-                    //todo: дополнительные прегенерируемые размеры
-                    DB::transaction(function () use ($img) {
-                        $img->show_order = Image::max('show_order') + 1;
-                        $img->save();
+
+                    DB::transaction(function () use ($uploadableObject, $className) {
+                        $uploadableObject->show_order = ModelFactory::max($className, 'show_order') + 1;
+                        $uploadableObject->save();
                     });
 
-                    $object->images()->save($img);
+                    if (method_exists($this, $afterSaveMethodName)) {
+                        $this->{$afterSaveMethodName}($uploadableObject, $requestRawData);
+                    }
+
+                    $object->{$relationMethodName}()->save($uploadableObject);
                     $processedFiles[] = [
-                        'image' => [
-                            'id' => $img->id,
-                            'preview' => $img->getUri($previewSize),
-                            'full' => $img->getUri('original'),
-                            'group' => $imageName
-                        ]
+                        $fieldName => $this->{$resultMethodName}($uploadableObject, $requestRawData)
                     ];
                 }
             }
@@ -88,70 +72,49 @@ class UploadProcessor
         return $processedFiles;
     }
 
+
     /**
-     * @param BaseEntity $object
-     * @param $value
+     * @param $image
+     * @param $requestRawData
+     */
+    protected function processAfterSaveImage(Image $image, $requestRawData)
+    {
+        //todo: дополнительные прегенерируемые размеры
+        $previewSize = Arr::get($requestRawData, 'previewSize', config('app.defaultThumbnailSize'));
+        $image->generateSize($previewSize);
+    }
+
+
+    /**
+     * @param Image $image
      * @param $requestRawData
      * @return array
      */
-    protected function handleFileUpload(BaseEntity $object, $value, $requestRawData)
+    protected function getResultArrayForImage(Image $image, $requestRawData)
     {
-        $processedFiles = [];
-        if (is_array($value)) {
-            foreach ($value as $fileName => $files) {
-                if ($files instanceof UploadedFile) {
-                    $files = [$files];
-                }
-                foreach ($files as $file) {
-                    if (!Arr::get($requestRawData, 'multiple', false)) {
-                        //удаляем предыдущие картинки
-                        $object->files()->ofGroup($fileName)->get()->each(function ($file) {
-                            $file->delete();
-                        });
-                    }
-
-                    $fileObj = File::createFromUpload($file)
-                        ->setAttribute('group', $fileName);
-
-                    DB::transaction(function () use ($fileObj) {
-                        $fileObj->show_order = File::max('show_order') + 1;
-                        $fileObj->save();
-                    });
-
-                    $object->files()->save($fileObj);
-                    $processedFiles[] = [
-                        'file' => [
-                            'id' => $fileObj->id,
-                            'icon' => $fileObj->getIconClass(),
-                            'name' => $fileObj->display_name,
-                            'type' => $fileObj->type,
-                            'size' => $fileObj->getReadableSize(),
-                            'uri' => $fileObj->getUri(),
-                            'group' => $fileName
-                        ]
-                    ];
-                }
-
-            }
-        }
-        return $processedFiles;
+        $previewSize = Arr::get($requestRawData, 'previewSize', config('app.defaultThumbnailSize'));
+        return [
+            'id' => $image->id,
+            'preview' => $image->getUri($previewSize),
+            'full' => $image->getUri('original'),
+            'group' => $image->group
+        ];
     }
 
     /**
-     * @param $fieldName
-     * @return bool
+     * @param File $file
+     * @return array
      */
-    protected function isImageUploadField($fieldName)
+    protected function getResultArrayForFile(File $file)
     {
-        return $fieldName == 'image';
-    }
-
-    /**
-     * @param $fieldName
-     * @return bool
-     */
-    protected function isFileUploadField($fieldName)
-    {
-        return $fieldName == 'file';
+        return [
+            'id' => $file->id,
+            'icon' => $file->getIconClass(),
+            'name' => $file->display_name,
+            'type' => $file->type,
+            'size' => $file->getReadableSize(),
+            'uri' => $file->getUri(),
+            'group' => $file->group
+        ];
     }
 }
