@@ -110,7 +110,7 @@ class AmfProcessor
      * @param AbstractEntity $object
      * @param $keyValue
      */
-    protected function processObjectSave(AbstractEntity $object, $keyValue, $requestRawData)
+    protected function processObjectSave(AbstractEntity $object, $keyValue)
     {
         // Run through all incoming fields except Many-to-Many relations and set it
         foreach ($keyValue as $fieldName => $value) {
@@ -143,16 +143,16 @@ class AmfProcessor
      * @param $object
      * @param $keyValue
      */
-    protected function processObjectCreate($object, $keyValue, $requestRawData)
+    protected function processObjectCreate($object, $keyValue)
     {
-        $this->processObjectSave($object, $keyValue, $requestRawData);
+        $this->processObjectSave($object, $keyValue);
     }
 
     /**
      * @param $object
      * @param $keyValue
      */
-    protected function processObjectToggle($object, $keyValue, $requestRawData)
+    protected function processObjectToggle($object, $keyValue)
     {
         foreach (array_keys($keyValue) as $fieldName) {
             $this->affectedFieldsCount++;
@@ -174,6 +174,7 @@ class AmfProcessor
     /**
      * @param $object
      * @param $keyValue
+     * @param $requestRawData
      */
     protected function processObjectUpload($object, $keyValue, $requestRawData)
     {
