@@ -9,7 +9,11 @@
 namespace App\Facepalm\Models\Foundation;
 
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 /**
  * Class AbstractEntity
@@ -25,4 +29,39 @@ use Illuminate\Database\Eloquent\Model;
  */
 abstract class AbstractEntity extends Model
 {
+    /**
+     * @param $fieldName
+     * @return bool
+     */
+    public function isDatetimeField($fieldName)
+    {
+        return in_array($fieldName, $this->getDates());
+    }
+
+    /**
+     * @param $fieldName
+     * @return bool
+     */
+    public function isBelongsToField($fieldName)
+    {
+        if (Str::endsWith($fieldName, '_id')) {
+            $relationMethod = Str::substr($fieldName, 0, -3);
+            if (method_exists($this, $relationMethod) && $this->$relationMethod() instanceof BelongsTo) {
+//                return $relationMethod;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param $fieldName
+     * @return bool
+     */
+    public function isManyToMany($fieldName)
+    {
+        return $this->$fieldName instanceof Collection;
+    }
+
+
 }

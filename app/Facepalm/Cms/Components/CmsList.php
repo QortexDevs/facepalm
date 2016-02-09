@@ -6,7 +6,7 @@ use App\Facepalm\Cms\CmsCommon;
 use App\Facepalm\Cms\Fields\AbstractField;
 use App\Facepalm\Cms\Fields\FieldListProcessor;
 use App\Facepalm\Cms\Fields\Types\RelationField;
-use App\Facepalm\ModelFactory;
+use App\Facepalm\Models\ModelFactory;
 use Carbon\Carbon;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Database\Eloquent\Model;

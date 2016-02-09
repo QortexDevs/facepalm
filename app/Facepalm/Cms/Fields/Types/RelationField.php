@@ -11,7 +11,7 @@ namespace App\Facepalm\Cms\Fields\Types;
 
 use App\Facepalm\Cms\CmsCommon;
 use App\Facepalm\Cms\Fields\AbstractField;
-use App\Facepalm\ModelFactory;
+use App\Facepalm\Models\ModelFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;

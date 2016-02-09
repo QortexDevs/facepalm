@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\Cms;
 
+use App\Facepalm\Controllers\MainController;
 
-class CmsController extends \App\Facepalm\Controller
+class CmsController extends MainController
 {
 }

@@ -6,25 +6,22 @@
  * Time: 17:12
  */
 
-namespace App\Facepalm;
+namespace App\Facepalm\Controllers;
 
 use App\Facepalm\Cms\Components\CmsList;
 use App\Facepalm\Cms\Components\CmsForm;
 use App\Facepalm\Cms\Config\Config;
 use App\Facepalm\Models\File;
 use App\Facepalm\Models\Image;
-use Illuminate\Database\Eloquent\Model;
+use App\Facepalm\PostProcessing\AmfProcessor;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
 use TwigBridge\Facade\Twig;
 
-class Controller extends BaseController
+class MainController extends BaseController
 {
     const ACTION_LIST_OBJECTS = 1;
     const ACTION_EDIT_OBJECT = 2;

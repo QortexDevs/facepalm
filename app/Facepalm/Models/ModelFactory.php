@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Facepalm;
+namespace App\Facepalm\Models;
 
 use App\Facepalm\Cms\CmsCommon;
 use Illuminate\Database\Eloquent\Builder;

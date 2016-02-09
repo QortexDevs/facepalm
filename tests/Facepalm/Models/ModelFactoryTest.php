@@ -1,7 +1,7 @@
 <?php
 namespace Tests;
 
-use App\Facepalm\ModelFactory;
+use App\Facepalm\Models\ModelFactory;
 
 class ModelFactoryTest extends TestCase
 {

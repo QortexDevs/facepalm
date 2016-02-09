@@ -19,7 +19,7 @@
 
 namespace App\Facepalm\Cms\Components;
 
-use App\Facepalm\ModelFactory;
+use App\Facepalm\Models\ModelFactory;
 use App\Facepalm\Models\Image;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Database\Eloquent\Model;
