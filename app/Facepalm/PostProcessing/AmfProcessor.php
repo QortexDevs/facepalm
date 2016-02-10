@@ -7,23 +7,18 @@ namespace App\Facepalm\PostProcessing;
 
 use App\Facepalm\Cms\CmsCommon;
 use App\Facepalm\Models\ModelFactory;
-use App\Facepalm\Models\File;
 use App\Facepalm\Models\Foundation\AbstractEntity;
-use App\Facepalm\Models\Foundation\BaseEntity;
-use App\Facepalm\Models\Image;
+use App\Facepalm\PostProcessing\AmfActions\AbstractAction;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class AmfProcessor
 {
     protected $affectedObjectsCount = 0;
     protected $affectedFieldsCount = 0;
     protected $affectedObjects = [];
-    protected $toggledFields = [];
-    protected $uploadedFiles = [];
+    protected $affectedFields = [];
 
     /**
      * Run through AMF input array
@@ -35,9 +30,11 @@ class AmfProcessor
      */
     public function process($amf)
     {
-        foreach ($amf as $action => $input) {
-            $processMethod = 'processObject' . Str::studly($action);
-            if (method_exists($this, $processMethod)) {
+        foreach ($amf as $actionName => $input) {
+            $processMethod = 'processObject' . Str::studly($actionName);
+            //todo: вынести это в фабрику, и не привязываться жестко к неймспейсам
+            $processActionName = __NAMESPACE__ . '\AmfActions\\' . Str::studly($actionName);
+            if (class_exists($processActionName)) {
                 foreach ($input as $modelName => $data) {
                     $fullModelName = ModelFactory::getFullModelClassName($modelName);
                     if ($fullModelName) {
@@ -48,13 +45,36 @@ class AmfProcessor
                                     $object = ModelFactory::find($fullModelName, $id);
                                 } elseif (preg_match('/\%CREATE_[\w]{6}\%/i', $id)) {
                                     $object = new $fullModelName();
-                                    Session::flash('creatingObject', true);
                                 }
                                 if ($object) {
-                                    $this->{$processMethod}($object, $keyValue, $amf);
-                                    if ($processMethod == 'create') {
-                                        $this->affectedObjectsCount++;
-                                        $this->affectedObjects[$modelName][] = $object->id;
+                                    /** @var AbstractAction $action */
+                                    $action = new $processActionName();
+                                    $action->process($object, $keyValue, $amf);
+
+
+                                    // todo: вот эта хуета по прежнем не нравится
+                                    // todo: подумать про какой-нибудь объект ActionResult
+
+                                    $affectedObjects = $action->getAffectedObjects();
+                                    if ($affectedObjects) {
+                                        Arr::set(
+                                            $this->affectedObjects,
+                                            $actionName . '.' . $modelName,
+                                            (array) Arr::get($this->affectedObjects, $actionName . '.' . $modelName) + $affectedObjects
+                                        );
+
+                                        $this->affectedObjectsCount += count($affectedObjects);
+                                    }
+
+                                    $affectedFields = $action->getAffectedFields();
+                                    if ($affectedFields) {
+                                        $resultArrayPath = $actionName . '.' . class_basename($object) . '.' . $object->{CmsCommon::COLUMN_NAME_ID};
+                                        Arr::set(
+                                            $this->affectedFields,
+                                            $resultArrayPath,
+                                            (array) Arr::get($this->affectedFields, $resultArrayPath) + $affectedFields
+                                        );
+                                        $this->affectedFieldsCount += count($affectedFields);
                                     }
                                 }
                             }
@@ -63,14 +83,6 @@ class AmfProcessor
                 }
             }
         }
-    }
-
-    /**
-     * @return array
-     */
-    public function getAffectedObjects()
-    {
-        return $this->affectedObjects;
     }
 
     /**
@@ -92,115 +104,17 @@ class AmfProcessor
     /**
      * @return array
      */
-    public function getToggledFields()
+    public function getAffectedObjects()
     {
-        return $this->toggledFields;
+        return $this->affectedObjects;
     }
 
     /**
      * @return array
      */
-    public function getUploadedFiles()
+    public function getAffectedFields()
     {
-        return $this->uploadedFiles;
+        return $this->affectedFields;
     }
 
-
-    /**
-     * @param AbstractEntity $object
-     * @param $keyValue
-     */
-    protected function processObjectSave(AbstractEntity $object, $keyValue)
-    {
-        // Run through all incoming fields except Many-to-Many relations and set it
-        foreach ($keyValue as $fieldName => $value) {
-            if (!$object->isManyToMany($fieldName)) {
-                // todo: учитывать описания полей из общей схемы данных (которой пока нет :))
-                if ($object->isBelongsToField($fieldName)) {
-                    $this->processBelongsToField($object, $fieldName, $value);
-                } elseif ($object->isDatetimeField($fieldName)) {
-                    $object->$fieldName = (new \DateTime($value))->format('Y-m-d H:i:s');
-                } else {
-                    $object->$fieldName = $value;
-                }
-            }
-        }
-
-        // Save
-        $object->save();
-
-        // And after saving process Many-to-Many relations
-        foreach ($keyValue as $fieldName => $value) {
-            if ($object->isManyToMany($fieldName)) {
-                // get keys of non-zero array elements
-                $object->$fieldName()->sync(array_keys(array_filter($value)));
-            }
-        }
-    }
-
-    /**
-     * Alias for [Save]
-     * @param $object
-     * @param $keyValue
-     */
-    protected function processObjectCreate($object, $keyValue)
-    {
-        $this->processObjectSave($object, $keyValue);
-    }
-
-    /**
-     * @param $object
-     * @param $keyValue
-     */
-    protected function processObjectToggle($object, $keyValue)
-    {
-        foreach (array_keys($keyValue) as $fieldName) {
-            $this->affectedFieldsCount++;
-            $object->$fieldName ^= 1;
-            $this->toggledFields[class_basename($object)][$object->{CmsCommon::COLUMN_NAME_ID}][$fieldName] = $object->$fieldName;
-        }
-        $object->save();
-
-    }
-
-    /**
-     * @param AbstractEntity $object
-     */
-    protected function processObjectDelete(AbstractEntity $object)
-    {
-        $object->delete();
-    }
-
-    /**
-     * @param $object
-     * @param $keyValue
-     * @param $requestRawData
-     */
-    protected function processObjectUpload($object, $keyValue, $requestRawData)
-    {
-        $uploadProcessor = new UploadProcessor();
-        foreach ($keyValue as $fieldName => $value) {
-            $this->uploadedFiles += $uploadProcessor->handle($fieldName, $object, $value, $requestRawData);
-        }
-    }
-
-
-    /**
-     * @param $object
-     * @param $fieldName
-     * @param $value
-     */
-    protected function processBelongsToField($object, $fieldName, $value)
-    {
-        $relationMethod = Str::substr($fieldName, 0, -3);
-        if ($value) {
-            $foreignObject = ModelFactory::find($relationMethod, $value);
-            if ($foreignObject) {
-                $object->$relationMethod()->associate($foreignObject);
-            }
-        } else {
-            $object->$relationMethod()->dissociate();
-
-        }
-    }
 }

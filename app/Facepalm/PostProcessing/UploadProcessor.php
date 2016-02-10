@@ -6,9 +6,11 @@
 namespace App\Facepalm\PostProcessing;
 
 use App\Facepalm\Models\File;
+use App\Facepalm\Models\Foundation\AbstractEntity;
 use App\Facepalm\Models\Foundation\BaseEntity;
 use App\Facepalm\Models\Image;
 use App\Facepalm\Models\ModelFactory;
+use App\Facepalm\PostProcessing\AmfActions\AbstractAction;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -18,12 +20,12 @@ class UploadProcessor
 {
     /**
      * @param $fieldName (image|file)
-     * @param $object
+     * @param AbstractEntity $object
      * @param $value
      * @param $requestRawData
      * @return array
      */
-    public function handle($fieldName, BaseEntity $object, $value, $requestRawData)
+    public function handle($fieldName, AbstractEntity $object, $value, $requestRawData)
     {
         $relationMethodName = $fieldName . 's';
         $className = Str::ucfirst($fieldName);

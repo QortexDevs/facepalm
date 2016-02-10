@@ -61,7 +61,7 @@ $(document).ready(function () {
                 if (url.endsWith('/create')) {
                     url = _.strLeftBack(url, '/');
                 }
-                document.location.href = url + '/' + response + '/';
+                document.location.href = url + '/' + response + '/?justCreated=1';
             } else {
                 $.growl.notice({title: '', message: "Cохранено"});
                 toggleSpinner(false);

@@ -186,23 +186,24 @@ class MainController extends BaseController
         //todo:
         //todo: продумать нормальный возврат!
         //todo: события до, после и вместо!!!!
-        if ($amfProcessor->getToggledFields()) {
+        if (Arr::has($amfProcessor->getAffectedFields(), 'toggle')) {
+            // todo: какашка какая-то
             if ($amfProcessor->getAffectedFieldsCount() == 1) {
                 // адская конструкция для доступа к конкретному единственному значению многомерного массива
-                $singleElementFieldValue = array_values(array_values(array_values($amfProcessor->getToggledFields())[0])[0])[0];
+                $singleElementFieldValue = array_values(array_values(array_values($amfProcessor->getAffectedFields()['toggle'])[0])[0])[0];
                 return response()->json($singleElementFieldValue);
             } else {
-                return response()->json($amfProcessor->getToggledFields());
+                return response()->json($amfProcessor->getAffectedFields()['toggle']);
             }
         }
-        if ($amfProcessor->getAffectedObjects()) {
+        if (Arr::has($amfProcessor->getAffectedObjects(), "create")) {
             if ($amfProcessor->getAffectedObjectsCount() == 1) {
-                $id = array_values($amfProcessor->getAffectedObjects())[0][0];
+                $id = array_values($amfProcessor->getAffectedObjects()['create'])[0][0];
                 return response()->json($id);
             }
         }
-        if ($files = $amfProcessor->getUploadedFiles()) {
-            return response()->json($files);
+        if ($files = Arr::get($amfProcessor->getAffectedObjects(), 'upload')) {
+            return response()->json(array_values($files)[0]);
         }
     }
 
@@ -233,7 +234,7 @@ class MainController extends BaseController
         $formData = $form->display();
         $params = [
             'form' => $formData,
-            'justCreated' => Session::get('creatingObject'),
+            'justCreated' => $this->request->input('justCreated'),
             'pageTitle' => $this->config->get('strings.editTitle') ?: 'Редактирование объекта'
         ];
 
