@@ -17,6 +17,11 @@ $(document).ready(function () {
     //load underscore.string
     _.mixin(s.exports());
 
+    // Session keep-alive
+    setInterval(function () {
+        $.get('./', {'ping': 'ping'});
+    }, 120000);
+
     $(document).on('click', '.cms-module-list-content button.status', function () {
         var $tr = $(this).closest('tr[data-id]');
         var id = $tr.data('id');

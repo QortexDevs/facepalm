@@ -61,6 +61,10 @@ class MainController extends BaseController
         $this->module = $module;
         $this->request = $request;
 
+        if ($request->input('ping')) {
+            return 'ok';
+        }
+
         $this->config = (new Config())->load($group, $module);
         if ($group && !$module) {
             return redirect('/cms/' . $group . '/' . array_keys($this->config->get('structure')[$group]['sections'])[0]);
