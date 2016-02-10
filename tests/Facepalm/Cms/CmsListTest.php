@@ -70,7 +70,7 @@ class CmsListTest extends TestCase
         $this->assertTrue(is_array($result));
         $this->assertArrayHasKey('settings', $result);
         $this->assertArrayHasKey('rows', $result);
-        $this->assertGreaterThan(1, count($result['rows']));
+        $this->assertGreaterThan(0, count($result['rows']));
     }
 
     /**

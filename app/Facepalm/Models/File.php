@@ -130,43 +130,6 @@ class File extends BindableEntity
     }
 
     /**
-     * Allowed formats:
-     *
-     * 200x300
-     * 200
-     * x300
-     * todo: think about non-proportional resize
-     *
-     * @param $sizeString
-     * @return $this
-     */
-    public function generateSize($sizeString)
-    {
-        $width = $height = null;
-        $size = explode('x', $sizeString);
-        if (isset($size[0]) && (int)$size[0] > 0) {
-            $width = (int)$size[0];
-        }
-        if (isset($size[1]) && (int)$size[1] > 0) {
-            $height = (int)$size[1];
-        }
-        if ($width || $height) {
-            $image = \Intervention\Image\Facades\Image::make($this->getPhysicalPath('original'));
-            if ($width && $height) {
-                $image->fit($width, $height);
-            } else {
-                $image->resize($width, $height, function ($constraint) {
-                    $constraint->aspectRatio();
-                    $constraint->upsize();
-                });
-            }
-            $image->save($this->getPhysicalPath($sizeString));
-        }
-        return $this;
-    }
-
-
-    /**
      * Cheating own protective mutator
      */
     protected function generateName()

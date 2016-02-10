@@ -14,6 +14,28 @@ use Illuminate\Database\Eloquent\Model;
 abstract class BaseEntity extends AbstractEntity
 {
     /**
+     *
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        // generate name on model creating
+        self::deleting(function (BaseEntity $entity) {
+            $entity->images()
+                ->get()
+                ->each(function ($uploadableObject) {
+                    $uploadableObject->delete();
+                });
+            $entity->files()
+                ->get()
+                ->each(function ($uploadableObject) {
+                    $uploadableObject->delete();
+                });
+        });
+    }
+
+    /**
      * Get all binded images
      */
     public function images()
