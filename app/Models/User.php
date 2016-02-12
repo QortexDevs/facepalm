@@ -37,10 +37,14 @@ class User extends BaseEntity implements AuthenticatableContract,
      */
     protected $hidden = ['password', 'remember_token'];
 
+
     protected $casts = [
         'status' => 'boolean',
     ];
 //    protected $dateFormat = 'd.m.Y H:i:s';
+
+    protected $textFields = ['bio'];
+    protected $stringFields = ['title'];
 
     public function role()
     {
