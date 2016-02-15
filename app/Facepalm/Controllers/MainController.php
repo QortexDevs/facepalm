@@ -13,6 +13,7 @@ use App\Facepalm\PostProcessing\AmfProcessor;
 use App\Models\User;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use TwigBridge\Facade\Twig;
 
 class MainController extends BaseController
@@ -33,20 +34,6 @@ class MainController extends BaseController
      */
     protected function renderPage($template, $params)
     {
-        /** @var User $user */
-        $user = User::find(601);
-//        $user->texts()->create([
-//            'group' => 'bio',
-//            'languageCode' => 'ru',
-//            'textBody' => 'Родился в Москве в 1980 году',
-//        ]);
-//        dd($user->getTextItem('descr', 'ru'));
-//        $user->setTextItem('descr', ['stringValue' => 'descr title', 'textBody' => '']);
-//        $user->setTextItem('descr', ['stringValue' => 'заголовок'], 'ru');
-//        app()->setLocale('de');
-//        $user->title = 'Herr';
-
-        exit;
         //todo: вынести в какую-то общую тулзу
         $assetsBusters = array_flip(
             array_map(

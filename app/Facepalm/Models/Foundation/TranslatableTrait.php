@@ -222,6 +222,23 @@ trait TranslatableTrait
         });
     }
 
+
+    /**
+     * Returns closure to use in join statement when building query
+     *
+     * @param $joinNumber
+     * @param $group
+     * @return \Closure
+     */
+    public static function getJoinClosure($joinNumber, $group)
+    {
+        return function ($join) use ($joinNumber, $group) {
+            $join->where('ti' . $joinNumber . '.bind_type', '=', static::class)
+                ->on('ti' . $joinNumber . '.bind_id', '=', static::getTableName() . '.id')
+                ->where('ti' . $joinNumber . '.group', '=', $group);
+        };
+    }
+
     /*todo:
 
         todo: подумать, как это все кешировать, чтобы не дергать каждый раз базу, особенно при записи значений.
@@ -229,8 +246,44 @@ trait TranslatableTrait
         todo: рефакторинг, объединить одинаковые методы
         todo: single lang mode
 
-        todo: поиск и сортировка по этому полю
+----------------
+        С поиском нормально получается через Eloquent
+        $users = User::whereHas('textItems', function ($query) {
+            $query->where('group', '=', 'title')->where(function ($query) {
+                $query->where('stringValue', '=', 'Mistr')
+                    ->orWhere('stringValue', '=', 'Sir');
+            });
+        })
+            ->where('status', 0)
+            ->get();
+
+----------------------
+        А вот с сортировкой лучше юзать обычный QueryBuilder а потом делать hydrate в коллекцию моделей
+        Подумать, как делать поиск по всем языкам, а выводить и сортировать по определенному
+
+        $users = DB::table('users')
+            ->leftJoin('text_items AS ti1', User::getJoinClosure(1, 'title'))
+            ->leftJoin('text_items AS ti2', User::getJoinClosure(2, 'bio'))
+            ->select('users.*', 'ti1.stringValue AS title', 'ti2.textBody AS bio')
+            ->where('ti1.stringValue', 'Sir')
+            ->where('users.status', 0)
+            ->groupBy('users.id')
+            ->orderBy('title')
+            ->get();
+
+        $users = User::hydrate($users);
+
 
     */
+
+    /**
+     * Get table name statically. Ugly :(
+     *
+     * @return mixed
+     */
+    protected static function getTableName()
+    {
+        return ((new static)->getTable());
+    }
 
 }
