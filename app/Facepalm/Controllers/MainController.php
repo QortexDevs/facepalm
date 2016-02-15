@@ -40,8 +40,11 @@ class MainController extends BaseController
 //            'languageCode' => 'ru',
 //            'textBody' => 'Родился в Москве в 1980 году',
 //        ]);
-        dd($user->texts('ru'));
-
+//        dd($user->getTextItem('descr', 'ru'));
+//        $user->setTextItem('descr', ['stringValue' => 'descr title', 'textBody' => '']);
+//        $user->setTextItem('descr', ['stringValue' => 'заголовок'], 'ru');
+//        app()->setLocale('de');
+//        $user->title = 'Herr';
 
         exit;
         //todo: вынести в какую-то общую тулзу

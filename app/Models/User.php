@@ -43,7 +43,7 @@ class User extends BaseEntity implements AuthenticatableContract,
     ];
 //    protected $dateFormat = 'd.m.Y H:i:s';
 
-    protected $textFields = ['bio'];
+    protected $textFields = ['bio', 'descr'];
     protected $stringFields = ['title'];
 
     public function role()
