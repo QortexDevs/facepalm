@@ -167,13 +167,14 @@ abstract class AbstractField implements \ArrayAccess
      * @param Model $object
      * @param array $parameters
      * @param string $template
-     * @return
+     * @return string
      */
     public function renderFormField($object, $parameters = [], $template = '')
     {
         $template = $template ?: $this->templateName;
 
         if ($template) {
+            $languages = ['ru' => 'ru', 'en' => 'en'];
             return Twig::render($template, [
                     'object' => $object,
                     'field' => $this->name,
@@ -182,6 +183,7 @@ abstract class AbstractField implements \ArrayAccess
                     'inputName' => $this->fieldNameBase . '[' . $this->name . ']',
                     'parameters' => $this->parameters,
                     'data' => $this->data,
+                    'languages' => $languages
                 ] + $parameters);
         }
     }

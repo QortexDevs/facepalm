@@ -35,6 +35,7 @@ abstract class BaseEntity extends AbstractEntity
                 ->each(function ($uploadableObject) {
                     $uploadableObject->delete();
                 });
+            $entity->textItems()->delete();
         });
     }
 

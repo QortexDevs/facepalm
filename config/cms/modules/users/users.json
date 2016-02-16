@@ -73,6 +73,11 @@
             "updated_at": {
                 "type": "date"
             },
+            "bio": {
+                "type": "text",
+                "title": "Bio",
+                "translatable": true
+            },
             "acl": {
                 "type": "custom",
                 "title": "Доступ"
