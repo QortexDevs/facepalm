@@ -76,7 +76,8 @@
             "bio": {
                 "type": "text",
                 "title": "Bio",
-                "translatable": true
+                "translatable": true,
+                "wysiwyg": true
             },
             "acl": {
                 "type": "custom",

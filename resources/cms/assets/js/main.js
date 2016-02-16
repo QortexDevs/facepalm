@@ -12,10 +12,23 @@
 //= ../../../../bower_components/twig.js/twig.js
 //= ../../../../bower_components/Sortable/Sortable.js
 //= ../../../../bower_components/fancybox/source/jquery.fancybox.pack.js
+//= ../../../../bower_components/codemirror/lib/codemirror.js
+//= ../../../../bower_components/codemirror/mode/xml/xml.js
+
+//= ../nonBowerPackages/redactor/redactor/redactor.js
+//= ../nonBowerPackages/redactor/langs/ru.js
+//= ../nonBowerPackages/redactor/plugins/video.js
+//= ../nonBowerPackages/redactor/plugins/fontcolor.js
+//= ../nonBowerPackages/redactor/plugins/table.js
+//= ../nonBowerPackages/redactor/plugins/fontsize.js
+//= ../nonBowerPackages/redactor/plugins/fullscreen.js
+
 
 $(document).ready(function () {
     //load underscore.string
     _.mixin(s.exports());
+
+    InitWysiwyg();
 
     // Session keep-alive
     setInterval(function () {

@@ -24,6 +24,7 @@
     "dropzone": "enyo/dropzone#~4.2.0",
     "twig.js": "~0.8.7",
     "Sortable": "~1.4.2",
-    "fancybox": "^2.1.5"
+    "fancybox": "^2.1.5",
+    "codemirror": "^5.11.0"
   }
 }

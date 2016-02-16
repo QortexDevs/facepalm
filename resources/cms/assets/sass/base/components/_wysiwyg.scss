@@ -1,0 +1,78 @@
+.redactor-toolbar {
+    background: #74808F;
+    box-shadow: none;
+}
+
+.redactor-toolbar li {
+    font-size: 16px;
+}
+
+.redactor-toolbar li a {
+    color: #fff;
+}
+
+.redactor-toolbar li a:hover {
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+}
+
+.redactor-toolbar li a:active.redactor-toolbar li a.redactor-act {
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+}
+
+.redactor-editor {
+    font-family: Lato, sans-serif !important;
+    font-size: 16px;
+    line-height: 22px;
+    font-weight: 300;
+    color: black;
+    padding: 10px;
+}
+
+.redactor-editor div,
+.redactor-editor p,
+.redactor-editor ul,
+.redactor-editor ol,
+.redactor-editor table,
+.redactor-editor dl,
+.redactor-editor blockquote,
+.redactor-editor pre {
+    font-size: 16px;
+    line-height: 22px;
+    color: black;
+}
+
+.redactor-editor strong {
+    font-weight: bold;
+}
+
+.redactor-editor em {
+    font-style: italic;
+}
+
+.redactor-editor iframe {
+    margin: 0;
+}
+
+.redactor-editor a {
+    color: #b51e83;
+}
+
+.redactor-editor p {
+    margin-bottom: 10px;
+}
+
+.redactor-editor h3 {
+    color: #b51e83;
+    font-size: 25px;
+    font-weight: normal;
+    margin-bottom: 10px;
+}
+
+.redactor-editor h4 {
+    color: #b51e83;
+    font-size: 18px;
+    font-weight: normal;
+    margin-bottom: 10px;
+}
