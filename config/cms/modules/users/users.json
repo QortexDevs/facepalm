@@ -73,6 +73,11 @@
             "updated_at": {
                 "type": "date"
             },
+            "title": {
+                "type": "string",
+                "title": "Title",
+                "translatable": true
+            },
             "bio": {
                 "type": "text",
                 "title": "Bio",

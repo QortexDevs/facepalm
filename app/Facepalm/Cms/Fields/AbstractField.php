@@ -188,4 +188,12 @@ abstract class AbstractField implements \ArrayAccess
         }
     }
 
+    /**
+     *
+     */
+    public function getRowClassName()
+    {
+        return Str::snake(Str::substr(class_basename($this), 0, -5));
+    }
+
 }

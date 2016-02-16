@@ -4,7 +4,7 @@
     <table>
         {% for field in form.fields %}
             {% if not field.isSkipped %}
-                <tr data-row-for-field="{{ field.name }}">
+                <tr data-row-for-field="{{ field.name }}" class="row-for-field-{{ field.getRowClassName() }}">
                     <td class="caption">
                         {% if not field.doNotShowTitle %}
                             <div class="caption">{{ field.title }}</div>
