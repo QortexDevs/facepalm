@@ -9,7 +9,9 @@
 namespace App\Facepalm\Controllers;
 
 use App\Facepalm\Cms\Config\Config;
+use App\Facepalm\Models\SiteSection;
 use App\Facepalm\PostProcessing\AmfProcessor;
+use App\Facepalm\Tools\Tree;
 use App\Models\User;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Arr;
@@ -34,6 +36,18 @@ class MainController extends BaseController
      */
     protected function renderPage($template, $params)
     {
+        $tree = new Tree();
+        $tree->fromEloquentCollection(SiteSection::all());
+
+        $t = microtime(1);
+        pre($tree->getPath(1464, 'path_name'));
+        pre($tree->getPath(1493, function ($element) {
+            return $element->path_name . $element->id;
+        }));
+
+
+        exit;
+
         //todo: вынести в какую-то общую тулзу
         $assetsBusters = array_flip(
             array_map(
