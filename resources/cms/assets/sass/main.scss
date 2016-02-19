@@ -12,5 +12,11 @@
 @import "base/components/login";
 @import "base/components/wysiwyg";
 
+ul.tree {
+    ul {
+        margin-left: 20px;
+    }
+}
+
 //@import "modules/company-services-form";
 //@import "modules/users";

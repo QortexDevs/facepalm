@@ -16,6 +16,7 @@ use App\Models\User;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
+use Twig_Loader_Array;
 use TwigBridge\Facade\Twig;
 
 class MainController extends BaseController
@@ -39,12 +40,23 @@ class MainController extends BaseController
         $tree = new Tree();
         $tree->fromEloquentCollection(SiteSection::all());
 
-        $t = microtime(1);
-        pre($tree->getPath(1464, 'path_name'));
-        pre($tree->getPath(1493, function ($element) {
-            return $element->path_name . $element->id;
-        }));
+//        pre($tree->getPath(1464, 'path_name'));
+//        pre($tree->getPath(1493, function ($element) {
+//            return $element->path_name . $element->id;
+//        }));
 
+
+        $loader = new Twig_Loader_Array(array(
+            'index.html' => '<li>{%if isRoot%}!{%endif%}({{level}}) {{element.path_name}} {%if nested%}<ul>{{nested|raw}}</ul>{%endif%}</li>',
+        ));
+        $env = new \Twig_Environment($loader, [
+            'debug' => false,
+            'cache' => storage_path('twig')
+        ]);
+        $t = microtime(1);
+        echo '<ul class="tree">' . $tree->render(0, $env, 'index.html', false) . '</ul>';
+
+        echo microtime(1) - $t;
 
         exit;
 

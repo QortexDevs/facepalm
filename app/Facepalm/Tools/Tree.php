@@ -16,6 +16,7 @@ use Illuminate\Support\Arr;
 
 class Tree
 {
+    public $output;
     /** @var  Model[] */
     protected $elementsById;
 
@@ -176,6 +177,69 @@ class Tree
     {
         //todo: сделать!
     }
+
+    /**
+     * todo: сделать возможность передавать не рендер-шаблон, а колбек. Для какого-то кастомного рендера
+     * @param $rootId
+     * @param $render
+     * @param $templateName
+     * @param bool $renderRoot
+     * @return string
+     */
+    public function render($rootId, $render, $templateName, $renderRoot = false)
+    {
+        return $this->process(
+            $rootId,
+            function ($elementId, $level, $nested, $isRoot = false) use ($render, $templateName) {
+                return $render->render($templateName, [
+                    'level' => $level,
+                    'element' => $this->getElement($elementId),
+                    'nested' => $nested,
+                    'isRoot' => $isRoot,
+                ]);
+            },
+            $renderRoot
+        );
+
+    }
+
+
+    /**
+     * @param $rootId
+     * @param null $callbackItem
+     * @param bool $processRoot
+     * @param int $level
+     * @return string
+     */
+    protected function process($rootId, $callbackItem, $processRoot = false, $level = 0)
+    {
+        if (!is_callable($callbackItem)) {
+            return null;
+        }
+
+        $output = '';
+        if ($processRoot) {
+            $output .= $callbackItem(
+                $rootId,
+                $level,
+                $this->process($rootId, $callbackItem, false, $level + 1),
+                true
+            );
+        } else {
+            if (Arr::has($this->elementsByParent, $rootId)) {
+                foreach ($this->elementsByParent[$rootId] as $elementId) {
+                    $output .= $callbackItem(
+                        $elementId,
+                        $level,
+                        $this->process($elementId, $callbackItem, false, $level + 1)
+                    );
+                }
+            }
+        }
+
+        return $output;
+    }
+
 
     /**
      * Build tree meta-information
