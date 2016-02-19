@@ -1,12 +1,12 @@
 {% if parameters.translatable %}
     {% for langCode,langTitle in languages %}
         <div class="language-row">
-            <div class="language-caption">{{ langTitle }}</div>
             <input type="text" class="text"
                    name="{{ inputName }}[{{ langCode }}][stringValue]"
                    value="{{ object.string(field, langCode) }}"
                    {% if parameters.width %}style="width: {{ parameters.width }}"{% endif %}
             />
+            <div class="language-caption">{{ langTitle }}</div>
         </div>
     {% endfor %}
 {% else %}

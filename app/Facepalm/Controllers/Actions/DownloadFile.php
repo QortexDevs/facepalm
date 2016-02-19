@@ -6,7 +6,7 @@
  * Time: 17:12
  */
 
-namespace App\Facepalm\Controllers;
+namespace App\Facepalm\Controllers\Actions;
 
 use App\Facepalm\Cms\Components\CmsList;
 use App\Facepalm\Cms\Components\CmsForm;
@@ -21,9 +21,9 @@ use Illuminate\Support\Facades\Session;
 use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
 use TwigBridge\Facade\Twig;
 
-trait DownloadFileTrait
+class DownloadFile
 {
-    public function downloadFile(Request $request, $hash, $name = '')
+    public function handle(Request $request, $hash, $name = '')
     {
         /** @var File $file */
         $file = File::where('name', $hash)->first();

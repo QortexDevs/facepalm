@@ -14,6 +14,7 @@
 //= ../../../../bower_components/fancybox/source/jquery.fancybox.pack.js
 //= ../../../../bower_components/codemirror/lib/codemirror.js
 //= ../../../../bower_components/codemirror/mode/xml/xml.js
+//= ../../../../bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.js
 
 //= ../nonBowerPackages/redactor/redactor/redactor.js
 //= ../nonBowerPackages/redactor/langs/ru.js
@@ -34,6 +35,24 @@ $(document).ready(function () {
     setInterval(function () {
         $.get('./', {'ping': 'ping'});
     }, 120000);
+
+    $('.main-menu .right-panel').mCustomScrollbar({
+        theme: "light-2",
+        autoExpandScrollbar: true,
+        scrollInertia: 400,
+        mouseWheel: {
+            preventDefault: true
+        },
+        callbacks: {
+            onScroll: function (q, q1) {
+                console.log("Content scrolled...", q, q1);
+            }
+        }
+        // todo: прик лкике по меню - запоминать в локал-сторадже скроллТоп, и потом при инициализации - сразу скроллить на него.
+        // todo: При загрузке страницы - обнулять это значение в локалсторадже
+        // todo: если есть выделенный пункт, а сохраненного значения нет, то вычислять его примерно и сероллить туда
+        // todo: а вообще, переделать все на аякс, сука
+    });
 
     $(document).on('click', '.cms-module-list-content button.status', function () {
         var $tr = $(this).closest('tr[data-id]');

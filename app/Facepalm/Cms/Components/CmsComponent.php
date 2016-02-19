@@ -11,6 +11,7 @@ class CmsComponent
 {
     protected $modelName = null;
     protected $baseUrl = '.';
+    protected $config;
 
     /** @var FieldListProcessor */
     protected $fieldsProcessor = null;
@@ -25,7 +26,7 @@ class CmsComponent
         $this->fieldsProcessor = new FieldListProcessor();
         if ($config) {
             $this->fieldsProcessor->setDictionaries($config->get('dictionaries', []));
-            $this->buildFromConfig($config);
+            $this->configure($config);
         }
     }
 
@@ -50,7 +51,14 @@ class CmsComponent
     /**
      * @param $config
      */
-    public function buildFromConfig($config)
+    public function configure($config)
+    {
+        $this->config = $config;
+    }
+
+    /**
+     */
+    public function build()
     {
     }
 
@@ -88,4 +96,5 @@ class CmsComponent
 
         return $this;
     }
+
 }

@@ -6,69 +6,24 @@
             "sections": {
                 "users": {
                     "title": "Пользователи"
+                },
+                "subs": {
+                    "title": "Подписчики"
                 }
             }
         },
-        "companies": {
-            "title": "Компании",
-            "icon": "coffee",
+        "texts": {
+            "title": "Тексты",
+            "icon": "columns",
             "sections": {
-                "companies": {
-                    "title": "Компании"
+                "sections": {
+                    "title": "Текстовые разделы"
                 },
-                "galleries": {
-                    "title": "Галереи"
+                "translations": {
+                    "title": "Переводы"
                 },
-                "persons": {
-                    "title": "Персоны"
-                },
-                "menu": {
-                    "title": "Меню"
-                },
-                "events": {
-                    "title": "События"
-                },
-                "actions": {
-                    "title": "Акции"
-                },
-                "articles": {
-                    "title": "Статьи"
-                }
-            }
-        },
-        "dictionaries": {
-            "title": "Справочники",
-            "icon": "book",
-            "sections": {
-                "cities": {
-                    "title": "Города"
-                },
-                "serviceTypes": {
-                    "title": "Типы услуг"
-                },
-                "priceDimensions": {
-                    "title": "Размерности цен"
-                },
-                "priceIntervals": {
-                    "title": "Диапазоны цен"
-                },
-                "menuSections": {
-                    "title": "Разделы меню"
-                },
-                "articleTypes": {
-                    "title": "Типы статей"
-                }
-            }
-        },
-        "system": {
-            "title": "Система",
-            "icon": "gears",
-            "sections": {
-                "objects": {
-                    "title": "Объекты"
-                },
-                "relations": {
-                    "title": "Связи"
+                "strings": {
+                    "title": "Строковые параметры"
                 }
             }
         }

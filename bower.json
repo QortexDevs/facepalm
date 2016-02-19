@@ -25,6 +25,7 @@
     "twig.js": "~0.8.7",
     "Sortable": "~1.4.2",
     "fancybox": "^2.1.5",
-    "codemirror": "^5.11.0"
+    "codemirror": "^5.11.0",
+    "malihu-custom-scrollbar-plugin": "^3.1.3"
   }
 }

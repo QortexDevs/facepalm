@@ -18,7 +18,7 @@ class CmsListTest extends TestCase
     public function testCmsListRequireModelDefinition()
     {
         $this->setExpectedException('Exception', 'No model defined');
-        (new CmsList())->prepareData();
+        (new CmsList())->build();
     }
 
     /**
@@ -28,7 +28,7 @@ class CmsListTest extends TestCase
     {
         $result = (new CmsList())
             ->setMainModel('User')
-            ->prepareData();
+            ->build();
         $this->assertTrue(is_array($result));
         $this->assertArrayHasKey('meta', $result);
         $this->assertEquals('User', $result['meta']['model']);
@@ -41,7 +41,7 @@ class CmsListTest extends TestCase
     {
         $result = (new CmsList())
             ->setMainModel('user')
-            ->prepareData();
+            ->build();
         $this->assertTrue(is_array($result));
         $this->assertArrayHasKey('meta', $result);
         $this->assertEquals('User', $result['meta']['model']);
@@ -55,7 +55,7 @@ class CmsListTest extends TestCase
         $this->setExpectedException('Exception', 'Cannot find class');
         (new CmsList())
             ->setMainModel('user2')
-            ->prepareData();
+            ->build();
     }
 
     /**
@@ -66,7 +66,7 @@ class CmsListTest extends TestCase
         $this->createDummyUsersData();
         $result = (new CmsList())
             ->setMainModel('User')
-            ->prepareData();
+            ->build();
         $this->assertTrue(is_array($result));
         $this->assertArrayHasKey('settings', $result);
         $this->assertArrayHasKey('rows', $result);
@@ -83,12 +83,12 @@ class CmsListTest extends TestCase
 
         $result = $list
             ->toggleIdColumn(false)
-            ->prepareData();
+            ->build();
         $this->assertFalse($result['settings']['showIdColumn']);
 
         $result = $list
             ->toggleIdColumn(true)
-            ->prepareData();
+            ->build();
         $this->assertTrue($result['settings']['showIdColumn']);
     }
 
@@ -102,12 +102,12 @@ class CmsListTest extends TestCase
 
         $result = $list
             ->toggleDeleteButtonColumn(false)
-            ->prepareData();
+            ->build();
         $this->assertFalse($result['settings']['showDeleteButton']);
 
         $result = $list
             ->toggleDeleteButtonColumn(true)
-            ->prepareData();
+            ->build();
         $this->assertTrue($result['settings']['showDeleteButton']);
     }
 
@@ -121,12 +121,12 @@ class CmsListTest extends TestCase
 
         $result = $list
             ->toggleStatusButtonColumn(false)
-            ->prepareData();
+            ->build();
         $this->assertFalse($result['settings']['showStatusButton']);
 
         $result = $list
             ->toggleStatusButtonColumn(true)
-            ->prepareData();
+            ->build();
         $this->assertTrue($result['settings']['showStatusButton']);
     }
 
@@ -141,12 +141,12 @@ class CmsListTest extends TestCase
 
         $result = $list
             ->toggleEditButtonColumn(false)
-            ->prepareData();
+            ->build();
         $this->assertFalse($result['settings']['showEditButton']);
 
         $result = $list
             ->toggleEditButtonColumn(true)
-            ->prepareData();
+            ->build();
         $this->assertTrue($result['settings']['showEditButton']);
     }
 
@@ -166,7 +166,7 @@ class CmsListTest extends TestCase
                     'title' => 'Name'
                 ],
             ])
-            ->prepareData();
+            ->build();
 
         $this->assertEquals(2, count($result['meta']['columns']));
         $this->assertArrayHasKey('email', $result['meta']['columns']);
@@ -197,7 +197,7 @@ class CmsListTest extends TestCase
                 'email' => 'E-mail',
                 'name' => 'WrongName'
             ])
-            ->prepareData();
+            ->build();
 
         $this->assertEquals('E-mail', $result['meta']['columns']['email']['title']);
         $this->assertEquals('Name', $result['meta']['columns']['name']['title']);
@@ -220,7 +220,7 @@ class CmsListTest extends TestCase
                 'E-mail',
                 'Name'
             ])
-            ->prepareData();
+            ->build();
 
         $this->assertEquals('E-mail', $result['meta']['columns']['email']['title']);
         $this->assertEquals('Name', $result['meta']['columns']['name']['title']);
@@ -241,7 +241,7 @@ class CmsListTest extends TestCase
                 'E-mail',
                 'Name'
             ])
-            ->prepareData();
+            ->build();
 
         $this->assertEquals('E-mail', $result['meta']['columns']['email']['title']);
         $this->assertEquals('Name', $result['meta']['columns']['name']['title']);
@@ -259,7 +259,7 @@ class CmsListTest extends TestCase
                 'email',
                 'name'
             ])
-            ->prepareData();
+            ->build();
 
         $this->assertEquals(2, count($result['meta']['columns']));
         $this->assertArrayHasKey('email', $result['meta']['columns']);
@@ -279,7 +279,7 @@ class CmsListTest extends TestCase
             ->setColumns([
                 'email'
             ])
-            ->prepareData();
+            ->build();
 
         $this->assertEquals(1, count($result['meta']['columns']));
         $this->assertArrayHasKey('email', $result['meta']['columns']);
@@ -301,7 +301,7 @@ class CmsListTest extends TestCase
                     'name' => 'NewName'
                 ],
             ])
-            ->prepareData();
+            ->build();
 
         $this->assertArrayNotHasKey('name', $result['meta']['columns']);
         $this->assertArrayHasKey('NewName', $result['meta']['columns']);
@@ -323,7 +323,7 @@ class CmsListTest extends TestCase
                     'type' => CmsCommon::COLUMN_TYPE_TEXT
                 ],
             ])
-            ->prepareData();
+            ->build();
 
         $this->assertTrue($result['meta']['columns']['email'] instanceof StringField);
         $this->assertTrue($result['meta']['columns']['name'] instanceof TextField);

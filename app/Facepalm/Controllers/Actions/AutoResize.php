@@ -6,7 +6,7 @@
  * Time: 17:12
  */
 
-namespace App\Facepalm\Controllers;
+namespace App\Facepalm\Controllers\Actions;
 
 use App\Facepalm\Cms\Components\CmsList;
 use App\Facepalm\Cms\Components\CmsForm;
@@ -21,9 +21,9 @@ use Illuminate\Support\Facades\Session;
 use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
 use TwigBridge\Facade\Twig;
 
-trait AutoResizeTrait
+class AutoResize
 {
-    public function autoResizeImage(Request $request, $path, $name)
+    public function handle(Request $request, $path, $name)
     {
         preg_match('/^(?<hash>[0-9a-f]+)(_(?<dimensions>[\dx]+))?\.(?<ext>jpg|png|gif)$/', $name, $matches);
         if (Arr::has($matches, 'hash') & Arr::has($matches, 'dimensions')) {

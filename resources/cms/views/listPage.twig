@@ -1,6 +1,6 @@
 {% extends "base.twig" %}
 	{% block moduleContent %}
         <div class="cms-module-list-page">
-            {% include "components/list/container.twig" %}
+            {{ listHtml|raw }}
         </div>
     {% endblock moduleContent %}

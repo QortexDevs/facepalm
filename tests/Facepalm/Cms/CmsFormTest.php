@@ -19,7 +19,7 @@ class CmsFormTest extends TestCase
     public function testCmsFormRequireModelDefinition()
     {
         $this->setExpectedException('Exception', 'No model defined');
-        (new CmsForm())->display();
+        (new CmsForm())->build();
     }
 
     /**
@@ -29,7 +29,7 @@ class CmsFormTest extends TestCase
     {
         $result = (new CmsForm())
             ->setMainModel('User')
-            ->display();
+            ->build();
         $this->assertTrue(is_array($result));
         $this->assertArrayHasKey('fields', $result);
         $this->assertArrayHasKey('object', $result);
@@ -52,7 +52,7 @@ class CmsFormTest extends TestCase
                     'title' => 'Name'
                 ],
             ])
-            ->display();
+            ->build();
 
         $this->assertEquals(2, count($result['fields']));
         $this->assertTrue($result['fields']['email'] instanceof StringField);
@@ -85,7 +85,7 @@ class CmsFormTest extends TestCase
                     'title' => 'Name'
                 ],
             ])
-            ->display();
+            ->build();
 
         $this->assertTrue($result['object'] instanceof User);
         $this->assertEquals('test@rest', $result['object']->email);
@@ -113,7 +113,7 @@ class CmsFormTest extends TestCase
                     'title' => 'Name'
                 ],
             ])
-            ->display();
+            ->build();
 
         $this->assertTrue($result['object'] instanceof User);
         $this->assertEquals($user->email, $result['object']->email);
@@ -131,7 +131,7 @@ class CmsFormTest extends TestCase
         $result = (new CmsForm())
             ->setMainModel('User')
             ->setEditedObject($id)
-            ->display();
+            ->build();
 
     }
 

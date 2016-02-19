@@ -25,6 +25,7 @@ use Illuminate\Contracts\Config\Repository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Mockery\CountValidator\Exception;
+use TwigBridge\Facade\Twig;
 
 class CmsForm extends CmsComponent
 {
@@ -40,8 +41,10 @@ class CmsForm extends CmsComponent
      * @param Repository $config
      * @return $this
      */
-    public function buildFromConfig($config)
+    public function configure($config)
     {
+        parent::configure($config);
+
         $this->setFields($config->get('form.fields'), $config->get('titles'))
             ->setBaseUrl($config->get('baseUrl'))
             ->setMainModel($config->get('model'));
@@ -74,7 +77,7 @@ class CmsForm extends CmsComponent
      * @return array
      * @throws \Exception
      */
-    public function display()
+    public function build()
     {
         if (!$this->modelName) {
             throw new \Exception('No model defined');
@@ -102,6 +105,21 @@ class CmsForm extends CmsComponent
         ];
 
         return $output;
+    }
+
+
+    /**
+     * @param $render
+     * @param string $templateName
+     * @return mixed
+     * @throws \Exception
+     */
+    public function render($render, $templateName = 'components/form/container.twig')
+    {
+        return $render->render($templateName, [
+            "form" => $this->build(),
+            "moduleConfig" => $this->config,
+        ]);
     }
 
 

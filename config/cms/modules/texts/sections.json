@@ -1,0 +1,28 @@
+{
+    "model": "site_section",
+    "titles": {
+        "path_name": "Путь",
+        "password": "Пароль",
+        "type": "Тип",
+        "status": "Активность"
+    },
+    "navigation": {
+        "model": "site_section"
+    },
+    "form": {
+        "fields": {
+            "path_name": true,
+            "title": {
+                "type": "string",
+                "title": "Title",
+                "translatable": true
+            },
+            "content": {
+                "type": "text",
+                "title": "Content",
+                "translatable": true,
+                "wysiwyg": true
+            }
+        }
+    }
+}

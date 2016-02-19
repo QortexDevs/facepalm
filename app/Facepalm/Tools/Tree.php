@@ -29,6 +29,7 @@ class Tree
 
     /**
      * @param Collection $objects
+     * @return $this
      */
     public function fromEloquentCollection(Collection $objects)
     {
@@ -39,6 +40,8 @@ class Tree
         }
 
         $this->calculateAncestorsAndDescendants();
+
+        return $this;
     }
 
 
@@ -183,20 +186,30 @@ class Tree
      * @param $rootId
      * @param $render
      * @param $templateName
+     * @param array $additionalParameters
      * @param bool $renderRoot
      * @return string
      */
-    public function render($rootId, $render, $templateName, $renderRoot = false)
+    public function render($rootId, $render, $templateName, $additionalParameters = [], $renderRoot = false)
     {
         return $this->process(
             $rootId,
-            function ($elementId, $level, $nested, $isRoot = false) use ($render, $templateName) {
+            function (
+                $elementId,
+                $level,
+                $nested,
+                $isRoot = false
+            ) use (
+                $render,
+                $templateName,
+                $additionalParameters
+            ) {
                 return $render->render($templateName, [
-                    'level' => $level,
-                    'element' => $this->getElement($elementId),
-                    'nested' => $nested,
-                    'isRoot' => $isRoot,
-                ]);
+                        'level' => $level,
+                        'element' => $this->getElement($elementId),
+                        'nested' => $nested,
+                        'isRoot' => $isRoot,
+                    ] + $additionalParameters);
             },
             $renderRoot
         );

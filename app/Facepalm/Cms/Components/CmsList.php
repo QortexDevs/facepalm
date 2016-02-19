@@ -35,8 +35,10 @@ class CmsList extends CmsComponent
      * @param Repository $config
      * @return $this
      */
-    public function buildFromConfig($config)
+    public function configure($config)
     {
+        parent::configure($config);
+
         $this->setColumns($config->get('list.columns'), $config->get('titles'))
             ->setBaseUrl($config->get('baseUrl'))
             ->setMainModel($config->get('model'))
@@ -94,7 +96,7 @@ class CmsList extends CmsComponent
      * @return array
      * @throws \Exception
      */
-    public function prepareData()
+    public function build()
     {
         if (!$this->modelName) {
             throw new \Exception('No model defined');
@@ -105,6 +107,7 @@ class CmsList extends CmsComponent
         $queryBuilder = ModelFactory::builderFor($this->modelName);
 
         // todo: сортировка из настроек
+        // todo: хитровыебанные запрос для многоязычных полей
         $queryBuilder = $queryBuilder->orderBy(CmsCommon::COLUMN_NAME_ID, self::DEFAULT_ORDERING);
 
         // eager loading of related models
@@ -150,4 +153,20 @@ class CmsList extends CmsComponent
 
         return $output;
     }
+
+
+    /**
+     * @param $render
+     * @param string $templateName
+     * @return mixed
+     * @throws \Exception
+     */
+    public function render($render, $templateName = 'components/list/container.twig')
+    {
+        return $render->render($templateName, [
+            "list" => $this->build(),
+            "moduleConfig" => $this->config,
+        ]);
+    }
+
 }

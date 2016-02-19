@@ -1,28 +1,39 @@
-<menu class="main-menu {% if cmsStructure[currentPathSections[0]].sections %}has-sub-menu{% endif %}">
+<menu class="main-menu">
     <div class="logo-bar">
         <a href="/cms/" class="logo" title="Facepalm CMS"></a>
     </div>
-    <ul class="top-menu clearfix">
-        {% for sectionName, sectionInfo in cmsStructure %}
-            <li{% if currentPathSections[0] == sectionName %} class="active"{% endif %}>
-                <a href="/cms/{{ sectionName }}/">
-                    {% if sectionInfo.icon %}<i class="fa fa-fw fa-{{ sectionInfo.icon }}"></i>{% endif %}
-                    {{ sectionInfo.title }}
-                </a>
-                {% if sectionName == currentPathSections[0] %}
-                    {% if cmsStructure[currentPathSections[0]].sections %}
-                        <ul class="sub-menu clearfix">
-                            {% for subSectionName, subSectionInfo in cmsStructure[currentPathSections[0]].sections %}
-                                <li {% if currentPathSections[1] == subSectionName %}class="active"{% endif %} >
-                                    <a href="/cms/{{ currentPathSections[0] }}/{{ subSectionName }}/">
-                                        {{ subSectionInfo.title }}
-                                    </a>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-                {% endif %}
-            </li>
-        {% endfor %}
-    </ul>
+    <div class="panels">
+        <div class="left-panel {% if navigation %}collapsed{% endif %}">
+            <ul class="clearfix">
+                {% for sectionName, sectionInfo in cmsStructure %}
+                    <li{% if currentPathSections[0] == sectionName %} class="active"{% endif %}>
+                        <a href="/cms/{{ sectionName }}/" class="first-level-item" title="{{ sectionInfo.title }}">
+                            {% if sectionInfo.icon %}<i class="fa fa-fw fa-{{ sectionInfo.icon }}"></i>{% endif %}
+                            <span>{{ sectionInfo.title }}</span>
+                        </a>
+                        {% if sectionName == currentPathSections[0] %}
+                            {% if cmsStructure[currentPathSections[0]].sections %}
+                                <ul class="sub-menu clearfix">
+                                    {% for subSectionName, subSectionInfo in cmsStructure[currentPathSections[0]].sections %}
+                                        <li {% if currentPathSections[1] == subSectionName %}class="active"{% endif %} >
+                                            <a href="/cms/{{ currentPathSections[0] }}/{{ subSectionName }}/">
+                                                {{ subSectionInfo.title }}
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% if navigation %}
+            <div class="right-panel">
+                <ul class="top-menu clearfix">
+                    {{ navigation|raw }}
+                </ul>
+            </div>
+        {% endif %}
+    </div>
 </menu>

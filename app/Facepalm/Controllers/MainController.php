@@ -8,76 +8,52 @@
 
 namespace App\Facepalm\Controllers;
 
-use App\Facepalm\Cms\Config\Config;
-use App\Facepalm\Models\SiteSection;
-use App\Facepalm\PostProcessing\AmfProcessor;
-use App\Facepalm\Tools\Tree;
-use App\Models\User;
+use App\Facepalm\Controllers\Actions\AutoResize;
+use App\Facepalm\Controllers\Actions\CmsUI;
+use App\Facepalm\Controllers\Actions\DownloadFile;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\DB;
-use Twig_Loader_Array;
-use TwigBridge\Facade\Twig;
 
+/**
+ * todo: Подумать насчет передачи параметрво неявно, как в dd()
+ * Class MainController
+ * @package App\Facepalm\Controllers
+ */
 class MainController extends BaseController
 {
-    use AutoResizeTrait,
-        DownloadFileTrait,
-        ModuleTrait;
-
-    const ACTION_LIST_OBJECTS = 1;
-    const ACTION_EDIT_OBJECT = 2;
-    const ACTION_CREATE_OBJECT = 3;
-
+    /**
+     * @param Request $request
+     * @param null $group
+     * @param null $module
+     * @param null $params
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function displayCmsUI(Request $request, $group = null, $module = null, $params = null)
+    {
+        return (new CmsUI())->handle($request, $group, $module, $params);
+    }
 
     /**
-     * @param $template
-     * @param $params
+     * @param Request $request
+     * @param $hash
+     * @param string $name
      * @return mixed
      */
-    protected function renderPage($template, $params)
+    public function downloadFile(Request $request, $hash, $name = '')
     {
-        $tree = new Tree();
-        $tree->fromEloquentCollection(SiteSection::all());
-
-//        pre($tree->getPath(1464, 'path_name'));
-//        pre($tree->getPath(1493, function ($element) {
-//            return $element->path_name . $element->id;
-//        }));
-
-
-        $loader = new Twig_Loader_Array(array(
-            'index.html' => '<li>{%if isRoot%}!{%endif%}({{level}}) {{element.path_name}} {%if nested%}<ul>{{nested|raw}}</ul>{%endif%}</li>',
-        ));
-        $env = new \Twig_Environment($loader, [
-            'debug' => false,
-            'cache' => storage_path('twig')
-        ]);
-        $t = microtime(1);
-        echo '<ul class="tree">' . $tree->render(0, $env, 'index.html', false) . '</ul>';
-
-        echo microtime(1) - $t;
-
-        exit;
-
-        //todo: вынести в какую-то общую тулзу
-        $assetsBusters = array_flip(
-            array_map(
-                function ($item) {
-                    return mb_strpos($item, 'public/') !== false ? mb_substr($item, mb_strlen('public/')) : $item;
-                },
-                array_flip(@json_decode(@file_get_contents(app()->basePath() . '/busters.json'), true) ?: [])
-            )
-        );
-        $params = array_merge($params, [
-            'assetsBusters' => $assetsBusters,
-            'currentPathSections' => [$this->group, $this->module],
-            'cmsStructure' => $this->config->get('structure'),
-            'moduleConfig' => $this->config->get('module'),
-        ]);
-
-        return Twig::render($template, $params);
-
+        return (new DownloadFile())->handle($request, $hash, $name);
     }
+
+    /**
+     * @param Request $request
+     * @param $path
+     * @param $name
+     * @return mixed
+     */
+    public function autoResizeImage(Request $request, $path, $name)
+    {
+        return (new AutoResize())->handle($request, $path, $name);
+    }
+
 
 }

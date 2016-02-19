@@ -1,0 +1,10 @@
+<li {% if navigationId==element.id %}class="active"{% endif %}>
+    {% if isRoot %}
+        <a href="{{ moduleConfig.baseUrl }}/">Главная</a>
+    {% else %}
+        <a href="{{ moduleConfig.baseUrl }}/{{ element.id }}/">{{ element.title?element.title:element.path_name }}</a>
+    {% endif %}
+    {% if nested %}
+        <ul>{{ nested|raw }}</ul>
+    {% endif %}
+</li>

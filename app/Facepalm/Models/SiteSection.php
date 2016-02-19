@@ -15,4 +15,6 @@ use App\Facepalm\Models\Foundation\BaseEntity;
  */
 class SiteSection extends BaseEntity
 {
+    protected $stringFields = ['title'];
+
 }
