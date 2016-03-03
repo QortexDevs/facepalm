@@ -5,6 +5,7 @@ use App\Facepalm\Cms\CmsCommon;
 use App\Facepalm\Cms\Components\CmsList;
 use App\Facepalm\Cms\Fields\Types\StringField;
 use App\Facepalm\Cms\Fields\Types\TextField;
+use App\Facepalm\Tools\Tree;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Str;
@@ -69,8 +70,9 @@ class CmsListTest extends TestCase
             ->build();
         $this->assertTrue(is_array($result));
         $this->assertArrayHasKey('settings', $result);
-        $this->assertArrayHasKey('rows', $result);
-        $this->assertGreaterThan(0, count($result['rows']));
+        $this->assertArrayHasKey('tree', $result);
+        $this->assertTrue($result['tree'] instanceof Tree);
+        $this->assertGreaterThan(0, count($result['tree']->getAllElements()));
     }
 
     /**
@@ -174,9 +176,9 @@ class CmsListTest extends TestCase
         $this->assertEquals('E-mail', $result['meta']['columns']['email']['title']);
         $this->assertEquals('Name', $result['meta']['columns']['name']['title']);
         $this->assertTrue($result['meta']['columns']['name'] instanceof StringField);
-        $this->assertArrayHasKey('id', $result['rows'][0]);
-        $this->assertArrayHasKey('email', $result['rows'][0]);
-        $this->assertArrayHasKey('name', $result['rows'][0]);
+        $this->assertArrayHasKey('id', $result['tree']->getAllElements()[0]);
+        $this->assertArrayHasKey('email', $result['tree']->getAllElements()[0]);
+        $this->assertArrayHasKey('name', $result['tree']->getAllElements()[0]);
     }
 
     /**
@@ -264,8 +266,8 @@ class CmsListTest extends TestCase
         $this->assertEquals(2, count($result['meta']['columns']));
         $this->assertArrayHasKey('email', $result['meta']['columns']);
         $this->assertArrayHasKey('name', $result['meta']['columns']);
-        $this->assertArrayHasKey('email', $result['rows'][0]);
-        $this->assertArrayHasKey('name', $result['rows'][0]);
+        $this->assertArrayHasKey('email', $result['tree']->getAllElements()[0]);
+        $this->assertArrayHasKey('name', $result['tree']->getAllElements()[0]);
     }
 
     /**
@@ -283,7 +285,7 @@ class CmsListTest extends TestCase
 
         $this->assertEquals(1, count($result['meta']['columns']));
         $this->assertArrayHasKey('email', $result['meta']['columns']);
-        $this->assertArrayHasKey('email', $result['rows'][0]);
+        $this->assertArrayHasKey('email', $result['tree']->getAllElements()[0]);
     }
 
     /**
@@ -297,15 +299,15 @@ class CmsListTest extends TestCase
             ->setColumns([
                 'email' => [
                 ],
-                'name' => [
-                    'name' => 'NewName'
+                'oldName' => [
+                    'name' => 'name'
                 ],
             ])
             ->build();
 
-        $this->assertArrayNotHasKey('name', $result['meta']['columns']);
-        $this->assertArrayHasKey('NewName', $result['meta']['columns']);
-        $this->assertArrayHasKey('NewName', $result['rows'][0]);
+        $this->assertArrayNotHasKey('oldName', $result['meta']['columns']);
+        $this->assertArrayHasKey('name', $result['meta']['columns']);
+        $this->assertArrayHasKey('name', $result['tree']->getAllElements()[0]);
     }
 
     /**

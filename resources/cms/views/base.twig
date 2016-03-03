@@ -12,7 +12,7 @@
 
 </head>
 {% block bodyOuter %}
-    <body class="cms-page{% if navigation %} two-column{% endif %}">
+    <body class="cms-page{% if navigation %} two-column{% endif %}" data-base-url="{{ moduleConfig.baseUrl }}">
     {% include 'leftMenu.twig' %}
     <main>
         <form class="main-cms-form" action="./" enctype="multipart/form-data" method="post">

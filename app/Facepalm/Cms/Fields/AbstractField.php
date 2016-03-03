@@ -14,8 +14,8 @@ use TwigBridge\Facade\Twig;
  * @property string name
  * @property string title
  * @property mixed isLinkInList
- * @property mixed fieldNameBase
- * @property mixed uploadName
+ * @property mixed randomId
+ * @property mixed modelName
  */
 abstract class AbstractField implements \ArrayAccess
 {
@@ -139,10 +139,12 @@ abstract class AbstractField implements \ArrayAccess
      */
     public function renderForList($row)
     {
-        if ($this->isLinkInList) {
-            return '<a href="' . $row['editUrl'] . '">' . $row[$this->name] . '</a>';
-        } else {
-            return $row[$this->name];
+        if ($row) {
+            if ($this->isLinkInList) {
+                return '<a href="' . $row->editUrl . '">' . $this->getValueForList($row) . '</a>';
+            } else {
+                return $this->getValueForList($row);
+            }
         }
     }
 
@@ -173,14 +175,25 @@ abstract class AbstractField implements \ArrayAccess
     {
         $template = $template ?: $this->templateName;
 
+
+        $amfNameBase = $object
+            ? '[' . class_basename($this->modelName) . '][' . $object->id . ']'
+            : '[' . class_basename($this->modelName) . '][%CREATE_' . $this->randomId . '%]';
+
+        $fieldNameBase = $object
+            ? 'save' . $amfNameBase
+            : 'create' . $amfNameBase;
+
+
         if ($template) {
+            //todo: языки подгружать!
             $languages = ['ru' => 'ru', 'en' => 'en'];
             return Twig::render($template, [
                     'object' => $object,
                     'field' => $this->name,
-                    'uploadName' => $this->uploadName,
-                    'fieldNameBase' => $this->fieldNameBase,
-                    'inputName' => $this->fieldNameBase . '[' . $this->name . ']',
+                    'uploadName' => 'upload' . $amfNameBase,
+                    'fieldNameBase' => $fieldNameBase,
+                    'inputName' => $fieldNameBase . '[' . $this->name . ']',
                     'parameters' => $this->parameters,
                     'data' => $this->data,
                     'languages' => $languages

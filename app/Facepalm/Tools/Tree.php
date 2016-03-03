@@ -17,7 +17,7 @@ use Illuminate\Support\Arr;
 class Tree
 {
     public $output;
-    /** @var  Model[] */
+    /** @var  Model[]|stdClass[] */
     protected $elementsById;
 
     /** @var  array */
@@ -35,6 +35,25 @@ class Tree
     {
         /** @var Model $object */
         foreach ($objects as $object) {
+            $this->elementsById[$object->id] = $object;
+            $this->elementsByParent[$object->parent_id][] = $object->id;
+        }
+
+        $this->calculateAncestorsAndDescendants();
+
+        return $this;
+    }
+
+    /**
+     * todo: объединить с предыдущим методом
+     * @param $array
+     * @return $this
+     */
+    public function fromArray($array)
+    {
+        /** @var Model $object */
+        foreach ($array as $arrayItem) {
+            $object = (object)$arrayItem;
             $this->elementsById[$object->id] = $object;
             $this->elementsByParent[$object->parent_id][] = $object->id;
         }
@@ -130,6 +149,23 @@ class Tree
         return $this->getElementsByIds($this->getChildrenIds($element));
     }
 
+    /**
+     * @return mixed
+     */
+    public function getAllElementsAsArray()
+    {
+        return array_map(function ($element) {
+            return (array)$element;
+        }, array_values($this->elementsById));
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAllElements()
+    {
+        return array_values($this->elementsById);
+    }
 
     /**
      * @param $ids
@@ -271,6 +307,9 @@ class Tree
                 while ($this->elementsById[$tmpId]->parent_id) {
                     $this->elementsAncestors[$id][] = $this->elementsById[$tmpId]->parent_id;
                     $tmpId = $this->elementsById[$tmpId]->parent_id;
+                    if (!Arr::has($this->elementsById, $tmpId)) {
+                        break;
+                    }
                 }
 
                 // build descendants list

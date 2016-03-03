@@ -41,6 +41,7 @@ class AmfProcessor
                         if (is_array($data)) {
                             foreach ($data as $id => $keyValue) {
                                 /** @var AbstractEntity $object */
+                                $object = null;
                                 if ((int)$id) {
                                     $object = ModelFactory::find($fullModelName, $id);
                                 } elseif (preg_match('/\%CREATE_[\w]{6}\%/i', $id)) {
@@ -60,7 +61,10 @@ class AmfProcessor
                                         Arr::set(
                                             $this->affectedObjects,
                                             $actionName . '.' . $modelName,
-                                            (array) Arr::get($this->affectedObjects, $actionName . '.' . $modelName) + $affectedObjects
+                                            (array)Arr::get(
+                                                $this->affectedObjects,
+                                                $actionName . '.' . $modelName
+                                            ) + $affectedObjects
                                         );
 
                                         $this->affectedObjectsCount += count($affectedObjects);
@@ -72,7 +76,7 @@ class AmfProcessor
                                         Arr::set(
                                             $this->affectedFields,
                                             $resultArrayPath,
-                                            (array) Arr::get($this->affectedFields, $resultArrayPath) + $affectedFields
+                                            (array)Arr::get($this->affectedFields, $resultArrayPath) + $affectedFields
                                         );
                                         $this->affectedFieldsCount += count($affectedFields);
                                     }

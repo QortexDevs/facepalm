@@ -169,7 +169,6 @@ class CmsUI
     }
 
 
-
     /**
      * @return mixed
      * @throws \Exception
@@ -187,6 +186,7 @@ class CmsUI
     {
         $list = new CmsList($this->config->part('module'));
         $params = [
+            'buttonsPanel' => !!$this->config->get('module.list.treeMode'),
             'listHtml' => $list->render(app()->make('twig')),
             'pageTitle' => $this->config->get('strings.title') ?: 'Список объектов'
         ];
@@ -280,8 +280,6 @@ class CmsUI
         );
 
         if ($this->layoutMode == self::LAYOUT_TWO_COLUMN) {
-            //todo: передавать в шаблон элемента дополнительные параметры (например активный выделенный пункт)
-            //todo: а также baseUrl
             $params['navigation'] = (new Tree())
                 ->fromEloquentCollection(SiteSection::orderBy('show_order')->get())
                 ->render(0, app()->make('twig'), 'leftNavigationItem', [

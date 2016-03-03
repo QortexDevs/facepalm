@@ -6,7 +6,9 @@ use App\Facepalm\Cms\CmsCommon;
 use App\Facepalm\Cms\Fields\AbstractField;
 use App\Facepalm\Cms\Fields\FieldListProcessor;
 use App\Facepalm\Cms\Fields\Types\RelationField;
+use App\Facepalm\Models\Foundation\BaseEntity;
 use App\Facepalm\Models\ModelFactory;
+use App\Facepalm\Tools\Tree;
 use Carbon\Carbon;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Database\Eloquent\Model;
@@ -26,6 +28,7 @@ class CmsList extends CmsComponent
     protected $showStatusButton = true;
     protected $showDeleteButton = true;
     protected $showEditButton = false;
+    protected $isTreeMode = false;
 
     protected $relatedModels = [];
     const DEFAULT_ORDERING = 'desc';
@@ -45,7 +48,8 @@ class CmsList extends CmsComponent
             ->toggleIdColumn($config->get('list.showId') !== false)
             ->toggleStatusButtonColumn($config->get('list.showStatus') !== false)
             ->toggleDeleteButtonColumn($config->get('list.showDelete') !== false)
-            ->toggleEditButtonColumn($config->get('list.showEdit') == true);
+            ->toggleEditButtonColumn($config->get('list.showEdit') == true)
+            ->toggleTreeMode($config->get('list.treeMode') == true);
 
         return $this;
     }
@@ -93,6 +97,17 @@ class CmsList extends CmsComponent
 
 
     /**
+     * @param bool $tree
+     * @return $this
+     */
+    public function toggleTreeMode($tree = true)
+    {
+        $this->isTreeMode = (bool)$tree;
+        return $this;
+    }
+
+
+    /**
      * @return array
      * @throws \Exception
      */
@@ -108,7 +123,11 @@ class CmsList extends CmsComponent
 
         // todo: сортировка из настроек
         // todo: хитровыебанные запрос для многоязычных полей
-        $queryBuilder = $queryBuilder->orderBy(CmsCommon::COLUMN_NAME_ID, self::DEFAULT_ORDERING);
+        if ($this->isTreeMode) {
+            $queryBuilder = $queryBuilder->orderBy(CmsCommon::COLUMN_NAME_SHOW_ORDER, 'asc');
+        } else {
+            $queryBuilder = $queryBuilder->orderBy(CmsCommon::COLUMN_NAME_ID, self::DEFAULT_ORDERING);
+        }
 
         // eager loading of related models
         if ($this->fieldsProcessor->getRelatedModels()) {
@@ -117,24 +136,24 @@ class CmsList extends CmsComponent
             }
         }
 
+        if ($this->isTreeMode) {
+            foreach ($this->fieldsProcessor->getFields() as $field) {
+                $field->setParameters([
+                    'modelName' => $this->modelName
+                ]);
+                $field->prepareData();
+            }
+        }
+
         // do query
         $objects = $queryBuilder->get();
 
-        $rows = [];
-        /** @var Model $object */
+        /** @var BaseEntity $object */
         foreach ($objects as $object) {
-            $row = [
-                CmsCommon::COLUMN_NAME_ID => $object->{CmsCommon::COLUMN_NAME_ID},
-                CmsCommon::COLUMN_NAME_STATUS => $object->{CmsCommon::COLUMN_NAME_STATUS}
-            ];
-            /** @var AbstractField $column */
-            foreach ($this->fieldsProcessor->getFields() as $column) {
-                //todo: row - сделать классом, а не массивом
-                $row[$column->name] = $column->getValueForList($object);
-                $row['editUrl'] = $this->baseUrl . '/' . $object->{CmsCommon::COLUMN_NAME_ID} . '/';
-            }
-            $rows[] = $row;
+            $object->editUrl = $this->baseUrl . '/' . $object->id . '/';
         }
+
+        $tree = (new Tree())->fromEloquentCollection($objects);
 
         $output = [
             'settings' => [
@@ -142,15 +161,14 @@ class CmsList extends CmsComponent
                 'showStatusButton' => $this->showStatusButton,
                 'showDeleteButton' => $this->showDeleteButton,
                 'showEditButton' => $this->showEditButton,
+                'treeMode' => $this->isTreeMode
             ],
             'meta' => [
                 'model' => class_basename($this->modelName),
                 'columns' => $this->fieldsProcessor->getFields()
             ],
-            'rows' => $rows
-
+            'tree' => $tree
         ];
-
         return $output;
     }
 
@@ -161,11 +179,28 @@ class CmsList extends CmsComponent
      * @return mixed
      * @throws \Exception
      */
-    public function render($render, $templateName = 'components/list/container.twig')
+    public function render($render, $templateName = null)
     {
+        $treeContent = $emptyTreeItem = '';
+        $listData = $this->build();
+        if (!$templateName) {
+            $templateName = $listData['settings']['treeMode'] ? 'components/list/containerTree.twig' : 'components/list/container.twig';
+        }
+        if ($listData['settings']['treeMode']) {
+            $treeContent = $listData['tree']->render(0, app()->make('twig'), 'components/list/treeItem', [
+                "list" => $listData,
+                "moduleConfig" => $this->config,
+            ]);
+            $emptyTreeItem = app()->make('twig')->render('components/list/treeItem', [
+                "list" => $listData,
+                "moduleConfig" => $this->config,
+            ]);
+        }
         return $render->render($templateName, [
-            "list" => $this->build(),
+            "list" => $listData,
             "moduleConfig" => $this->config,
+            'treeContent' => $treeContent ?: '',
+            'emptyTreeItem' => $emptyTreeItem ?: ''
         ]);
     }
 

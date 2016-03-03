@@ -44,7 +44,16 @@ class Save extends AbstractAction
             }
         }
 
-        $object->save();
+        if (!$object->id) {
+            $className = class_basename($object);
+            DB::transaction(function () use ($object, $className) {
+                $object->show_order = ModelFactory::max($className, 'show_order') + 1;
+                $object->save();
+            });
+        } else {
+            $object->save();
+        }
+
 
         $this->saveTranslatableItems($object, $keyValue);
         $this->syncManyToManyRelations($object, $keyValue);

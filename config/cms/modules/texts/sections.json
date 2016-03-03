@@ -2,8 +2,6 @@
     "model": "site_section",
     "titles": {
         "path_name": "Путь",
-        "password": "Пароль",
-        "type": "Тип",
         "status": "Активность"
     },
     "navigation": {

@@ -27,6 +27,7 @@
 
 $(document).ready(function () {
     //load underscore.string
+    var baseUrl = $('body').data('base-url');
     _.mixin(s.exports());
 
     InitWysiwyg();
@@ -54,28 +55,56 @@ $(document).ready(function () {
         // todo: а вообще, переделать все на аякс, сука
     });
 
-    $(document).on('click', '.cms-module-list-content button.status', function () {
-        var $tr = $(this).closest('tr[data-id]');
+    $(document).on('click', '.cms-module-list-content button.status, .cms-module-tree-content button.status', function () {
+        var $tr = $(this).closest('[data-id]');
         var id = $tr.data('id');
-        var model = $(this).closest('table[data-model]').data('model');
+        var model = $(this).closest('[data-model]').data('model');
         var payload = _.extend({}.setWithPath(['toggle', model, id, 'status'], 1), getCsrfTokenParameter());
-        $.post('./', payload, 'json').done(function (result) {
+        $.post(baseUrl + '/', payload, 'json').done(function (result) {
             $tr.toggleClass('inactive', !result);
         });
         return false;
     });
-    $(document).on('click', '.cms-module-list-content button.delete', function () {
+    $(document).on('click', '.cms-module-list-content button.delete, .cms-module-tree-content button.delete', function () {
         if (confirm('Sure?')) {
-            var $tr = $(this).closest('tr[data-id]');
+            var $tr = $(this).closest('[data-id]');
             var id = $tr.data('id');
-            var model = $(this).closest('table[data-model]').data('model');
+            var model = $(this).closest('[data-model]').data('model');
             var payload = _.extend({}.setWithPath(['delete', model, id], 1), getCsrfTokenParameter());
-            $.post('./', payload, 'json').done(function (result) {
+            $.post(baseUrl + '/', payload, 'json').done(function (result) {
                 $tr.fadeOut('fast', function () {
                     $(this).remove()
                 });
             });
         }
+        return false;
+    });
+    $(document).on('click', '.cms-module-tree-content button.add', function () {
+        var template = $(this).closest('[data-model]').find('script[data-template-name="empty-tree-element"]').html();
+        var $tr = $(this).closest('[data-id]');
+        var id = $tr.data('id');
+        var model = $(this).closest('[data-model]').data('model');
+        var payload = _.extend({}.setWithPath(['create', model, '%CREATE_' + Math.random().toString(36).substring(2, 8) + '%', 'parent_id'], id), getCsrfTokenParameter());
+        $.post(baseUrl + '/', payload, 'json').done(function (result) {
+            var newItem$ = $(template.replace(new RegExp('%CREATE_%', 'g'), result)).attr('data-id', result);
+            newItem$.find('.id').text(result)
+            $tr.find('>ul').append(newItem$);
+        });
+        return false;
+    });
+    $(document).on('click', '.add-new-tree-item', function () {
+        var template = $(this).closest('[data-model]').find('script[data-template-name="empty-tree-element"]').html();
+        var $tr = $(this).closest('[data-model]');
+        var id = 0;
+        var model = $(this).closest('[data-model]').data('model');
+        var rnd = Math.random().toString(36).substring(2, 8);
+        var payload = _.extend({}.setWithPath(['create', model, '%CREATE_' + rnd + '%', 'parent_id'], id), getCsrfTokenParameter());
+        payload['create'][model]['%CREATE_' + rnd + '%']['parent_id'] = 0
+        $.post(baseUrl + '/', payload, 'json').done(function (result) {
+            var newItem$ = $(template.replace(new RegExp('%CREATE_%', 'g'), result)).attr('data-id', result);
+            newItem$.find('.id').text(result)
+            $tr.find('ul:first').append(newItem$);
+        });
         return false;
     });
 
@@ -161,7 +190,7 @@ $(document).ready(function () {
             var id = $image.data('id');
             var model = 'image';
             var payload = _.extend({}.setWithPath(['delete', model, id], 1), getCsrfTokenParameter());
-            $.post('./', payload, 'json').done(function (result) {
+            $.post(baseUrl + '/', payload, 'json').done(function (result) {
                 $image.fadeOut(function () {
                     $(this).remove();
                 });
@@ -176,7 +205,7 @@ $(document).ready(function () {
             var id = $file.data('id');
             var model = 'file';
             var payload = _.extend({}.setWithPath(['delete', model, id], 1), getCsrfTokenParameter());
-            $.post('./', payload, 'json').done(function (result) {
+            $.post(baseUrl + '/', payload, 'json').done(function (result) {
                 $file.fadeOut(function () {
                     $(this).remove();
                 });
@@ -208,7 +237,7 @@ $(document).ready(function () {
                 for (var i in orderArray) {
                     payload['save']['image'][orderArray[i]] = {'show_order': parseInt(i) + 1};
                 }
-                $.post('./', payload, 'json');
+                $.post(baseUrl + '/', payload, 'json');
             },
         });
 
@@ -225,17 +254,51 @@ $(document).ready(function () {
                 for (var i in orderArray) {
                     payload['save']['file'][orderArray[i]] = {'show_order': parseInt(i) + 1};
                 }
-                $.post('./', payload, 'json');
+                $.post(baseUrl + '/', payload, 'json');
             },
         });
 
     });
 
+    var onTreeSort = function (evt, sortable) {
+        var model = $(evt.target).closest('[data-model]').data('model');
+        var parentId = $(evt.target).data('id');
+        var orderArray = sortable.toArray().filter(function (el) {
+            return el >= 0
+        });
+        var payload = _.extend({save: {}}, getCsrfTokenParameter());
+        payload['save'][model] = {}; // object, not an array. Otherwise it will create 0..id empty elements
+        for (var i in orderArray) {
+            payload['save'][model][orderArray[i]] = {'show_order': parseInt(i) + 1, 'parent_id': parentId};
+        }
+        $.post(baseUrl + '/', payload, 'json');
+    };
+
+    $('.cms-module-tree-content').each(function (i) {
+        var treeName = 'tree_' + i;
+        console.log(treeName);
+        $(this).find('ul').each(function () {
+            var sortable = Sortable.create($(this)[0], {
+                animation: 200,
+                handle: ".id",
+                scroll: true,
+                group: treeName,
+                onAdd: function (/**Event*/evt) {
+                    onTreeSort(evt, sortable);
+                },
+                onUpdate: function (/**Event*/evt) {
+                    onTreeSort(evt, sortable);
+                },
+            });
+        });
+    });
+
+
     $(".dropzone").each(function () {
         var $dropzone = $(this);
         var isMultiple = $dropzone.data('multiple') == "1";
         $(this).dropzone({
-            url: "./?_token=" + $('input:hidden[name=_token]').val() + $dropzone.data('parameters'),
+            url: baseUrl + "/?_token=" + $('input:hidden[name=_token]').val() + $dropzone.data('parameters'),
             paramName: $(this).data('input-name'),
             parallelUploads: 3,
             maxFiles: isMultiple ? null : 1,

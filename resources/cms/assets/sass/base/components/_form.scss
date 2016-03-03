@@ -1,22 +1,6 @@
 .cms-module-form-page {
     padding-top: 10px;
     padding-bottom: 85px;
-
-    .form-buttons {
-        margin-left: -50px;
-        background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 22%);
-        width: 100%;
-        position: fixed;
-        bottom: 0;
-        padding: 20px 0 0px 0px;
-        z-index: 100;
-
-        .inner-container {
-            box-shadow: 0 -1px 30px -10px rgba(0, 0, 0, 0.07);
-            border-top: 1px solid #f4f7fa;
-            padding: 15px 30px;
-        }
-    }
 }
 
 .cms-module-form {

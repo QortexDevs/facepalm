@@ -83,16 +83,11 @@ class CmsForm extends CmsComponent
             throw new \Exception('No model defined');
         }
 
-        $amfNameBase = $this->editedObject
-            ? '[' . class_basename($this->modelName) . '][' . $this->editedObject->id . ']'
-            : '[' . class_basename($this->modelName) . '][%CREATE_' . Str::quickRandom(6) . '%]';
-
+        $randomId = Str::quickRandom(6);
         foreach ($this->fieldsProcessor->getFields() as $field) {
             $field->setParameters([
-                'uploadName' => 'upload' . $amfNameBase,
-                'fieldNameBase' => $this->editedObject
-                    ? 'save' . $amfNameBase
-                    : 'create' . $amfNameBase
+                'randomId' => $randomId,
+                'modelName' => $this->modelName
             ]);
             $field->prepareData($this->editedObject);
 

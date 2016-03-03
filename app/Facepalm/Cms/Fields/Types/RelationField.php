@@ -45,6 +45,9 @@ class RelationField extends AbstractField
     }
 
     /**
+     * todo: переделать на два метода - для просто поля и для поля у указангого объекта
+     * todo: т.к., напрмиер грузить словарь можно и без объекта
+     *
      * @param null|Model $object
      */
     public function prepareData($object = null)

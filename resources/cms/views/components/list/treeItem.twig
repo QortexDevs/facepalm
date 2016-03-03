@@ -1,0 +1,36 @@
+<li data-id="{{ element.id }}" {% if list.settings.showStatusButton and not element.status %}class="inactive"{% endif %}>
+    <div class="row">
+        <div class="id">{{ element.id }}</div>
+        {% for fieldelement in list.meta.columns %}
+            <div>
+                {{ fieldelement.renderFormField(element)|raw }}
+            </div>
+        {% endfor %}
+        {% if true %}
+            <div class="buttons">
+                <button type="button" class="add fa fa-plus"></button>
+            </div>
+        {% endif %}
+        {% if list.settings.showEditButton %}
+            <div class="buttons">
+                <a class="edit button fa fa-pencil" href="{{ element.editUrl }}"></a>
+            </div>
+        {% endif %}
+        {% if list.settings.showStatusButton %}
+            <div class="buttons">
+                <button type="button" class="status fa fa-lightbulb-o"></button>
+            </div>
+        {% endif %}
+        {% if list.settings.showDeleteButton %}
+            <div class="buttons">
+                <button type="button" class="delete fa fa-times"></button>
+            </div>
+        {% endif %}
+    </div>
+    <ul data-id="{{ element.id }}">
+        <li class="dummy" data-id="-1"></li>
+        {% if nested %}
+            {{ nested|raw }}
+        {% endif %}
+    </ul>
+</li>

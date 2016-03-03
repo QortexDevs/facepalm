@@ -12,6 +12,15 @@
                 }
             }
         },
+        "structure": {
+            "title": "Структура сайта",
+            "icon": "align-left",
+            "sections": {
+                "structure": {
+                    "title": "Структура сайта"
+                }
+            }
+        },
         "texts": {
             "title": "Тексты",
             "icon": "columns",

@@ -1,0 +1,18 @@
+{
+    "model": "site_section",
+    "titles": {
+        "path_name": "Путь"
+    },
+    "list": {
+        "treeMode": true,
+        "columns": {
+            "path_name": true,
+            "title": {
+                "type": "string",
+                "title": "Title",
+                "translatable": true
+            }
+        },
+        "status": "status"
+    }
+}

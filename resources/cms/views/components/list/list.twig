@@ -19,7 +19,7 @@
     </tr>
     </thead>
     <tbody>
-    {% for object in list.rows %}
+    {% for object in list.tree.getAllElements %}
         <tr {% if list.settings.showStatusButton and not object.status %}class="inactive"{% endif %}
             data-id="{{ object.id }}">
             <td><a href='{{ object.editUrl }}'>{{ object.id }}</a></td>
