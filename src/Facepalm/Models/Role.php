@@ -2,9 +2,9 @@
 
 namespace Facepalm\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Facepalm\Models\Foundation\BaseEntity;
 
-class Role extends Model
+class Role extends BaseEntity
 {
     //
 }
