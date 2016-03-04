@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <title>Dashboard for /Users/xpundel/Developing/Projects/Web/facepalm-package/src/Facepalm/Cms</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../css/bootstrap.min.css" rel="stylesheet">
+  <link href="../css/nv.d3.min.css" rel="stylesheet">
+  <link href="../css/style.css" rel="stylesheet">
+  <!--[if lt IE 9]>
+  <script src="../js/html5shiv.min.js"></script>
+  <script src="../js/respond.min.js"></script>
+  <![endif]-->
+ </head>
+ <body>
+  <header>
+   <div class="container">
+    <div class="row">
+     <div class="col-md-12">
+      <ol class="breadcrumb">
+        <li><a href="../index.html">/Users/xpundel/Developing/Projects/Web/facepalm-package/src/Facepalm</a></li>
+        <li><a href="index.html">Cms</a></li>
+        <li class="active">(Dashboard)</li>
+
+      </ol>
+     </div>
+    </div>
+   </div>
+  </header>
+  <div class="container">
+   <div class="row">
+    <div class="col-md-12">
+     <h2>Classes</h2>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Coverage Distribution</h3>
+     <div id="classCoverageDistribution" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Complexity</h3>
+     <div id="classComplexity" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Insufficient Coverage</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Class</th>
+         <th class="text-right">Coverage</th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Fields/FieldListProcessor.php.html#9">FieldListProcessor</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Components/CmsComponent.php.html#10">CmsComponent</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Fields/Types/TextField.php.html#16">TextField</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Components/CmsForm.php.html#30">CmsForm</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Components/CmsList.php.html#19">CmsList</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Fields/Types/ImageField.php.html#18">ImageField</a></td><td class="text-right">18%</td></tr>
+       <tr><td><a href="Fields/Types/FileField.php.html#18">FileField</a></td><td class="text-right">18%</td></tr>
+       <tr><td><a href="Fields/AbstractField.php.html#20">AbstractField</a></td><td class="text-right">33%</td></tr>
+       <tr><td><a href="Config/Config.php.html#16">Config</a></td><td class="text-right">47%</td></tr>
+       <tr><td><a href="Fields/Types/RelationField.php.html#26">RelationField</a></td><td class="text-right">54%</td></tr>
+       <tr><td><a href="Fields/UploadableField.php.html#18">UploadableField</a></td><td class="text-right">60%</td></tr>
+       <tr><td><a href="Config/JsonFileConfigLoader.php.html#15">JsonFileConfigLoader</a></td><td class="text-right">66%</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Project Risks</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Class</th>
+         <th class="text-right"><abbr title="Change Risk Anti-Patterns (CRAP) Index">CRAP</abbr></th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Fields/FieldListProcessor.php.html#9">FieldListProcessor</a></td><td class="text-right">462</td></tr>
+       <tr><td><a href="Components/CmsList.php.html#19">CmsList</a></td><td class="text-right">420</td></tr>
+       <tr><td><a href="Fields/AbstractField.php.html#20">AbstractField</a></td><td class="text-right">226</td></tr>
+       <tr><td><a href="Components/CmsForm.php.html#30">CmsForm</a></td><td class="text-right">132</td></tr>
+       <tr><td><a href="Components/CmsComponent.php.html#10">CmsComponent</a></td><td class="text-right">90</td></tr>
+       <tr><td><a href="Fields/Types/RelationField.php.html#26">RelationField</a></td><td class="text-right">32</td></tr>
+       <tr><td><a href="Config/Config.php.html#16">Config</a></td><td class="text-right">24</td></tr>
+       <tr><td><a href="Fields/Types/ImageField.php.html#18">ImageField</a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="Fields/Types/FileField.php.html#18">FileField</a></td><td class="text-right">7</td></tr>
+       <tr><td><a href="Fields/UploadableField.php.html#18">UploadableField</a></td><td class="text-right">5</td></tr>
+       <tr><td><a href="Config/JsonFileConfigLoader.php.html#15">JsonFileConfigLoader</a></td><td class="text-right">2</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-12">
+     <h2>Methods</h2>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Coverage Distribution</h3>
+     <div id="methodCoverageDistribution" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Complexity</h3>
+     <div id="methodComplexity" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Insufficient Coverage</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Method</th>
+         <th class="text-right">Coverage</th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Fields/AbstractField.php.html#119"><abbr title="AbstractField::offsetExists">offsetExists</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Fields/AbstractField.php.html#123"><abbr title="AbstractField::offsetUnset">offsetUnset</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Fields/AbstractField.php.html#140"><abbr title="AbstractField::renderForList">renderForList</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Fields/AbstractField.php.html#174"><abbr title="AbstractField::renderFormField">renderFormField</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Fields/AbstractField.php.html#115"><abbr title="AbstractField::offsetSet">offsetSet</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Fields/AbstractField.php.html#110"><abbr title="AbstractField::offsetGet">offsetGet</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Components/CmsComponent.php.html#24"><abbr title="CmsComponent::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Fields/AbstractField.php.html#65"><abbr title="AbstractField::setTitle">setTitle</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Fields/AbstractField.php.html#105"><abbr title="AbstractField::__isset">__isset</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Fields/AbstractField.php.html#207"><abbr title="AbstractField::getRowClassName">getRowClassName</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Fields/FieldListProcessor.php.html#27"><abbr title="FieldListProcessor::process">process</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Fields/Types/RelationField.php.html#53"><abbr title="RelationField::prepareData">prepareData</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Fields/Types/TextField.php.html#24"><abbr title="TextField::getValueForList">getValueForList</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Fields/UploadableField.php.html#34"><abbr title="UploadableField::getItems">getItems</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Fields/FieldListProcessor.php.html#153"><abbr title="FieldListProcessor::setDictionaries">setDictionaries</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Fields/FieldListProcessor.php.html#129"><abbr title="FieldListProcessor::getTitle">getTitle</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Fields/FieldListProcessor.php.html#94"><abbr title="FieldListProcessor::getFields">getFields</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Fields/FieldListProcessor.php.html#102"><abbr title="FieldListProcessor::getRelatedModels">getRelatedModels</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Fields/FieldListProcessor.php.html#112"><abbr title="FieldListProcessor::isRelationColumn">isRelationColumn</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Config/Config.php.html#91"><abbr title="Config::getConfigPath">getConfigPath</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Config/Config.php.html#100"><abbr title="Config::loadConfig">loadConfig</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Components/CmsComponent.php.html#93"><abbr title="CmsComponent::setBaseUrl">setBaseUrl</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Components/CmsForm.php.html#44"><abbr title="CmsForm::configure">configure</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Components/CmsForm.php.html#58"><abbr title="CmsForm::setEditedObject">setEditedObject</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Config/Config.php.html#48"><abbr title="Config::load">load</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Components/CmsComponent.php.html#83"><abbr title="CmsComponent::setColumns">setColumns</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Components/CmsComponent.php.html#71"><abbr title="CmsComponent::setFields">setFields</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Components/CmsComponent.php.html#38"><abbr title="CmsComponent::setMainModel">setMainModel</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Components/CmsComponent.php.html#54"><abbr title="CmsComponent::configure">configure</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Components/CmsComponent.php.html#61"><abbr title="CmsComponent::build">build</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Components/CmsForm.php.html#112"><abbr title="CmsForm::render">render</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Components/CmsForm.php.html#80"><abbr title="CmsForm::build">build</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Components/CmsList.php.html#41"><abbr title="CmsList::configure">configure</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Components/CmsList.php.html#114"><abbr title="CmsList::build">build</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Components/CmsList.php.html#182"><abbr title="CmsList::render">render</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Components/CmsList.php.html#92"><abbr title="CmsList::toggleEditButtonColumn">toggleEditButtonColumn</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Components/CmsList.php.html#103"><abbr title="CmsList::toggleTreeMode">toggleTreeMode</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Components/CmsList.php.html#62"><abbr title="CmsList::toggleIdColumn">toggleIdColumn</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Components/CmsList.php.html#82"><abbr title="CmsList::toggleDeleteButtonColumn">toggleDeleteButtonColumn</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Components/CmsList.php.html#72"><abbr title="CmsList::toggleStatusButtonColumn">toggleStatusButtonColumn</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Fields/Types/ImageField.php.html#25"><abbr title="ImageField::prepareData">prepareData</abbr></a></td><td class="text-right">18%</td></tr>
+       <tr><td><a href="Fields/Types/FileField.php.html#25"><abbr title="FileField::prepareData">prepareData</abbr></a></td><td class="text-right">18%</td></tr>
+       <tr><td><a href="Fields/Types/RelationField.php.html#81"><abbr title="RelationField::setParameter">setParameter</abbr></a></td><td class="text-right">60%</td></tr>
+       <tr><td><a href="Config/JsonFileConfigLoader.php.html#21"><abbr title="JsonFileConfigLoader::load">load</abbr></a></td><td class="text-right">66%</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Project Risks</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Method</th>
+         <th class="text-right"><abbr title="Change Risk Anti-Patterns (CRAP) Index">CRAP</abbr></th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Fields/FieldListProcessor.php.html#27"><abbr title="FieldListProcessor::process">process</abbr></a></td><td class="text-right">110</td></tr>
+       <tr><td><a href="Components/CmsList.php.html#114"><abbr title="CmsList::build">build</abbr></a></td><td class="text-right">72</td></tr>
+       <tr><td><a href="Fields/FieldListProcessor.php.html#129"><abbr title="FieldListProcessor::getTitle">getTitle</abbr></a></td><td class="text-right">56</td></tr>
+       <tr><td><a href="Components/CmsForm.php.html#58"><abbr title="CmsForm::setEditedObject">setEditedObject</abbr></a></td><td class="text-right">42</td></tr>
+       <tr><td><a href="Components/CmsList.php.html#182"><abbr title="CmsList::render">render</abbr></a></td><td class="text-right">42</td></tr>
+       <tr><td><a href="Fields/AbstractField.php.html#174"><abbr title="AbstractField::renderFormField">renderFormField</abbr></a></td><td class="text-right">30</td></tr>
+       <tr><td><a href="Fields/Types/RelationField.php.html#53"><abbr title="RelationField::prepareData">prepareData</abbr></a></td><td class="text-right">30</td></tr>
+       <tr><td><a href="Fields/Types/ImageField.php.html#25"><abbr title="ImageField::prepareData">prepareData</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="Fields/AbstractField.php.html#140"><abbr title="AbstractField::renderForList">renderForList</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="Components/CmsForm.php.html#80"><abbr title="CmsForm::build">build</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="Config/Config.php.html#48"><abbr title="Config::load">load</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="Fields/Types/FileField.php.html#25"><abbr title="FileField::prepareData">prepareData</abbr></a></td><td class="text-right">7</td></tr>
+       <tr><td><a href="Fields/UploadableField.php.html#34"><abbr title="UploadableField::getItems">getItems</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Components/CmsComponent.php.html#24"><abbr title="CmsComponent::__construct">__construct</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Components/CmsComponent.php.html#38"><abbr title="CmsComponent::setMainModel">setMainModel</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Fields/Types/RelationField.php.html#81"><abbr title="RelationField::setParameter">setParameter</abbr></a></td><td class="text-right">2</td></tr>
+       <tr><td><a href="Config/JsonFileConfigLoader.php.html#21"><abbr title="JsonFileConfigLoader::load">load</abbr></a></td><td class="text-right">2</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+   <footer>
+    <hr/>
+    <p>
+     <small>Generated by <a href="http://github.com/sebastianbergmann/php-code-coverage" target="_top">PHP_CodeCoverage 2.2.4</a> using <a href="http://php.net/" target="_top">PHP 5.6.16</a> and <a href="https://phpunit.de/">PHPUnit 4.8.23</a> at Fri Mar 4 14:32:10 MSK 2016.</small>
+    </p>
+   </footer>
+  </div>
+  <script src="../js/jquery.min.js" type="text/javascript"></script>
+  <script src="../js/bootstrap.min.js" type="text/javascript"></script>
+  <script src="../js/holder.min.js" type="text/javascript"></script>
+  <script src="../js/d3.min.js" type="text/javascript"></script>
+  <script src="../js/nv.d3.min.js" type="text/javascript"></script>
+  <script type="text/javascript">
+$(document).ready(function() {
+  nv.addGraph(function() {
+    var chart = nv.models.multiBarChart();
+    chart.tooltips(false)
+      .showControls(false)
+      .showLegend(false)
+      .reduceXTicks(false)
+      .staggerLabels(true)
+      .yAxis.tickFormat(d3.format('d'));
+
+    d3.select('#classCoverageDistribution svg')
+      .datum(getCoverageDistributionData([5,0,2,0,1,1,1,2,0,0,0,11], "Class Coverage"))
+      .transition().duration(500).call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  nv.addGraph(function() {
+    var chart = nv.models.multiBarChart();
+    chart.tooltips(false)
+      .showControls(false)
+      .showLegend(false)
+      .reduceXTicks(false)
+      .staggerLabels(true)
+      .yAxis.tickFormat(d3.format('d'));
+
+    d3.select('#methodCoverageDistribution svg')
+      .datum(getCoverageDistributionData([40,0,2,0,0,0,0,2,0,0,0,26], "Method Coverage"))
+      .transition().duration(500).call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  function getCoverageDistributionData(data, label) {
+    var labels = [
+      '0%',
+      '0-10%',
+      '10-20%',
+      '20-30%',
+      '30-40%',
+      '40-50%',
+      '50-60%',
+      '60-70%',
+      '70-80%',
+      '80-90%',
+      '90-100%',
+      '100%'
+    ];
+    var values = [];
+    $.each(labels, function(key) {
+      values.push({x: labels[key], y: data[key]});
+    });
+
+    return [
+      {
+        key: label,
+        values: values,
+        color: "#4572A7"
+      }
+    ];
+  }
+  nv.addGraph(function() {
+    var chart = nv.models.scatterChart()
+      .showDistX(true)
+      .showDistY(true)
+      .showLegend(false)
+      .forceX([0, 100]);
+    chart.tooltipContent(function(key, y, e, graph) {
+      return '<p>' + graph.point.class + '</p>';
+    });
+
+    chart.xAxis.axisLabel('Code Coverage (in percent)');
+    chart.yAxis.axisLabel('Cyclomatic Complexity');
+
+    d3.select('#classComplexity svg')
+      .datum(getComplexityData([[100,0,"<a href=\"CmsCommon.php.html#7\">CmsCommon<\/a>"],[0,9,"<a href=\"Components\/CmsComponent.php.html#10\">CmsComponent<\/a>"],[0,11,"<a href=\"Components\/CmsForm.php.html#30\">CmsForm<\/a>"],[0,20,"<a href=\"Components\/CmsList.php.html#19\">CmsList<\/a>"],[47.619047619048,10,"<a href=\"Config\/Config.php.html#16\">Config<\/a>"],[66.666666666667,2,"<a href=\"Config\/JsonFileConfigLoader.php.html#15\">JsonFileConfigLoader<\/a>"],[33.333333333333,26,"<a href=\"Fields\/AbstractField.php.html#20\">AbstractField<\/a>"],[100,5,"<a href=\"Fields\/FieldFactory.php.html#15\">FieldFactory<\/a>"],[0,21,"<a href=\"Fields\/FieldListProcessor.php.html#9\">FieldListProcessor<\/a>"],[100,1,"<a href=\"Fields\/Types\/BooleanField.php.html#15\">BooleanField<\/a>"],[100,0,"<a href=\"Fields\/Types\/DateField.php.html#14\">DateField<\/a>"],[100,4,"<a href=\"Fields\/Types\/DatetimeField.php.html#16\">DatetimeField<\/a>"],[18.75,3,"<a href=\"Fields\/Types\/FileField.php.html#18\">FileField<\/a>"],[100,0,"<a href=\"Fields\/Types\/FloatField.php.html#15\">FloatField<\/a>"],[18.75,4,"<a href=\"Fields\/Types\/ImageField.php.html#18\">ImageField<\/a>"],[100,0,"<a href=\"Fields\/Types\/IntegerField.php.html#15\">IntegerField<\/a>"],[100,0,"<a href=\"Fields\/Types\/PasswordField.php.html#15\">PasswordField<\/a>"],[54.838709677419,14,"<a href=\"Fields\/Types\/RelationField.php.html#26\">RelationField<\/a>"],[100,3,"<a href=\"Fields\/Types\/SelectField.php.html#19\">SelectField<\/a>"],[100,1,"<a href=\"Fields\/Types\/StringField.php.html#14\">StringField<\/a>"],[0,1,"<a href=\"Fields\/Types\/TextField.php.html#16\">TextField<\/a>"],[100,0,"<a href=\"Fields\/Types\/UnknownField.php.html#15\">UnknownField<\/a>"],[60,4,"<a href=\"Fields\/UploadableField.php.html#18\">UploadableField<\/a>"]], 'Class Complexity'))
+      .transition()
+      .duration(500)
+      .call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  nv.addGraph(function() {
+    var chart = nv.models.scatterChart()
+      .showDistX(true)
+      .showDistY(true)
+      .showLegend(false)
+      .forceX([0, 100]);
+    chart.tooltipContent(function(key, y, e, graph) {
+      return '<p>' + graph.point.class + '</p>';
+    });
+
+    chart.xAxis.axisLabel('Code Coverage (in percent)');
+    chart.yAxis.axisLabel('Method Complexity');
+
+    d3.select('#methodComplexity svg')
+      .datum(getComplexityData([[0,2,"<a href=\"Components\/CmsComponent.php.html#24\">CmsComponent::__construct<\/a>"],[0,2,"<a href=\"Components\/CmsComponent.php.html#38\">CmsComponent::setMainModel<\/a>"],[0,1,"<a href=\"Components\/CmsComponent.php.html#54\">CmsComponent::configure<\/a>"],[0,1,"<a href=\"Components\/CmsComponent.php.html#61\">CmsComponent::build<\/a>"],[0,1,"<a href=\"Components\/CmsComponent.php.html#71\">CmsComponent::setFields<\/a>"],[0,1,"<a href=\"Components\/CmsComponent.php.html#83\">CmsComponent::setColumns<\/a>"],[0,1,"<a href=\"Components\/CmsComponent.php.html#93\">CmsComponent::setBaseUrl<\/a>"],[0,1,"<a href=\"Components\/CmsForm.php.html#44\">CmsForm::configure<\/a>"],[0,6,"<a href=\"Components\/CmsForm.php.html#58\">CmsForm::setEditedObject<\/a>"],[0,3,"<a href=\"Components\/CmsForm.php.html#80\">CmsForm::build<\/a>"],[0,1,"<a href=\"Components\/CmsForm.php.html#112\">CmsForm::render<\/a>"],[0,1,"<a href=\"Components\/CmsList.php.html#41\">CmsList::configure<\/a>"],[0,1,"<a href=\"Components\/CmsList.php.html#62\">CmsList::toggleIdColumn<\/a>"],[0,1,"<a href=\"Components\/CmsList.php.html#72\">CmsList::toggleStatusButtonColumn<\/a>"],[0,1,"<a href=\"Components\/CmsList.php.html#82\">CmsList::toggleDeleteButtonColumn<\/a>"],[0,1,"<a href=\"Components\/CmsList.php.html#92\">CmsList::toggleEditButtonColumn<\/a>"],[0,1,"<a href=\"Components\/CmsList.php.html#103\">CmsList::toggleTreeMode<\/a>"],[0,8,"<a href=\"Components\/CmsList.php.html#114\">CmsList::build<\/a>"],[0,6,"<a href=\"Components\/CmsList.php.html#182\">CmsList::render<\/a>"],[100,1,"<a href=\"Config\/Config.php.html#34\">Config::__construct<\/a>"],[100,1,"<a href=\"Config\/Config.php.html#42\">Config::setLoader<\/a>"],[0,3,"<a href=\"Config\/Config.php.html#48\">Config::load<\/a>"],[100,1,"<a href=\"Config\/Config.php.html#65\">Config::get<\/a>"],[100,1,"<a href=\"Config\/Config.php.html#74\">Config::set<\/a>"],[100,1,"<a href=\"Config\/Config.php.html#83\">Config::part<\/a>"],[0,1,"<a href=\"Config\/Config.php.html#91\">Config::getConfigPath<\/a>"],[0,1,"<a href=\"Config\/Config.php.html#100\">Config::loadConfig<\/a>"],[66.666666666667,2,"<a href=\"Config\/JsonFileConfigLoader.php.html#21\">JsonFileConfigLoader::load<\/a>"],[100,1,"<a href=\"Fields\/AbstractField.php.html#30\">AbstractField::isSkipped<\/a>"],[100,1,"<a href=\"Fields\/AbstractField.php.html#38\">AbstractField::setSkipped<\/a>"],[100,1,"<a href=\"Fields\/AbstractField.php.html#46\">AbstractField::__construct<\/a>"],[100,1,"<a href=\"Fields\/AbstractField.php.html#55\">AbstractField::setName<\/a>"],[0,1,"<a href=\"Fields\/AbstractField.php.html#65\">AbstractField::setTitle<\/a>"],[100,1,"<a href=\"Fields\/AbstractField.php.html#75\">AbstractField::setParameters<\/a>"],[100,1,"<a href=\"Fields\/AbstractField.php.html#86\">AbstractField::setParameter<\/a>"],[100,1,"<a href=\"Fields\/AbstractField.php.html#96\">AbstractField::__get<\/a>"],[0,1,"<a href=\"Fields\/AbstractField.php.html#105\">AbstractField::__isset<\/a>"],[0,1,"<a href=\"Fields\/AbstractField.php.html#110\">AbstractField::offsetGet<\/a>"],[0,1,"<a href=\"Fields\/AbstractField.php.html#115\">AbstractField::offsetSet<\/a>"],[0,1,"<a href=\"Fields\/AbstractField.php.html#119\">AbstractField::offsetExists<\/a>"],[0,1,"<a href=\"Fields\/AbstractField.php.html#123\">AbstractField::offsetUnset<\/a>"],[100,2,"<a href=\"Fields\/AbstractField.php.html#131\">AbstractField::getValueForList<\/a>"],[0,3,"<a href=\"Fields\/AbstractField.php.html#140\">AbstractField::renderForList<\/a>"],[100,1,"<a href=\"Fields\/AbstractField.php.html#155\">AbstractField::getDefaults<\/a>"],[100,1,"<a href=\"Fields\/AbstractField.php.html#163\">AbstractField::prepareData<\/a>"],[0,5,"<a href=\"Fields\/AbstractField.php.html#174\">AbstractField::renderFormField<\/a>"],[0,1,"<a href=\"Fields\/AbstractField.php.html#207\">AbstractField::getRowClassName<\/a>"],[100,2,"<a href=\"Fields\/FieldFactory.php.html#23\">FieldFactory::get<\/a>"],[100,3,"<a href=\"Fields\/FieldFactory.php.html#36\">FieldFactory::canonize<\/a>"],[0,10,"<a href=\"Fields\/FieldListProcessor.php.html#27\">FieldListProcessor::process<\/a>"],[0,1,"<a href=\"Fields\/FieldListProcessor.php.html#94\">FieldListProcessor::getFields<\/a>"],[0,1,"<a href=\"Fields\/FieldListProcessor.php.html#102\">FieldListProcessor::getRelatedModels<\/a>"],[0,1,"<a href=\"Fields\/FieldListProcessor.php.html#112\">FieldListProcessor::isRelationColumn<\/a>"],[0,7,"<a href=\"Fields\/FieldListProcessor.php.html#129\">FieldListProcessor::getTitle<\/a>"],[0,1,"<a href=\"Fields\/FieldListProcessor.php.html#153\">FieldListProcessor::setDictionaries<\/a>"],[100,1,"<a href=\"Fields\/Types\/BooleanField.php.html#17\">BooleanField::getDefaults<\/a>"],[100,4,"<a href=\"Fields\/Types\/DatetimeField.php.html#26\">DatetimeField::getValueForList<\/a>"],[18.75,3,"<a href=\"Fields\/Types\/FileField.php.html#25\">FileField::prepareData<\/a>"],[18.75,4,"<a href=\"Fields\/Types\/ImageField.php.html#25\">ImageField::prepareData<\/a>"],[100,4,"<a href=\"Fields\/Types\/RelationField.php.html#34\">RelationField::getValueForList<\/a>"],[0,5,"<a href=\"Fields\/Types\/RelationField.php.html#53\">RelationField::prepareData<\/a>"],[60,2,"<a href=\"Fields\/Types\/RelationField.php.html#81\">RelationField::setParameter<\/a>"],[100,2,"<a href=\"Fields\/Types\/RelationField.php.html#95\">RelationField::setParameters<\/a>"],[100,1,"<a href=\"Fields\/Types\/RelationField.php.html#107\">RelationField::buildRelationFieldsNames<\/a>"],[100,2,"<a href=\"Fields\/Types\/SelectField.php.html#27\">SelectField::getValueForList<\/a>"],[100,1,"<a href=\"Fields\/Types\/SelectField.php.html#39\">SelectField::setDictionary<\/a>"],[100,1,"<a href=\"Fields\/Types\/StringField.php.html#18\">StringField::getDefaults<\/a>"],[0,1,"<a href=\"Fields\/Types\/TextField.php.html#24\">TextField::getValueForList<\/a>"],[100,2,"<a href=\"Fields\/UploadableField.php.html#24\">UploadableField::prepareData<\/a>"],[0,2,"<a href=\"Fields\/UploadableField.php.html#34\">UploadableField::getItems<\/a>"]], 'Method Complexity'))
+      .transition()
+      .duration(500)
+      .call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  function getComplexityData(data, label) {
+    var values = [];
+    $.each(data, function(key) {
+      var value = Math.round(data[key][0]*100) / 100;
+      values.push({
+        x: value,
+        y: data[key][1],
+        class: data[key][2],
+        size: 0.05,
+        shape: 'diamond'
+      });
+    });
+
+    return [
+      {
+        key: label,
+        values: values,
+        color: "#4572A7"
+      }
+    ];
+  }
+});
+  </script>
+ </body>
+</html>
