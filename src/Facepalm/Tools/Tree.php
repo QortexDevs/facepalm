@@ -164,7 +164,7 @@ class Tree
      */
     public function getAllElements()
     {
-        return array_values($this->elementsById);
+        return $this->elementsById ? array_values($this->elementsById) : [];
     }
 
     /**

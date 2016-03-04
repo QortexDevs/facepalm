@@ -14,17 +14,17 @@ class CreateImagesTable extends Migration
     {
         Schema::create('images', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('parent_id');
-            $table->integer('status');
-            $table->integer('show_order');
-            $table->integer('bind_id');
+            $table->integer('parent_id')->nullable();
+            $table->integer('status')->nullable();
+            $table->integer('show_order')->nullable();
+            $table->integer('bind_id')->nullable();
             $table->string('bind_type');
             $table->string('group');
             $table->string('name');
-            $table->integer('width');
-            $table->integer('height');
-            $table->integer('original_width');
-            $table->integer('original_height');
+            $table->integer('width')->nullable();
+            $table->integer('height')->nullable();
+            $table->integer('original_width')->nullable();
+            $table->integer('original_height')->nullable();
             $table->string('ext');
             $table->string('original_name');
             $table->timestamps();
