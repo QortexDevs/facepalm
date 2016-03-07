@@ -41,48 +41,48 @@ class ConfigTest extends TestCase
         $this->assertEquals(3, $part->get('c'));
     }
 
-//    /**
-//     *
-//     */
-//    public function testLoader()
-//    {
-//        /** @var ConfigLoaderInterface $loader */
-//        $loader = m::mock('Facepalm\Cms\Config\ConfigLoaderInterface');
-//        $loader->shouldReceive('load')->once()->with(app()->configPath() . DIRECTORY_SEPARATOR . 'cms/cms.json')->andReturn([
-//            'key1' => ['a' => 2, 'b' => 3],
-//            'key2' => ['c' => 3, 'd' => 4]
-//        ]);
-//
-//        $config = new Config();
-//        $config->setLoader($loader);
-//        $config->load();
-//        $this->assertEquals(4, $config->get('key2.d'));
-//    }
-//
-//    /**
-//     *
-//     */
-//    public function testLoaderWithModule()
-//    {
-//        /** @var ConfigLoaderInterface $loader */
-//        $loader = m::mock('Facepalm\Cms\Config\ConfigLoaderInterface');
-//        $loader->shouldReceive('load')->with(app()->configPath() . DIRECTORY_SEPARATOR . 'cms/cms.json')
-//            ->andReturn([
-//                'key1' => ['a' => 2, 'b' => 3],
-//                'key2' => ['c' => 3, 'd' => 4]
-//            ]);
-//        $loader->shouldReceive('load')->with(app()->configPath() . DIRECTORY_SEPARATOR . 'cms/modules/users/access.json')
-//            ->andReturn([
-//                'key3' => ['a' => 2, 'b' => 3],
-//                'key4' => ['c' => 3, 'd' => 4]
-//            ]);
-//
-//        $config = new Config();
-//        $config->setLoader($loader);
-//        $config->load('users', 'access');
-//        $this->assertEquals(4, $config->get('key2.d'));
-//        $this->assertEquals(2, $config->get('module.key3.a'));
-//    }
+    /**
+     *
+     */
+    public function testLoader()
+    {
+        /** @var ConfigLoaderInterface $loader */
+        $loader = m::mock('Facepalm\Cms\Config\ConfigLoaderInterface');
+        $loader->shouldReceive('load')->once()->with(app()->configPath() . DIRECTORY_SEPARATOR . 'cms/cms.json')->andReturn([
+            'key1' => ['a' => 2, 'b' => 3],
+            'key2' => ['c' => 3, 'd' => 4]
+        ]);
+
+        $config = new Config();
+        $config->setLoader($loader);
+        $config->load();
+        $this->assertEquals(4, $config->get('key2.d'));
+    }
+
+    /**
+     *
+     */
+    public function testLoaderWithModule()
+    {
+        /** @var ConfigLoaderInterface $loader */
+        $loader = m::mock('Facepalm\Cms\Config\ConfigLoaderInterface');
+        $loader->shouldReceive('load')->with(app()->configPath() . DIRECTORY_SEPARATOR . 'cms/cms.json')
+            ->andReturn([
+                'key1' => ['a' => 2, 'b' => 3],
+                'key2' => ['c' => 3, 'd' => 4]
+            ]);
+        $loader->shouldReceive('load')->with(app()->configPath() . DIRECTORY_SEPARATOR . 'cms/modules/users/access.json')
+            ->andReturn([
+                'key3' => ['a' => 2, 'b' => 3],
+                'key4' => ['c' => 3, 'd' => 4]
+            ]);
+
+        $config = new Config();
+        $config->setLoader($loader);
+        $config->load('users', 'access');
+        $this->assertEquals(4, $config->get('key2.d'));
+        $this->assertEquals(2, $config->get('module.key3.a'));
+    }
 
     /**
      *
