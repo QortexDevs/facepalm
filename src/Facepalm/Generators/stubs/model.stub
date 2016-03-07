@@ -1,0 +1,13 @@
+<?php
+
+namespace DummyNamespace;
+
+use Facepalm\Models\Foundation\BaseEntity;
+
+class DummyClass extends BaseEntity
+{
+    protected $textFields = [];
+    protected $stringFields = [];
+
+    //
+}

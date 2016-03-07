@@ -16,6 +16,10 @@ abstract class BaseEntity extends AbstractEntity
 {
     use TranslatableTrait;
 
+    protected $casts = [
+        'status' => 'boolean',
+    ];
+
     /**
      *
      */
