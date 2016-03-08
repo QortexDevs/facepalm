@@ -24,7 +24,7 @@
             data-id="{{ object.id }}">
             <td><a href='{{ object.editUrl }}'>{{ object.id }}</a></td>
             {% for fieldObject in list.meta.columns %}
-                <td>
+                <td class="{% if fieldObject.type %}cell-type-{{ fieldObject.type }}{% endif %}">
                     {{ fieldObject.renderForList(object)|raw }}
                 </td>
             {% endfor %}

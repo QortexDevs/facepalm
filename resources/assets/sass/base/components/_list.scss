@@ -44,6 +44,10 @@
                 border-bottom: 1px solid #e2e7ec;
                 color: #b0b8c2;
 
+                &.cell-type-checkbox, &.cell-type-boolean {
+                    text-align: center;
+                }
+
                 &:first-child {
                     padding-left: 8px;
                 }

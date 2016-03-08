@@ -20,5 +20,11 @@ class BooleanField extends AbstractField
             'doNotShowTitle' => true
         ]);
     }
+
+    public function getValueForList($object)
+    {
+        return (bool)$object->{$this->name} ? '✓' : '';
+    }
+
     protected $templateName = 'components/form/elements/checkbox.twig';
 }
