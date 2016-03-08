@@ -120,7 +120,7 @@ $(document).ready(function () {
         toggleFormButtons(false);
 
         // Minimum delay to avoid unpleasant blinking
-        $.when($.post('./', formData), delay(createMode ? 100 : 500)).then(function (result) {
+        $.when($.post(baseUrl + '/', formData), delay(createMode ? 100 : 500)).then(function (result) {
             var response = result[0];
             if (createMode && parseInt(response) > 0) {
                 var url = _.rtrim(document.location.href, '/');

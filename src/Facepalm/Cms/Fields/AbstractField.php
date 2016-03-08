@@ -2,6 +2,7 @@
 
 namespace Facepalm\Cms\Fields;
 
+use Facepalm\Models\Language;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -187,7 +188,7 @@ abstract class AbstractField implements \ArrayAccess
 
         if ($template) {
             //todo: языки подгружать!
-            $languages = ['ru' => 'ru', 'en' => 'en'];
+            $languages = Language::where('status', 1)->orderby('is_default', 'desc')->get()->pluck('code', 'code');
             return Twig::render($template, [
                     'object' => $object,
                     'field' => $this->name,
