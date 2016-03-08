@@ -159,6 +159,18 @@ trait TranslatableTrait
         }
     }
 
+    function __isset($key)
+    {
+        if (in_array($key, $this->stringFields)) {
+            return true;
+        } elseif (in_array($key, $this->textFields)) {
+            return true;
+        } else {
+            return parent::__isset($key);
+        }
+    }
+
+
     /**
      * Magic method for setting string- and text- fields, that is specified in $textFields and $stringFields arrays
      * The default language is used
