@@ -36,7 +36,7 @@ class Tree
         /** @var Model $object */
         foreach ($objects as $object) {
             $this->elementsById[$object->id] = $object;
-            $this->elementsByParent[$object->parent_id][] = $object->id;
+            $this->elementsByParent[(int)$object->parent_id][] = $object->id;
         }
 
         $this->calculateAncestorsAndDescendants();
@@ -265,7 +265,6 @@ class Tree
         if (!is_callable($callbackItem)) {
             return null;
         }
-
         $output = '';
         if ($processRoot) {
             $output .= $callbackItem(
@@ -304,9 +303,9 @@ class Tree
 
                 // build ancestors list
                 $tmpId = $id;
-                while ($this->elementsById[$tmpId]->parent_id) {
-                    $this->elementsAncestors[$id][] = $this->elementsById[$tmpId]->parent_id;
-                    $tmpId = $this->elementsById[$tmpId]->parent_id;
+                while ((int)$this->elementsById[$tmpId]->parent_id) {
+                    $this->elementsAncestors[$id][] = (int)$this->elementsById[$tmpId]->parent_id;
+                    $tmpId = (int)$this->elementsById[$tmpId]->parent_id;
                     if (!Arr::has($this->elementsById, $tmpId)) {
                         break;
                     }

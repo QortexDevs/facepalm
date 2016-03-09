@@ -13,6 +13,7 @@ use Facepalm\Cms\Components\CmsForm;
 use Facepalm\Cms\Config\Config;
 use Facepalm\Models\File;
 use Facepalm\Models\Image;
+use Facepalm\Models\ModelFactory;
 use Facepalm\Models\SiteSection;
 use Facepalm\PostProcessing\AmfProcessor;
 use Facepalm\Tools\Tree;
@@ -281,7 +282,7 @@ class CmsUI
 
         if ($this->layoutMode == self::LAYOUT_TWO_COLUMN) {
             $params['navigation'] = (new Tree())
-                ->fromEloquentCollection(SiteSection::orderBy('show_order')->get())
+                ->fromEloquentCollection(ModelFactory::builderFor($this->config->get('module.navigation.model'))->orderBy('show_order')->get())
                 ->render(0, app()->make('twig'), 'leftNavigationItem', [
                     'moduleConfig' => $this->config->get('module'),
                     'navigationId' => $this->navigationId
