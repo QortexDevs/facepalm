@@ -88,6 +88,13 @@ class FieldListProcessor
         return $this;
     }
 
+    public function prependHiddenField($name, $value)
+    {
+        $factory = new FieldFactory();
+        $field = $factory->get('hidden')->setName($name)->setForceValue($value);
+        $this->fields = Arr::prepend($this->fields, $field, $name);
+    }
+
     /**
      * @return AbstractField[]
      */

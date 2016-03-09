@@ -12,7 +12,7 @@
 {% else %}
     <input type="text" class="text"
            name="{{ inputName }}"
-           value="{{ object.__get(field) }}"
+           value="{{ forceValue?:object.__get(field) }}"
            {% if parameters.width %}style="width: {{ parameters.width }}"{% endif %}
     />
 {% endif %}

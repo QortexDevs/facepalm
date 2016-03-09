@@ -24,6 +24,7 @@ abstract class AbstractField implements \ArrayAccess
     protected $data = [];
     protected $templateName;
     protected $skipped = false;
+    protected $forceValue;
 
     /**
      * @return boolean
@@ -66,6 +67,12 @@ abstract class AbstractField implements \ArrayAccess
     public function setTitle($title)
     {
         $this->parameters['title'] = $title;
+        return $this;
+    }
+
+    public function setForceValue($value)
+    {
+        $this->forceValue = $value;
         return $this;
     }
 
@@ -187,8 +194,9 @@ abstract class AbstractField implements \ArrayAccess
 
 
         if ($template) {
-            //todo: языки подгружать!
             $languages = Language::where('status', 1)->orderby('is_default', 'desc')->get()->pluck('code', 'code');
+
+            // todo: некрасиво!
             return Twig::render($template, [
                     'object' => $object,
                     'field' => $this->name,
@@ -197,7 +205,8 @@ abstract class AbstractField implements \ArrayAccess
                     'inputName' => $fieldNameBase . '[' . $this->name . ']',
                     'parameters' => $this->parameters,
                     'data' => $this->data,
-                    'languages' => $languages
+                    'languages' => $languages,
+                    'forceValue' => $this->forceValue
                 ] + $parameters);
         }
     }

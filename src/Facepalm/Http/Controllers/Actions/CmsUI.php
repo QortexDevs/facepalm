@@ -21,6 +21,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
 use TwigBridge\Facade\Twig;
 
@@ -126,6 +127,12 @@ class CmsUI
                 // If navigation entity is not editing entity, remove first (navigation) id from parameters
                 if ($this->config->get('module.navigation.model') != $this->config->get('module.model')) {
                     array_shift($params);
+                    $this->config->set('module.baseUrlNav', $this->config->get('module.baseUrl'));
+                    $this->config->set(
+                        'module.baseUrl',
+                        $this->config->get('module.baseUrl') . '/' . $this->navigationId
+                    );
+
                 }
             }
         }
@@ -186,6 +193,13 @@ class CmsUI
     protected function showObjectsListPage()
     {
         $list = new CmsList($this->config->part('module'));
+        if ($this->navigationId && $this->config->get('module.navigation.model') != $this->config->get('module.model')) {
+            $list->setAdditionalConstraints(function ($builder) {
+                //todo: может быть установлен извне
+                $relationField = Str::snake($this->config->get('module.navigation.model')) . '_id';
+                return $builder->where($relationField, $this->navigationId);
+            });
+        }
         $params = [
             'buttonsPanel' => !!$this->config->get('module.list.treeMode'),
             'listHtml' => $list->render(app()->make('twig')),
@@ -204,11 +218,18 @@ class CmsUI
     {
         $form = (new CmsForm($this->config->part('module')))->setEditedObject($this->objectId);
 
+        if ($this->navigationId && $this->config->get('module.navigation.model') != $this->config->get('module.model')) {
+            //todo: может быть установлен извне
+            $relationField = Str::snake($this->config->get('module.navigation.model')) . '_id';
+            $form->prependHiddenField($relationField, $this->navigationId);
+        }
+
         $params = [
             'formHtml' => $form->render(app()->make('twig')),
             'justCreated' => $this->request->input('justCreated'),
             'pageTitle' => $this->config->get('strings.editTitle') ?: 'Редактирование объекта'
         ];
+
 
         return $this->renderPage('formPage', $params);
     }
@@ -220,6 +241,13 @@ class CmsUI
     protected function showCreateObjectFormPage()
     {
         $form = (new CmsForm($this->config->part('module')));
+
+        if ($this->navigationId && $this->config->get('module.navigation.model') != $this->config->get('module.model')) {
+            //todo: может быть установлен извне
+            $relationField = Str::snake($this->config->get('module.navigation.model')) . '_id';
+            $form->prependHiddenField($relationField, $this->navigationId);
+        }
+
         $params = [
             'formHtml' => $form->render(app()->make('twig')),
             'pageTitle' => $this->config->get('strings.editTitle') ?: 'Редактирование объекта'

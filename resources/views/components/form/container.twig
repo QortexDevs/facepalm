@@ -4,16 +4,20 @@
     <table>
         {% for field in form.fields %}
             {% if not field.isSkipped %}
-                <tr data-row-for-field="{{ field.name }}" class="row-for-field-{{ field.getRowClassName() }}">
-                    <td class="caption">
-                        {% if not field.doNotShowTitle %}
-                            <div class="caption">{{ field.title }}</div>
-                        {% endif %}
-                    </td>
-                    <td class="field">
-                        {{ field.renderFormField(form.object)|raw }}
-                    </td>
-                </tr>
+                {% if field.isHidden %}
+                    {{ field.renderFormField(form.object)|raw }}
+                {% else %}
+                    <tr data-row-for-field="{{ field.name }}" class="row-for-field-{{ field.getRowClassName() }}">
+                        <td class="caption">
+                            {% if not field.doNotShowTitle %}
+                                <div class="caption">{{ field.title }}</div>
+                            {% endif %}
+                        </td>
+                        <td class="field">
+                            {{ field.renderFormField(form.object)|raw }}
+                        </td>
+                    </tr>
+                {% endif %}
             {% endif %}
         {% endfor %}
     </table>

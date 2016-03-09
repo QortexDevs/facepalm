@@ -33,6 +33,8 @@ class CmsList extends CmsComponent
     protected $relatedModels = [];
     const DEFAULT_ORDERING = 'desc';
 
+    protected $constraintCallbacks = [];
+
 
     /**
      * @param Repository $config
@@ -117,16 +119,28 @@ class CmsList extends CmsComponent
             throw new \Exception('No model defined');
         }
 
+        $tableName = Str::snake(class_basename($this->modelName)) . 's';
+
         // get query builder with all records (dummy clause)
         /** @var Builder $queryBuilder */
         $queryBuilder = ModelFactory::builderFor($this->modelName);
 
+
+        if ($this->constraintCallbacks) {
+            foreach ($this->constraintCallbacks as $constraintCallback) {
+                $queryBuilder = $constraintCallback($queryBuilder);
+            }
+        }
+
         // todo: сортировка из настроек
         // todo: хитровыебанные запрос для многоязычных полей
         if ($this->isTreeMode) {
-            $queryBuilder = $queryBuilder->orderBy(CmsCommon::COLUMN_NAME_SHOW_ORDER, 'asc');
+            $queryBuilder = $queryBuilder->orderBy($tableName . '.' . CmsCommon::COLUMN_NAME_SHOW_ORDER, 'asc');
         } else {
-            $queryBuilder = $queryBuilder->orderBy(CmsCommon::COLUMN_NAME_ID, self::DEFAULT_ORDERING);
+            $queryBuilder = $queryBuilder->orderBy(
+                $tableName . '.' . CmsCommon::COLUMN_NAME_ID,
+                self::DEFAULT_ORDERING
+            );
         }
 
         // eager loading of related models
@@ -202,6 +216,11 @@ class CmsList extends CmsComponent
             'treeContent' => $treeContent ?: '',
             'emptyTreeItem' => $emptyTreeItem ?: ''
         ]);
+    }
+
+    public function setAdditionalConstraints($param)
+    {
+        $this->constraintCallbacks[] = $param;
     }
 
 }

@@ -1,0 +1,13 @@
+{% if parameters.translatable %}
+    {% for langCode,langTitle in languages %}
+            <input type="hidden"
+                   name="{{ inputName }}[{{ langCode }}][stringValue]"
+                   value="{{ forceValue?:object.string(field, langCode) }}"
+            />
+    {% endfor %}
+{% else %}
+    <input type="hidden"
+           name="{{ inputName }}"
+           value="{{ forceValue?:object.__get(field) }}"
+    />
+{% endif %}

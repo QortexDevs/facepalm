@@ -40,7 +40,12 @@ class ModelFactory
      */
     public static function builderFor($modelName)
     {
-        return self::where($modelName, CmsCommon::COLUMN_NAME_ID, '>', '0');
+        return self::where(
+            $modelName,
+            Str::snake(class_basename($modelName)) . 's.' . CmsCommon::COLUMN_NAME_ID,
+            '>',
+            '0'
+        );
     }
 
     /**

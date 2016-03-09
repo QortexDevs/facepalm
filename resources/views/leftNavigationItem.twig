@@ -1,8 +1,8 @@
 <li {% if navigationId==element.id %}class="active"{% endif %}>
     {% if isRoot %}
-        <a href="{{ moduleConfig.baseUrl }}/">Главная</a>
+        <a href="{{ moduleConfig.baseUrlNav }}/">Главная</a>
     {% else %}
-        <a href="{{ moduleConfig.baseUrl }}/{{ element.id }}/">{{ element.title?element.title:element.name?element.name:element.path_name }}</a>
+        <a href="{{ moduleConfig.baseUrlNav }}/{{ element.id }}/">{{ element.title?element.title:element.name?element.name:element.path_name }}</a>
     {% endif %}
     {% if nested %}
         <ul>{{ nested|raw }}</ul>

@@ -36,7 +36,6 @@ class CmsForm extends CmsComponent
     /** @var BaseEntity */
     protected $editedObject = null;
 
-
     /**
      * @param Repository $config
      * @return $this
@@ -73,6 +72,11 @@ class CmsForm extends CmsComponent
         return $this;
     }
 
+    public function prependHiddenField($name, $value)
+    {
+        $this->fieldsProcessor->prependHiddenField($name, $value);
+    }
+
     /**
      * @return array
      * @throws \Exception
@@ -96,7 +100,6 @@ class CmsForm extends CmsComponent
         $output = [
             'fields' => $this->fieldsProcessor->getFields(),
             'object' => $this->editedObject
-
         ];
 
         return $output;
