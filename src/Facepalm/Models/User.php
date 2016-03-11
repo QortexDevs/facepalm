@@ -10,6 +10,10 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
+/**
+ * @property array|string password
+ * @property array|string email
+ */
 class User extends BaseEntity implements AuthenticatableContract,
     AuthorizableContract,
     CanResetPasswordContract

@@ -36,5 +36,10 @@ class GeneratorServiceProvider extends ServiceProvider
             return $app['Facepalm\Generators\Commands\MigrateMakeCommand'];
         });
         $this->commands('command.facepalm.migration');
+
+        $this->app->singleton('command.facepalm.superuser', function ($app) {
+            return $app['Facepalm\Generators\Commands\SuperuserCommand'];
+        });
+        $this->commands('command.facepalm.superuser');
     }
 }
