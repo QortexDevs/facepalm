@@ -9,6 +9,7 @@
 namespace Facepalm\Http\Controllers;
 
 use Facepalm\Http\Controllers\Actions\AutoResize;
+use Facepalm\Http\Controllers\Actions\CmsAuth;
 use Facepalm\Http\Controllers\Actions\CmsUI;
 use Facepalm\Http\Controllers\Actions\DownloadFile;
 use Illuminate\Http\Request;
@@ -21,6 +22,11 @@ use Illuminate\Routing\Controller as BaseController;
  */
 class MainController extends BaseController
 {
+    public function displayLoginScreen(Request $request)
+    {
+        return (new CmsAuth())->get($request);
+    }
+
     /**
      * @param Request $request
      * @param null $group
