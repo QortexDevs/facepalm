@@ -6,7 +6,7 @@
  * Time: 17:12
  */
 
-namespace Facepalm\Http\Controllers\Actions;
+namespace Facepalm\Http\Controllers;
 
 use Facepalm\Cms\Components\CmsList;
 use Facepalm\Cms\Components\CmsForm;
@@ -26,7 +26,7 @@ use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
 use TwigBridge\Facade\Twig;
 
-class CmsUI
+class CmsController extends BaseController
 {
     const ACTION_LIST_OBJECTS = 1;
     const ACTION_EDIT_OBJECT = 2;
@@ -90,6 +90,7 @@ class CmsUI
 
         //todo: сомнения в красоте
         $this->config->set('module.baseUrl', '/cms/' . $group . '/' . $module);
+        $this->config->set('module.baseUrlNav', $this->config->get('module.baseUrl'));
 
         if ($this->config->get('module.navigation')) {
             $this->layoutMode = self::LAYOUT_TWO_COLUMN;
@@ -128,7 +129,6 @@ class CmsUI
                 // If navigation entity is not editing entity, remove first (navigation) id from parameters
                 if ($this->config->get('module.navigation.model') != $this->config->get('module.model')) {
                     array_shift($params);
-                    $this->config->set('module.baseUrlNav', $this->config->get('module.baseUrl'));
                     $this->config->set(
                         'module.baseUrl',
                         $this->config->get('module.baseUrl') . '/' . $this->navigationId

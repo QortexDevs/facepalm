@@ -6,7 +6,7 @@
  * Time: 17:12
  */
 
-namespace Facepalm\Http\Controllers\Actions;
+namespace Facepalm\Http\Controllers;
 
 use Facepalm\Cms\Components\CmsList;
 use Facepalm\Cms\Components\CmsForm;
@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Session;
 use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
 use TwigBridge\Facade\Twig;
 
-class AutoResize
+class AutoResizeController extends BaseController
 {
     public function handle(Request $request, $path, $name)
     {

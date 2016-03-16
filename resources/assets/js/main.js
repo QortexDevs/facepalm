@@ -26,6 +26,9 @@
 
 
 $(document).ready(function () {
+
+    (new Auth()).init();
+
     //load underscore.string
     var baseUrl = $('body').data('base-url');
     _.mixin(s.exports());

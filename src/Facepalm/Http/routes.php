@@ -2,10 +2,18 @@
 
 
 // cms
-Route::any('/media/files/{hash}/{name?}', 'MainController@downloadFile');
-Route::any('/media/images/{path}/{name}', 'MainController@autoResizeImage')->where('path', '(.*)');
-Route::any('/cms/{group?}/{module?}/{params?}', 'MainController@displayCmsUI')->where('params', '(.*)');
+Route::any('/media/files/{hash}/{name?}', 'DownloadFileController@handle');
+Route::any('/media/images/{path}/{name}', 'AutoResizeController@handle')->where('path', '(.*)');
+
+Route::get('/cms/login', 'AuthController@get');
+Route::post('/cms/login', 'AuthController@login');
+Route::get('/cms/logout', 'AuthController@logout');
+
+
+Route::any('/cms/{group?}/{module?}/{params?}', 'CmsController@handle')->where(
+    'params',
+    '(.*)'
+)->middleware(Facepalm\Http\Middleware\Authenticate::class);
 
 // default route
-//todo: перенести это тоже в facepalmcontroller
 Route::any('/{params?}', 'DefaultController@display')->where('params', '(.*)');
