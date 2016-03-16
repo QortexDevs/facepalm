@@ -8,9 +8,10 @@
 
 namespace Facepalm\Http\Controllers;
 
-use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use TwigBridge\Facade\Twig;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -20,7 +21,9 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class AuthController extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
-    use AuthenticatesAndRegistersUsers, ThrottlesLogins;
+    use AuthenticatesUsers, ThrottlesLogins;
+
+    protected $redirectAfterLogout = '/cms/';
 
     /**
      * @param Request $request
@@ -31,14 +34,35 @@ class AuthController extends BaseController
         return Twig::render("loginPage.twig", []);
     }
 
-//    /**
-//     * @param Request $request
-//     * @return string
-//     */
-//    public function login(Request $request)
-//    {
-//        return $request->input('login');
-//    }
+    /**
+     * Handle a login request to the application.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function login(Request $request)
+    {
+        $this->validateLogin($request);
+
+
+        $credentials = $request->only('email', 'password');
+        $credentials['status'] = 1;
+
+        if (Auth::attempt($credentials)) {
+            if ($request->ajax()) {
+                return response()->json(['user' => Auth::user()]);
+            } else {
+                return $this->handleUserWasAuthenticated($request, false);
+            }
+        }
+        //todo: переделать вывод текста ошибки! Локализация!
+        //$this->getFailedLoginMessage()
+        if ($request->ajax()) {
+            return response()->json(['errors' => [$this->loginUsername() => 'Неверные логин или пароль']]);
+        } else {
+            return $this->sendFailedLoginResponse($request);
+        }
+    }
 
 
 }

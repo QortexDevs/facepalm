@@ -5,6 +5,7 @@
         <div class="login-form">
             <div class="logo"></div>
             <form action="/cms/login/" method="post">
+                {{ csrf_field() }}
                 <input type="hidden" name="back" value="{{ backUrl }}">
                 <input type="text" name="email" value="{{ login }}" placeholder="E-mail" class="text">
                 <input type="password" name="password" placeholder="Пароль" class="text">

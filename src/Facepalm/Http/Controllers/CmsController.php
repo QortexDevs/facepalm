@@ -137,7 +137,7 @@ class CmsController extends BaseController
                 }
             }
         }
-        if (Arr::get($params, 0) == 'create') {
+        if (Arr::get($params, 0) === 'create') {
             $this->objectId = null;
             $this->action = self::ACTION_CREATE_OBJECT;
             array_shift($params);
@@ -158,7 +158,7 @@ class CmsController extends BaseController
     protected function get()
     {
         $moduleContent = '';
-        if ($this->layoutMode == self::LAYOUT_TWO_COLUMN && !$this->navigationId) {
+        if ($this->layoutMode === self::LAYOUT_TWO_COLUMN && !$this->navigationId) {
             return $this->showDashboardPage();
         }
 
