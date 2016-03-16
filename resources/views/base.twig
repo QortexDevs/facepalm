@@ -24,7 +24,17 @@
                 <div class="top-bar">
                     <h1>{{ pageTitle }}</h1>
                     <div class="right">
-                        <div class="user-icon fa fa-user"></div>
+                        <a href="/cms/logout/" title="{{ user.email }}: выход">
+                            <div
+                                    {% if userpic %}
+                                class="user-icon"
+                                style="background-image: url({{ userpic }})"
+                            {% else %}
+                                class="user-icon fa fa-user"
+                                    {% endif %}>
+
+                            </div>
+                        </a>
                     </div>
                 </div>
                 <div class="module-content">

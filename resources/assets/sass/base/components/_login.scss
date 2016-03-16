@@ -20,7 +20,7 @@ body {
                 justify-content: center;
 
                 &.shake {
-                    animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+                    animation: shake 0.82s cubic-bezier(.36, .07, .19, .97) both;
                 }
 
                 .logo {
@@ -38,22 +38,19 @@ body {
                     justify-content: space-between;
                     margin-left: 60px;
 
-                    .error {
-                        background-color: #ea5a5a;
-                        box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-                        padding: 10px;
-                        left: -30px;
-                        top: 20px;
-                        color: white;
-                        position: absolute;
-                    }
-
                     input {
                         &.text {
 
                             -webkit-font-smoothing: antialiased;
                             -moz-font-smoothing: antialiased;
                             -o-font-smoothing: antialiased;
+
+                            &:-webkit-autofill,
+                            &:-webkit-autofill:hover,
+                            &:-webkit-autofill:focus,
+                            &:-webkit-autofill:active {
+                                transition: background-color 5000s ease-in-out 0s;
+                            }
 
                             flex-grow: 1;
                             color: white;

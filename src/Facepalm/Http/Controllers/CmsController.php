@@ -318,12 +318,14 @@ class CmsController extends BaseController
                 ], true);
         }
 //        $params['navigation'] = 'fsdfsdf';
-
+        $userpic = Auth::user()->images()->ofGroup('avatar')->first();
         $params = array_merge($params, [
             'assetsBusters' => $assetsBusters,
             'currentPathSections' => [$this->group, $this->module],
             'cmsStructure' => $this->config->get('structure'),
             'moduleConfig' => $this->config->get('module'),
+            'user' => Auth::user(),
+            'userpic' => $userpic ? $userpic->getUri('200x200') : ''
         ]);
 
 
