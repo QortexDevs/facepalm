@@ -1,11 +1,21 @@
 body {
 
     &.login-page {
-        background: url("../i/bg.jpg") no-repeat center -50px;
         background-size: cover;
+        background-repeat: no-repeat;
 
         .bg {
+            background: url("../i/bg-gradient.jpg") no-repeat;
+            background-size: cover;
             height: 100%;
+            opacity: 0.8;
+        }
+        .container {
+            height: 100%;
+            position: absolute;
+            width: 100%;
+            top: 0;
+            left: 0;
             display: flex;
             justify-content: center;
             align-items: center;
