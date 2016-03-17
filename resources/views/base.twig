@@ -24,17 +24,24 @@
                 <div class="top-bar">
                     <h1>{{ pageTitle }}</h1>
                     <div class="right">
-                        <a href="/cms/logout/" title="{{ user.email }}: выход">
-                            <div
-                                    {% if userpic %}
-                                class="user-icon"
-                                style="background-image: url({{ userpic }})"
-                            {% else %}
-                                class="user-icon fa fa-user"
-                                    {% endif %}>
+                        <div title="{{ user.email }}"
+                                {% if userpic %}
+                            class="user-icon"
+                            style="background-image: url({{ userpic }})"
+                        {% else %}
+                            class="user-icon fa fa-user"
+                                {% endif %}>
 
+                        </div>
+                        <div class="user-dropdown-container">
+                            <div class="user-dropdown-content">
+                                <div class="username">{{ user.email }}</div>
+                                <menu>
+                                    <a href="/" target="_blank"><i class="fa fa-home"></i>Открыть сайт</a>
+                                    <a href="/cms/logout/"><i class="fa fa-sign-out"></i>Выход</a>
+                                </menu>
                             </div>
-                        </a>
+                        </div>
                     </div>
                 </div>
                 <div class="module-content">

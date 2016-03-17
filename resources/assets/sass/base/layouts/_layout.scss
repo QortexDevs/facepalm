@@ -2,6 +2,48 @@
     display: flex;
     flex-direction: column;
 
+    .user-dropdown-container {
+        display: none;
+    }
+
+    .user-dropdown-content {
+        background: white;
+        box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+        border-radius: 4px;
+        font-family: $additionalFontName;
+        font-size: 16px;
+
+        .username {
+            padding: 10px 20px;
+            color: #848381;
+            font-weight: 400;
+            text-align: center;
+        }
+        menu {
+
+            a {
+                padding: 10px;
+                display: block;
+                border-top: 1px solid #eee;
+                transition: 0.1s;
+                color: #666;
+
+                &:hover {
+                    background-color: $mainThemeColor;
+                    color: white;
+                    i {
+                        color: white
+                    }
+                }
+
+                i {
+                    margin-right: 8px;
+                    color: #aeaeae;
+                }
+            }
+        }
+    }
+
     main {
         margin-left: $leftMenuWidth;
 
@@ -25,6 +67,7 @@
                     background-size: cover;
                     width: 37px;
                     height: 36px;
+                    cursor: pointer;
                 }
             }
         }
@@ -55,5 +98,6 @@
             margin-left: $leftMenuWidth+$collapsedLeftMenuWidth;
         }
     }
+
 }
 

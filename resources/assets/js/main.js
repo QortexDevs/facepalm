@@ -15,6 +15,8 @@
 //= ../../../../bower_components/codemirror/lib/codemirror.js
 //= ../../../../bower_components/codemirror/mode/xml/xml.js
 //= ../../../../bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.js
+//= ../../../../bower_components/tether/dist/js/tether.js
+//= ../../../../bower_components/tether-drop/dist/js/drop.js
 
 //= ../nonBowerPackages/redactor/redactor/redactor.js
 //= ../nonBowerPackages/redactor/langs/ru.js
@@ -28,6 +30,13 @@
 $(document).ready(function () {
 
     (new Auth()).init();
+
+    drop = new Drop({
+        target: document.querySelector('.user-icon'),
+        content: $('.user-dropdown-container').html(),
+        position: 'bottom right',
+        openOn: 'click'
+    });
 
     //load underscore.string
     var baseUrl = $('body').data('base-url');
