@@ -79,26 +79,28 @@ class CmsController extends BaseController
         }
 
         $this->config = (new Config())->load($group, $module);
-        if ($group && !$module) {
-            return redirect('/cms/' . $group . '/' . array_keys($this->config->get('structure')[$group]['sections'])[0]);
+        if ($group) {
+            if (!$module) {
+                return redirect('/cms/' . $group . '/' . array_keys($this->config->get('structure')[$group]['sections'])[0]);
+            }
+
+            if ($module && !$this->config->get('module')) {
+                // todo: это необязательно, если у нас полностью кастомный обработчик
+                abort(404);
+            }
+
+            //todo: сомнения в красоте
+            $this->config->set('module.baseUrl', '/cms/' . $group . '/' . $module);
+            $this->config->set('module.baseUrlNav', $this->config->get('module.baseUrl'));
+
+            if ($this->config->get('module.navigation')) {
+                $this->layoutMode = self::LAYOUT_TWO_COLUMN;
+            } else {
+                $this->layoutMode = self::LAYOUT_SIMPLE;
+            }
+
+            $this->parameters = $this->processParameters($params);
         }
-
-        if ($group && $module && !$this->config->get('module')) {
-            // todo: это необязательно, если у нас полностью кастомный обработчик
-            abort(404);
-        }
-
-        //todo: сомнения в красоте
-        $this->config->set('module.baseUrl', '/cms/' . $group . '/' . $module);
-        $this->config->set('module.baseUrlNav', $this->config->get('module.baseUrl'));
-
-        if ($this->config->get('module.navigation')) {
-            $this->layoutMode = self::LAYOUT_TWO_COLUMN;
-        } else {
-            $this->layoutMode = self::LAYOUT_SIMPLE;
-        }
-
-        $this->parameters = $this->processParameters($params);
 
         //todo: process config structure with permissions
         //todo: process module config with permissions
@@ -157,21 +159,25 @@ class CmsController extends BaseController
      */
     protected function get()
     {
-        $moduleContent = '';
-        if ($this->layoutMode === self::LAYOUT_TWO_COLUMN && !$this->navigationId) {
-            return $this->showDashboardPage();
-        }
+        if ($this->group) {
+            $moduleContent = '';
+            if ($this->layoutMode === self::LAYOUT_TWO_COLUMN && !$this->navigationId) {
+                return $this->showDashboardPage();
+            }
 
-        switch ($this->action) {
-            case self::ACTION_LIST_OBJECTS:
-                $moduleContent = $this->showObjectsListPage();
-                break;
-            case self::ACTION_EDIT_OBJECT:
-                $moduleContent = $this->showEditObjectFormPage();
-                break;
-            case self::ACTION_CREATE_OBJECT:
-                $moduleContent = $this->showCreateObjectFormPage();
-                break;
+            switch ($this->action) {
+                case self::ACTION_LIST_OBJECTS:
+                    $moduleContent = $this->showObjectsListPage();
+                    break;
+                case self::ACTION_EDIT_OBJECT:
+                    $moduleContent = $this->showEditObjectFormPage();
+                    break;
+                case self::ACTION_CREATE_OBJECT:
+                    $moduleContent = $this->showCreateObjectFormPage();
+                    break;
+            }
+        } else {
+            $moduleContent = $this->showIndex();
         }
 
         return $moduleContent;
@@ -185,6 +191,18 @@ class CmsController extends BaseController
     protected function showDashboardPage()
     {
         return $this->renderPage('dashboardPage', []);
+    }
+
+    /**
+     * @return mixed
+     * @throws \Exception
+     */
+    protected function showIndex()
+    {
+        return $this->renderPage(
+            'indexPage',
+            ['pageTitle' => 'Welcome', 'structure' => $this->config->get('structure')]
+        );
     }
 
     /**

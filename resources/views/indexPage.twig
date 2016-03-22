@@ -1,0 +1,19 @@
+{% extends "base.twig" %}
+
+{% block moduleContent %}
+    <div class="index-page">
+        {% for sectionName, sectionInfo in cmsStructure %}
+                {% if sectionInfo.sections %}
+                        {% for subSectionName, subSectionInfo in sectionInfo.sections %}
+                            <div class="tile">
+                                {% if sectionInfo.icon %}<i class="fa fa-fw fa-{{ sectionInfo.icon }}"></i>{% endif %}
+                                <span class="top-level-name">{{ sectionInfo.title }}</span>
+                                <a href="/cms/{{ sectionName }}/{{ subSectionName }}/">
+                                    <span>{{ subSectionInfo.title }}</span>
+                                </a>
+                            </div>
+                        {% endfor %}
+                {% endif %}
+        {% endfor %}
+    </div>
+{% endblock moduleContent %}
