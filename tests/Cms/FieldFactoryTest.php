@@ -12,7 +12,7 @@ use Facepalm\Cms\Fields\Types\IntegerField;
 use Facepalm\Cms\Fields\Types\PasswordField;
 use Facepalm\Cms\Fields\Types\RelationField;
 use Facepalm\Cms\Fields\Types\SelectField;
-use Facepalm\Cms\Fields\Types\StringField;
+use Facepalm\Cms\Fields\Types\AclField;
 use Facepalm\Cms\Fields\Types\TextField;
 use Facepalm\Cms\Fields\Types\UnknownField;
 
@@ -44,7 +44,7 @@ class FieldFactoryTest extends TestCase
     {
         $factory = new FieldFactory();
         $field = $factory->get('string');
-        $this->assertTrue($field instanceof StringField);
+        $this->assertTrue($field instanceof AclField);
     }
 
     /**

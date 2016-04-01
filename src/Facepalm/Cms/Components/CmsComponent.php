@@ -15,15 +15,20 @@ class CmsComponent
 
     /** @var FieldListProcessor */
     protected $fieldsProcessor = null;
+    protected $cmsConfig = null;
 
 
     /**
      * CmsComponent constructor.
      * @param Config $config
      */
-    public function __construct($config = null)
+    public function __construct($config = null, $cmsConfig = null)
     {
         $this->fieldsProcessor = new FieldListProcessor();
+        if ($cmsConfig) {
+            $this->cmsConfig = $cmsConfig;
+            $this->fieldsProcessor->setCmsConfig($this->cmsConfig);
+        }
         if ($config) {
             $this->fieldsProcessor->setDictionaries($config->get('dictionaries', []));
             $this->configure($config);

@@ -1,0 +1,24 @@
+<ul class="acl">
+    <li>
+        <label><input type="checkbox" value="1" name="ACL[/]" {% if attribute(acl, '/') %}checked{% endif %}> CMS
+        </label>
+        <ul>
+            {% for name,section in structure %}
+                <li>
+                    <label><input type="checkbox" value="1" name="ACL[{{ name }}]" {% if attribute(acl, name) %}checked{% endif %}> {{ section.title }}
+                    </label>
+                    {% if section.sections %}
+                        <ul>
+                            {% for nameSub,sectionSub in section.sections %}
+                                <li>
+                                    <label><input type="checkbox" value="1" name="ACL[{{ name }}/{{ nameSub }}]" {% if attribute(acl, name~'/'~nameSub) %}checked{% endif %}> {{ sectionSub.title }}
+                                    </label>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </li>
+</ul>

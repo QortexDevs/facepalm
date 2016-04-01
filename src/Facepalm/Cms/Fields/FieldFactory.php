@@ -15,18 +15,17 @@ use Illuminate\Support\Str;
 class FieldFactory
 {
     /**
-     * todo: подумать, как использовать ДИ-контейнер, чтобы не напрямую создавать, а через сервисы, чтоб можно было подменить
      * @param $type
      * @param array $params
      * @return AbstractField|null
      */
     public function get($type, $params = [])
     {
-        $className = 'Facepalm\Cms\Fields\Types\\' . $this->canonize($type) . 'Field';
-        if (class_exists($className)) {
-            return new $className($params);
+        try {
+            return app()->make($this->canonize($type));
+        } catch (\Exception $e) {
+            return app()->make($this->canonize('unknown'));
         }
-        return new UnknownField();
     }
 
     /**
@@ -43,7 +42,13 @@ class FieldFactory
         if ($type == 'dictionary') {
             $type = 'select';
         }
-        return Str::ucfirst($type);
+
+        if (Str::contains($type, '.')) {
+            return $type;
+        } else {
+            return 'facepalm.cms.field.' . Str::lower($type);
+        }
+
     }
 
 

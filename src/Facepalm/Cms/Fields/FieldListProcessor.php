@@ -18,6 +18,7 @@ class FieldListProcessor
 
     protected $relatedModels = [];
     protected $dictionaries = [];
+    protected $cmsConfig = null;
 
     /**
      * @param $fields
@@ -68,6 +69,10 @@ class FieldListProcessor
                     ->setName($name)
                     ->setTitle($title)
                     ->setParameters($parameters);
+
+                if ($this->cmsConfig) {
+                    $this->fields[$name]->setParameter('config', $this->cmsConfig);
+                }
 
                 //todo: перенести в сам класс типа поля
                 if ($this->fields[$name] instanceof SelectField) {
@@ -161,5 +166,10 @@ class FieldListProcessor
     {
         $this->dictionaries = $dictionaries;
         return $this;
+    }
+
+    public function setCmsConfig($cmsConfig)
+    {
+        $this->cmsConfig = $cmsConfig;
     }
 }

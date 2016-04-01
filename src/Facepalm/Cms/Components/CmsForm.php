@@ -39,6 +39,7 @@ class CmsForm extends CmsComponent
     /**
      * @param Repository $config
      * @return $this
+     * @throws \Exception
      */
     public function configure($config)
     {
@@ -47,6 +48,7 @@ class CmsForm extends CmsComponent
         $this->setFields($config->get('form.fields'), $config->get('titles'))
             ->setBaseUrl($config->get('baseUrl'))
             ->setMainModel($config->get('model'));
+
         return $this;
     }
 

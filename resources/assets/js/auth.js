@@ -8,7 +8,7 @@ Auth.prototype = {
         $('.login-form form').on('submit', function () {
             $.post($(this).attr('action'), $(this).serialize(), 'json').done(function (response) {
                 if (response.user) {
-                    document.location.href = '/cms/settings/';
+                    document.location.href = '/cms/';
                 } else {
                     _this.shake();
                     if (response.errors) {

@@ -235,7 +235,7 @@ class CmsController extends BaseController
      */
     protected function showEditObjectFormPage()
     {
-        $form = (new CmsForm($this->config->part('module')))->setEditedObject($this->objectId);
+        $form = (new CmsForm($this->config->part('module'), $this->config))->setEditedObject($this->objectId);
 
         if ($this->navigationId && $this->config->get('module.navigation.model') != $this->config->get('module.model')) {
             //todo: может быть установлен извне
