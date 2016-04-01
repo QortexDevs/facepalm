@@ -18,11 +18,12 @@ class AclField extends AbstractField
 
     public function renderFormField($object, $parameters = [], $template = '')
     {
-//        $this->templateVars['acl'] = $object->acl ? json_decode($object->acl) : [];
-
+        $this->makeNames($object);
 
         return Twig::render($this->templateName, [
+                'inputName' => $this->fieldNameBase . '[' . $this->name . ']',
                 'structure' => $this->config->get('structure'),
+                'acl' => $object->acl ? json_decode($object->acl) : []
             ] + $parameters);
     }
 

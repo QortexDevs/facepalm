@@ -25,6 +25,8 @@ abstract class AbstractField implements \ArrayAccess
     protected $templateName;
     protected $skipped = false;
     protected $forceValue;
+    protected $amfNameBase;
+    protected $fieldNameBase;
 
     /**
      * @return boolean
@@ -173,6 +175,21 @@ abstract class AbstractField implements \ArrayAccess
 
     }
 
+    
+    /**
+     * @param $object
+     */
+    protected function makeNames($object)
+    {
+        $this->amfNameBase = $object
+            ? '[' . class_basename($this->modelName) . '][' . $object->id . ']'
+            : '[' . class_basename($this->modelName) . '][%CREATE_' . $this->randomId . '%]';
+
+        $this->fieldNameBase = $object
+            ? 'save' . $this->amfNameBase
+            : 'create' . $this->amfNameBase;
+    }
+
     /**
      * @param Model $object
      * @param array $parameters
@@ -183,15 +200,7 @@ abstract class AbstractField implements \ArrayAccess
     {
         $template = $template ?: $this->templateName;
 
-
-        $amfNameBase = $object
-            ? '[' . class_basename($this->modelName) . '][' . $object->id . ']'
-            : '[' . class_basename($this->modelName) . '][%CREATE_' . $this->randomId . '%]';
-
-        $fieldNameBase = $object
-            ? 'save' . $amfNameBase
-            : 'create' . $amfNameBase;
-
+        $this->makeNames($object);
 
         if ($template) {
             $languages = Language::where('status', 1)->orderby('is_default', 'desc')->get()->pluck('code', 'code');
@@ -200,9 +209,9 @@ abstract class AbstractField implements \ArrayAccess
             return Twig::render($template, [
                     'object' => $object,
                     'field' => $this->name,
-                    'uploadName' => 'upload' . $amfNameBase,
-                    'fieldNameBase' => $fieldNameBase,
-                    'inputName' => $fieldNameBase . '[' . $this->name . ']',
+                    'uploadName' => 'upload' . $this->amfNameBase,
+                    'fieldNameBase' => $this->fieldNameBase,
+                    'inputName' => $this->fieldNameBase . '[' . $this->name . ']',
                     'parameters' => $this->parameters,
                     'data' => $this->data,
                     'languages' => $languages,

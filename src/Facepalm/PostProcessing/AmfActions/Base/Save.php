@@ -37,7 +37,9 @@ class Save extends AbstractAction
                 } elseif ($object->isDatetimeField($fieldName)) {
                     $object->$fieldName = (new \DateTime($value))->format('Y-m-d H:i:s');
                 } elseif (is_array($value)) {
-                    continue;
+                    d($value);
+                    $object->$fieldName = json_encode($value);
+//                    continue;
                 } else {
                     $object->$fieldName = $value;
                 }
