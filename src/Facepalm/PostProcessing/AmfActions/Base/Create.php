@@ -3,7 +3,7 @@
  * Action-Model-Field (AMF) processor
  */
 
-namespace Facepalm\PostProcessing\AmfActions;
+namespace Facepalm\PostProcessing\AmfActions\Base;
 
 use Facepalm\Cms\CmsCommon;
 use Facepalm\Models\ModelFactory;

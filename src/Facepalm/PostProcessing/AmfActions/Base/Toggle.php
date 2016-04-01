@@ -3,7 +3,7 @@
  * Action-Model-Field (AMF) processor
  */
 
-namespace Facepalm\PostProcessing\AmfActions;
+namespace Facepalm\PostProcessing\AmfActions\Base;
 
 use Facepalm\Cms\CmsCommon;
 use Facepalm\Models\ModelFactory;
@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class Delete extends AbstractAction
+class Toggle extends AbstractAction
 {
     /**
      * @param AbstractEntity $object
@@ -27,7 +27,11 @@ class Delete extends AbstractAction
      */
     public function process(AbstractEntity $object, $keyValue, $requestRawData)
     {
-        $object->delete();
+        foreach (array_keys($keyValue) as $fieldName) {
+            $object->$fieldName ^= 1;
+            $this->affectedFields[$fieldName] = $object->$fieldName;
+        }
+        $object->save();
     }
 
 }

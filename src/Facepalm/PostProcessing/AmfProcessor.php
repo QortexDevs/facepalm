@@ -31,10 +31,8 @@ class AmfProcessor
     public function process($amf)
     {
         foreach ($amf as $actionName => $input) {
-            $processMethod = 'processObject' . Str::studly($actionName);
-            //todo: вынести это в фабрику, и не привязываться жестко к неймспейсам
-            $processActionName = __NAMESPACE__ . '\AmfActions\\' . Str::studly($actionName);
-            if (class_exists($processActionName)) {
+            try {
+                $action = app()->make('facepalm.amf.action.' . Str::lower($actionName));
                 foreach ($input as $modelName => $data) {
                     $fullModelName = ModelFactory::getFullModelClassName($modelName);
                     if ($fullModelName) {
@@ -49,7 +47,6 @@ class AmfProcessor
                                 }
                                 if ($object) {
                                     /** @var AbstractAction $action */
-                                    $action = new $processActionName();
                                     $action->process($object, $keyValue, $amf);
 
 
@@ -85,6 +82,8 @@ class AmfProcessor
                         }
                     }
                 }
+            } catch (\Exception $e) {
+
             }
         }
     }

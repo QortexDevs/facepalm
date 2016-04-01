@@ -39,7 +39,14 @@ class CmsServiceProvider extends ServiceProvider
             $this->app->bind('facepalm.cms.field.' . $fieldType, $className);
         }
 
+        $this->app->bind('facepalm.amf.action.save', 'Facepalm\PostProcessing\AmfActions\Base\Save');
+        $this->app->bind('facepalm.amf.action.create', 'Facepalm\PostProcessing\AmfActions\Base\Create');
+        $this->app->bind('facepalm.amf.action.delete', 'Facepalm\PostProcessing\AmfActions\Base\Delete');
+        $this->app->bind('facepalm.amf.action.toggle', 'Facepalm\PostProcessing\AmfActions\Base\Toggle');
+        $this->app->bind('facepalm.amf.action.upload', 'Facepalm\PostProcessing\AmfActions\Base\Upload');
+
         $this->app->bind('facepalm.cms.fields.extended.acl', 'Facepalm\Cms\Fields\Extended\AclField');
+//        $this->app->bind('facepalm.amf.action.acl', 'Facepalm\PostProcessing\AmfActions\Extended\Acl');
 
     }
 }
