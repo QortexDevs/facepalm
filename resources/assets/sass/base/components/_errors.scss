@@ -1,0 +1,15 @@
+body {
+
+    &.login-page {
+        .container {
+            .fatal-error {
+                font-size: 50px;
+                color: white;
+                text-transform: uppercase;
+                opacity: 0.8;
+                font-weight: 100;
+            }
+        }
+    }
+
+}

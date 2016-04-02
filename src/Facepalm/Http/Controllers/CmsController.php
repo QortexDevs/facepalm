@@ -79,6 +79,13 @@ class CmsController extends BaseController
         }
 
         $this->config = (new Config())->load($group, $module);
+
+        $this->filterCmsStructureWithPermissions();
+
+        if (!$this->config->get('structure')) {
+            abort(403);
+        }
+
         if ($group) {
             if (!$module) {
                 return redirect('/cms/' . $group . '/' . array_keys($this->config->get('structure')[$group]['sections'])[0]);
@@ -114,6 +121,36 @@ class CmsController extends BaseController
         }
 
         return '';
+    }
+
+    /**
+     * @return bool
+     */
+    protected function filterCmsStructureWithPermissions()
+    {
+        if (Auth::user()->role->id === 1) {
+            return true;
+        }
+        $acl = Auth::user()->acl ? json_decode(Auth::user()->acl, true) : [];
+
+        $structure = $this->config->get('structure');
+        if (!$acl || !Arr::has($acl, '/')) {
+            $structure = [];
+        }
+        foreach ($structure as $sectionName => $data) {
+            if (!array_key_exists($sectionName, $acl)) {
+                unset($structure[$sectionName]);
+            } else {
+                if (array_key_exists('sections', $structure[$sectionName])) {
+                    foreach ($structure[$sectionName]['sections'] as $subSectionName => $dataNested) {
+                        if (!array_key_exists($sectionName . '/' . $subSectionName, $acl)) {
+                            unset($structure[$sectionName]['sections'][$subSectionName]);
+                        }
+                    }
+                }
+            }
+        }
+        $this->config->set('structure', $structure);
     }
 
 

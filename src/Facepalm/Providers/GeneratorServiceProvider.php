@@ -41,5 +41,10 @@ class GeneratorServiceProvider extends ServiceProvider
             return $app['Facepalm\Generators\Commands\SuperuserCommand'];
         });
         $this->commands('command.facepalm.superuser');
+
+        $this->app->singleton('command.facepalm.resetpassword', function ($app) {
+            return $app['Facepalm\Generators\Commands\ResetPasswordCommand'];
+        });
+        $this->commands('command.facepalm.resetpassword');
     }
 }
