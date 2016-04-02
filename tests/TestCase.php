@@ -1,8 +1,6 @@
 <?php
 namespace Facepalm\Tests;
 
-use Facepalm\Providers\CmsServiceProvider;
-
 class TestCase extends \Illuminate\Foundation\Testing\TestCase
 {
     /**
@@ -49,8 +47,7 @@ class TestCase extends \Illuminate\Foundation\Testing\TestCase
             \Facepalm\Tests\Bootstrap\Exceptions\Handler::class
         );
 
-        $cmsServiceProvider = new CmsServiceProvider($app);
-        $cmsServiceProvider->register();
+        $app->register(\Facepalm\Providers\CmsServiceProvider::class);
 
         $app->make(\Illuminate\Contracts\Console\Kernel::class)->bootstrap();
 
