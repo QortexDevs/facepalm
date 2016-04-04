@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Support\Facades\Hash;
 
 /**
  * @property array|string password
@@ -53,5 +54,15 @@ class User extends BaseEntity implements AuthenticatableContract,
     public function role()
     {
         return $this->belongsTo('Facepalm\Models\Role');
+    }
+
+    /**
+     * @param $password
+     */
+    protected function setPasswordAttribute($password)
+    {
+        if ($password !== '') {
+            $this->attributes['password'] = Hash::make($password);
+        }
     }
 }
