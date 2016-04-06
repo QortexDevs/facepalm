@@ -41,6 +41,12 @@
                     }
                 }
 
+                .field-comment {
+                    margin: 4px 0 10px 0;
+                    color: $captionsColor;
+                    font-size: 13px;
+                }
+
                 input {
                     &.text {
                         width: 350px;
