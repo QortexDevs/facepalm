@@ -70,6 +70,12 @@ class CmsController extends BaseController
      */
     public function handle(Request $request, $group = null, $module = null, $params = null)
     {
+        $locale = config('app.cmsLocale') ?: config('app.locale');
+        if ($locale) {
+            app()->setLocale($locale);
+        }
+
+
         $this->group = $group;
         $this->module = $module;
         $this->request = $request;
