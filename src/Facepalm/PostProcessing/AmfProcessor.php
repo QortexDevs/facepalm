@@ -33,6 +33,10 @@ class AmfProcessor
         foreach ($amf as $actionName => $input) {
             try {
                 $action = app()->make('facepalm.amf.action.' . Str::lower($actionName));
+            } catch (\Exception $e) {
+                //todo: unknown action
+            }
+            if (isset($action)) {
                 foreach ($input as $modelName => $data) {
                     $fullModelName = ModelFactory::getFullModelClassName($modelName);
                     if ($fullModelName) {
@@ -82,8 +86,6 @@ class AmfProcessor
                         }
                     }
                 }
-            } catch (\Exception $e) {
-
             }
         }
     }

@@ -27,6 +27,7 @@ class FacepalmServiceProvider extends AggregateServiceProvider
         'Facepalm\Providers\GeneratorServiceProvider',
         'Facepalm\Providers\RouteServiceProvider',
         'Facepalm\Providers\CmsServiceProvider',
+        'Facepalm\Providers\AppServiceProvider',
     ];
 
 }

@@ -198,6 +198,7 @@ trait TranslatableTrait
      * @param $group
      * @param TextItem|array $newValue
      * @param null $languageCode
+     * @throws \Exception
      */
     public function setTextItem($group, $newValue, $languageCode = null)
     {
@@ -228,6 +229,10 @@ trait TranslatableTrait
                 if (Arr::has($newValue, 'textBody')) {
                     $textItem->textBody = $newValue['textBody'];
                 }
+            }
+
+            if (!$this->id) {
+                throw new \Exception('Addind textitem to unexisting object');
             }
 
             $this->textItems()->save($textItem);

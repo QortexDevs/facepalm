@@ -37,13 +37,16 @@ class Save extends AbstractAction
                 } elseif ($object->isDatetimeField($fieldName)) {
                     $object->$fieldName = (new \DateTime($value))->format('Y-m-d H:i:s');
                 } elseif (is_array($value)) {
-                    //todo: think
-                    $object->$fieldName = json_encode($value);
+                    if (!$this->isMultiLangValue($value)) {
+                        //todo: think некрасиво это все
+                        $object->$fieldName = json_encode($value, JSON_UNESCAPED_UNICODE);
+                    }
                 } else {
                     $object->$fieldName = $value;
                 }
             }
         }
+
 
         if (!$object->id) {
             $className = class_basename($object);
@@ -55,9 +58,10 @@ class Save extends AbstractAction
             $object->save();
         }
 
-
-        $this->saveTranslatableItems($object, $keyValue);
-        $this->syncManyToManyRelations($object, $keyValue);
+        if ($object->id) {
+            $this->saveTranslatableItems($object, $keyValue);
+            $this->syncManyToManyRelations($object, $keyValue);
+        }
     }
 
 
@@ -103,15 +107,22 @@ class Save extends AbstractAction
     {
         foreach ($keyValue as $fieldName => $value) {
             if (!$object->isManyToMany($fieldName)) {
-                if (is_array($value)) {
-                    if ((Arr::has(reset($value), 'textBody') || Arr::has(reset($value), 'stringValue'))) {
-                        //translatable textitem
-                        foreach ($value as $languageCode => $data) {
-                            $object->setTextItem($fieldName, $data, $languageCode);
-                        }
+                if ($this->isMultiLangValue($value)) {
+                    //translatable textitem
+                    foreach ($value as $languageCode => $data) {
+                        $object->setTextItem($fieldName, $data, $languageCode);
                     }
                 }
             }
         }
+    }
+
+    /**
+     * @param $value
+     * @return bool
+     */
+    private function isMultiLangValue($value)
+    {
+        return is_array(reset($value)) && (Arr::has(reset($value), 'textBody') || Arr::has(reset($value), 'stringValue'));
     }
 }
