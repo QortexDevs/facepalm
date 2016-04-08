@@ -1,7 +1,7 @@
 <div class="dropzone-container">
     <div class="files-list">
         {% for file in data.files %}
-            {% include "components/form/filePreview.twig" %}
+            {% include "facepalm::components/form/filePreview.twig" %}
         {% endfor %}
     </div>
     <div class="dropzone" data-input-name="{{ uploadName }}[{{ parameters.type }}][{{ parameters.name }}]"

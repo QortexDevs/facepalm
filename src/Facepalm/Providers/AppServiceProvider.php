@@ -16,13 +16,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //todo: разобраться! при загрузке facepalm:template.twig
-        $this->loadViewsFrom(__DIR__ . '../../../resources/', 'facepalm');
-
-        DB::listen(function ($sql, $bindings = null, $time = null) {
+        $this->loadViewsFrom(__DIR__ . '/../../../resources/views/', 'facepalm');
+//        DB::listen(function ($sql, $bindings = null, $time = null) {
 //            d($sql, $time / 1000);
 //            echo($sql->sql . " - " . $time / 1000 . "<br />\n");
-        });
+//        });
     }
 
     /**

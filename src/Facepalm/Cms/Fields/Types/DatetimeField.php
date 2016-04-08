@@ -17,7 +17,7 @@ class DatetimeField extends AbstractField
 {
     //todo: в параметры его втащить?
     protected $listFormat = 'd.m.Y H:i';
-    protected $templateName = 'components/form/elements/datetime.twig';
+    protected $templateName = 'facepalm::components/form/elements/datetime.twig';
 
     /**
      * @param Model $object

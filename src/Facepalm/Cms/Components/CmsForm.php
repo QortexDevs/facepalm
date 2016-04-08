@@ -114,7 +114,7 @@ class CmsForm extends CmsComponent
      * @return mixed
      * @throws \Exception
      */
-    public function render($render, $templateName = 'components/form/container.twig')
+    public function render($render, $templateName = 'facepalm::components/form/container.twig')
     {
         return $render->render($templateName, [
             "form" => $this->build(),

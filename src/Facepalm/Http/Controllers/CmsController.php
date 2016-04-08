@@ -233,7 +233,7 @@ class CmsController extends BaseController
      */
     protected function showDashboardPage()
     {
-        return $this->renderPage('dashboardPage', []);
+        return $this->renderPage('facepalm::dashboardPage', []);
     }
 
     /**
@@ -243,7 +243,7 @@ class CmsController extends BaseController
     protected function showIndex()
     {
         return $this->renderPage(
-            'indexPage',
+            'facepalm::indexPage',
             ['pageTitle' => 'Welcome', 'structure' => $this->config->get('structure')]
         );
     }
@@ -269,7 +269,7 @@ class CmsController extends BaseController
         ];
 
 
-        return $this->renderPage('listPage', $params);
+        return $this->renderPage('facepalm::listPage', $params);
     }
 
     /**
@@ -293,7 +293,7 @@ class CmsController extends BaseController
         ];
 
 
-        return $this->renderPage('formPage', $params);
+        return $this->renderPage('facepalm::formPage', $params);
     }
 
     /**
@@ -315,7 +315,7 @@ class CmsController extends BaseController
             'pageTitle' => $this->config->get('strings.editTitle') ?: 'Редактирование объекта'
         ];
 
-        return $this->renderPage('formPage', $params);
+        return $this->renderPage('facepalm::formPage', $params);
     }
 
     /**
@@ -373,7 +373,7 @@ class CmsController extends BaseController
         if ($this->layoutMode == self::LAYOUT_TWO_COLUMN) {
             $params['navigation'] = (new Tree())
                 ->fromEloquentCollection(ModelFactory::builderFor($this->config->get('module.navigation.model'))->orderBy('show_order')->get())
-                ->render(0, app()->make('twig'), 'leftNavigationItem', [
+                ->render(0, app()->make('twig'), 'facepalm::leftNavigationItem', [
                     'moduleConfig' => $this->config->get('module'),
                     'navigationId' => $this->navigationId
                 ], true);

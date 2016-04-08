@@ -31,7 +31,7 @@ class AuthController extends BaseController
      */
     public function get(Request $request)
     {
-        return Twig::render("loginPage.twig", []);
+        return Twig::render("facepalm::loginPage", []);
     }
 
     /**

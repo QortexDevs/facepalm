@@ -17,7 +17,7 @@ use Illuminate\Support\Arr;
 
 class ImageField extends UploadableField
 {
-    protected $templateName = 'components/form/elements/image.twig';
+    protected $templateName = 'facepalm::components/form/elements/image.twig';
 
     /**
      * @param null|AbstractEntity $object

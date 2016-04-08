@@ -198,14 +198,14 @@ class CmsList extends CmsComponent
         $treeContent = $emptyTreeItem = '';
         $listData = $this->build();
         if (!$templateName) {
-            $templateName = $listData['settings']['treeMode'] ? 'components/list/containerTree.twig' : 'components/list/container.twig';
+            $templateName = $listData['settings']['treeMode'] ? 'facepalm::components/list/containerTree.twig' : 'facepalm::components/list/container.twig';
         }
         if ($listData['settings']['treeMode']) {
-            $treeContent = $listData['tree']->render(0, app()->make('twig'), 'components/list/treeItem', [
+            $treeContent = $listData['tree']->render(0, app()->make('twig'), 'facepalm::components/list/treeItem', [
                 "list" => $listData,
                 "moduleConfig" => $this->config,
             ]);
-            $emptyTreeItem = app()->make('twig')->render('components/list/treeItem', [
+            $emptyTreeItem = app()->make('twig')->render('facepalm::components/list/treeItem', [
                 "list" => $listData,
                 "moduleConfig" => $this->config,
             ]);

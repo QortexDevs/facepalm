@@ -35,8 +35,9 @@ class AmfProcessor
                 $action = app()->make('facepalm.amf.action.' . Str::lower($actionName));
             } catch (\Exception $e) {
                 //todo: unknown action
+                $action = null;
             }
-            if (isset($action)) {
+            if (isset($action) && $action) {
                 foreach ($input as $modelName => $data) {
                     $fullModelName = ModelFactory::getFullModelClassName($modelName);
                     if ($fullModelName) {

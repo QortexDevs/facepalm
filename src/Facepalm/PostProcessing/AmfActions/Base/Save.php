@@ -123,6 +123,6 @@ class Save extends AbstractAction
      */
     private function isMultiLangValue($value)
     {
-        return is_array(reset($value)) && (Arr::has(reset($value), 'textBody') || Arr::has(reset($value), 'stringValue'));
+        return is_array($value) && is_array(reset($value)) && (Arr::has(reset($value), 'textBody') || Arr::has(reset($value), 'stringValue'));
     }
 }

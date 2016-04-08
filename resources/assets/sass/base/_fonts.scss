@@ -21,6 +21,26 @@
     font-weight: 300;
     font-style: normal;
 }
+@font-face {
+    font-family: 'Lato';
+    src: url('../fonts/LatoRegular.eot');
+    src: url('../fonts/LatoRegular.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/LatoRegular.woff') format('woff'),
+    url('../fonts/LatoRegular.ttf') format('truetype');
+    //url('../fonts/fontawesome-webfont.svg?v=4.3.0#fontawesomeregular') format('svg');
+    font-weight: 400;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Lato';
+    src: url('../fonts/LatoBold.eot');
+    src: url('../fonts/LatoBold.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/LatoBold.woff') format('woff'),
+    url('../fonts/LatoBold.ttf') format('truetype');
+    //url('../fonts/fontawesome-webfont.svg?v=4.3.0#fontawesomeBold') format('svg');
+    font-weight: 700;
+    font-style: normal;
+}
 
 @font-face {
     font-family: 'Cuprum';

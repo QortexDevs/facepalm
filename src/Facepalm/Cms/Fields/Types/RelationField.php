@@ -25,7 +25,7 @@ use Illuminate\Support\Str;
  */
 class RelationField extends AbstractField
 {
-    protected $templateName = 'components/form/elements/relation.twig';
+    protected $templateName = 'facepalm::components/form/elements/relation.twig';
 
     /**
      * @param \Illuminate\Database\Eloquent\Model $object

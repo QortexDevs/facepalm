@@ -9,6 +9,9 @@
     <link rel="stylesheet"
           href="/assets/build/cms/css/vendor.css?{{ assetsBusters['assets/build/cms/css/vendor.css'] }}"/>
     <link rel="stylesheet" href="/assets/build/cms/css/main.css?{{ assetsBusters['assets/build/cms/css/main.css'] }}"/>
+    {# todo: проверка на наличие! - вынести в контроллер, ессно #}
+    {# todo: общий css, js и отдельные файлики для модулей, если надо  #}
+    <link rel="stylesheet" href="/assets/build/cmsCustom/css/main.css?{{ assetsBusters['assets/build/cmsCustom/css/main.css'] }}"/>
     {% block cssFile %}{% endblock %}
 
     <script></script>
@@ -16,7 +19,7 @@
 </head>
 {% block bodyOuter %}
     <body class="cms-page{% if navigation %} two-column{% endif %}" data-base-url="{{ moduleConfig.baseUrl }}">
-    {% include 'leftMenu.twig' %}
+    {% include 'facepalm::leftMenu.twig' %}
     <main>
         <form class="main-cms-form" action="./" enctype="multipart/form-data" method="post">
             {{ csrf_field() }}
@@ -57,9 +60,9 @@
 <script src="/assets/build/cms/js/all.js?{{ assetsBusters['assets/build/cms/js/all.js'] }}"></script>
 {% block jsFile %}{% endblock %}
 <script type="text/template" id="image-preview-template">
-    {{ source("components/form/imagePreview.twig") }}
+    {{ source("facepalm::components/form/imagePreview.twig") }}
 </script>
 <script type="text/template" id="file-preview-template">
-    {{ source("components/form/filePreview.twig") }}
+    {{ source("facepalm::components/form/filePreview.twig") }}
 </script>
 </html>

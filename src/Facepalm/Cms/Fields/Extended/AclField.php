@@ -14,7 +14,7 @@ use TwigBridge\Facade\Twig;
 
 class AclField extends AbstractField
 {
-    protected $templateName = 'components/form/extended/acl.twig';
+    protected $templateName = 'facepalm::components/form/extended/acl.twig';
 
     public function renderFormField($object, $parameters = [], $template = '')
     {
