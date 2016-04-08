@@ -361,13 +361,27 @@ class CmsController extends BaseController
     protected function renderPage($template, $params)
     {
 
+        $assetsBusters = [];
         //todo: вынести в какую-то общую тулзу
         $bustersPath = app()->publicPath() . DIRECTORY_SEPARATOR . config('app.facepalmAssetsPath') . 'busters.json';
         if (is_file($bustersPath)) {
             $assetsBusters = array_flip(
                 array_map(
                     function ($item) {
-                        return mb_strpos($item, 'build/') !== false ? mb_substr($item, mb_strlen('build/')) : $item;
+                        return 'facepalm::' .
+                        mb_strpos($item, 'build/') !== false ? mb_substr($item, mb_strlen('build/')) : $item;
+                    },
+                    array_flip(@json_decode(file_get_contents($bustersPath), true) ?: [])
+                )
+            );
+        }
+
+        $bustersPath = app()->publicPath() . DIRECTORY_SEPARATOR . 'assets/build/cms/busters.json';
+        if (is_file($bustersPath)) {
+            $assetsBusters += array_flip(
+                array_map(
+                    function ($item) {
+                        return mb_strpos($item, 'public/') !== false ? mb_substr($item, mb_strlen('public/')) : $item;
                     },
                     array_flip(@json_decode(file_get_contents($bustersPath), true) ?: [])
                 )

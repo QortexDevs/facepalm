@@ -4,14 +4,12 @@
     <meta charset="utf-8"/>
     <title>Facepalm CMS</title>
 
-    <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,100,700&subset=latin,cyrillic'
-          rel='stylesheet' type='text/css'>
     <link rel="stylesheet"
-          href="/assets/build/cms/css/vendor.css?{{ assetsBusters['css/vendor.css'] }}"/>
-    <link rel="stylesheet" href="/assets/build/cms/css/main.css?{{ assetsBusters['css/main.css'] }}"/>
+          href="/assets/facepalm/css/vendor.css?{{ assetsBusters['facepalm::css/vendor.css'] }}"/>
+    <link rel="stylesheet" href="/assets/facepalm/css/main.css?{{ assetsBusters['facepalm::css/main.css'] }}"/>
     {# todo: проверка на наличие! - вынести в контроллер, ессно #}
     {# todo: общий css, js и отдельные файлики для модулей, если надо  #}
-    <link rel="stylesheet" href="/assets/build/cmsCustom/css/main.css?{{ assetsBusters['assets/build/cmsCustom/css/main.css'] }}"/>
+    <link rel="stylesheet" href="/assets/build/cms/css/main.css?{{ assetsBusters['assets/build/cms/css/main.css'] }}"/>
     {% block cssFile %}{% endblock %}
 
     <script></script>
@@ -57,7 +55,7 @@
     </body>
 {% endblock bodyOuter %}
 <div id="spinner"></div>
-<script src="/assets/build/cms/js/all.js?{{ assetsBusters['js/all.js'] }}"></script>
+<script src="/assets/facepalm/js/all.js?{{ assetsBusters['facepalm::js/all.js'] }}"></script>
 {% block jsFile %}{% endblock %}
 <script type="text/template" id="image-preview-template">
     {{ source("facepalm::components/form/imagePreview.twig") }}
