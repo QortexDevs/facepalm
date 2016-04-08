@@ -369,7 +369,7 @@ class CmsController extends BaseController
                 array_map(
                     function ($item) {
                         return 'facepalm::' .
-                        mb_strpos($item, 'build/') !== false ? mb_substr($item, mb_strlen('build/')) : $item;
+                        (mb_strpos($item, 'build/') !== false ? mb_substr($item, mb_strlen('build/')) : $item);
                     },
                     array_flip(@json_decode(file_get_contents($bustersPath), true) ?: [])
                 )
