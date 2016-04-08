@@ -34,13 +34,17 @@ var gulp = require('gulp'),
 
 
 var RESULT_JS_NAME = 'all.js';
-var BUILD_PATH = 'public/assets/build/';
+var BUILD_PATH = 'build/';
 var SRC_PATH = 'resources/';
 
+var busterOptions = {
+    fileName: 'build/busters.json',
+    length: 5
+};
 
 // modules to build
 var DEFAULT_MODULES = [
-    'cms', 'site'
+    ''
 ];
 var modulesToBuild = DEFAULT_MODULES;
 if (argv.m) {
@@ -117,7 +121,7 @@ modulesToBuild.map(function (module) {
             //.pipe(uglify())
             .pipe(sourcemaps.write())
             .pipe(gulp.dest(getBuildPath(module, 'js')))
-            .pipe(bust({length: 5}))
+            .pipe(bust(busterOptions))
             .pipe(gulp.dest('.'))
     });
 });
@@ -133,7 +137,7 @@ modulesToBuild.map(function (module) {
             //.pipe(cssmin())
             .pipe(sourcemaps.write())
             .pipe(gulp.dest(getBuildPath(module, 'styles')))
-            .pipe(bust({length: 5}))
+            .pipe(bust(busterOptions))
             .pipe(gulp.dest('.'))
     });
 });
@@ -145,7 +149,7 @@ modulesToBuild.map(function (module) {
             .pipe(rigger())
             //.pipe(cssmin())
             .pipe(gulp.dest(getBuildPath(module, 'styles')))
-            .pipe(bust({length: 5}))
+            .pipe(bust(busterOptions))
             .pipe(gulp.dest('.'))
     });
 });

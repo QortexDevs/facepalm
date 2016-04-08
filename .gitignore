@@ -2,8 +2,6 @@
 /node_modules
 /bower_components
 
-/public/assets/build
-/public/media/
 
 Homestead.yaml
 Homestead.json
@@ -19,7 +17,3 @@ Thumbs.db
 *.pyc
 !.gitattributes
 !.gitignore
-
-#if building on server, uncomment this lines and remove files from git
-busters.json
-public/assets/build

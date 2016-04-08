@@ -360,15 +360,19 @@ class CmsController extends BaseController
      */
     protected function renderPage($template, $params)
     {
+
         //todo: вынести в какую-то общую тулзу
-        $assetsBusters = array_flip(
-            array_map(
-                function ($item) {
-                    return mb_strpos($item, 'public/') !== false ? mb_substr($item, mb_strlen('public/')) : $item;
-                },
-                array_flip(@json_decode(@file_get_contents(app()->basePath() . '/busters.json'), true) ?: [])
-            )
-        );
+        $bustersPath = app()->publicPath() . DIRECTORY_SEPARATOR . config('app.facepalmAssetsPath') . 'busters.json';
+        if (is_file($bustersPath)) {
+            $assetsBusters = array_flip(
+                array_map(
+                    function ($item) {
+                        return mb_strpos($item, 'build/') !== false ? mb_substr($item, mb_strlen('build/')) : $item;
+                    },
+                    array_flip(@json_decode(file_get_contents($bustersPath), true) ?: [])
+                )
+            );
+        }
 
         if ($this->layoutMode == self::LAYOUT_TWO_COLUMN) {
             $params['navigation'] = (new Tree())
@@ -381,6 +385,7 @@ class CmsController extends BaseController
 //        $params['navigation'] = 'fsdfsdf';
         $userpic = Auth::user()->images()->ofGroup('avatar')->first();
         $params = array_merge($params, [
+            'assetsPath' => config('app.facepalmAssetsPath'),
             'assetsBusters' => $assetsBusters,
             'currentPathSections' => [$this->group, $this->module],
             'cmsStructure' => $this->config->get('structure'),
