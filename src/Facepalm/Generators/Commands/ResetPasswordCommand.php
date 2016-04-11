@@ -36,7 +36,7 @@ class ResetPasswordCommand extends Command
     {
         $this->comment(PHP_EOL . 'Resetting password for user ' . $this->argument('user') . PHP_EOL);
         $user = User::where('email', $this->argument('user'))->first();
-        $user->password = Hash::make($this->argument('password'));
+        $user->password = $this->argument('password');
         $user->status = 1;
         $user->save();
     }

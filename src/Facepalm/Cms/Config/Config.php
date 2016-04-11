@@ -44,7 +44,6 @@ class Config
         $this->configLoader = $configLoader;
     }
 
-
     public function load($group = null, $module = null)
     {
         $this->configRepository = new Repository($this->loadConfig(self::DEFAULT_CONFIG_NAME));
@@ -68,6 +67,14 @@ class Config
     }
 
     /**
+     * @return array
+     */
+    public function all()
+    {
+        return $this->configRepository->all();
+    }
+
+    /**
      * @param $key
      * @param $value
      */
@@ -88,7 +95,7 @@ class Config
     /**
      * @return string
      */
-    protected function getConfigPath()
+    public function getConfigPath()
     {
         return app()->configPath() . DIRECTORY_SEPARATOR . self::CONFIG_PATH;
     }

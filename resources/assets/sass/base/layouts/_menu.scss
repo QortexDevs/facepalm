@@ -82,12 +82,14 @@
                         a {
                             font-size: 14px;
                             line-height: 16px;
+                            color: #aeaeae;
+                            padding: 15px 0;
 
                             &.first-level-item {
                                 padding-left: 0px;
                                 i {
-                                    margin-left: 15px;
-                                    font-size: 20px
+                                    margin-left: 9px;
+                                    font-size: 24px;
                                 }
 
                                 span {
@@ -97,6 +99,7 @@
                         }
                         &.active {
                             a {
+                                color: #fff;
                                 &.first-level-item {
                                     margin: 0 -10px;
                                     padding-left: 10px;

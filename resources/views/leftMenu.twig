@@ -13,15 +13,17 @@
                         </a>
                         {% if sectionName == currentPathSections[0] %}
                             {% if cmsStructure[currentPathSections[0]].sections %}
-                                <ul class="sub-menu clearfix">
-                                    {% for subSectionName, subSectionInfo in cmsStructure[currentPathSections[0]].sections %}
-                                        <li {% if currentPathSections[1] == subSectionName %}class="active"{% endif %} >
-                                            <a href="/cms/{{ currentPathSections[0] }}/{{ subSectionName }}/">
-                                                {{ subSectionInfo.title }}
-                                            </a>
-                                        </li>
-                                    {% endfor %}
-                                </ul>
+                                {% if not navigation or (navigation and cmsStructure[currentPathSections[0]].sections|length>1) %}
+                                    <ul class="sub-menu clearfix">
+                                        {% for subSectionName, subSectionInfo in cmsStructure[currentPathSections[0]].sections %}
+                                            <li {% if currentPathSections[1] == subSectionName %}class="active"{% endif %} >
+                                                <a href="/cms/{{ currentPathSections[0] }}/{{ subSectionName }}/">
+                                                    {{ subSectionInfo.title }}
+                                                </a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
                             {% endif %}
                         {% endif %}
                     </li>
