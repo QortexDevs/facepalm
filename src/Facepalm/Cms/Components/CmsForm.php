@@ -94,8 +94,7 @@ class CmsForm extends CmsComponent
                 'randomId' => $randomId,
                 'modelName' => $this->modelName
             ]);
-            $field->prepareData($this->editedObject);
-
+            $field->prepareData($this->editedObject, $this->fieldsProcessor);
         }
 
         $output = [

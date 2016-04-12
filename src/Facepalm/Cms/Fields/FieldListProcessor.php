@@ -60,6 +60,7 @@ class FieldListProcessor
                     $parameters['foreignDisplayName'] = explode('.', $name)[1];
                     $parameters['cardinality'] = Arr::get($parameters, 'cardinality', self::CARDINALITY_ONE);
                     $this->relatedModels[] = $parameters['foreignModel'];
+                    $type = Arr::get($parameters, 'type', $type);
                 } else {
                     $type = Arr::get($parameters, 'type', self::FIELD_TYPE_DEFAULT);
                 }

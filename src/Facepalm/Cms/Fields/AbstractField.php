@@ -79,6 +79,14 @@ abstract class AbstractField implements \ArrayAccess
     }
 
     /**
+     * @return mixed
+     */
+    public function getForceValue()
+    {
+        return $this->forceValue;
+    }
+
+    /**
      * @param $parameters
      * @return $this
      */
