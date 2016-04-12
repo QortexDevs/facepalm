@@ -45,7 +45,7 @@ abstract class AbstractEntity extends Model
     public function isBelongsToField($fieldName)
     {
         if (Str::endsWith($fieldName, '_id')) {
-            $relationMethod = Str::substr($fieldName, 0, -3);
+            $relationMethod = Str::camel(Str::substr($fieldName, 0, -3));
             if (method_exists($this, $relationMethod) && $this->$relationMethod() instanceof BelongsTo) {
 //                return $relationMethod;
                 return true;

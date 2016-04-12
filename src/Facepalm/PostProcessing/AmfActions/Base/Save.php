@@ -72,7 +72,7 @@ class Save extends AbstractAction
      */
     protected function processBelongsToField($object, $fieldName, $value)
     {
-        $relationMethod = Str::substr($fieldName, 0, -3);
+        $relationMethod = Str::camel(Str::substr($fieldName, 0, -3));
         if ($value) {
             $foreignObject = ModelFactory::find($relationMethod, $value);
             if ($foreignObject) {
