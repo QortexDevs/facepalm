@@ -71,7 +71,7 @@ class AddCmsModuleCommand extends Command
         if (count($path) == 2) {
             $configName = $config->getConfigPath() . 'modules' . DIRECTORY_SEPARATOR . $path[0] . DIRECTORY_SEPARATOR . $path[1] . '.json';
             if (!is_file($configName)) {
-                $jsonNew = json_decode('{ "model": "", "strings": { "accusative": "", "title": "", "editTitle": "" }, "titles": { }, "list": { "columns": { } }, "form": { "fields": { } } }');
+                $jsonNew = json_decode('{ "model": "", "strings": { "accusative": "", "title": "", "editTitle": "" }, "titles": { "name": "Название", "status": "Активность" }, "list": { "columns": { "name": { "translatable": true } } }, "form": { "fields": { "name": { "translatable": true }, "status": { "type": "boolean" } } } }');
                 file_put_contents(
                     $configName,
                     json_encode($jsonNew, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT)
