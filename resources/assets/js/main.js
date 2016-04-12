@@ -287,7 +287,6 @@ $(document).ready(function () {
 
         $('.cms-module-tree-content').each(function (i) {
             var treeName = 'tree_' + i;
-            console.log(treeName);
             $(this).find('ul').each(function () {
                 var sortable = Sortable.create($(this)[0], {
                     animation: 200,
@@ -304,6 +303,18 @@ $(document).ready(function () {
             });
         });
 
+        $('.cms-module-list-content[data-sortable="true"] tbody').each(function (i) {
+            var listName = 'list_' + i;
+            var sortable = Sortable.create($(this)[0], {
+                animation: 200,
+                handle: ".column-id",
+                scroll: true,
+                group: listName,
+                onUpdate: function (/**Event*/evt) {
+                    onTreeSort(evt, sortable);
+                },
+            });
+        });
 
         $(".dropzone").each(function () {
             var $dropzone = $(this);

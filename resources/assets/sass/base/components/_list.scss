@@ -109,6 +109,9 @@
                     }
                 }
             }
+            &.sortable-ghost {
+                opacity: 0.2;
+            }
         }
 
         thead {
@@ -118,6 +121,26 @@
                         color: #8e9aa9;
                         background: white;
 
+                    }
+                }
+            }
+        }
+
+        &[data-sortable="true"] {
+            .column-id {
+                padding: 10px 0;
+                a {
+                    cursor: move;
+                    &:before {
+                        color: #ccc;
+                        content: "\f07d";
+                        display: inline-block;
+                        font: normal normal normal 14px/1 FontAwesome;
+                        text-rendering: auto;
+                        -webkit-font-smoothing: antialiased;
+                        -moz-osx-font-smoothing: grayscale;
+                        transform: translate(0, 0);
+                        padding: 0 10px;
                     }
                 }
             }

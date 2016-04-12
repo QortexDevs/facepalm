@@ -137,10 +137,14 @@ class CmsList extends CmsComponent
         if ($this->isTreeMode) {
             $queryBuilder = $queryBuilder->orderBy($tableName . '.' . CmsCommon::COLUMN_NAME_SHOW_ORDER, 'asc');
         } else {
-            $queryBuilder = $queryBuilder->orderBy(
-                $tableName . '.' . CmsCommon::COLUMN_NAME_ID,
-                self::DEFAULT_ORDERING
-            );
+            if ($this->config->get('list.sortable')) {
+                $queryBuilder = $queryBuilder->orderBy($tableName . '.' . CmsCommon::COLUMN_NAME_SHOW_ORDER, 'asc');
+            } else {
+                $queryBuilder = $queryBuilder->orderBy(
+                    $tableName . '.' . CmsCommon::COLUMN_NAME_ID,
+                    self::DEFAULT_ORDERING
+                );
+            }
         }
 
         // eager loading of related models
@@ -175,7 +179,8 @@ class CmsList extends CmsComponent
                 'showStatusButton' => $this->showStatusButton,
                 'showDeleteButton' => $this->showDeleteButton,
                 'showEditButton' => $this->showEditButton,
-                'treeMode' => $this->isTreeMode
+                'treeMode' => $this->isTreeMode,
+                'sortable' => $this->config->get('list.sortable')
             ],
             'meta' => [
                 'model' => class_basename($this->modelName),
