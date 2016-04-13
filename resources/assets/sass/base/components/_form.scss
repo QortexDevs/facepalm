@@ -45,6 +45,11 @@
                     margin: 4px 0 10px 0;
                     color: $captionsColor;
                     font-size: 13px;
+
+                    &.after {
+                        padding-left: 4px;
+                        display: inline-block;
+                    }
                 }
 
                 input {
@@ -115,7 +120,7 @@
                 }
             }
         }
-        
+
         //todo: вынести в общие кнопки
         .add-new-subform-item {
             background-color: #1ba8ed;

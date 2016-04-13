@@ -14,10 +14,13 @@
                             {% endif %}
                         </td>
                         <td class="field">
-                            {% if field.comment %}
+                            {% if field.comment and (not field.comment_position or field.comment_position == "top" or field.comment_position == "above") %}
                                 <div class="field-comment">{{ field.comment }}</div>
                             {% endif %}
                             {{ field.renderFormField(form.object)|raw }}
+                            {% if field.comment and field.comment_position == "after" %}
+                                <div class="field-comment after">{{ field.comment }}</div>
+                            {% endif %}
                         </td>
                     </tr>
                 {% endif %}
