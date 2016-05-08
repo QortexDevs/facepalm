@@ -16,6 +16,6 @@ Route::group(['middleware' => ['web']], function () {
         '(.*)'
     )->middleware(Facepalm\Http\Middleware\Authenticate::class);
 
-// default route
+    // default route todo: подумать над переопределением
     Route::any('/{params?}', 'DefaultController@display')->where('params', '(.*)');
 });

@@ -21,10 +21,17 @@ class FieldFactory
      */
     public function get($type, $params = [])
     {
+        $canonizedName = $this->canonize($type);
         try {
-            return app()->make($this->canonize($type));
+            return app()->make($canonizedName);
         } catch (\Exception $e) {
-            return app()->make($this->canonize('unknown'));
+            $className = '\\' . $this->dottedNotationToNamespace($canonizedName) . 'Field';
+
+            try {
+                return app()->make($className);
+            } catch (\Exception $e) {
+                return app()->make($this->canonize('unknown'));
+            }
         }
     }
 
@@ -46,9 +53,17 @@ class FieldFactory
         if (Str::contains($type, '.')) {
             return $type;
         } else {
-            return 'facepalm.cms.field.' . Str::lower($type);
+            return 'facepalm.cms.field.' . Str::snake($type);
         }
 
+    }
+
+
+    private function dottedNotationToNamespace($name)
+    {
+        return implode('\\', array_map(function ($part) {
+            return Str::ucfirst(Str::camel($part));
+        }, explode('.', $name)));
     }
 
 
