@@ -233,7 +233,9 @@ class CmsController extends BaseController
      */
     protected function showDashboardPage()
     {
-        return $this->renderPage('facepalm::dashboardPage', []);
+        return $this->renderPage('facepalm::dashboardPage', [
+            'pageTitle' => $this->config->get('module.strings.title') ?: 'Список объектов'
+        ]);
     }
 
     /**
@@ -265,7 +267,7 @@ class CmsController extends BaseController
         $params = [
             'buttonsPanel' => !!$this->config->get('module.list.treeMode'),
             'listHtml' => $list->render(app()->make('twig')),
-            'pageTitle' => $this->config->get('strings.title') ?: 'Список объектов'
+            'pageTitle' => $this->config->get('module.strings.title') ?: 'Список объектов'
         ];
 
 

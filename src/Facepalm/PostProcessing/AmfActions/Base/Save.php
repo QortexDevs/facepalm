@@ -5,6 +5,7 @@
 
 namespace Facepalm\PostProcessing\AmfActions\Base;
 
+use Carbon\Carbon;
 use Facepalm\Cms\CmsCommon;
 use Facepalm\Models\ModelFactory;
 use Facepalm\Models\File;
@@ -35,7 +36,11 @@ class Save extends AbstractAction
                 if ($object->isBelongsToField($fieldName)) {
                     $this->processBelongsToField($object, $fieldName, $value);
                 } elseif ($object->isDatetimeField($fieldName)) {
-                    $object->$fieldName = (new \DateTime($value))->format('Y-m-d H:i:s');
+                    if ($value) {
+                        $object->$fieldName = (new \DateTime($value))->format('Y-m-d H:i:s');
+                    } else {
+                        $object->$fieldName = null;
+                    }
                 } elseif (is_array($value)) {
                     if (!$this->isMultiLangValue($value)) {
                         //todo: think некрасиво это все
@@ -123,6 +128,8 @@ class Save extends AbstractAction
      */
     private function isMultiLangValue($value)
     {
-        return is_array($value) && is_array(reset($value)) && (Arr::has(reset($value), 'textBody') || Arr::has(reset($value), 'stringValue'));
+        return is_array($value)
+        && is_array(reset($value))
+        && (Arr::has(reset($value), 'textBody') || Arr::has(reset($value), 'stringValue'));
     }
 }
