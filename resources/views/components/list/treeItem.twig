@@ -6,7 +6,7 @@
                 {{ fieldelement.renderFormField(element)|raw }}
             </div>
         {% endfor %}
-        {% if true %}
+        {% if not list.settings.plainTreeMode %}
             <div class="buttons">
                 <button type="button" class="add fa fa-plus"></button>
             </div>

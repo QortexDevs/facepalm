@@ -353,8 +353,9 @@ $(document).ready(function () {
         };
 
         $('.cms-module-tree-content').each(function (i) {
+            var plain = $(this).data('plain') === 1;
             var treeName = 'tree_' + i;
-            $(this).find('ul').each(function () {
+            $(this).find((plain ? '>' : '') + 'ul').each(function () {
                 var sortable = Sortable.create($(this)[0], {
                     animation: 200,
                     handle: ".id",

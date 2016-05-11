@@ -29,6 +29,7 @@ class CmsList extends CmsComponent
     protected $showDeleteButton = true;
     protected $showEditButton = false;
     protected $isTreeMode = false;
+    protected $isPlainTreeMode = false;
 
     protected $relatedModels = [];
     const DEFAULT_ORDERING = 'desc';
@@ -51,7 +52,8 @@ class CmsList extends CmsComponent
             ->toggleStatusButtonColumn($config->get('list.showStatus') !== false)
             ->toggleDeleteButtonColumn($config->get('list.showDelete') !== false)
             ->toggleEditButtonColumn($config->get('list.showEdit') == true)
-            ->toggleTreeMode($config->get('list.treeMode') == true);
+            ->toggleTreeMode($config->get('list.treeMode') == true)
+            ->togglePlainTreeMode($config->get('list.plain') == true);
 
         return $this;
     }
@@ -105,6 +107,16 @@ class CmsList extends CmsComponent
     public function toggleTreeMode($tree = true)
     {
         $this->isTreeMode = (bool)$tree;
+        return $this;
+    }
+
+    /**
+     * @param bool $isPlain
+     * @return $this
+     */
+    public function togglePlainTreeMode($isPlain = true)
+    {
+        $this->isPlainTreeMode = (bool)$isPlain;
         return $this;
     }
 
@@ -180,6 +192,7 @@ class CmsList extends CmsComponent
                 'showDeleteButton' => $this->showDeleteButton,
                 'showEditButton' => $this->showEditButton,
                 'treeMode' => $this->isTreeMode,
+                'plainTreeMode' => $this->isPlainTreeMode,
                 'sortable' => $this->config->get('list.sortable')
             ],
             'meta' => [
