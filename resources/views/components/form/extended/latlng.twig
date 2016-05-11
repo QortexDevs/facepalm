@@ -1,0 +1,15 @@
+<div class="lat-lng-container">
+    <input type="{% if parameters.map == 'google' %}hidden{% else %}text{% endif %}" class="text" data-latlng-field="lat"
+           name="{{ inputNameLat }}"
+           value="{{ lat }}"/>
+    <input type="{% if parameters.map == 'google' %}hidden{% else %}text{% endif %}" class="text" data-latlng-field="lng"
+           name="{{ inputNameLng }}"
+           value="{{ lng }}"/>
+    {% if parameters.map == 'google' %}
+        <input id="pac-input" class="controls" type="text" placeholder="Поиск по карте">
+        <div class="map google" style="{% if parameters.width %}width:{{ parameters.width }}; {% endif %}
+                {% if parameters.height %}height:{{ parameters.height }}; {% endif %}"
+             data-lat="{{ lat }}" data-lng="{{ lng }}"
+        ></div>
+    {% endif %}
+</div>

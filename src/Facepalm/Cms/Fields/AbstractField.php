@@ -209,7 +209,6 @@ abstract class AbstractField implements \ArrayAccess
         $template = $template ?: $this->templateName;
 
         $this->makeNames($object);
-
         if ($template) {
             $languages = Language::where('status', 1)->orderby('is_default', 'desc')->get()->pluck('code', 'code');
 

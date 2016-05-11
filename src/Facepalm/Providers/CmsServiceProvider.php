@@ -54,6 +54,7 @@ class CmsServiceProvider extends ServiceProvider
         $this->app->bind('facepalm.amf.action.upload', 'Facepalm\PostProcessing\AmfActions\Base\Upload');
 
         $this->app->bind('facepalm.cms.fields.extended.acl', 'Facepalm\Cms\Fields\Extended\AclField');
+        $this->app->bind('facepalm.cms.fields.extended.latlng', 'Facepalm\Cms\Fields\Extended\LatlngField');
 //        $this->app->bind('facepalm.amf.action.acl', 'Facepalm\PostProcessing\AmfActions\Extended\Acl');
 
     }
