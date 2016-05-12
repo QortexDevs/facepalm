@@ -121,6 +121,19 @@
             }
         }
 
+        // схлопываем чекбоксовые строки
+        .row-for-field-boolean {
+            td {
+                padding-bottom: 10px;
+            }
+
+            + :not(.row-for-field-boolean) {
+                td {
+                    padding-top: 20px;
+                }
+            }
+        }
+
         //todo: вынести в общие кнопки
         .add-new-subform-item {
             background-color: #1ba8ed;
@@ -382,6 +395,8 @@
         }
     }
 }
+
+//todo: переделать =)
 
 #pac-input {
     background-color: #fff;
