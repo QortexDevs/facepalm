@@ -391,11 +391,17 @@ class CmsController extends BaseController
         }
 
         if ($this->layoutMode == self::LAYOUT_TWO_COLUMN) {
-            $params['navigation'] = Tree::fromEloquentCollection(ModelFactory::builderFor($this->config->get('module.navigation.model'))->orderBy('show_order')->get())
+            $sectionsCollection = ModelFactory::builderFor($this->config->get('module.navigation.model'));
+            if ($this->config->get('module.navigation.skip')) {
+                $skip = (array)$this->config->get('module.navigation.skip');
+                $sectionsCollection = $sectionsCollection->whereNotIn('id', $skip);
+            }
+            $sectionsCollection = $sectionsCollection->orderBy('show_order');
+            $params['navigation'] = Tree::fromEloquentCollection($sectionsCollection->get())
                 ->render(0, app()->make('twig'), 'facepalm::leftNavigationItem', [
                     'moduleConfig' => $this->config->get('module'),
                     'navigationId' => $this->navigationId
-                ], true);
+                ], $this->config->get('module.navigation.showRoot'));
         }
 //        $params['navigation'] = 'fsdfsdf';
         $userpic = Auth::user()->images()->ofGroup('avatar')->first();

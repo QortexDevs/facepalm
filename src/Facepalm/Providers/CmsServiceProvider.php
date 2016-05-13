@@ -39,6 +39,7 @@ class CmsServiceProvider extends ServiceProvider
             'select',
             'string',
             'text',
+            'plaintext',
             'unknown',
         ];
 

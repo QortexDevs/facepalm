@@ -115,7 +115,7 @@ $(document).ready(function () {
         }
 
 
-        $('.main-menu .right-panel').mCustomScrollbar({
+        $('.main-menu .left-panel:not(.collapsed), .main-menu .right-panel').mCustomScrollbar({
             theme: "light-2",
             autoExpandScrollbar: true,
             scrollInertia: 400,
