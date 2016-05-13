@@ -391,8 +391,7 @@ class CmsController extends BaseController
         }
 
         if ($this->layoutMode == self::LAYOUT_TWO_COLUMN) {
-            $params['navigation'] = (new Tree())
-                ->fromEloquentCollection(ModelFactory::builderFor($this->config->get('module.navigation.model'))->orderBy('show_order')->get())
+            $params['navigation'] = Tree::fromEloquentCollection(ModelFactory::builderFor($this->config->get('module.navigation.model'))->orderBy('show_order')->get())
                 ->render(0, app()->make('twig'), 'facepalm::leftNavigationItem', [
                     'moduleConfig' => $this->config->get('module'),
                     'navigationId' => $this->navigationId

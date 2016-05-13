@@ -183,7 +183,7 @@ class CmsList extends CmsComponent
             $object->editUrl = $this->baseUrl . '/' . $object->id . '/';
         }
 
-        $tree = (new Tree())->fromEloquentCollection($objects);
+        $tree = Tree::fromEloquentCollection($objects);
 
         $output = [
             'settings' => [

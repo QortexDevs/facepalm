@@ -30,9 +30,29 @@ class Tree
 
     /**
      * @param Collection $objects
+     * @return Tree
+     */
+    public static function fromEloquentCollection(Collection $objects)
+    {
+        $tree = new self();
+        return $tree->fillFromEloquentCollection($objects);
+    }
+
+    /**
+     * @param $array
+     * @return Tree
+     */
+    public static function fromArray($array)
+    {
+        $tree = new self();
+        return $tree->fillFromArray($array);
+    }
+
+    /**
+     * @param Collection $objects
      * @return $this
      */
-    public function fromEloquentCollection(Collection $objects)
+    public function fillFromEloquentCollection(Collection $objects)
     {
         /** @var AbstractEntity $object */
         foreach ($objects as $object) {
@@ -50,7 +70,7 @@ class Tree
      * @param $array
      * @return $this
      */
-    public function fromArray($array)
+    public function fillFromArray($array)
     {
         /** @var Model $object */
         foreach ($array as $arrayItem) {
@@ -214,7 +234,7 @@ class Tree
      * @param $field
      * @return mixed|null
      */
-    public function getElementByPath($path, $field = null, $separator = '/')
+    public function getElementByPath($path, $field = 'path_name', $separator = '/')
     {
         $segments = explode($separator, trim($path, $separator));
         if ($segments) {
