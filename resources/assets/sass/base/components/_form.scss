@@ -46,6 +46,10 @@
                     color: $captionsColor;
                     font-size: 13px;
 
+                    &.before {
+                        padding-right: 4px;
+                        display: inline-block;
+                    }
                     &.after {
                         padding-left: 4px;
                         display: inline-block;
