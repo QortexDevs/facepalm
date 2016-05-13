@@ -10,6 +10,7 @@ namespace Facepalm\Tools;
 
 
 use Closure;
+use Facepalm\Models\Foundation\AbstractEntity;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
@@ -33,7 +34,7 @@ class Tree
      */
     public function fromEloquentCollection(Collection $objects)
     {
-        /** @var Model $object */
+        /** @var AbstractEntity $object */
         foreach ($objects as $object) {
             $this->elementsById[$object->id] = $object;
             $this->elementsByParent[(int)$object->parent_id][] = $object->id;
@@ -192,7 +193,7 @@ class Tree
         $elementId = $this->getIdFromParameter($element);
         if ($elementId) {
             $pathArray = array_reverse($this->getAncestorsIds($elementId));
-            array_push($pathArray, $elementId);
+            $pathArray[] = $elementId;
             if ($field) {
                 $pathArray = array_map(function ($id) use ($field) {
                     if ($field instanceof Closure) {
@@ -202,7 +203,7 @@ class Tree
                     }
                 }, $pathArray);
             }
-            return join($separator, $pathArray);
+            return implode($separator, $pathArray);
         }
         return '';
     }
@@ -211,10 +212,30 @@ class Tree
      * @param $path
      * @param $separator
      * @param $field
+     * @return mixed|null
      */
     public function getElementByPath($path, $field = null, $separator = '/')
     {
-        //todo: сделать!
+        $segments = explode($separator, trim($path, $separator));
+        if ($segments) {
+            $currentParentId = 0;
+            $foundSections = 0;
+            foreach ($segments as $segment) {
+                $children = $this->getChildren($currentParentId);
+                if ($children) {
+                    foreach ($children as $child) {
+                        if ($child->{$field} === $segment) {
+                            $currentParentId = $child->id;
+                            $foundSections++;
+                        }
+                    }
+                }
+            }
+            if ($foundSections === count($segments)) {
+                return $this->getElement($currentParentId);
+            }
+        }
+        return null;
     }
 
     /**
@@ -327,7 +348,6 @@ class Tree
      */
     protected function getIdFromParameter($element)
     {
-        $id = $element instanceof Model ? $element->id : $element;
-        return $id;
+        return $element instanceof Model ? $element->id : $element;
     }
 }
