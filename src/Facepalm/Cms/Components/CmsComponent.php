@@ -9,13 +9,13 @@ use Facepalm\Models\ModelFactory;
 
 class CmsComponent
 {
-    protected $modelName = null;
+    protected $modelName ;
     protected $baseUrl = '.';
     protected $config;
 
     /** @var FieldListProcessor */
-    protected $fieldsProcessor = null;
-    protected $cmsConfig = null;
+    protected $fieldsProcessor;
+    protected $cmsConfig;
 
 
     /**
@@ -38,7 +38,7 @@ class CmsComponent
     /**
      * @param $modelName
      * @return $this
-     * @throws \Exception
+     * @throws \InvalidArgumentException
      */
     public function setMainModel($modelName)
     {
@@ -47,7 +47,7 @@ class CmsComponent
         if ($modelName) {
             $this->modelName = $modelName;
         } else {
-            throw new \Exception('Cannot find class ' . $modelName);
+            throw new \InvalidArgumentException('Cannot find class ' . $modelName);
         }
 
         return $this;

@@ -40,6 +40,7 @@ class CmsList extends CmsComponent
     /**
      * @param Repository $config
      * @return $this
+     * @throws \Exception
      */
     public function configure($config)
     {
