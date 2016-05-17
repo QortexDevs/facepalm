@@ -47,7 +47,6 @@ class CmsList extends CmsComponent
         parent::configure($config);
 
         $this->setColumns($config->get('list.columns'), $config->get('titles'))
-            ->setBaseUrl($config->get('baseUrl'))
             ->setMainModel($config->get('model'))
             ->toggleIdColumn($config->get('list.showId') !== false)
             ->toggleStatusButtonColumn($config->get('list.showStatus') !== false)
@@ -220,18 +219,19 @@ class CmsList extends CmsComponent
             $templateName = $listData['settings']['treeMode'] ? 'facepalm::components/list/containerTree.twig' : 'facepalm::components/list/container.twig';
         }
         if ($listData['settings']['treeMode']) {
-            $treeContent = $listData['tree']->render(0, app()->make('twig'), 'facepalm::components/list/treeItem', [
-                "list" => $listData,
-                "moduleConfig" => $this->config,
+            $treeContent = $listData['tree']->render($render, 'facepalm::components/list/treeItem', 0, false, [
+                'list' => $listData,
+                'moduleConfig' => $this->config,
             ]);
-            $emptyTreeItem = app()->make('twig')->render('facepalm::components/list/treeItem', [
-                "list" => $listData,
-                "moduleConfig" => $this->config,
+            $emptyTreeItem = $render->render('facepalm::components/list/treeItem', [
+                'list' => $listData,
+                'moduleConfig' => $this->config,
             ]);
         }
         return $render->render($templateName, [
-            "list" => $listData,
-            "moduleConfig" => $this->config,
+            'list' => $listData,
+            'baseUrl' => $this->baseUrl,
+            'moduleConfig' => $this->config,
             'treeContent' => $treeContent ?: '',
             'emptyTreeItem' => $emptyTreeItem ?: ''
         ]);

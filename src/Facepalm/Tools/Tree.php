@@ -260,14 +260,16 @@ class Tree
 
     /**
      * todo: сделать возможность передавать не рендер-шаблон, а колбек. Для какого-то кастомного рендера
-     * @param $rootId
      * @param $render
      * @param $templateName
-     * @param array $additionalParameters
+     * @param $rootId
      * @param bool $renderRoot
+     * @param array $additionalParameters
      * @return string
+     *
+     * @noinspection MoreThanThreeArgumentsInspection
      */
-    public function render($rootId, $render, $templateName, $additionalParameters = [], $renderRoot = false)
+    public function render($render, $templateName, $rootId, $renderRoot = false, array $additionalParameters = array())
     {
         return $this->process(
             $rootId,

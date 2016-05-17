@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Hash;
 /**
  * @property array|string password
  * @property array|string email
+ * @property array acl
+ * @property Role $role
  */
 class User extends BaseEntity implements AuthenticatableContract,
     AuthorizableContract,

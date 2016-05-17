@@ -8,23 +8,21 @@
 
 namespace Facepalm\Http\Controllers;
 
+use Facepalm\Tools\Tree;
+use Facepalm\Models\User;
+use TwigBridge\Facade\Twig;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Facepalm\Cms\Config\Config;
+use Facepalm\Tools\AssetsBuster;
+use Facepalm\Models\ModelFactory;
+use Facepalm\Cms\PermissionManager;
 use Facepalm\Cms\Components\CmsList;
 use Facepalm\Cms\Components\CmsForm;
-use Facepalm\Cms\Config\Config;
-use Facepalm\Models\File;
-use Facepalm\Models\Image;
-use Facepalm\Models\ModelFactory;
-use Facepalm\Models\SiteSection;
 use Facepalm\PostProcessing\AmfProcessor;
-use Facepalm\Tools\Tree;
-use Illuminate\Http\Request;
+use Illuminate\Foundation\Application;
 use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Str;
-use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
-use TwigBridge\Facade\Twig;
 
 class CmsController extends BaseController
 {
@@ -35,11 +33,26 @@ class CmsController extends BaseController
     const LAYOUT_SIMPLE = 1;
     const LAYOUT_TWO_COLUMN = 2;
 
+    /** @var  User */
+    protected $user;
+
     /** @var Config */
     protected $config;
 
+    /** @var  Request */
+    protected $request;
+
+    /** @var  Application */
+    protected $app;
+
+    /** @var \Twig_Environment */
+    protected $renderer;
+
+    /** @var  PermissionManager */
+    protected $permissionManager;
+
     /** @var  string */
-    protected $group, $module;
+    protected $group, $module, $baseUrl, $baseUrlNav;
 
     /** @var  array */
     protected $parameters;
@@ -53,44 +66,50 @@ class CmsController extends BaseController
     /** @var  integer */
     protected $action;
 
-    /** @var  Request */
-    protected $request;
 
     /** @var  string */
     protected $layoutMode;
 
+
+    /**
+     * CmsController constructor.
+     * @param Application $app
+     * @param Request $request
+     * @param User $user
+     * @param PermissionManager $pm
+     *
+     * @noinspection MoreThanThreeArgumentsInspection
+     */
+    public function __construct(Application $app, Request $request, User $user, PermissionManager $pm)
+    {
+        $this->setupLocale();
+
+        $this->app = $app;
+        $this->user = $user;
+        $this->request = $request;
+        $this->permissionManager = $pm;
+        $this->renderer = $this->app->make('twig');
+    }
+
     /**
      * Get module
      *
-     * @param Request $request
      * @param $group
      * @param $module
      * @param null $params
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
+     *
      */
-    public function handle(Request $request, $group = null, $module = null, $params = null)
+    public function handle($group = null, $module = null, $params = null)
     {
-        $locale = config('app.cmsLocale') ?: config('app.locale');
-        if ($locale) {
-            app()->setLocale($locale);
-        }
-
 
         $this->group = $group;
         $this->module = $module;
-        $this->request = $request;
+        $this->config = $this->permissionManager->filterCmsStructureWithPermissions(Config::fromFile($group, $module));
 
-        if ($request->input('ping')) {
-            return 'pong';
-        }
-
-        $this->config = (new Config())->load($group, $module);
-
-        $this->filterCmsStructureWithPermissions();
-
-        if (!$this->config->get('structure')) {
-            abort(403);
-        }
+        // Abort 404 if user has no access
+        $this->permissionManager->checkAccess($this->config, $group, $module);
 
         if ($group) {
             if (!$module) {
@@ -102,9 +121,7 @@ class CmsController extends BaseController
                 abort(404);
             }
 
-            //todo: сомнения в красоте
-            $this->config->set('module.baseUrl', '/cms/' . $group . '/' . $module);
-            $this->config->set('module.baseUrlNav', $this->config->get('module.baseUrl'));
+            $this->baseUrl = $this->baseUrlNav = '/cms/' . $group . '/' . $module;
 
             if ($this->config->get('module.navigation')) {
                 $this->layoutMode = self::LAYOUT_TWO_COLUMN;
@@ -115,9 +132,7 @@ class CmsController extends BaseController
             $this->parameters = $this->processParameters($params);
         }
 
-        //todo: process config structure with permissions
-        //todo: process module config with permissions
-        switch (request()->method()) {
+        switch ($this->request->method()) {
             case 'GET':
                 return $this->get();
                 break;
@@ -130,33 +145,14 @@ class CmsController extends BaseController
     }
 
     /**
-     * @return bool
+     *
      */
-    protected function filterCmsStructureWithPermissions()
+    protected function setupLocale()
     {
-        if (Auth::user()->role->id === 1) {
-            return true;
+        $locale = config('app.cmsLocale') ?: config('app.locale');
+        if ($locale) {
+            app()->setLocale($locale);
         }
-        $acl = Auth::user()->acl ? json_decode(Auth::user()->acl, true) : [];
-
-        $structure = $this->config->get('structure');
-        if (!$acl || !Arr::has($acl, '/')) {
-            $structure = [];
-        }
-        foreach ($structure as $sectionName => $data) {
-            if (!array_key_exists($sectionName, $acl)) {
-                unset($structure[$sectionName]);
-            } else {
-                if (array_key_exists('sections', $structure[$sectionName])) {
-                    foreach ($structure[$sectionName]['sections'] as $subSectionName => $dataNested) {
-                        if (!array_key_exists($sectionName . '/' . $subSectionName, $acl)) {
-                            unset($structure[$sectionName]['sections'][$subSectionName]);
-                        }
-                    }
-                }
-            }
-        }
-        $this->config->set('structure', $structure);
     }
 
 
@@ -168,18 +164,13 @@ class CmsController extends BaseController
     {
         $params = explode('/', trim($params, '/ '));
 
-        if ($this->config->get('module.navigation')) {
-            if ((int)Arr::get($params, 0)) {
-                $this->navigationId = (int)Arr::get($params, 0);
-                // If navigation entity is not editing entity, remove first (navigation) id from parameters
-                if ($this->config->get('module.navigation.model') != $this->config->get('module.model')) {
-                    array_shift($params);
-                    $this->config->set(
-                        'module.baseUrl',
-                        $this->config->get('module.baseUrl') . '/' . $this->navigationId
-                    );
+        if ($this->config->get('module.navigation') && (int)Arr::get($params, 0)) {
+            $this->navigationId = (int)Arr::get($params, 0);
 
-                }
+            // If navigation entity is not editing entity, remove first (navigation) id from parameters
+            if ($this->config->get('module.navigation.model') !== $this->config->get('module.model')) {
+                array_shift($params);
+                $this->baseUrl .= ('/' . $this->navigationId);
             }
         }
         if (Arr::get($params, 0) === 'create') {
@@ -199,56 +190,62 @@ class CmsController extends BaseController
 
     /**
      * @return mixed
+     * @throws \Exception
      */
     protected function get()
     {
         if ($this->group) {
             $moduleContent = '';
             if ($this->layoutMode === self::LAYOUT_TWO_COLUMN && !$this->navigationId) {
-                return $this->showDashboardPage();
-            }
-
-            switch ($this->action) {
-                case self::ACTION_LIST_OBJECTS:
-                    $moduleContent = $this->showObjectsListPage();
-                    break;
-                case self::ACTION_EDIT_OBJECT:
-                    $moduleContent = $this->showEditObjectFormPage();
-                    break;
-                case self::ACTION_CREATE_OBJECT:
-                    $moduleContent = $this->showCreateObjectFormPage();
-                    break;
+                $moduleContent = $this->showTwoColumnIndexPage();
+            } else {
+                switch ($this->action) {
+                    case self::ACTION_LIST_OBJECTS:
+                        $moduleContent = $this->showObjectsListPage();
+                        break;
+                    case self::ACTION_EDIT_OBJECT:
+                        $moduleContent = $this->showEditObjectFormPage();
+                        break;
+                    case self::ACTION_CREATE_OBJECT:
+                        $moduleContent = $this->showCreateObjectFormPage();
+                        break;
+                }
             }
         } else {
-            $moduleContent = $this->showIndex();
+            $moduleContent = $this->showCmsDashboard();
         }
 
-        return $moduleContent;
+        return $this->renderPage('facepalm::layouts/base', $moduleContent);
     }
-
 
     /**
      * @return mixed
      * @throws \Exception
      */
-    protected function showDashboardPage()
+    protected function showCmsDashboard()
     {
-        return $this->renderPage('facepalm::dashboardPage', [
+        return [
+            'moduleContent' => $this->renderer->render(
+                'facepalm::modulePages/cmsDashboard',
+                ['cmsStructure' => $this->config->get('structure')]
+            ),
+            'pageTitle' => 'Welcome'
+        ];
+    }
+
+    /**
+     * @return mixed
+     * @throws \Twig_Error_Loader
+     * @throws \Exception
+     */
+    protected function showTwoColumnIndexPage()
+    {
+        return [
+            'moduleContent' => $this->renderer->render('facepalm::modulePages/twoColumnIndex'),
             'pageTitle' => $this->config->get('module.strings.title') ?: 'Список объектов'
-        ]);
+        ];
     }
 
-    /**
-     * @return mixed
-     * @throws \Exception
-     */
-    protected function showIndex()
-    {
-        return $this->renderPage(
-            'facepalm::indexPage',
-            ['pageTitle' => 'Welcome', 'structure' => $this->config->get('structure')]
-        );
-    }
 
     /**
      * @return mixed
@@ -256,8 +253,8 @@ class CmsController extends BaseController
      */
     protected function showObjectsListPage()
     {
-        $list = new CmsList($this->config->part('module'));
-        if ($this->navigationId && $this->config->get('module.navigation.model') != $this->config->get('module.model')) {
+        $list = (new CmsList($this->config->part('module')))->setBaseUrl($this->baseUrl);
+        if ($this->navigationId && $this->config->get('module.navigation.model') !== $this->config->get('module.model')) {
             $list->setAdditionalConstraints(function ($builder) {
                 //todo: может быть установлен извне
                 $relationField = Str::snake($this->config->get('module.navigation.model')) . '_id';
@@ -265,13 +262,15 @@ class CmsController extends BaseController
             });
         }
         $params = [
-            'buttonsPanel' => !!$this->config->get('module.list.treeMode'),
-            'listHtml' => $list->render(app()->make('twig')),
+            'buttonsPanel' => (bool)$this->config->get('module.list.treeMode'),
+            'listHtml' => $list->render($this->renderer),
+        ];
+
+        return [
+            'moduleContent' => $this->renderer->render('facepalm::modulePages/list', $params),
             'pageTitle' => $this->config->get('module.strings.title') ?: 'Список объектов'
         ];
 
-
-        return $this->renderPage('facepalm::listPage', $params);
     }
 
     /**
@@ -282,20 +281,22 @@ class CmsController extends BaseController
     {
         $form = (new CmsForm($this->config->part('module'), $this->config))->setEditedObject($this->objectId);
 
-        if ($this->navigationId && $this->config->get('module.navigation.model') != $this->config->get('module.model')) {
+        if ($this->navigationId && $this->config->get('module.navigation.model') !== $this->config->get('module.model')) {
             //todo: может быть установлен извне
             $relationField = Str::snake($this->config->get('module.navigation.model')) . '_id';
             $form->prependHiddenField($relationField, $this->navigationId);
         }
 
         $params = [
-            'formHtml' => $form->render(app()->make('twig')),
+            'formHtml' => $form->render($this->renderer),
             'justCreated' => $this->request->input('justCreated'),
+        ];
+
+        return [
+            'moduleContent' => $this->renderer->render('facepalm::modulePages/form', $params),
             'pageTitle' => $this->config->get('strings.editTitle') ?: 'Редактирование объекта'
         ];
 
-
-        return $this->renderPage('facepalm::formPage', $params);
     }
 
     /**
@@ -306,18 +307,79 @@ class CmsController extends BaseController
     {
         $form = (new CmsForm($this->config->part('module')));
 
-        if ($this->navigationId && $this->config->get('module.navigation.model') != $this->config->get('module.model')) {
+        if ($this->navigationId && $this->config->get('module.navigation.model') !== $this->config->get('module.model')) {
             //todo: может быть установлен извне
             $relationField = Str::snake($this->config->get('module.navigation.model')) . '_id';
             $form->prependHiddenField($relationField, $this->navigationId);
         }
 
         $params = [
-            'formHtml' => $form->render(app()->make('twig')),
-            'pageTitle' => $this->config->get('strings.editTitle') ?: 'Редактирование объекта'
+            'formHtml' => $form->render($this->renderer),
         ];
 
-        return $this->renderPage('facepalm::formPage', $params);
+        return [
+            'moduleContent' => $this->renderer->render('facepalm::modulePages/form', $params),
+            'pageTitle' => $this->config->get('strings.editTitle') ?: 'Редактирование объекта'
+        ];
+    }
+
+
+    /**
+     * Render whole CMS page
+     * @param $template
+     * @param $params
+     * @return mixed
+     */
+    protected function renderPage($template = 'facepalm::layouts/base', array $params = array())
+    {
+        $assetsBuster = new AssetsBuster();
+        $assetsBusters = $assetsBuster->getCmsBusters();
+
+        $userpic = $this->user->images()->ofGroup('avatar')->first();
+        $params = array_merge($params, [
+            'user' => $this->user,
+            'baseUrl' => $this->baseUrl,
+            'assetsBusters' => $assetsBusters,
+            'moduleConfig' => $this->config->get('module'),
+            'assetsPath' => config('app.facepalmAssetsPath'),
+            'cmsStructure' => $this->config->get('structure'),
+            'currentPathSections' => [$this->group, $this->module],
+            'userpic' => $userpic ? $userpic->getUri('200x200') : '',
+            'navigation' => $this->layoutMode === self::LAYOUT_TWO_COLUMN ? $this->renderNavigationMenu() : '',
+        ]);
+
+
+        return Twig::render($template, $params);
+
+    }
+
+    /**
+     * Additional navigation tree menu
+     * @return string
+     */
+    protected function renderNavigationMenu()
+    {
+        $skip = (array)$this->config->get('module.navigation.skip');
+        $model = (string)$this->config->get('module.navigation.model');
+        $showRoot = (boolean)$this->config->get('module.navigation.showRoot');
+
+        $sectionsCollection = ModelFactory::builderFor($model)
+            ->whereNotIn('id', $skip ?: [])
+            ->orderBy('show_order')
+            ->get();
+
+        $tree = Tree::fromEloquentCollection($sectionsCollection);
+
+        return $tree->render(
+            $this->renderer,
+            'facepalm::layouts/menu/navigationItem',
+            0,
+            $showRoot,
+            [
+                'baseUrlNav' => $this->baseUrlNav,
+                'navigationId' => $this->navigationId
+            ]
+        );
     }
 
     /**
@@ -355,68 +417,5 @@ class CmsController extends BaseController
         }
     }
 
-    /**
-     * @param $template
-     * @param $params
-     * @return mixed
-     */
-    protected function renderPage($template, $params)
-    {
 
-        $assetsBusters = [];
-        //todo: вынести в какую-то общую тулзу
-        $bustersPath = app()->publicPath() . DIRECTORY_SEPARATOR . config('app.facepalmAssetsPath') . 'busters.json';
-        if (is_file($bustersPath)) {
-            $assetsBusters = array_flip(
-                array_map(
-                    function ($item) {
-                        return 'facepalm::' .
-                        (mb_strpos($item, 'build/') !== false ? mb_substr($item, mb_strlen('build/')) : $item);
-                    },
-                    array_flip(@json_decode(file_get_contents($bustersPath), true) ?: [])
-                )
-            );
-        }
-
-        $bustersPath = app()->publicPath() . DIRECTORY_SEPARATOR . 'assets/build/cms/busters.json';
-        if (is_file($bustersPath)) {
-            $assetsBusters += array_flip(
-                array_map(
-                    function ($item) {
-                        return mb_strpos($item, 'public/') !== false ? mb_substr($item, mb_strlen('public/')) : $item;
-                    },
-                    array_flip(@json_decode(file_get_contents($bustersPath), true) ?: [])
-                )
-            );
-        }
-
-        if ($this->layoutMode == self::LAYOUT_TWO_COLUMN) {
-            $sectionsCollection = ModelFactory::builderFor($this->config->get('module.navigation.model'));
-            if ($this->config->get('module.navigation.skip')) {
-                $skip = (array)$this->config->get('module.navigation.skip');
-                $sectionsCollection = $sectionsCollection->whereNotIn('id', $skip);
-            }
-            $sectionsCollection = $sectionsCollection->orderBy('show_order');
-            $params['navigation'] = Tree::fromEloquentCollection($sectionsCollection->get())
-                ->render(0, app()->make('twig'), 'facepalm::leftNavigationItem', [
-                    'moduleConfig' => $this->config->get('module'),
-                    'navigationId' => $this->navigationId
-                ], $this->config->get('module.navigation.showRoot'));
-        }
-//        $params['navigation'] = 'fsdfsdf';
-        $userpic = Auth::user()->images()->ofGroup('avatar')->first();
-        $params = array_merge($params, [
-            'assetsPath' => config('app.facepalmAssetsPath'),
-            'assetsBusters' => $assetsBusters,
-            'currentPathSections' => [$this->group, $this->module],
-            'cmsStructure' => $this->config->get('structure'),
-            'moduleConfig' => $this->config->get('module'),
-            'user' => Auth::user(),
-            'userpic' => $userpic ? $userpic->getUri('200x200') : ''
-        ]);
-
-
-        return Twig::render($template, $params);
-
-    }
 }

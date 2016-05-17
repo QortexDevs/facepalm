@@ -27,6 +27,18 @@ class Config
     /** @var  ConfigLoaderInterface */
     protected $configLoader;
 
+
+    /**
+     * @param null $group
+     * @param null $module
+     * @return Config
+     */
+    public static function fromFile($group = null, $module = null)
+    {
+        $instance = new self();
+        return $instance->load($group, $module);
+    }
+
     /**
      * Config constructor.
      * @param array|null $data
@@ -39,11 +51,19 @@ class Config
         $this->setLoader(new JsonFileConfigLoader());
     }
 
+    /**
+     * @param \Facepalm\Cms\Config\ConfigLoaderInterface $configLoader
+     */
     public function setLoader(ConfigLoaderInterface $configLoader)
     {
         $this->configLoader = $configLoader;
     }
 
+    /**
+     * @param null $group
+     * @param null $module
+     * @return $this
+     */
     public function load($group = null, $module = null)
     {
         $this->configRepository = new Repository($this->loadConfig(self::DEFAULT_CONFIG_NAME));

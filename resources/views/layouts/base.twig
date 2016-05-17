@@ -16,8 +16,8 @@
 
 </head>
 {% block bodyOuter %}
-    <body class="cms-page{% if navigation %} two-column{% endif %}" data-base-url="{{ moduleConfig.baseUrl }}">
-    {% include 'facepalm::leftMenu.twig' %}
+    <body class="cms-page{% if navigation %} two-column{% endif %}" data-base-url="{{ baseUrl }}">
+    {% include 'facepalm::layouts/menu/leftMenu' %}
     <main>
         <form class="main-cms-form" action="./" enctype="multipart/form-data" method="post">
             {{ csrf_field() }}
@@ -47,6 +47,7 @@
                 </div>
                 <div class="module-content">
                     {% block moduleContent %}
+                        {{ moduleContent|raw }}
                     {% endblock moduleContent %}
                 </div>
             {% endblock moduleContentOuter %}

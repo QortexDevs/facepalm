@@ -14,5 +14,5 @@ Route::group(['middleware' => ['web']], function () {
     Route::any('/cms/{group?}/{module?}/{params?}', 'CmsController@handle')->where(
         'params',
         '(.*)'
-    )->middleware(Facepalm\Http\Middleware\Authenticate::class);
+    )->middleware([Facepalm\Http\Middleware\Authenticate::class, Facepalm\Http\Middleware\PingPong::class]);
 });
