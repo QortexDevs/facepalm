@@ -66,6 +66,9 @@ class CmsController extends BaseController
     /** @var  integer */
     protected $action;
 
+    /** @var  bool */
+    protected $isDifferentNavModel;
+
 
     /** @var  string */
     protected $layoutMode;
@@ -170,6 +173,7 @@ class CmsController extends BaseController
             // If navigation entity is not editing entity, remove first (navigation) id from parameters
             if ($this->config->get('module.navigation.model') !== $this->config->get('module.model')) {
                 array_shift($params);
+                $this->isDifferentNavModel = true;
                 $this->baseUrl .= ('/' . $this->navigationId);
             }
         }
@@ -204,10 +208,8 @@ class CmsController extends BaseController
                         $moduleContent = $this->showObjectsListPage();
                         break;
                     case self::ACTION_EDIT_OBJECT:
-                        $moduleContent = $this->showEditObjectFormPage();
-                        break;
                     case self::ACTION_CREATE_OBJECT:
-                        $moduleContent = $this->showCreateObjectFormPage();
+                        $moduleContent = $this->showEditObjectFormPage();
                         break;
                 }
             }
@@ -254,13 +256,15 @@ class CmsController extends BaseController
     protected function showObjectsListPage()
     {
         $list = (new CmsList($this->config->part('module')))->setBaseUrl($this->baseUrl);
-        if ($this->navigationId && $this->config->get('module.navigation.model') !== $this->config->get('module.model')) {
+
+        if ($this->navigationId && $this->isDifferentNavModel) {
             $list->setAdditionalConstraints(function ($builder) {
-                //todo: может быть установлен извне
+                //todo: имя поля может быть установлено из вне
                 $relationField = Str::snake($this->config->get('module.navigation.model')) . '_id';
                 return $builder->where($relationField, $this->navigationId);
             });
         }
+
         $params = [
             'buttonsPanel' => (bool)$this->config->get('module.list.treeMode'),
             'listHtml' => $list->render($this->renderer),
@@ -279,10 +283,11 @@ class CmsController extends BaseController
      */
     protected function showEditObjectFormPage()
     {
+        $defaultPageTitle = $this->objectId ? 'Редактирование объекта' : 'Создание объекта';
         $form = (new CmsForm($this->config->part('module'), $this->config))->setEditedObject($this->objectId);
 
-        if ($this->navigationId && $this->config->get('module.navigation.model') !== $this->config->get('module.model')) {
-            //todo: может быть установлен извне
+        if ($this->navigationId && $this->isDifferentNavModel) {
+            //todo: имя поля может быть установлено из вне
             $relationField = Str::snake($this->config->get('module.navigation.model')) . '_id';
             $form->prependHiddenField($relationField, $this->navigationId);
         }
@@ -294,33 +299,9 @@ class CmsController extends BaseController
 
         return [
             'moduleContent' => $this->renderer->render('facepalm::modulePages/form', $params),
-            'pageTitle' => $this->config->get('strings.editTitle') ?: 'Редактирование объекта'
+            'pageTitle' => $this->config->get('strings.editTitle') ?: $defaultPageTitle
         ];
 
-    }
-
-    /**
-     * @return mixed
-     * @throws \Exception
-     */
-    protected function showCreateObjectFormPage()
-    {
-        $form = (new CmsForm($this->config->part('module')));
-
-        if ($this->navigationId && $this->config->get('module.navigation.model') !== $this->config->get('module.model')) {
-            //todo: может быть установлен извне
-            $relationField = Str::snake($this->config->get('module.navigation.model')) . '_id';
-            $form->prependHiddenField($relationField, $this->navigationId);
-        }
-
-        $params = [
-            'formHtml' => $form->render($this->renderer),
-        ];
-
-        return [
-            'moduleContent' => $this->renderer->render('facepalm::modulePages/form', $params),
-            'pageTitle' => $this->config->get('strings.editTitle') ?: 'Редактирование объекта'
-        ];
     }
 
 
