@@ -6,7 +6,6 @@ use Facepalm\Models\Language;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use TwigBridge\Facade\Twig;
 
 /**
  * Class AbstractField
@@ -27,6 +26,17 @@ abstract class AbstractField implements \ArrayAccess
     protected $forceValue;
     protected $amfNameBase;
     protected $fieldNameBase;
+    protected $render;
+
+    /**
+     * @param mixed $render
+     * @return $this
+     */
+    public function setRender($render)
+    {
+        $this->render = $render;
+        return $this;
+    }
 
     /**
      * @return boolean
@@ -183,7 +193,7 @@ abstract class AbstractField implements \ArrayAccess
 
     }
 
-    
+
     /**
      * @param $object
      */
@@ -204,7 +214,7 @@ abstract class AbstractField implements \ArrayAccess
      * @param string $template
      * @return string
      */
-    public function renderFormField($object, $parameters = [], $template = '')
+    public function renderFormField($object, array $parameters = array(), $template = '')
     {
         $template = $template ?: $this->templateName;
 
@@ -212,17 +222,16 @@ abstract class AbstractField implements \ArrayAccess
         if ($template) {
             $languages = Language::where('status', 1)->orderby('is_default', 'desc')->get()->pluck('code', 'code');
 
-            // todo: некрасиво!
-            return Twig::render($template, [
+            return $this->render->render($template, [
                     'object' => $object,
-                    'field' => $this->name,
-                    'uploadName' => 'upload' . $this->amfNameBase,
-                    'fieldNameBase' => $this->fieldNameBase,
-                    'inputName' => $this->fieldNameBase . '[' . $this->name . ']',
-                    'parameters' => $this->parameters,
                     'data' => $this->data,
+                    'field' => $this->name,
                     'languages' => $languages,
-                    'forceValue' => $this->forceValue
+                    'forceValue' => $this->forceValue,
+                    'parameters' => $this->parameters,
+                    'fieldNameBase' => $this->fieldNameBase,
+                    'uploadName' => 'upload' . $this->amfNameBase,
+                    'inputName' => $this->fieldNameBase . '[' . $this->name . ']',
                 ] + $parameters);
         }
     }

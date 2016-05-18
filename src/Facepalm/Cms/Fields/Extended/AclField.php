@@ -10,17 +10,16 @@ namespace Facepalm\Cms\Fields\Extended;
 
 
 use Facepalm\Cms\Fields\AbstractField;
-use TwigBridge\Facade\Twig;
 
 class AclField extends AbstractField
 {
     protected $templateName = 'facepalm::components/form/extended/acl.twig';
 
-    public function renderFormField($object, $parameters = [], $template = '')
+    public function renderFormField($object, array $parameters = [], $template = '')
     {
         $this->makeNames($object);
 
-        return Twig::render($this->templateName, [
+        return $this->render->render($this->templateName, [
                 'acl' => $object->acl ? json_decode($object->acl) : [],
                 'inputName' => $this->fieldNameBase . '[' . $this->name . ']',
                 'structure' => $this->config ? $this->config->get('structure') : null,

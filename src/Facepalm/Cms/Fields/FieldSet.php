@@ -16,12 +16,24 @@ class FieldSet
     /** @var AbstractField[] */
     protected $fields = [];
 
-    /** @var FieldFactory  */
+    /** @var FieldFactory */
     protected $fieldFactory;
 
     protected $dictionaries = [];
     protected $relatedModels = [];
     protected $additionalParameters = [];
+
+    protected $render;
+
+    /**
+     * @param mixed $render
+     * @return $this
+     */
+    public function setRender($render)
+    {
+        $this->render = $render;
+        return $this;
+    }
 
     /**
      * FieldSet constructor.
@@ -76,6 +88,7 @@ class FieldSet
                 $this->fields[$name] = $this->fieldFactory->get($type)
                     ->setName($name)
                     ->setTitle($title)
+                    ->setRender($this->render)
                     ->setParameters($parameters);
 
 
@@ -98,9 +111,13 @@ class FieldSet
         return $this;
     }
 
+    /**
+     * @param $name
+     * @param $value
+     */
     public function prependHiddenField($name, $value)
     {
-        $field = $this->fieldFactory->get('hidden')->setName($name)->setForceValue($value);
+        $field = $this->fieldFactory->get('hidden')->setRender($this->render)->setName($name)->setForceValue($value);
         $this->fields = Arr::prepend($this->fields, $field, $name);
     }
 

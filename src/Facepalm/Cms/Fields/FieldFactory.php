@@ -22,11 +22,11 @@ class FieldFactory
     public function get($type, $params = [])
     {
         $canonizedName = $this->canonize($type);
+//        d($canonizedName);
         try {
             return app()->make($canonizedName);
         } catch (\Exception $e) {
             $className = '\\' . $this->dottedNotationToNamespace($canonizedName) . 'Field';
-
             try {
                 return app()->make($className);
             } catch (\Exception $e) {

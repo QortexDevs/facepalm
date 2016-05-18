@@ -207,9 +207,9 @@ class CmsController extends BaseController
 
             // Setup Field Set and set this instance to service container
             $this->fieldSet = $this->app->make('CmsFieldSet')
-                ->setDictionaries($this->config->get('dictionaries', []))
+                ->setDictionaries($this->config->get('module.dictionaries', []))
+                ->setRender($this->renderer)
                 ->setAdditionalParameter('config', $this->config);
-
             // Render page part content
             $moduleContent = '';
             if ($this->layoutMode === self::LAYOUT_TWO_COLUMN && !$this->navigationId) {
