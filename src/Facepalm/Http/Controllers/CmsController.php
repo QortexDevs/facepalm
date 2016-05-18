@@ -229,7 +229,29 @@ class CmsController extends BaseController
         return [
             'moduleContent' => $this->renderer->render(
                 'facepalm::modulePages/cmsDashboard',
-                ['cmsStructure' => $this->config->get('structure')]
+                [
+                    'cmsStructure' => $this->config->get('structure'),
+                    'palette' => [
+                        '#dcedc1',
+                        '#f2ecc8',
+                        '#ffd3b6',
+                        '#c3dff9',
+                        '#a8e6cf',
+                        '#b9e7ae',
+                        '#dfd7da',
+                        '#d5f4f0',
+                        '#d9ecff',
+                        '#d0ecc5',
+                        '#e4ffd3',
+                        '#ffe3ad',
+                        '#ffaaa5',
+                        '#ff8b94',
+                        '#f0d6bb',
+                        '#f2ecc8',
+                        '#dbbac7',
+                        '#c1f0d0',
+                    ]
+                ]
             ),
             'pageTitle' => 'Welcome'
         ];

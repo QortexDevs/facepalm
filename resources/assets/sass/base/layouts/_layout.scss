@@ -118,19 +118,10 @@
                 i {
                     font-size: 130px;
                     line-height: 170px;
-                    color: #999;
-                    opacity: 0.06;
+                    color: #fff;
+                    opacity: 0.2;
                 }
 
-                .top-level-name {
-                    position: absolute;
-                    top: 2px;
-                    right: 7px;
-                    opacity: 0.2;
-                    color: #777;
-                    font-weight: 100;
-                    font-family: $additionalFontName;
-                }
                 a {
                     position: absolute;
                     width: 100%;
@@ -138,6 +129,7 @@
                     top: 0;
                     left: 0;
                     display: flex;
+                    flex-direction: column;
                     justify-content: center;
                     align-items: center;
                     color: #454549;
@@ -147,6 +139,15 @@
                     text-align: center;
                     opacity: 0.8;
                     //text-shadow: 0 0 10px rgba(220,220,220,1);
+
+                    .top-level-name {
+                        margin-top:4px;
+                        opacity: 0.4;
+                        color: #000;
+                        font-weight: 100;
+                        font-family: $additionalFontName;
+                        font-size: 16px;
+                    }
 
                 }
             }

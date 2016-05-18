@@ -2,11 +2,11 @@
     {% for sectionName, sectionInfo in cmsStructure %}
         {% if sectionInfo.sections %}
             {% for subSectionName, subSectionInfo in sectionInfo.sections %}
-                <div class="tile">
+                <div class="tile" style="background-color: {{ palette[loop.parent.loop.index0] }}">
                     {% if sectionInfo.icon %}<i class="fa fa-fw fa-{{ sectionInfo.icon }}"></i>{% endif %}
-                    <span class="top-level-name">{{ sectionInfo.title }}</span>
                     <a href="/cms/{{ sectionName }}/{{ subSectionName }}/">
                         <span>{{ subSectionInfo.title }}</span>
+                        <span class="top-level-name">{{ sectionInfo.title }}</span>
                     </a>
                 </div>
             {% endfor %}
