@@ -13,27 +13,32 @@ use Illuminate\Support\Str;
 
 class CmsList extends CmsComponent
 {
-    // todo: нцжна вьюшка со списком и параметром, отображать ли кнопку добавления.
+    // todo: нужна вьюшка со списком и параметром, отображать ли кнопку добавления.
     // todo: Подумать про массовые операции
     // todo: пейджер и фильтр
     // todo: type select from local dictionary
 
-    protected $columns = [];
-    protected $showIdColumn = true;
-    protected $showStatusButton = true;
-    protected $showDeleteButton = true;
-    protected $showEditButton = false;
-    protected $isTreeMode = false;
-    protected $isPlainTreeMode = false;
-    protected $isSortable = false;
-    protected $strings = [];
-
-    protected $relatedModels = [];
     const DEFAULT_ORDERING = 'desc';
 
+    protected $columns = [];
+
+    protected $isTreeMode = false;
+    protected $isSortable = false;
+    protected $showIdColumn = true;
+    protected $showEditButton = false;
+    protected $showStatusButton = true;
+    protected $showDeleteButton = true;
+    protected $isPlainTreeMode = false;
+
+    protected $strings = [];
+    protected $relatedModels = [];
     protected $constraintCallbacks = [];
 
 
+    /**
+     * @param Repository $config
+     * @return mixed
+     */
     public static function fromConfig(Repository $config)
     {
         return (new self())->setColumns($config->get('list.columns'), $config->get('titles'))
@@ -48,7 +53,6 @@ class CmsList extends CmsComponent
             ->toggleDeleteButtonColumn($config->get('list.showDelete') !== false);
 
     }
-
 
     /**
      * @param bool $display
@@ -134,12 +138,12 @@ class CmsList extends CmsComponent
 
     /**
      * @return array
-     * @throws \Exception
+     * @throws \InvalidArgumentException
      */
     public function build()
     {
         if (!$this->modelName) {
-            throw new \Exception('No model defined');
+            throw new \InvalidArgumentException('No model defined');
         }
 
         $tableName = Str::snake(class_basename($this->modelName)) . 's';
@@ -157,20 +161,13 @@ class CmsList extends CmsComponent
 
         // todo: сортировка из настроек
         // todo: хитровыебанные запрос для многоязычных полей
-        if ($this->isTreeMode) {
+        if ($this->isTreeMode || $this->isSortable) {
             $queryBuilder = $queryBuilder->orderBy($tableName . '.' . CmsCommon::COLUMN_NAME_SHOW_ORDER, 'asc');
         } else {
-            if ($this->isSortable) {
-                $queryBuilder = $queryBuilder->orderBy($tableName . '.' . CmsCommon::COLUMN_NAME_SHOW_ORDER, 'asc');
-            } else {
-                $queryBuilder = $queryBuilder->orderBy(
-                    $tableName . '.' . CmsCommon::COLUMN_NAME_ID,
-                    self::DEFAULT_ORDERING
-                );
-            }
+            $queryBuilder = $queryBuilder->orderBy($tableName . '.' . CmsCommon::COLUMN_NAME_ID, self::DEFAULT_ORDERING);
         }
 
-        // eager loading of related models
+        // Eager loading of related models
         if ($this->fieldsProcessor->getRelatedModels()) {
             foreach ($this->fieldsProcessor->getRelatedModels() as $relatedModel) {
                 $queryBuilder->with($relatedModel);
@@ -179,9 +176,7 @@ class CmsList extends CmsComponent
 
         if ($this->isTreeMode) {
             foreach ($this->fieldsProcessor->getFields() as $field) {
-                $field->setParameters([
-                    'modelName' => $this->modelName
-                ]);
+                $field->setParameter('modelName', $this->modelName);
                 $field->prepareData();
             }
         }

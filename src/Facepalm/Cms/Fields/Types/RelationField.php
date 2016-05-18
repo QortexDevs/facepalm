@@ -58,7 +58,7 @@ class RelationField extends AbstractField
             $this->parameters['dictionary'][$foreignObject->{CmsCommon::COLUMN_NAME_ID}] = $foreignObject->{$this->foreignDisplayName};
         }
 
-        if ($this->cardinality == 'many') {
+        if ($this->cardinality === 'many') {
 
             if ($object) {
                 //todo: format displayname in config with placeholders-string

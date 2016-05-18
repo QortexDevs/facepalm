@@ -9,7 +9,7 @@ use Facepalm\Models\ModelFactory;
 
 class CmsComponent
 {
-    protected $modelName ;
+    protected $modelName;
     protected $baseUrl = '.';
     protected $config;
 

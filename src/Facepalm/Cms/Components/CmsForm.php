@@ -20,37 +20,28 @@
 namespace Facepalm\Cms\Components;
 
 use Facepalm\Models\ModelFactory;
-use Facepalm\Models\Image;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Mockery\CountValidator\Exception;
-use TwigBridge\Facade\Twig;
 
 class CmsForm extends CmsComponent
 {
     protected $fields = [];
-    protected $relatedModels = [];
-    protected $modelName = null;
 
     /** @var BaseEntity */
-    protected $editedObject = null;
+    protected $editedObject;
 
     /**
      * @param Repository $config
-     * @return $this
-     * @throws \Exception
+     * @return mixed
      */
-    public function configure($config)
+    public static function fromConfig(Repository $config)
     {
-        parent::configure($config);
-
-        $this->setFields($config->get('form.fields'), $config->get('titles'))
-            ->setBaseUrl($config->get('baseUrl'))
+        return (new self())->setFields($config->get('form.fields'), $config->get('titles'))
             ->setMainModel($config->get('model'));
-
-        return $this;
     }
+
 
     /**
      * @param int|null|Model $object
@@ -86,7 +77,7 @@ class CmsForm extends CmsComponent
     public function build()
     {
         if (!$this->modelName) {
-            throw new \Exception('No model defined');
+            throw new \InvalidArgumentException('No model defined');
         }
         $randomId = Str::quickRandom(6);
         foreach ($this->fieldsProcessor->getFields() as $field) {
@@ -115,8 +106,7 @@ class CmsForm extends CmsComponent
     public function render($render, $templateName = 'facepalm::components/form/container.twig')
     {
         return $render->render($templateName, [
-            "form" => $this->build(),
-            "moduleConfig" => $this->config,
+            'form' => $this->build(),
         ]);
     }
 

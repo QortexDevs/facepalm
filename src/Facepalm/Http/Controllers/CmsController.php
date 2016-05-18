@@ -295,7 +295,7 @@ class CmsController extends BaseController
     protected function renderEditObjectFormPage()
     {
         $defaultPageTitle = $this->objectId ? 'Редактирование объекта' : 'Создание объекта';
-        $form = (new CmsForm($this->config->part('module'), $this->config))->setEditedObject($this->objectId);
+        $form = CmsForm::fromConfig($this->config->part('module')/*, $this->config*/)->setEditedObject($this->objectId);
 
         if ($this->navigationId && $this->isDifferentNavModel) {
             //todo: имя поля может быть установлено из вне
