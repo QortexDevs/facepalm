@@ -107,6 +107,61 @@
                 margin: 0 20px 20px 0px;
                 transition: 0.4s;
 
+                &.color1 {
+                    background: #dcedc1;
+                }
+                &.color2 {
+                    background: #f2ecc8;
+                }
+                &.color3 {
+                    background: #ffd3b6;
+                }
+                &.color4 {
+                    background: #c3dff9;
+                }
+                &.color5 {
+                    background: #a8e6cf;
+                }
+                &.color6 {
+                    background: #b9e7ae;
+                }
+                &.color7 {
+                    background: #dfd7da;
+                }
+                &.color8 {
+                    background: #d5f4f0;
+                }
+                &.color9 {
+                    background: #d9ecff;
+                }
+                &.color10 {
+                    background: #d0ecc5;
+                }
+                &.color11 {
+                    background: #e4ffd3;
+                }
+                &.color12 {
+                    background: #ffe3ad;
+                }
+                &.color13 {
+                    background: #ffaaa5;
+                }
+                &.color14 {
+                    background: #ff8b94;
+                }
+                &.color15 {
+                    background: #f0d6bb;
+                }
+                &.color16 {
+                    background: #f2ecc8;
+                }
+                &.color17 {
+                    background: #dbbac7;
+                }
+                &.color18 {
+                    background: #c1f0d0;
+                }
+
                 &:hover {
                     background: #f0f0f7;
                 }
@@ -141,7 +196,7 @@
                     //text-shadow: 0 0 10px rgba(220,220,220,1);
 
                     .top-level-name {
-                        margin-top:4px;
+                        margin-top: 4px;
                         opacity: 0.4;
                         color: #000;
                         font-weight: 100;

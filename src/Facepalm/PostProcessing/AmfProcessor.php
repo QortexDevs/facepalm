@@ -123,4 +123,12 @@ class AmfProcessor
         return $this->affectedFields;
     }
 
+    /**
+     * @return bool
+     */
+    public function isSingleObjectCreated()
+    {
+        return $this->getAffectedObjectsCount() === 1 && Arr::has($this->getAffectedObjects(), 'create');
+    }
+
 }

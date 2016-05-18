@@ -106,7 +106,6 @@ class CmsController extends BaseController
      */
     public function handle($group = null, $module = null, $params = null)
     {
-
         $this->group = $group;
         $this->module = $module;
         $this->config = $this->permissionManager->filterCmsStructureWithPermissions(Config::fromFile($group, $module));
@@ -230,27 +229,7 @@ class CmsController extends BaseController
             'moduleContent' => $this->renderer->render(
                 'facepalm::modulePages/cmsDashboard',
                 [
-                    'cmsStructure' => $this->config->get('structure'),
-                    'palette' => [
-                        '#dcedc1',
-                        '#f2ecc8',
-                        '#ffd3b6',
-                        '#c3dff9',
-                        '#a8e6cf',
-                        '#b9e7ae',
-                        '#dfd7da',
-                        '#d5f4f0',
-                        '#d9ecff',
-                        '#d0ecc5',
-                        '#e4ffd3',
-                        '#ffe3ad',
-                        '#ffaaa5',
-                        '#ff8b94',
-                        '#f0d6bb',
-                        '#f2ecc8',
-                        '#dbbac7',
-                        '#c1f0d0',
-                    ]
+                    'cmsStructure' => $this->config->get('structure')
                 ]
             ),
             'pageTitle' => 'Welcome'
@@ -316,7 +295,7 @@ class CmsController extends BaseController
 
         $params = [
             'formHtml' => $form->render($this->renderer),
-            'justCreated' => $this->request->input('justCreated'),
+            'justCreated' => $this->app->session->get('justCreated'),
         ];
 
         return [
@@ -401,7 +380,7 @@ class CmsController extends BaseController
         //todo: события до, после и вместо!!!!
         if (Arr::has($amfProcessor->getAffectedFields(), 'toggle')) {
             // todo: какашка какая-то
-            if ($amfProcessor->getAffectedFieldsCount() == 1) {
+            if ($amfProcessor->getAffectedFieldsCount() === 1) {
                 // адская конструкция для доступа к конкретному единственному значению многомерного массива
                 $singleElementFieldValue = array_values(array_values(array_values($amfProcessor->getAffectedFields()['toggle'])[0])[0])[0];
                 return response()->json($singleElementFieldValue);
@@ -409,11 +388,10 @@ class CmsController extends BaseController
                 return response()->json($amfProcessor->getAffectedFields()['toggle']);
             }
         }
-        if (Arr::has($amfProcessor->getAffectedObjects(), "create")) {
-            if ($amfProcessor->getAffectedObjectsCount() == 1) {
-                $id = array_values($amfProcessor->getAffectedObjects()['create'])[0][0];
-                return response()->json($id);
-            }
+        if ($amfProcessor->isSingleObjectCreated()) {
+            $id = array_values($amfProcessor->getAffectedObjects()['create'])[0][0];
+            $this->app->session->flash('justCreated', $id);
+            return response()->json($id);
         }
         if ($files = Arr::get($amfProcessor->getAffectedObjects(), 'upload')) {
             return response()->json(array_values($files)[0]);
