@@ -3,17 +3,12 @@
 namespace Facepalm\Cms\Components;
 
 use Facepalm\Cms\CmsCommon;
-use Facepalm\Cms\Fields\AbstractField;
-use Facepalm\Cms\Fields\FieldListProcessor;
-use Facepalm\Cms\Fields\Types\RelationField;
+use Facepalm\Cms\Config\Config;
 use Facepalm\Models\Foundation\BaseEntity;
 use Facepalm\Models\ModelFactory;
 use Facepalm\Tools\Tree;
-use Carbon\Carbon;
-use Illuminate\Contracts\Config\Repository;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Config\Repository;
 use Illuminate\Database\Query\Builder;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 class CmsList extends CmsComponent
@@ -30,6 +25,8 @@ class CmsList extends CmsComponent
     protected $showEditButton = false;
     protected $isTreeMode = false;
     protected $isPlainTreeMode = false;
+    protected $isSortable = false;
+    protected $strings = [];
 
     protected $relatedModels = [];
     const DEFAULT_ORDERING = 'desc';
@@ -37,25 +34,19 @@ class CmsList extends CmsComponent
     protected $constraintCallbacks = [];
 
 
-    /**
-     * @param Repository $config
-     * @return $this
-     * @throws \Exception
-     */
-    public function configure($config)
+    public static function fromConfig(Repository $config)
     {
-        parent::configure($config);
-
-        $this->setColumns($config->get('list.columns'), $config->get('titles'))
+        return (new self())->setColumns($config->get('list.columns'), $config->get('titles'))
             ->setMainModel($config->get('model'))
+            ->setStrings((array)$config->get('strings'))
             ->toggleIdColumn($config->get('list.showId') !== false)
+            ->toggleTreeMode($config->get('list.treeMode') === true)
+            ->toggleSortable($config->get('list.sortable') === true)
+            ->togglePlainTreeMode($config->get('list.plain') === true)
+            ->toggleEditButtonColumn($config->get('list.showEdit') === true)
             ->toggleStatusButtonColumn($config->get('list.showStatus') !== false)
-            ->toggleDeleteButtonColumn($config->get('list.showDelete') !== false)
-            ->toggleEditButtonColumn($config->get('list.showEdit') == true)
-            ->toggleTreeMode($config->get('list.treeMode') == true)
-            ->togglePlainTreeMode($config->get('list.plain') == true);
+            ->toggleDeleteButtonColumn($config->get('list.showDelete') !== false);
 
-        return $this;
     }
 
 
@@ -120,6 +111,26 @@ class CmsList extends CmsComponent
         return $this;
     }
 
+    /**
+     * @param bool $isSortable
+     * @return $this
+     */
+    public function toggleSortable($isSortable = true)
+    {
+        $this->isSortable = (bool)$isSortable;
+        return $this;
+    }
+
+    /**
+     * @param array $strings
+     * @return $this
+     */
+    public function setStrings(array $strings = array())
+    {
+        $this->strings = $strings;
+        return $this;
+    }
+
 
     /**
      * @return array
@@ -149,7 +160,7 @@ class CmsList extends CmsComponent
         if ($this->isTreeMode) {
             $queryBuilder = $queryBuilder->orderBy($tableName . '.' . CmsCommon::COLUMN_NAME_SHOW_ORDER, 'asc');
         } else {
-            if ($this->config->get('list.sortable')) {
+            if ($this->isSortable) {
                 $queryBuilder = $queryBuilder->orderBy($tableName . '.' . CmsCommon::COLUMN_NAME_SHOW_ORDER, 'asc');
             } else {
                 $queryBuilder = $queryBuilder->orderBy(
@@ -193,7 +204,7 @@ class CmsList extends CmsComponent
                 'showEditButton' => $this->showEditButton,
                 'treeMode' => $this->isTreeMode,
                 'plainTreeMode' => $this->isPlainTreeMode,
-                'sortable' => $this->config->get('list.sortable')
+                'sortable' => $this->isSortable
             ],
             'meta' => [
                 'model' => class_basename($this->modelName),
@@ -221,17 +232,15 @@ class CmsList extends CmsComponent
         if ($listData['settings']['treeMode']) {
             $treeContent = $listData['tree']->render($render, 'facepalm::components/list/treeItem', 0, false, [
                 'list' => $listData,
-                'moduleConfig' => $this->config,
             ]);
             $emptyTreeItem = $render->render('facepalm::components/list/treeItem', [
                 'list' => $listData,
-                'moduleConfig' => $this->config,
             ]);
         }
         return $render->render($templateName, [
             'list' => $listData,
             'baseUrl' => $this->baseUrl,
-            'moduleConfig' => $this->config,
+            'strings' => $this->strings,
             'treeContent' => $treeContent ?: '',
             'emptyTreeItem' => $emptyTreeItem ?: ''
         ]);

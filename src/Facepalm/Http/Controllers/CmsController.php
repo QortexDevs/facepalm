@@ -192,6 +192,8 @@ class CmsController extends BaseController
     }
 
     /**
+     * Generate and output CMS UI pages
+     *
      * @return mixed
      * @throws \Exception
      */
@@ -200,30 +202,32 @@ class CmsController extends BaseController
         if ($this->group) {
             $moduleContent = '';
             if ($this->layoutMode === self::LAYOUT_TWO_COLUMN && !$this->navigationId) {
-                $moduleContent = $this->showTwoColumnIndexPage();
+                $moduleContent = $this->renderTwoColumnIndexPage();
             } else {
                 switch ($this->action) {
                     case self::ACTION_LIST_OBJECTS:
-                        $moduleContent = $this->showObjectsListPage();
+                        $moduleContent = $this->renderObjectsListPage();
                         break;
                     case self::ACTION_EDIT_OBJECT:
                     case self::ACTION_CREATE_OBJECT:
-                        $moduleContent = $this->showEditObjectFormPage();
+                        $moduleContent = $this->renderEditObjectFormPage();
                         break;
                 }
             }
         } else {
-            $moduleContent = $this->showCmsDashboard();
+            $moduleContent = $this->renderCmsDashboard();
         }
 
         return $this->renderPage('facepalm::layouts/base', $moduleContent);
     }
 
     /**
+     * Render CMS starting page part
+     *
      * @return mixed
      * @throws \Exception
      */
-    protected function showCmsDashboard()
+    protected function renderCmsDashboard()
     {
         return [
             'moduleContent' => $this->renderer->render(
@@ -237,11 +241,13 @@ class CmsController extends BaseController
     }
 
     /**
+     * Render index page part for two-column layout
+     *
      * @return mixed
      * @throws \Twig_Error_Loader
      * @throws \Exception
      */
-    protected function showTwoColumnIndexPage()
+    protected function renderTwoColumnIndexPage()
     {
         return [
             'moduleContent' => $this->renderer->render('facepalm::modulePages/twoColumnIndex'),
@@ -251,12 +257,14 @@ class CmsController extends BaseController
 
 
     /**
+     * Render List or tree page part
+     *
      * @return mixed
      * @throws \Exception
      */
-    protected function showObjectsListPage()
+    protected function renderObjectsListPage()
     {
-        $list = (new CmsList($this->config->part('module')))->setBaseUrl($this->baseUrl);
+        $list = CmsList::fromConfig($this->config->part('module'))->setBaseUrl($this->baseUrl);
 
         if ($this->navigationId && $this->isDifferentNavModel) {
             $list->setAdditionalConstraints(function ($builder) {
@@ -279,10 +287,12 @@ class CmsController extends BaseController
     }
 
     /**
+     * Render form page part
+     *
      * @return mixed
      * @throws \Exception
      */
-    protected function showEditObjectFormPage()
+    protected function renderEditObjectFormPage()
     {
         $defaultPageTitle = $this->objectId ? 'Редактирование объекта' : 'Создание объекта';
         $form = (new CmsForm($this->config->part('module'), $this->config))->setEditedObject($this->objectId);
@@ -307,6 +317,8 @@ class CmsController extends BaseController
 
 
     /**
+     * Render whoel UI page
+     *
      * Render whole CMS page
      * @param $template
      * @param $params
