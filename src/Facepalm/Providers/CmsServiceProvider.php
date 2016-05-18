@@ -2,6 +2,10 @@
 
 namespace Facepalm\Providers;
 
+use Facepalm\Cms\Components\CmsForm;
+use Facepalm\Cms\Components\CmsList;
+use Facepalm\Cms\Fields\FieldFactory;
+use Facepalm\Cms\Fields\FieldSet;
 use Facepalm\Cms\PermissionManager;
 use Facepalm\Models\Image;
 use Illuminate\Support\Facades\Auth;
@@ -59,11 +63,15 @@ class CmsServiceProvider extends ServiceProvider
         $this->app->bind('facepalm.cms.fields.extended.acl', 'Facepalm\Cms\Fields\Extended\AclField');
         $this->app->bind('facepalm.cms.fields.extended.latlng', 'Facepalm\Cms\Fields\Extended\LatlngField');
 
-        $this->app->bind('PermissionManager', PermissionManager::class);
+        $this->app->bind('CmsList', CmsList::class);
+        $this->app->bind('CmsForm', CmsForm::class);
+        $this->app->bind('CmsFieldSet', FieldSet::class);
+        $this->app->bind('Facepalm\Cms\Fields\FieldFactory', FieldFactory::class);
+        $this->app->bind('Facepalm\Cms\PermissionManager', PermissionManager::class);
         $this->app->bind('Facepalm\Models\User', function () {
             return Auth::user() ?: null;
         });
-        
+
 //        $this->app->bind('facepalm.amf.action.acl', 'Facepalm\PostProcessing\AmfActions\Extended\Acl');
 
     }

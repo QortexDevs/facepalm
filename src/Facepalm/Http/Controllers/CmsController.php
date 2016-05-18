@@ -8,6 +8,7 @@
 
 namespace Facepalm\Http\Controllers;
 
+use Facepalm\Cms\Fields\FieldSet;
 use Facepalm\Tools\Tree;
 use Facepalm\Models\User;
 use TwigBridge\Facade\Twig;
@@ -41,6 +42,9 @@ class CmsController extends BaseController
 
     /** @var  Request */
     protected $request;
+
+    /** @var  FieldSet */
+    protected $fieldSet;
 
     /** @var  Application */
     protected $app;
@@ -200,6 +204,13 @@ class CmsController extends BaseController
     protected function get()
     {
         if ($this->group) {
+
+            // Setup Field Set and set this instance to service container
+            $this->fieldSet = $this->app->make('CmsFieldSet')
+                ->setDictionaries($this->config->get('dictionaries', []))
+                ->setAdditionalParameter('config', $this->config);
+
+            // Render page part content
             $moduleContent = '';
             if ($this->layoutMode === self::LAYOUT_TWO_COLUMN && !$this->navigationId) {
                 $moduleContent = $this->renderTwoColumnIndexPage();
@@ -264,11 +275,15 @@ class CmsController extends BaseController
      */
     protected function renderObjectsListPage()
     {
-        $list = CmsList::fromConfig($this->config->part('module'))->setBaseUrl($this->baseUrl);
 
+        /** @var CmsList $list */
+        $list = $this->app->make('CmsList', [$this->fieldSet])
+            ->setBaseUrl($this->baseUrl)
+            ->setupFromConfig($this->config->part('module'));
+
+        // дополнительная фильтрация списка в зависимости от выбора в левом меню
         if ($this->navigationId && $this->isDifferentNavModel) {
             $list->setAdditionalConstraints(function ($builder) {
-                //todo: имя поля может быть установлено из вне
                 $relationField = Str::snake($this->config->get('module.navigation.model')) . '_id';
                 return $builder->where($relationField, $this->navigationId);
             });
@@ -295,13 +310,16 @@ class CmsController extends BaseController
     protected function renderEditObjectFormPage()
     {
         $defaultPageTitle = $this->objectId ? 'Редактирование объекта' : 'Создание объекта';
-        $form = CmsForm::fromConfig($this->config->part('module')/*, $this->config*/)->setEditedObject($this->objectId);
 
         if ($this->navigationId && $this->isDifferentNavModel) {
-            //todo: имя поля может быть установлено из вне
             $relationField = Str::snake($this->config->get('module.navigation.model')) . '_id';
-            $form->prependHiddenField($relationField, $this->navigationId);
+            $this->fieldSet->prependHiddenField($relationField, $this->navigationId);
         }
+
+        /** @var CmsForm $form */
+        $form = $this->app->make('CmsForm', [$this->fieldSet])
+            ->setupFromConfig($this->config->part('module'))
+            ->setEditedObject($this->objectId);
 
         $params = [
             'formHtml' => $form->render($this->renderer),

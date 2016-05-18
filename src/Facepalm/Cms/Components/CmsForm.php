@@ -34,12 +34,18 @@ class CmsForm extends CmsComponent
 
     /**
      * @param Repository $config
-     * @return mixed
+     * @param bool $processFieldSet
+     * @return $this
      */
-    public static function fromConfig(Repository $config)
+    public function setupFromConfig(Repository $config, $processFieldSet = true)
     {
-        return (new self())->setFields($config->get('form.fields'), $config->get('titles'))
-            ->setMainModel($config->get('model'));
+        $this->setMainModel($config->get('model'));
+
+        if ($processFieldSet) {
+            $this->fieldSet->process($config->get('form.fields'), $config->get('titles'));
+        }
+
+        return $this;
     }
 
 
@@ -65,11 +71,6 @@ class CmsForm extends CmsComponent
         return $this;
     }
 
-    public function prependHiddenField($name, $value)
-    {
-        $this->fieldsProcessor->prependHiddenField($name, $value);
-    }
-
     /**
      * @return array
      * @throws \Exception
@@ -80,16 +81,16 @@ class CmsForm extends CmsComponent
             throw new \InvalidArgumentException('No model defined');
         }
         $randomId = Str::quickRandom(6);
-        foreach ($this->fieldsProcessor->getFields() as $field) {
+        foreach ($this->fieldSet->getFields() as $field) {
             $field->setParameters([
                 'randomId' => $randomId,
                 'modelName' => $this->modelName
             ]);
-            $field->prepareData($this->editedObject, $this->fieldsProcessor);
+            $field->prepareData($this->editedObject, $this->fieldSet);
         }
 
         $output = [
-            'fields' => $this->fieldsProcessor->getFields(),
+            'fields' => $this->fieldSet->getFields(),
             'object' => $this->editedObject
         ];
 

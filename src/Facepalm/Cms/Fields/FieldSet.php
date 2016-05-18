@@ -6,7 +6,7 @@ use Facepalm\Cms\Fields\Types\SelectField;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
-class FieldListProcessor
+class FieldSet
 {
     const FIELD_TYPE_DEFAULT = 'string';
     const RELATION_TYPE_NAME = 'relation';
@@ -16,32 +16,41 @@ class FieldListProcessor
     /** @var AbstractField[] */
     protected $fields = [];
 
-    protected $relatedModels = [];
+    /** @var FieldFactory  */
+    protected $fieldFactory;
+
     protected $dictionaries = [];
-    protected $cmsConfig = null;
+    protected $relatedModels = [];
+    protected $additionalParameters = [];
+
+    /**
+     * FieldSet constructor.
+     * @param FieldFactory $fieldFactory
+     */
+    public function __construct(FieldFactory $fieldFactory)
+    {
+        $this->fieldFactory = $fieldFactory;
+    }
+
 
     /**
      * @param $fields
      * @param $titles
-     * @return FieldListProcessor $this
+     * @return FieldSet $this
      */
-    public function process($fields, $titles = [])
+    public function process($fields, array $titles = array())
     {
-        $factory = new FieldFactory();
-
         // Ensure $fields is array
         $fields = (array)$fields;
 
         if (count($fields)) {
 
             // Convert plain array to associative
-            if (!Arr::isAssoc($fields)) {
-                if (!is_array($fields[0])) {
-                    $fields = array_flip($fields);
-                }
+            if (!Arr::isAssoc($fields) && !is_array($fields[0])) {
+                $fields = array_flip($fields);
             }
 
-            // Now whe definitely have associative array of fields, with names as keys
+            // Now we definitely have associative array of fields, with names as keys
             $counter = 0;
             foreach ($fields as $name => $parameters) {
                 // Ensure $parameters is array
@@ -53,11 +62,9 @@ class FieldListProcessor
                 }
 
                 $title = $this->getTitle($name, $parameters, $titles, $counter);
-
                 if ($this->isRelationColumn($name)) {
                     $type = self::RELATION_TYPE_NAME;
-                    $parameters['foreignModel'] = explode('.', $name)[0];
-                    $parameters['foreignDisplayName'] = explode('.', $name)[1];
+                    list($parameters['foreignModel'], $parameters['foreignDisplayName']) = explode('.', $name);
                     $parameters['cardinality'] = Arr::get($parameters, 'cardinality', self::CARDINALITY_ONE);
                     $this->relatedModels[] = $parameters['foreignModel'];
                     $type = Arr::get($parameters, 'type', $type);
@@ -66,23 +73,20 @@ class FieldListProcessor
                 }
 
                 // todo: подумтаь насчет ключа все же
-                $this->fields[$name] = $factory->get($type)
+                $this->fields[$name] = $this->fieldFactory->get($type)
                     ->setName($name)
                     ->setTitle($title)
                     ->setParameters($parameters);
 
-                if ($this->cmsConfig) {
-                    $this->fields[$name]->setParameter('config', $this->cmsConfig);
-                }
+
+                $this->fields[$name]->setParameters($this->additionalParameters);
 
                 //todo: перенести в сам класс типа поля
-                if ($this->fields[$name] instanceof SelectField) {
-                    if (!$this->fields[$name]->dictionary) {
-                        if ($this->fields[$name]->options) {
-                            $this->fields[$name]->setDictionary($this->fields[$name]->options);
-                        } else {
-                            $this->fields[$name]->setDictionary(Arr::get($this->dictionaries, $name, []));
-                        }
+                if ($this->fields[$name] instanceof SelectField && !$this->fields[$name]->dictionary) {
+                    if ($this->fields[$name]->options) {
+                        $this->fields[$name]->setDictionary($this->fields[$name]->options);
+                    } else {
+                        $this->fields[$name]->setDictionary(Arr::get($this->dictionaries, $name, []));
                     }
                 }
 
@@ -96,8 +100,7 @@ class FieldListProcessor
 
     public function prependHiddenField($name, $value)
     {
-        $factory = new FieldFactory();
-        $field = $factory->get('hidden')->setName($name)->setForceValue($value);
+        $field = $this->fieldFactory->get('hidden')->setName($name)->setForceValue($value);
         $this->fields = Arr::prepend($this->fields, $field, $name);
     }
 
@@ -137,7 +140,7 @@ class FieldListProcessor
      * @param $columnName
      * @param $titles
      * @param $counter
-     * @return null
+     * @return string|null
      */
     protected function getTitle($columnName, $column, $titles, $counter)
     {
@@ -161,7 +164,7 @@ class FieldListProcessor
 
     /**
      * @param array $dictionaries
-     * @return FieldListProcessor
+     * @return FieldSet
      */
     public function setDictionaries($dictionaries)
     {
@@ -169,8 +172,14 @@ class FieldListProcessor
         return $this;
     }
 
-    public function setCmsConfig($cmsConfig)
+    /**
+     * @param $name
+     * @param $value
+     * @return $this
+     */
+    public function setAdditionalParameter($name, $value)
     {
-        $this->cmsConfig = $cmsConfig;
+        $this->additionalParameters[$name] = $value;
+        return $this;
     }
 }

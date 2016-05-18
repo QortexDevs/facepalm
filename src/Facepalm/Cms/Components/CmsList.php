@@ -37,12 +37,12 @@ class CmsList extends CmsComponent
 
     /**
      * @param Repository $config
+     * @param bool $processFieldSet
      * @return mixed
      */
-    public static function fromConfig(Repository $config)
+    public function setupFromConfig(Repository $config, $processFieldSet = true)
     {
-        return (new self())->setColumns($config->get('list.columns'), $config->get('titles'))
-            ->setMainModel($config->get('model'))
+        $this->setMainModel($config->get('model'))
             ->setStrings((array)$config->get('strings'))
             ->toggleIdColumn($config->get('list.showId') !== false)
             ->toggleTreeMode($config->get('list.treeMode') === true)
@@ -52,6 +52,11 @@ class CmsList extends CmsComponent
             ->toggleStatusButtonColumn($config->get('list.showStatus') !== false)
             ->toggleDeleteButtonColumn($config->get('list.showDelete') !== false);
 
+        if ($processFieldSet) {
+            $this->fieldSet->process($config->get('list.columns'), $config->get('titles'));
+        }
+        
+        return $this;
     }
 
     /**
@@ -168,14 +173,14 @@ class CmsList extends CmsComponent
         }
 
         // Eager loading of related models
-        if ($this->fieldsProcessor->getRelatedModels()) {
-            foreach ($this->fieldsProcessor->getRelatedModels() as $relatedModel) {
+        if ($this->fieldSet->getRelatedModels()) {
+            foreach ($this->fieldSet->getRelatedModels() as $relatedModel) {
                 $queryBuilder->with($relatedModel);
             }
         }
 
         if ($this->isTreeMode) {
-            foreach ($this->fieldsProcessor->getFields() as $field) {
+            foreach ($this->fieldSet->getFields() as $field) {
                 $field->setParameter('modelName', $this->modelName);
                 $field->prepareData();
             }
@@ -203,7 +208,7 @@ class CmsList extends CmsComponent
             ],
             'meta' => [
                 'model' => class_basename($this->modelName),
-                'columns' => $this->fieldsProcessor->getFields()
+                'columns' => $this->fieldSet->getFields()
             ],
             'tree' => $tree
         ];

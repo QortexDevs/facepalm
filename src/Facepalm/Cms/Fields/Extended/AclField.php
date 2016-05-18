@@ -21,9 +21,9 @@ class AclField extends AbstractField
         $this->makeNames($object);
 
         return Twig::render($this->templateName, [
+                'acl' => $object->acl ? json_decode($object->acl) : [],
                 'inputName' => $this->fieldNameBase . '[' . $this->name . ']',
-                'structure' => $this->config->get('structure'),
-                'acl' => $object->acl ? json_decode($object->acl) : []
+                'structure' => $this->config ? $this->config->get('structure') : null,
             ] + $parameters);
     }
 

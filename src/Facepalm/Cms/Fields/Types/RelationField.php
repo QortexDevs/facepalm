@@ -92,7 +92,7 @@ class RelationField extends AbstractField
      * @param $parameters
      * @return $this
      */
-    public function setParameters($parameters)
+    public function setParameters(array $parameters)
     {
         parent::setParameters($parameters);
         if (Arr::has($parameters, 'foreignModel')) {

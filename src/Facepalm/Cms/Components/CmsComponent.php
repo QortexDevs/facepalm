@@ -2,38 +2,29 @@
 
 namespace Facepalm\Cms\Components;
 
-use Facepalm\Cms\CmsCommon;
-use Facepalm\Cms\Config\Config;
-use Facepalm\Cms\Fields\FieldListProcessor;
+use Facepalm\Cms\Fields\FieldSet;
 use Facepalm\Models\ModelFactory;
 
-class CmsComponent
+abstract class CmsComponent
 {
+    /** @var string */
     protected $modelName;
+
+    /** @var string */
     protected $baseUrl = '.';
-    protected $config;
 
-    /** @var FieldListProcessor */
-    protected $fieldsProcessor;
-    protected $cmsConfig;
-
+    /** @var FieldSet */
+    protected $fieldSet;
 
     /**
      * CmsComponent constructor.
-     * @param Config $config
+     * @param FieldSet $fieldSet
      */
-    public function __construct($config = null, $cmsConfig = null)
+    public function __construct(FieldSet $fieldSet)
     {
-        $this->fieldsProcessor = new FieldListProcessor();
-        if ($cmsConfig) {
-            $this->cmsConfig = $cmsConfig;
-            $this->fieldsProcessor->setCmsConfig($this->cmsConfig);
-        }
-        if ($config) {
-            $this->fieldsProcessor->setDictionaries($config->get('dictionaries', []));
-            $this->configure($config);
-        }
+        $this->fieldSet = $fieldSet;
     }
+
 
     /**
      * @param $modelName
@@ -53,43 +44,6 @@ class CmsComponent
         return $this;
     }
 
-    /**
-     * @param $config
-     */
-    public function configure($config)
-    {
-        $this->config = $config;
-    }
-
-    /**
-     */
-    public function build()
-    {
-    }
-
-    /**
-     * todo: описать в документации, как можно передавать разные параметры
-     * @param $columns
-     * @param null $titles
-     * @return CmsComponent|CmsList|CmsForm
-     */
-    public function setFields($columns, $titles = null)
-    {
-        $this->fieldsProcessor->process($columns, $titles);
-
-        return $this;
-    }
-
-    /**
-     * @param $columns
-     * @param null $titles
-     * @return CmsComponent|CmsForm|CmsList
-     */
-    public function setColumns($columns, $titles = null)
-    {
-        return $this->setFields($columns, $titles);
-    }
-
 
     /**
      * @param $baseUrl
@@ -101,5 +55,9 @@ class CmsComponent
 
         return $this;
     }
+
+
+    abstract public function build();
+
 
 }

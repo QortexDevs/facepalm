@@ -90,7 +90,7 @@ abstract class AbstractField implements \ArrayAccess
      * @param $parameters
      * @return $this
      */
-    public function setParameters($parameters)
+    public function setParameters(array $parameters)
     {
         $this->parameters = array_replace($this->parameters, $parameters);
         return $this;
