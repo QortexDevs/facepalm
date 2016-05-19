@@ -9,8 +9,10 @@
 namespace Facepalm\Http\Controllers;
 
 use Facepalm\Cms\Fields\FieldSet;
+use Facepalm\Models\Foundation\BaseEntity;
 use Facepalm\Tools\Tree;
 use Facepalm\Models\User;
+use Illuminate\Database\Eloquent\Model;
 use TwigBridge\Facade\Twig;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -276,6 +278,8 @@ class CmsController extends BaseController
     protected function renderObjectsListPage()
     {
 
+        $defaultPageTitle = $this->config->get('module.strings.title') ?: 'Список объектов';
+
         /** @var CmsList $list */
         $list = $this->app->make('CmsList', [$this->fieldSet])
             ->setBaseUrl($this->baseUrl)
@@ -283,6 +287,11 @@ class CmsController extends BaseController
 
         // дополнительная фильтрация списка в зависимости от выбора в левом меню
         if ($this->navigationId && $this->isDifferentNavModel) {
+            if ($this->config->get('module.navigation.titleField')) {
+                $relationObject = ModelFactory::find($this->config->get('module.navigation.model'), $this->navigationId);
+                $defaultPageTitle = $relationObject->{$this->config->get('module.navigation.titleField')};
+            }
+
             $list->setAdditionalConstraints(function ($builder) {
                 $relationField = Str::snake($this->config->get('module.navigation.model')) . '_id';
                 return $builder->where($relationField, $this->navigationId);
@@ -296,7 +305,7 @@ class CmsController extends BaseController
 
         return [
             'moduleContent' => $this->renderer->render('facepalm::modulePages/list', $params),
-            'pageTitle' => $this->config->get('module.strings.title') ?: 'Список объектов'
+            'pageTitle' => $defaultPageTitle
         ];
 
     }
@@ -311,15 +320,58 @@ class CmsController extends BaseController
     {
         $defaultPageTitle = $this->objectId ? 'Редактирование объекта' : 'Создание объекта';
 
-        if ($this->navigationId && $this->isDifferentNavModel) {
-            $relationField = Str::snake($this->config->get('module.navigation.model')) . '_id';
-            $this->fieldSet->prependHiddenField($relationField, $this->navigationId);
+        if ($this->config->get('module.strings.editTitle')) {
+            $defaultPageTitle = $this->config->get('module.strings.editTitle');
+        }
+
+        if ($this->navigationId) {
+            if ($this->isDifferentNavModel) {
+                $relationField = Str::snake($this->config->get('module.navigation.model')) . '_id';
+                $this->fieldSet->prependHiddenField($relationField, $this->navigationId);
+            } else {
+                if ($this->config->get('module.navigation.titleField')) {
+                    $relationObject = ModelFactory::find($this->config->get('module.navigation.model'), $this->navigationId);
+                    $defaultPageTitle = $relationObject->{$this->config->get('module.navigation.titleField')};
+                }
+            }
         }
 
         /** @var CmsForm $form */
-        $form = $this->app->make('CmsForm', [$this->fieldSet])
-            ->setupFromConfig($this->config->part('module'))
-            ->setEditedObject($this->objectId);
+        $form = $this->app->make('CmsForm', [$this->fieldSet]);
+
+        //todo: refactor this!
+        if ($this->config->get('module.forms')) {
+            $form->setupFromConfig($this->config->part('module'), false);
+            $customForm = $this->config->part('module.forms.for_id_' . $this->objectId);
+            if ($customForm->get('fields')) {
+                if ($customForm->get('model')) {
+                    $form->setMainModel($customForm->get('model'));
+                }
+                if ($customForm->get('fields')) {
+                    $this->fieldSet->process($customForm->get('fields'), $this->config->get('module.titles'));
+                }
+                if ($customForm->get('overrideObjectId')) {
+                    //todo: унести это в форму и управлять параметром: createObjectOfNeed
+                    if (!ModelFactory::find($customForm->get('model'), $customForm->get('overrideObjectId'))) {
+                        $fullModelName = ModelFactory::getFullModelClassName($customForm->get('model'));
+                        /** @var BaseEntity $obj */
+                        $obj = new $fullModelName();
+                        $obj->id = $customForm->get('overrideObjectId');
+                        $obj->save();
+                    }
+                    $form->setEditedObject($customForm->get('overrideObjectId'));
+                } else {
+                    $form->setEditedObject($this->objectId);
+                }
+            } else {
+                $this->fieldSet->process($this->config->get('module.forms.default.fields'), $this->config->get('module.titles'));
+                $form->setEditedObject($this->objectId);
+            }
+        } else {
+            $form->setupFromConfig($this->config->part('module'));
+            $form->setEditedObject($this->objectId);
+        }
+
 
         $params = [
             'formHtml' => $form->render($this->renderer),

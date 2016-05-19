@@ -48,7 +48,7 @@ class Config
         $this->configRepository = new Repository($data);
 
         //todo: стоит ли это здесь делать или все же передавать снаружи?
-        $this->setLoader(new JsonFileConfigLoader());
+        $this->setLoader(new Json5FileConfigLoader());
     }
 
     /**

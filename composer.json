@@ -13,7 +13,8 @@
         "laravel/framework": "5.2.*",
         "twig/twig": "~1.23",
         "rcrowe/twigbridge": "0.9.x",
-        "intervention/image": "^2.3"
+        "intervention/image": "^2.3",
+        "hiroto-k/json5-php": "~1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
