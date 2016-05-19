@@ -1,7 +1,10 @@
 {
     "name": "xpundel/facepalm",
     "description": "The FacepalmCMS.",
-    "keywords": ["facepalm", "cms"],
+    "keywords": [
+        "facepalm",
+        "cms"
+    ],
     "authors": [
         {
             "name": "Mikhail Lisnyak",
@@ -9,7 +12,7 @@
         }
     ],
     "require": {
- 	   "php": ">=5.5.9",
+        "php": ">=5.5.9",
         "laravel/framework": "5.2.*",
         "twig/twig": "~1.23",
         "rcrowe/twigbridge": "0.9.x",
@@ -24,10 +27,10 @@
         "squizlabs/php_codesniffer": "2.*"
     },
     "autoload": {
-       "psr-4": {
+        "psr-4": {
             "Facepalm\\": "src/Facepalm/",
             "Facepalm\\Tests\\": "tests"
-       },
+        },
         "files": [
             "src/Facepalm/helpers.php"
         ]

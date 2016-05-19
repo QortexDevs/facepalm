@@ -16,8 +16,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->publishes([__DIR__ . '/../build/' => public_path() . "/assets/facepalm/"], 'assets');
-        $this->publishes([__DIR__ . '/../database/' => base_path("database")], 'database');
+        $this->publishes([__DIR__ . '/../../../build/' => public_path() . "/assets/facepalm/"], 'assets');
+        $this->publishes([__DIR__ . '/../../../database/' => base_path("database")], 'database');
 
         $this->loadViewsFrom(__DIR__ . '/../../../resources/views/', 'facepalm');
 //        DB::listen(function ($sql, $bindings = null, $time = null) {
