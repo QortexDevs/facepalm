@@ -20,6 +20,7 @@ class AppServiceProvider extends ServiceProvider
         $this->publishes([__DIR__ . '/../../../database/' => base_path("database")], 'database');
 
         $this->loadViewsFrom(__DIR__ . '/../../../resources/views/', 'facepalm');
+        //test
 //        DB::listen(function ($sql, $bindings = null, $time = null) {
 //            d($sql, $time / 1000);
 //            echo($sql->sql . " - " . $time / 1000 . "<br />\n");
