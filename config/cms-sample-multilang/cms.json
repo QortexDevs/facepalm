@@ -1,0 +1,40 @@
+{
+    "structure": {
+        "values": {
+            "title": "Строки и значения",
+            "icon": "align-left",
+            "sections": {
+                "translations": {
+                    "title": "Переводы"
+                },
+                "values": {
+                    "title": "Строковые значения"
+                }
+            }
+        },
+        "structure": {
+            "title": "Структура сайта",
+            "icon": "sitemap",
+            "sections": {
+                "structure": {
+                    "title": "Структура сайта"
+                }
+            }
+        },
+        "settings": {
+            "title": "Настройки",
+            "icon": "gear",
+            "sections": {
+                "users": {
+                    "title": "Пользователи"
+                },
+                "roles": {
+                    "title": "Роли"
+                },
+                "languages": {
+                    "title": "Языки сайта"
+                }
+            }
+        }
+    }
+}

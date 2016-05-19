@@ -37,7 +37,7 @@ class SuperuserCommand extends Command
         $this->comment(PHP_EOL . 'Creating user ' . $this->argument('user') . PHP_EOL);
         $user = new User();
         $user->email = $this->argument('user');
-        $user->password = Hash::make($this->argument('password'));
+        $user->password = $this->argument('password');
         $user->status = 1;
         $user->role()->associate(Role::find(1));
         $user->save();

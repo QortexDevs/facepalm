@@ -1,26 +1,28 @@
 {
     "model": "site_section",
+    "strings": {
+        "title": "Текстовые разделы",
+    },
     "titles": {
         "path_name": "Путь",
         "status": "Активность"
     },
     "navigation": {
-        "model": "site_section"
+        "model": "site_section",
+        "titleField": "title",
     },
     "form": {
-        "fields": {
-            "path_name": true,
-            "title": {
-                "type": "string",
-                "title": "Title",
-                "translatable": true
-            },
-            "content": {
-                "type": "text",
-                "title": "Content",
-                "translatable": true,
-                "wysiwyg": true
+           "fields": {
+                "title": {
+                    "type": "plaintext",
+                    "title": "Страница"
+                },
+                "content": {
+                    "type": "text",
+                    "title": "Контент",
+                    "wysiwyg": true
+                }
             }
-        }
+       }
     }
 }

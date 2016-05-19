@@ -1,0 +1,34 @@
+{
+    "model": "language",
+    "strings": {
+        "accusative": "язык",
+        "title": "Языки",
+        "editTitle": "Редактирование языка"
+    },
+    "titles": {
+        "name": "Название",
+        "code": "Код",
+        "status": "Активность",
+        "is_default": "Язык по умолчанию"
+    },
+    "list": {
+        "columns": {
+            "name": true,
+            "code": true,
+            "is_default": {
+                "type": "checkbox"
+            }
+        }
+    },
+    "form": {
+        "fields": {
+            "name": true,
+            "code": {
+                "width": "100px"
+            },
+            "is_default": {
+                "type": "checkbox"
+            }
+        }
+    }
+}

@@ -20,7 +20,22 @@ class CreateRolesTable extends Migration
             $table->string('name');
             $table->timestamps();
         });
+        DB::table('roles')->insert(
+            [
+                'name' => 'Суперпользователь',
+                'status' => 1,
+                'show_order' => 1,
+            ]
+        );
+        DB::table('roles')->insert(
+            [
+                'name' => 'Администратор',
+                'status' => 1,
+                'show_order' => 2,
+            ]
+        );
     }
+
 
     /**
      * Reverse the migrations.

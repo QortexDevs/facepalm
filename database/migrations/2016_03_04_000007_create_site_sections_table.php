@@ -18,6 +18,8 @@ class CreateSiteSectionsTable extends Migration
             $table->integer('status')->nullable();
             $table->integer('show_order')->nullable();
             $table->string('path_name');
+            $table->boolean('show_in_main_menu');
+            $table->boolean('show_in_service_menu');
             $table->timestamps();
         });
     }

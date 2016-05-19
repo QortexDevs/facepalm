@@ -1,38 +1,32 @@
 {
     "structure": {
-        "users": {
-            "title": "Пользователи",
-            "icon": "user",
+        "values": {
+            "title": "Строки и значения",
+            "icon": "align-left",
             "sections": {
-                "users": {
-                    "title": "Пользователи"
-                },
-                "subs": {
-                    "title": "Подписчики"
+                "values": {
+                    "title": "Строковые значения"
                 }
             }
         },
         "structure": {
             "title": "Структура сайта",
-            "icon": "align-left",
+            "icon": "sitemap",
             "sections": {
                 "structure": {
                     "title": "Структура сайта"
                 }
             }
         },
-        "texts": {
-            "title": "Тексты",
-            "icon": "columns",
+        "settings": {
+            "title": "Настройки",
+            "icon": "gear",
             "sections": {
-                "sections": {
-                    "title": "Текстовые разделы"
+                "users": {
+                    "title": "Пользователи"
                 },
-                "translations": {
-                    "title": "Переводы"
-                },
-                "strings": {
-                    "title": "Строковые параметры"
+                "roles": {
+                    "title": "Роли"
                 }
             }
         }

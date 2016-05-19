@@ -1,5 +1,8 @@
 {
     "model": "site_section",
+    "strings": {
+        "title": "Структура сайта"
+    },
     "titles": {
         "path_name": "Путь"
     },
@@ -10,7 +13,12 @@
             "title": {
                 "type": "string",
                 "title": "Title",
-                "translatable": true
+            },
+            "show_in_main_menu": {
+                "type": "checkbox"
+            },
+            "show_in_service_menu": {
+                "type": "checkbox"
             }
         },
         "status": "status"

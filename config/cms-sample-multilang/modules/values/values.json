@@ -1,0 +1,19 @@
+{
+    "model": "StringValue",
+    "strings": {
+        "title": "Строковые значения"
+    },
+    "titles": {
+        "name": "Имя",
+        "value": "Значение"
+    },
+    "list": {
+        "treeMode": true,
+        "showStatus": false,
+        "plain": true,
+        "columns": {
+            "name": true,
+            "value": true
+        }
+    }
+}

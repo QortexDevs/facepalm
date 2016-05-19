@@ -1,0 +1,25 @@
+{
+    "model": "role",
+    "strings": {
+        "accusative": "роль",
+        "title": "Роли",
+        "editTitle": "Редактирование роли"
+    },
+    "titles": {
+        "name": "Название",
+        "status": "Активность"
+    },
+    "list": {
+        "columns": {
+            "name": true
+        }
+    },
+    "form": {
+        "fields": {
+            "name": true,
+            "status": {
+                "type": "boolean"
+            }
+        }
+    }
+}

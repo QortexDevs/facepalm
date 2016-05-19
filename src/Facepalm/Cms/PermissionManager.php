@@ -33,27 +33,29 @@ class PermissionManager
      */
     public function filterCmsStructureWithPermissions(Config $config)
     {
-        if ($this->user->role->id !== 1) {
-            $acl = $this->user->acl ? json_decode($this->user->acl, true) : [];
+        if ($this->user->role) {
+            if ($this->user->role->id !== 1) {
+                $acl = $this->user->acl ? json_decode($this->user->acl, true) : [];
 
-            $structure = $config->get('structure');
-            if (!$acl || !Arr::has($acl, '/')) {
-                $structure = [];
-            }
-            foreach ($structure as $sectionName => $data) {
-                if (!array_key_exists($sectionName, $acl)) {
-                    unset($structure[$sectionName]);
-                } else {
-                    if (array_key_exists('sections', $structure[$sectionName])) {
-                        foreach ($structure[$sectionName]['sections'] as $subSectionName => $dataNested) {
-                            if (!array_key_exists($sectionName . '/' . $subSectionName, $acl)) {
-                                unset($structure[$sectionName]['sections'][$subSectionName]);
+                $structure = $config->get('structure');
+                if (!$acl || !Arr::has($acl, '/')) {
+                    $structure = [];
+                }
+                foreach ($structure as $sectionName => $data) {
+                    if (!array_key_exists($sectionName, $acl)) {
+                        unset($structure[$sectionName]);
+                    } else {
+                        if (array_key_exists('sections', $structure[$sectionName])) {
+                            foreach ($structure[$sectionName]['sections'] as $subSectionName => $dataNested) {
+                                if (!array_key_exists($sectionName . '/' . $subSectionName, $acl)) {
+                                    unset($structure[$sectionName]['sections'][$subSectionName]);
+                                }
                             }
                         }
                     }
                 }
+                $config->set('structure', $structure);
             }
-            $config->set('structure', $structure);
         }
         return $config;
     }
