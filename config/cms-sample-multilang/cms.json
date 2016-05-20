@@ -1,6 +1,24 @@
 {
     "structure": {
-        "values": {
+          "texts": {
+            "title": "Текстовые разделы",
+            "icon": "columns",
+            "sections": {
+                "sections": {
+                    "title": "Текстовые разделы"
+                }
+            }
+        },
+       "structure": {
+            "title": "Структура сайта",
+            "icon": "sitemap",
+            "sections": {
+                "structure": {
+                    "title": "Структура сайта"
+                }
+            }
+        },
+         "values": {
             "title": "Строки и значения",
             "icon": "align-left",
             "sections": {
@@ -9,15 +27,6 @@
                 },
                 "values": {
                     "title": "Строковые значения"
-                }
-            }
-        },
-        "structure": {
-            "title": "Структура сайта",
-            "icon": "sitemap",
-            "sections": {
-                "structure": {
-                    "title": "Структура сайта"
                 }
             }
         },

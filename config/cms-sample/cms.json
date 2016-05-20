@@ -1,14 +1,5 @@
 {
     "structure": {
-        "values": {
-            "title": "Строки и значения",
-            "icon": "align-left",
-            "sections": {
-                "values": {
-                    "title": "Строковые значения"
-                }
-            }
-        },
         "structure": {
             "title": "Структура сайта",
             "icon": "sitemap",
@@ -18,7 +9,25 @@
                 }
             }
         },
-        "settings": {
+         "texts": {
+            "title": "Текстовые разделы",
+            "icon": "columns",
+            "sections": {
+                "sections": {
+                    "title": "Текстовые разделы"
+                }
+            }
+        },
+         "values": {
+            "title": "Строки и значения",
+            "icon": "align-left",
+            "sections": {
+                "values": {
+                    "title": "Строковые значения"
+                }
+            }
+        },
+       "settings": {
             "title": "Настройки",
             "icon": "gear",
             "sections": {
