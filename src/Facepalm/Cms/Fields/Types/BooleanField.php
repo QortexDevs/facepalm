@@ -26,5 +26,5 @@ class BooleanField extends AbstractField
         return (bool)$object->{$this->name} ? '✓' : '';
     }
 
-    protected $templateName = 'facepalm::components/form/elements/checkbox.twig';
+    protected $templateName = 'facepalm::components/form/elements/checkbox';
 }

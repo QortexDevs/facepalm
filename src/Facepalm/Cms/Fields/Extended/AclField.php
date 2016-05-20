@@ -13,7 +13,7 @@ use Facepalm\Cms\Fields\AbstractField;
 
 class AclField extends AbstractField
 {
-    protected $templateName = 'facepalm::components/form/extended/acl.twig';
+    protected $templateName = 'facepalm::components/form/extended/acl';
 
     public function renderFormField($object, array $parameters = [], $template = '')
     {

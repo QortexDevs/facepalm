@@ -15,7 +15,7 @@ use Illuminate\Support\Str;
 
 class TextField extends AbstractField
 {
-    protected $templateName = 'facepalm::components/form/elements/text.twig';
+    protected $templateName = 'facepalm::components/form/elements/text';
 
     /**
      * @param \Illuminate\Database\Eloquent\Model $object

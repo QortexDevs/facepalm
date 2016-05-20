@@ -13,7 +13,7 @@ use Facepalm\Cms\Fields\AbstractField;
 
 class LatlngField extends AbstractField
 {
-    protected $templateName = 'facepalm::components/form/extended/latlng.twig';
+    protected $templateName = 'facepalm::components/form/extended/latlng';
 
     public function renderFormField($object, array $parameters = [], $template = '')
     {

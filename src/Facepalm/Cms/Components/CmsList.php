@@ -227,7 +227,7 @@ class CmsList extends CmsComponent
         $treeContent = $emptyTreeItem = '';
         $listData = $this->build();
         if (!$templateName) {
-            $templateName = $listData['settings']['treeMode'] ? 'facepalm::components/list/containerTree.twig' : 'facepalm::components/list/container.twig';
+            $templateName = $listData['settings']['treeMode'] ? 'facepalm::components/list/containerTree' : 'facepalm::components/list/container';
         }
         if ($listData['settings']['treeMode']) {
             $treeContent = $listData['tree']->render($render, 'facepalm::components/list/treeItem', 0, false, [

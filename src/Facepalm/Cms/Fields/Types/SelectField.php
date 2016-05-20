@@ -18,7 +18,7 @@ use Illuminate\Support\Arr;
  */
 class SelectField extends AbstractField
 {
-    protected $templateName = 'facepalm::components/form/elements/select.twig';
+    protected $templateName = 'facepalm::components/form/elements/select';
 
     /**
      * @param \Illuminate\Database\Eloquent\Model $object

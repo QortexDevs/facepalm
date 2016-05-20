@@ -13,7 +13,7 @@ use Facepalm\Cms\Fields\AbstractField;
 
 class HiddenField extends AbstractField
 {
-    protected $templateName = 'facepalm::components/form/elements/hidden.twig';
+    protected $templateName = 'facepalm::components/form/elements/hidden';
 
     protected function getDefaults()
     {

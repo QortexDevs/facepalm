@@ -82,7 +82,7 @@ class UploadProcessor
     protected function processAfterSaveImage(Image $image, $requestRawData)
     {
         //todo: дополнительные прегенерируемые размеры
-        $previewSize = Arr::get($requestRawData, 'previewSize', config('app.defaultThumbnailSize'));
+        $previewSize = Arr::get($requestRawData, 'previewSize', config('facepalm.defaultThumbnailSize'));
         $image->generateSize($previewSize);
     }
 
@@ -94,7 +94,7 @@ class UploadProcessor
      */
     protected function getResultArrayForImage(Image $image, $requestRawData)
     {
-        $previewSize = Arr::get($requestRawData, 'previewSize', config('app.defaultThumbnailSize'));
+        $previewSize = Arr::get($requestRawData, 'previewSize', config('facepalm.defaultThumbnailSize'));
         return [
             'id' => $image->id,
             'preview' => $image->getUri($previewSize),

@@ -17,7 +17,7 @@ use Illuminate\Support\Arr;
 
 class ImageField extends UploadableField
 {
-    protected $templateName = 'facepalm::components/form/elements/image.twig';
+    protected $templateName = 'facepalm::components/form/elements/image';
 
     /**
      * @param null|AbstractEntity $object
@@ -28,7 +28,7 @@ class ImageField extends UploadableField
 
         if ($object) {
             if (!Arr::has($this->parameters, 'previewSize')) {
-                $this->parameters['previewSize'] = config('app.defaultThumbnailSize');
+                $this->parameters['previewSize'] = config('facepalm.defaultThumbnailSize');
             }
 
             $this->data['images'] = [];

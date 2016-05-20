@@ -15,6 +15,6 @@ class DateField extends DatetimeField
 {
     //todo: в параметры его втащить?
     protected $listFormat = 'd.m.Y';
-    protected $templateName = 'facepalm::components/form/elements/date.twig';
+    protected $templateName = 'facepalm::components/form/elements/date';
 
 }

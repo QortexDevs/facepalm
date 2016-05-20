@@ -8,24 +8,22 @@
 
 namespace Facepalm\Http\Controllers;
 
+use Facepalm\Cms\Components\CmsForm;
+use Facepalm\Cms\Components\CmsList;
+use Facepalm\Cms\Config\Config;
 use Facepalm\Cms\Fields\FieldSet;
+use Facepalm\Cms\PermissionManager;
 use Facepalm\Models\Foundation\BaseEntity;
-use Facepalm\Tools\Tree;
+use Facepalm\Models\ModelFactory;
 use Facepalm\Models\User;
-use Illuminate\Database\Eloquent\Model;
-use TwigBridge\Facade\Twig;
+use Facepalm\PostProcessing\AmfProcessor;
+use Facepalm\Tools\AssetsBuster;
+use Facepalm\Tools\Tree;
+use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-use Facepalm\Cms\Config\Config;
-use Facepalm\Tools\AssetsBuster;
-use Facepalm\Models\ModelFactory;
-use Facepalm\Cms\PermissionManager;
-use Facepalm\Cms\Components\CmsList;
-use Facepalm\Cms\Components\CmsForm;
-use Facepalm\PostProcessing\AmfProcessor;
-use Illuminate\Foundation\Application;
-use Illuminate\Routing\Controller as BaseController;
 
 class CmsController extends BaseController
 {
@@ -157,7 +155,7 @@ class CmsController extends BaseController
      */
     protected function setupLocale()
     {
-        $locale = config('app.cmsLocale') ?: config('app.locale');
+        $locale = config('facepalm.cmsLocale') ?: config('app.locale');
         if ($locale) {
             app()->setLocale($locale);
         }
@@ -405,7 +403,7 @@ class CmsController extends BaseController
             'baseUrl' => $this->baseUrl,
             'assetsBusters' => $assetsBusters,
             'moduleConfig' => $this->config->get('module'),
-            'assetsPath' => config('app.facepalmAssetsPath'),
+            'assetsPath' => config('facepalm.facepalmAssetsPath'),
             'cmsStructure' => $this->config->get('structure'),
             'currentPathSections' => [$this->group, $this->module],
             'userpic' => $userpic ? $userpic->getUri('200x200') : '',
@@ -413,7 +411,7 @@ class CmsController extends BaseController
         ]);
 
 
-        return Twig::render($template, $params);
+        return $this->renderer->render($template, $params);
 
     }
 

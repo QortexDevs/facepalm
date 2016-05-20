@@ -24,12 +24,15 @@ class FacepalmServiceProvider extends AggregateServiceProvider
      * @var array
      */
     protected $providers = [
-        'Facepalm\Providers\GeneratorServiceProvider',
-        'Facepalm\Providers\RouteServiceProvider',
+        'TwigBridge\ServiceProvider',
+        'Intervention\Image\ImageServiceProvider',
+
         'Facepalm\Providers\CmsServiceProvider',
         'Facepalm\Providers\AppServiceProvider',
+        'Facepalm\Providers\RouteServiceProvider',
+        'Facepalm\Providers\GeneratorServiceProvider',
     ];
 
 
-    
+
 }

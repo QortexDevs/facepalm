@@ -8,15 +8,15 @@
 
 namespace Facepalm\Http\Controllers;
 
+use Illuminate\Foundation\Application;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use TwigBridge\Facade\Twig;
-use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends BaseController
 {
@@ -26,12 +26,13 @@ class AuthController extends BaseController
     protected $redirectAfterLogout = '/cms/';
 
     /**
+     * @param Application $app
      * @param Request $request
      * @return string
      */
-    public function get(Request $request)
+    public function get(Application $app, Request $request)
     {
-        return Twig::render("facepalm::loginPage", []);
+        return $app->make('twig')->render('facepalm::loginPage', []);
     }
 
     /**

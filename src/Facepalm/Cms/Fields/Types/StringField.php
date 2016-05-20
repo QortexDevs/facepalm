@@ -13,7 +13,7 @@ use Facepalm\Cms\Fields\AbstractField;
 
 class StringField extends AbstractField
 {
-    protected $templateName = 'facepalm::components/form/elements/string.twig';
+    protected $templateName = 'facepalm::components/form/elements/string';
 
     protected function getDefaults()
     {

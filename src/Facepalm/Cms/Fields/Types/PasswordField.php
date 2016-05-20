@@ -15,6 +15,6 @@ use Illuminate\Database\Eloquent\Model;
 class PasswordField extends AbstractField
 {
 
-    protected $templateName = 'facepalm::components/form/elements/password.twig';
+    protected $templateName = 'facepalm::components/form/elements/password';
 
 }

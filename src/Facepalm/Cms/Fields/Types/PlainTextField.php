@@ -14,6 +14,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class PlainTextField extends AbstractField
 {
-    protected $templateName = 'facepalm::components/form/elements/plainText.twig';
+    protected $templateName = 'facepalm::components/form/elements/plainText';
 
 }

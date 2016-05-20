@@ -8,18 +8,10 @@
 
 namespace Facepalm\Http\Controllers;
 
-use Facepalm\Cms\Components\CmsList;
-use Facepalm\Cms\Components\CmsForm;
-use Facepalm\Cms\Config\Config;
 use Facepalm\Models\File;
-use Facepalm\Models\Image;
-use Facepalm\PostProcessing\AmfProcessor;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Session;
 use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
-use TwigBridge\Facade\Twig;
 
 class DownloadFileController extends BaseController
 {

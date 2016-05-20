@@ -17,7 +17,7 @@ class AssetsBuster
      */
     public function getCmsBusters()
     {
-        $facepalmBustersPath = app()->publicPath() . DIRECTORY_SEPARATOR . config('app.facepalmAssetsPath') . 'busters.json';
+        $facepalmBustersPath = app()->publicPath() . DIRECTORY_SEPARATOR . config('facepalm.facepalmAssetsPath') . 'busters.json';
         $projectBustersPath = app()->publicPath() . DIRECTORY_SEPARATOR . 'assets/build/cms/busters.json';
 
         return
