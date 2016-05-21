@@ -12,7 +12,7 @@
             "path_name": true,
             "title": {
                 "type": "string",
-                "title": "Title",
+                "title": "Title"
             },
             "show_in_main_menu": {
                 "type": "checkbox"

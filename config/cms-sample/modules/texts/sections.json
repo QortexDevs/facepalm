@@ -20,7 +20,8 @@
                 "content": {
                     "type": "text",
                     "title": "Контент",
-                    "wysiwyg": true
+                    "wysiwyg": true,
+                    "dynamic": true
                 }
             }
        }
