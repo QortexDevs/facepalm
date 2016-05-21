@@ -431,10 +431,6 @@ class CmsController extends BaseController
             ->orderBy('show_order')
             ->get();
 
-        foreach ($sectionsCollection as $section) {
-            pre($section->title);
-        }
-
         $tree = Tree::fromEloquentCollection($sectionsCollection);
 
         return $tree->render(
