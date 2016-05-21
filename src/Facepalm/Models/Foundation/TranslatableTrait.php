@@ -64,6 +64,11 @@ trait TranslatableTrait
         if (!$languageCode) {
             $languageCode = app()->getLocale();
         }
+        foreach ($this->textItems as $item) {
+            if ($item->group == $group && $item->languageCode == $languageCode) {
+                return $item;
+            }
+        }
         return $this->textItems()->ofGroupAndLanguage($group, $languageCode)->first();
     }
 
@@ -159,7 +164,7 @@ trait TranslatableTrait
         }
     }
 
-    function __isset($key)
+    public function __isset($key)
     {
         if (in_array($key, $this->stringFields)) {
             return true;
@@ -232,7 +237,7 @@ trait TranslatableTrait
             }
 
             if (!$this->id) {
-                throw new \Exception('Addind textitem to unexisting object');
+                throw new \Exception('Addind textitem to non-existing object');
             }
 
             $this->textItems()->save($textItem);

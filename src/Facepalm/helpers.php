@@ -26,17 +26,17 @@ if (!function_exists('d')) {
      */
     function pre()
     {
-        if (PHP_SAPI != 'cli') {
-            echo '<pre>';
-        }
         array_map(function ($x) {
+            if (PHP_SAPI != 'cli') {
+                echo '<pre>';
+            }
             print_r($x);
+            echo PHP_EOL;
+
+            if (PHP_SAPI != 'cli') {
+                echo '</pre>';
+            }
         }, func_get_args());
 
-        echo PHP_EOL;
-
-        if (PHP_SAPI != 'cli') {
-            echo '</pre>';
-        }
     }
 }

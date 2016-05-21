@@ -426,9 +426,14 @@ class CmsController extends BaseController
         $showRoot = (boolean)$this->config->get('module.navigation.showRoot');
 
         $sectionsCollection = ModelFactory::builderFor($model)
+            ->with('textItems')
             ->whereNotIn('id', $skip ?: [])
             ->orderBy('show_order')
             ->get();
+
+        foreach ($sectionsCollection as $section) {
+            pre($section->title);
+        }
 
         $tree = Tree::fromEloquentCollection($sectionsCollection);
 

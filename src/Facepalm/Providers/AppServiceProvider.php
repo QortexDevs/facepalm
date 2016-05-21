@@ -24,9 +24,8 @@ class AppServiceProvider extends ServiceProvider
 
         $this->loadViewsFrom(__DIR__ . '/../../../resources/views/', 'facepalm');
         //test
-//        DB::listen(function ($sql, $bindings = null, $time = null) {
-//            d($sql, $time / 1000);
-//            echo($sql->sql . " - " . $time / 1000 . "<br />\n");
+//        DB::listen(function ($sql) {
+//            pre($sql->sql, $sql->time /= 1000, $sql->bindings);
 //        });
     }
 
