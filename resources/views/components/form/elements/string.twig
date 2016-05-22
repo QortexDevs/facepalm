@@ -6,7 +6,9 @@
                    value="{{ object.string(field, langCode) }}"
                    {% if parameters.width %}style="width: {{ parameters.width }}"{% endif %}
             />
-            <div class="language-caption">{{ langTitle }}</div>
+            {% if languages|length > 1 %}
+                <div class="language-caption">{{ langTitle }}</div>
+            {% endif %}
         </div>
     {% endfor %}
 {% else %}

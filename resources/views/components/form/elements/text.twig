@@ -1,8 +1,10 @@
 {% if parameters.translatable %}
     {% for langCode,langTitle in languages %}
         <div class="language-row">
-            <div class="language-caption">{{ langTitle }}</div>
-            {# todo: добавить возможность строкового комментария к тексту#}
+            {% if languages|length > 1 %}
+                <div class="language-caption">{{ langTitle }}</div>
+                {# todo: добавить возможность строкового комментария к тексту#}
+            {% endif %}
             <textarea name="{{ inputName }}[{{ langCode }}][textBody]"
                       {% if parameters.wysiwyg %}data-wysiwyg="true"{% endif %}
                       style="{% if parameters.width %}width:{{ parameters.width }}; {% endif %}
@@ -11,11 +13,11 @@
         </div>
     {% endfor %}
 {% elseif parameters.dynamic %}
-            <textarea name="{{ inputName }}[][textBody]"
-                      {% if parameters.wysiwyg %}data-wysiwyg="true"{% endif %}
-                      style="{% if parameters.width %}width:{{ parameters.width }}; {% endif %}
-                              {% if     parameters.height %}height:{{ parameters.height }}; {% endif %}"
-            >{{ object.text(field, langCode) }}</textarea>
+    <textarea name="{{ inputName }}[][textBody]"
+              {% if parameters.wysiwyg %}data-wysiwyg="true"{% endif %}
+              style="{% if parameters.width %}width:{{ parameters.width }}; {% endif %}
+                      {% if     parameters.height %}height:{{ parameters.height }}; {% endif %}"
+    >{{ object.text(field, langCode) }}</textarea>
 {% else %}
     <textarea name="{{ inputName }}"
               {% if parameters.wysiwyg %}data-wysiwyg="true"{% endif %}
