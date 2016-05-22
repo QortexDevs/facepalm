@@ -397,16 +397,22 @@ class CmsController extends BaseController
         $assetsBuster = new AssetsBuster();
         $assetsBusters = $assetsBuster->getCmsBusters();
 
+        // todo: вынести в конфиг?
+        $customCssPath = 'assets/build/cms/css/main.css';
+        $customJsPath = 'assets/build/cms/js/all.js';
+
         $userpic = $this->user->images()->ofGroup('avatar')->first();
         $params = array_merge($params, [
             'user' => $this->user,
             'baseUrl' => $this->baseUrl,
             'assetsBusters' => $assetsBusters,
             'moduleConfig' => $this->config->get('module'),
-            'assetsPath' => config('facepalm.facepalmAssetsPath'),
             'cmsStructure' => $this->config->get('structure'),
+            'assetsPath' => config('facepalm.facepalmAssetsPath'),
             'currentPathSections' => [$this->group, $this->module],
             'userpic' => $userpic ? $userpic->getUri('200x200') : '',
+            'customJsPath' => is_file(public_path($customJsPath)) ? $customJsPath : '',
+            'customCssPath' => is_file(public_path($customCssPath)) ? $customCssPath : '',
             'navigation' => $this->layoutMode === self::LAYOUT_TWO_COLUMN ? $this->renderNavigationMenu() : '',
         ]);
 

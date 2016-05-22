@@ -7,9 +7,10 @@
     <link rel="stylesheet"
           href="/assets/facepalm/css/vendor.css?{{ assetsBusters['facepalm::css/vendor.css'] }}"/>
     <link rel="stylesheet" href="/assets/facepalm/css/main.css?{{ assetsBusters['facepalm::css/main.css'] }}"/>
-    {# todo: проверка на наличие! - вынести в контроллер, ессно #}
     {# todo: общий css, js и отдельные файлики для модулей, если надо  #}
-    <link rel="stylesheet" href="/assets/build/cms/css/main.css?{{ assetsBusters['assets/build/cms/css/main.css'] }}"/>
+    {% if customCssPath %}
+        <link rel="stylesheet" href="/{{ customCssPath }}?{{ assetsBusters[customCssPath] }}"/>
+    {% endif %}
     {% block cssFile %}{% endblock %}
 
     <script></script>
@@ -57,7 +58,9 @@
 {% endblock bodyOuter %}
 <div id="spinner"></div>
 <script src="/assets/facepalm/js/all.js?{{ assetsBusters['facepalm::js/all.js'] }}"></script>
-<script src="/assets/build/cms/js/all.js?{{ assetsBusters['assets/build/cms/js/all.js'] }}"></script>
+{% if customJsPath %}
+    <script src="/{{ customJsPath }}?{{ assetsBusters[customJsPath] }}"></script>
+{% endif %}
 {% block jsFile %}{% endblock %}
 <script type="text/template" id="image-preview-template">
     {{ source("facepalm::components/form/imagePreview.twig") }}
