@@ -25,6 +25,10 @@
 //= ../nonBowerPackages/redactor/plugins/table.js
 //= ../nonBowerPackages/redactor/plugins/fontsize.js
 //= ../nonBowerPackages/redactor/plugins/fullscreen.js
+//
+// = ../nonBowerPackages/ckeditor/ckeditor.js
+// = ../nonBowerPackages/ckeditor/adapters/jquery.js
+// = ../nonBowerPackages/ckeditor/build-config.js
 
 
 $(document).ready(function () {

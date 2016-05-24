@@ -58,6 +58,8 @@
 {% endblock bodyOuter %}
 <div id="spinner"></div>
 <script src="/assets/facepalm/js/all.js?{{ assetsBusters['facepalm::js/all.js'] }}"></script>
+{#<script src="/assets/facepalm/nonBowerPackages/ckeditor/ckeditor.js"></script>#}
+{#<script src="/assets/facepalm/nonBowerPackages/ckeditor/adapters/jquery.js"></script>#}
 {% if customJsPath %}
     <script src="/{{ customJsPath }}?{{ assetsBusters[customJsPath] }}"></script>
 {% endif %}

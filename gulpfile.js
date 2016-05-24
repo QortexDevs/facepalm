@@ -60,7 +60,8 @@ var path = {
         styles: 'assets/sass/**/*.scss',
         vendorStyles: 'assets/vendorCss/*.css',
         images: 'assets/i/**/*.*',
-        fonts: 'assets/fonts/**/*.*'
+        fonts: 'assets/fonts/**/*.*',
+        nonBowerPackages: 'assets/nonBowerPackages/**/*.*'
     },
     // additional to src-paths
     watch: {
@@ -73,6 +74,7 @@ var path = {
         styles: 'css/',
         images: 'i/',
         fonts: 'fonts/',
+        nonBowerPackages: 'nonBowerPackages/',
     }
 };
 
@@ -176,6 +178,14 @@ modulesToBuild.map(function (module) {
     });
 });
 
+/** build fonts task */
+modulesToBuild.map(function (module) {
+    gulp.task('nonBowerPackages:build:' + module, function () {
+        gulp.src(getSrcPath(module, 'nonBowerPackages'))
+            .pipe(gulp.dest(getBuildPath(module, 'nonBowerPackages')))
+    });
+});
+
 
 gulp.task('watch', function () {
     modulesToBuild.map(function (module) {
@@ -199,6 +209,7 @@ modulesToBuild.map(function (module) {
         'styles:build:' + module,
         'vendorStyles:build:' + module,
         'fonts:build:' + module,
+        'nonBowerPackages:build:' + module,
         'images:build:' + module
     ]);
 });

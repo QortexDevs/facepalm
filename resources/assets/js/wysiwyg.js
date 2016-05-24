@@ -1,4 +1,33 @@
 function InitWysiwyg() {
+    // var baseUrl = $('body').data('base-url');
+    //
+    // $('textarea[data-wysiwyg]').each(function () {
+    //     $(this).ckeditor({
+    //         customConfig: '',
+    //         toolbarGroups: [
+    //             {name: 'clipboard', groups: ['clipboard', 'undo']},
+    //             {name: 'editing', groups: ['find', 'selection', 'spellchecker', 'editing']},
+    //             {name: 'forms', groups: ['forms']},
+    //             {name: 'styles', groups: ['styles']},
+    //             {name: 'basicstyles', groups: ['basicstyles', 'cleanup']},
+    //             {name: 'paragraph', groups: ['list', 'indent', 'blocks', 'align', 'bidi', 'paragraph']},
+    //             {name: 'links', groups: ['links']},
+    //             {name: 'insert', groups: ['insert']},
+    //             {name: 'colors', groups: ['colors']},
+    //             {name: 'tools', groups: ['tools']},
+    //             {name: 'others', groups: ['others']},
+    //             {name: 'about', groups: ['about']},
+    //             {name: 'document', groups: ['mode', 'document', 'doctools']}
+    //         ],
+    //         removeButtons: 'autoFormat,CommentSelectedRange,UncommentSelectedRange,AutoComplete,Save,NewPage,Preview,Print,Cut,Copy,Paste,PasteText,PasteFromWord,Undo,Redo,Find,Replace,SelectAll,Scayt,Form,Checkbox,Radio,TextField,Textarea,Button,Select,HiddenField,Templates,Underline,Italic,Subscript,Strike,Superscript,JustifyBlock,BidiLtr,BidiRtl,Language,Embed,CodeSnippet,Flash,SpecialChar,Smiley,PageBreak,Iframe,Font,FontSize,TextColor,BGColor,About,Anchor,Unlink,Outdent,Indent',
+    //         codemirror: {
+    //             theme: 'monokai'
+    //         },
+    //         extraPlugins: 'uploadimage',
+    //         uploadUrl: baseUrl + "/?_token=" + $('input:hidden[name=_token]').val() + '&fileFromWysiwyg=1',
+    //     });
+    // });
+
     var buttons = ['html', 'formatting', 'bold', 'italic', 'unorderedlist', 'link'];
     var plugins = ['bufferbuttons', 'table', 'fullscreen'];
     $('textarea[data-wysiwyg]').each(function () {
