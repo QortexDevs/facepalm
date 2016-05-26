@@ -234,11 +234,11 @@ class Tree
      * @param $field
      * @return mixed|null
      */
-    public function getElementByPath($path, $field = 'path_name', $separator = '/')
+    public function getElementByPath($path, $field = 'path_name', $separator = '/', $rootId = 0)
     {
         $segments = explode($separator, trim($path, $separator));
         if ($segments) {
-            $currentParentId = 0;
+            $currentParentId = $rootId;
             $foundSections = 0;
             foreach ($segments as $segment) {
                 $children = $this->getChildren($currentParentId);
@@ -371,5 +371,18 @@ class Tree
     protected function getIdFromParameter($element)
     {
         return $element instanceof Model ? $element->id : $element;
+    }
+
+    /**
+     *
+     */
+    public function findRoot()
+    {
+        $rootChildren = $this->getChildrenIds(0);
+        if (!count($rootChildren) || count($rootChildren) > 1) {
+            return 0;
+        } else {
+            return $rootChildren[0];
+        }
     }
 }
