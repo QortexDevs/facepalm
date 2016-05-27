@@ -177,11 +177,13 @@ $(document).ready(function () {
         $(document).on('click', '.add-new-tree-item', function () {
             var template = $(this).closest('[data-model]').find('script[data-template-name="empty-tree-element"]').html();
             var $tr = $(this).closest('[data-model]');
-            var id = 0;
+            var id = parseInt($(this).closest('[data-model]').data('tree-root'));
             var model = $(this).closest('[data-model]').data('model');
             var rnd = Math.random().toString(36).substring(2, 8);
             var payload = _.extend({}.setWithPath(['create', model, '%CREATE_' + rnd + '%', 'parent_id'], id), getCsrfTokenParameter());
-            payload['create'][model]['%CREATE_' + rnd + '%']['parent_id'] = 0
+            // console.log(payload);
+            // payload['create'][model]['%CREATE_' + rnd + '%']['parent_id'] = 0
+            // console.log(payload);
             $.post(baseUrl + '/', payload, 'json').done(function (result) {
                 var newItem$ = $(template.replace(new RegExp('%CREATE_%', 'g'), result)).attr('data-id', result);
                 newItem$.find('.id').text(result)

@@ -29,6 +29,7 @@ class CmsList extends CmsComponent
     protected $showStatusButton = true;
     protected $showDeleteButton = true;
     protected $isPlainTreeMode = false;
+    protected $treeRoot = 0;
 
     protected $strings = [];
     protected $relatedModels = [];
@@ -46,6 +47,7 @@ class CmsList extends CmsComponent
             ->setStrings((array)$config->get('strings'))
             ->toggleIdColumn($config->get('list.showId') !== false)
             ->toggleTreeMode($config->get('list.treeMode') === true)
+            ->toggleTreeRoot($config->get('list.root'))
             ->toggleSortable($config->get('list.sortable') === true)
             ->togglePlainTreeMode($config->get('list.plain') === true)
             ->toggleEditButtonColumn($config->get('list.showEdit') === true)
@@ -55,7 +57,7 @@ class CmsList extends CmsComponent
         if ($processFieldSet) {
             $this->fieldSet->process($config->get('list.columns'), $config->get('titles'));
         }
-        
+
         return $this;
     }
 
@@ -107,6 +109,12 @@ class CmsList extends CmsComponent
     public function toggleTreeMode($tree = true)
     {
         $this->isTreeMode = (bool)$tree;
+        return $this;
+    }
+
+    public function toggleTreeRoot($root = true)
+    {
+        $this->treeRoot = (int)$root;
         return $this;
     }
 
@@ -230,7 +238,7 @@ class CmsList extends CmsComponent
             $templateName = $listData['settings']['treeMode'] ? 'facepalm::components/list/containerTree' : 'facepalm::components/list/container';
         }
         if ($listData['settings']['treeMode']) {
-            $treeContent = $listData['tree']->render($render, 'facepalm::components/list/treeItem', 0, false, [
+            $treeContent = $listData['tree']->render($render, 'facepalm::components/list/treeItem', $this->treeRoot, false, [
                 'list' => $listData,
             ]);
             $emptyTreeItem = $render->render('facepalm::components/list/treeItem', [
@@ -242,7 +250,8 @@ class CmsList extends CmsComponent
             'baseUrl' => $this->baseUrl,
             'strings' => $this->strings,
             'treeContent' => $treeContent ?: '',
-            'emptyTreeItem' => $emptyTreeItem ?: ''
+            'emptyTreeItem' => $emptyTreeItem ?: '',
+            'treeRoot' => $this->treeRoot,
         ]);
     }
 
