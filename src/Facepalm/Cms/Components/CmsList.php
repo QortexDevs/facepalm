@@ -22,6 +22,7 @@ class CmsList extends CmsComponent
 
     protected $columns = [];
 
+    protected $treeRoot = 0;
     protected $isTreeMode = false;
     protected $isSortable = false;
     protected $showIdColumn = true;
@@ -29,7 +30,6 @@ class CmsList extends CmsComponent
     protected $showStatusButton = true;
     protected $showDeleteButton = true;
     protected $isPlainTreeMode = false;
-    protected $treeRoot = 0;
 
     protected $strings = [];
     protected $relatedModels = [];
@@ -44,10 +44,10 @@ class CmsList extends CmsComponent
     public function setupFromConfig(Repository $config, $processFieldSet = true)
     {
         $this->setMainModel($config->get('model'))
+            ->setTreeRoot($config->get('list.root'))
             ->setStrings((array)$config->get('strings'))
             ->toggleIdColumn($config->get('list.showId') !== false)
             ->toggleTreeMode($config->get('list.treeMode') === true)
-            ->toggleTreeRoot($config->get('list.root'))
             ->toggleSortable($config->get('list.sortable') === true)
             ->togglePlainTreeMode($config->get('list.plain') === true)
             ->toggleEditButtonColumn($config->get('list.showEdit') === true)
@@ -112,7 +112,7 @@ class CmsList extends CmsComponent
         return $this;
     }
 
-    public function toggleTreeRoot($root = true)
+    public function setTreeRoot($root = true)
     {
         $this->treeRoot = (int)$root;
         return $this;

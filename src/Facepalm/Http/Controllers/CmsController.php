@@ -296,6 +296,16 @@ class CmsController extends BaseController
             });
         }
 
+
+        if ($this->config->get('module.constants') && is_array($this->config->get('module.constants'))) {
+            foreach ($this->config->get('module.constants') as $constantField => $constantValue) {
+                $list->setAdditionalConstraints(function ($builder) use ($constantField, $constantValue) {
+                    return $builder->where($constantField, $constantValue);
+                });
+            }
+        }
+
+
         $params = [
             'buttonsPanel' => (bool)$this->config->get('module.list.treeMode'),
             'listHtml' => $list->render($this->renderer),
@@ -333,6 +343,14 @@ class CmsController extends BaseController
                 }
             }
         }
+
+        if ($this->config->get('module.constants') && is_array($this->config->get('module.constants'))) {
+            foreach ($this->config->get('module.constants') as $constantField => $constantValue) {
+                $this->fieldSet->prependHiddenField($constantField, $constantValue);
+            }
+        }
+
+
 
         /** @var CmsForm $form */
         $form = $this->app->make('CmsForm', [$this->fieldSet]);
