@@ -17,6 +17,7 @@ class BaseController extends FrameworkBaseController
 
     protected $commonViewValues = [];
     protected $requestSegments = [];
+    protected $activeBranch = [];
 
     protected $addSiteNameToTitle;
     protected $siteName;
@@ -44,9 +45,18 @@ class BaseController extends FrameworkBaseController
             );
         }
 
+        if ($this->currentSection) {
+            $this->activeBranch = array_reverse($siteTree->getElementAncestors($this->currentSection));
+            if (config('facepalm.rootSection') && $this->activeBranch[0]->id == $root) {
+                array_shift($this->activeBranch);
+            }
+            $this->activeBranch[] = $this->currentSection;
+        }
+
         $this->commonViewValues = [
             'siteTree' => $siteTree,
             'topLevelMenu' => $siteTree->getChildren(config('facepalm.rootSection') ? $root : 0),
+            'activeBranch' => $this->activeBranch,
             'root' => '/',
             'requestSegments' => $this->requestSegments,
         ];
