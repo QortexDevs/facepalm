@@ -11,6 +11,7 @@ namespace Facepalm\Models\Foundation;
 
 use Facepalm\Models\TextItem;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 
 abstract class BaseEntity extends AbstractEntity
 {
@@ -59,5 +60,23 @@ abstract class BaseEntity extends AbstractEntity
     public function files()
     {
         return $this->morphMany('Facepalm\Models\File', 'bind');
+    }
+
+    /**
+     * @return array
+     */
+    public function imagesByGroup()
+    {
+        $images = $this->images;
+        $out = [];
+        foreach ($images as $img) {
+            if (Arr::has($out, $img->group)) {
+                $out[$img->group] = (array)$out[$img->group];
+                $out[$img->group][] = $img;
+            } else {
+                $out[$img->group] = $img;
+            }
+        }
+        return $out;
     }
 }

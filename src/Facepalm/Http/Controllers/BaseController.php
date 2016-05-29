@@ -21,6 +21,7 @@ class BaseController extends FrameworkBaseController
 
     protected $addSiteNameToTitle;
     protected $siteName;
+    protected $siteTree;
 
     /**
      * BaseController constructor.
@@ -30,14 +31,14 @@ class BaseController extends FrameworkBaseController
     {
         $this->request = $request;
         $this->requestSegments = $request->segments();
-        $siteTree = Tree::fromEloquentCollection(
+        $this->siteTree = Tree::fromEloquentCollection(
             SiteSection::where('status', 1)->orderBy('show_order')->get()
         );
 
-        $root = $siteTree->findRoot();
+        $root = $this->siteTree->findRoot();
 
         if ($this->requestSegments) {
-            $this->currentSection = $siteTree->getElementByPath(
+            $this->currentSection = $this->siteTree->getElementByPath(
                 implode('/', $this->requestSegments),
                 'path_name',
                 '/',
@@ -46,7 +47,7 @@ class BaseController extends FrameworkBaseController
         }
 
         if ($this->currentSection) {
-            $this->activeBranch = array_reverse($siteTree->getElementAncestors($this->currentSection));
+            $this->activeBranch = array_reverse($this->siteTree->getElementAncestors($this->currentSection));
             if (config('facepalm.rootSection') && $this->activeBranch[0]->id == $root) {
                 array_shift($this->activeBranch);
             }
@@ -54,8 +55,8 @@ class BaseController extends FrameworkBaseController
         }
 
         $this->commonViewValues = [
-            'siteTree' => $siteTree,
-            'topLevelMenu' => $siteTree->getChildren(config('facepalm.rootSection') ? $root : 0),
+            'siteTree' => $this->siteTree,
+            'topLevelMenu' => $this->siteTree->getChildren(config('facepalm.rootSection') ? $root : 0),
             'activeBranch' => $this->activeBranch,
             'root' => '/',
             'requestSegments' => $this->requestSegments,

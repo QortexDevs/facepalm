@@ -114,7 +114,7 @@ class Image extends BindableEntity
      * @param $suffix
      * @return string
      */
-    public function getUri($suffix)
+    public function getUri($suffix = 'original')
     {
         $path = $this->getRelativePath($suffix);
         if ($path) {
