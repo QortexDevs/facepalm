@@ -32,7 +32,7 @@ class BaseController extends FrameworkBaseController
         $this->request = $request;
         $this->requestSegments = $request->segments();
         $this->siteTree = Tree::fromEloquentCollection(
-            SiteSection::where('status', 1)->orderBy('show_order')->get()
+            SiteSection::where('status', 1)->orderBy('show_order')->with('textItems')->get()
         );
 
         $root = $this->siteTree->findRoot();

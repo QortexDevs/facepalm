@@ -21,6 +21,8 @@ abstract class BaseEntity extends AbstractEntity
         'status' => 'boolean',
     ];
 
+    protected $bindedEntitiesByGroup = [];
+
     /**
      *
      */
@@ -67,16 +69,42 @@ abstract class BaseEntity extends AbstractEntity
      */
     public function imagesByGroup()
     {
-        $images = $this->images;
-        $out = [];
-        foreach ($images as $img) {
-            if (Arr::has($out, $img->group)) {
-                $out[$img->group] = (array)$out[$img->group];
-                $out[$img->group][] = $img;
-            } else {
-                $out[$img->group] = $img;
+        $this->processBindedEntities('images');
+        return $this->bindedEntitiesByGroup['images'];
+    }
+
+    /**
+     * @return array
+     */
+    public function filesByGroup()
+    {
+        $this->processBindedEntities('files');
+        return $this->bindedEntitiesByGroup['files'];
+    }
+
+    /**
+     * @param array|string $entitiesToGroup
+     * @param bool $force
+     */
+    public function processBindedEntities($entitiesToGroup = ['images', 'files'], $force = false)
+    {
+        $entitiesToGroup = (array)$entitiesToGroup;
+        foreach ($entitiesToGroup as $type) {
+            if (!Arr::has($this->bindedEntitiesByGroup, $type) || $force) {
+                $this->bindedEntitiesByGroup[$type] = [];
+                $objects = $this->{$type};
+                if ($objects) {
+                    foreach ($objects as $obj) {
+                        if (Arr::has($this->bindedEntitiesByGroup[$type], $obj->group)) {
+                            $this->bindedEntitiesByGroup[$type][$obj->group] = (array)$this->bindedEntitiesByGroup[$type][$obj->group];
+                            $this->bindedEntitiesByGroup[$type][$obj->group][] = $obj;
+                        } else {
+                            $this->bindedEntitiesByGroup[$type][$obj->group] = $obj;
+                        }
+                    }
+                }
             }
         }
-        return $out;
     }
+
 }
