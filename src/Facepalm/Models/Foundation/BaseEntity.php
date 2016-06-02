@@ -85,6 +85,7 @@ abstract class BaseEntity extends AbstractEntity
     /**
      * @param array|string $entitiesToGroup
      * @param bool $force
+     * @return $this
      */
     public function processBindedEntities($entitiesToGroup = ['images', 'files'], $force = false)
     {
@@ -105,6 +106,8 @@ abstract class BaseEntity extends AbstractEntity
                 }
             }
         }
+
+        return $this;
     }
 
 }
