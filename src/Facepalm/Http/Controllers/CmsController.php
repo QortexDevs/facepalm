@@ -351,15 +351,30 @@ class CmsController extends BaseController
         }
 
 
-
         /** @var CmsForm $form */
         $form = $this->app->make('CmsForm', [$this->fieldSet]);
 
         //todo: refactor this!
         if ($this->config->get('module.forms')) {
             $form->setupFromConfig($this->config->part('module'), false);
-            $customForm = $this->config->part('module.forms.for_id_' . $this->objectId);
-            if ($customForm->get('fields')) {
+
+            $customForm = null;
+            $customForms = $this->config->get('module.forms');
+            if ($customForms) {
+                foreach ($customForms as $k => $v) {
+                    if (Str::startsWith($k, 'for_id_')) {
+                        $ids = Str::substr($k, Str::length('for_id_'));
+                        if ($ids) {
+                            $ids = explode(',', $ids);
+                            if (in_array($this->objectId, $ids, true)) {
+                                $customForm = $this->config->part('module.forms.' . $k);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            if ($customForm && $customForm->get('fields')) {
                 if ($customForm->get('model')) {
                     $form->setMainModel($customForm->get('model'));
                 }
