@@ -44,6 +44,7 @@ class BaseController extends FrameworkBaseController
                 '/',
                 config('facepalm.rootSection') ? $root : 0
             );
+
         }
 
         if ($this->currentSection) {

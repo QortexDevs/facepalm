@@ -251,7 +251,7 @@ class Tree
                     }
                 }
             }
-            if ($foundSections === count($segments)) {
+            if ($foundSections /*=== count($segments)*/) {
                 return $this->getElement($currentParentId);
             }
         }
