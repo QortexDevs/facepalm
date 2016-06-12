@@ -97,7 +97,9 @@ abstract class BaseEntity extends AbstractEntity
                 if ($objects) {
                     foreach ($objects as $obj) {
                         if (Arr::has($this->bindedEntitiesByGroup[$type], $obj->group)) {
-                            $this->bindedEntitiesByGroup[$type][$obj->group] = (array)$this->bindedEntitiesByGroup[$type][$obj->group];
+                            if (!is_array($this->bindedEntitiesByGroup[$type][$obj->group])) {
+                                $this->bindedEntitiesByGroup[$type][$obj->group] = [$this->bindedEntitiesByGroup[$type][$obj->group]];
+                            }
                             $this->bindedEntitiesByGroup[$type][$obj->group][] = $obj;
                         } else {
                             $this->bindedEntitiesByGroup[$type][$obj->group] = $obj;
