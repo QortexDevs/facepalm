@@ -112,4 +112,22 @@ abstract class BaseEntity extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @param $id
+     * @return BaseEntity|null
+     */
+    public static function getByIdWithData($id)
+    {
+        $object = static::where('status', 1)
+            ->with('images')
+            ->with('textItems')
+            ->find($id);
+
+        if ($object) {
+            $object->processBindedEntities('images');
+        }
+
+        return $object;
+    }
+
 }
