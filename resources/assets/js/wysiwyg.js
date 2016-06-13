@@ -41,7 +41,7 @@ function InitWysiwyg() {
             focus: false,
             codemirror: true,
 
-            formatting: ['p', 'h3', 'h4'],
+            formatting: ['p', 'h2', 'h3'],
             plugins: $(this).is('.easy') ? [] : plugins,
 
             imageUpload: './',
@@ -55,7 +55,7 @@ function InitWysiwyg() {
             fileUploadParam: 'fileFromWysiwyg',
 
             cleanStyleOnEnter: true, //If set to 'true', this setting will prevent new paragraph from inheriting styles, classes and attributes form a previous paragraph
-            allowedTags: ['p', 'h3', 'h4', 'pre', 'a', 'i', 'b', 'em', 'strong', 'ul', 'ol', 'li', 'img', 'iframe', 'blockquote', 'table', 'tr', 'td', 'th', 'tbody', 'thead', 'span', 'br', 'hr', 'dl', 'dd', 'dt'],
+            allowedTags: ['p', 'h2', 'h3', 'h4', 'pre', 'a', 'i', 'b', 'em', 'strong', 'ul', 'ol', 'li', 'img', 'iframe', 'blockquote', 'table', 'tr', 'td', 'th', 'tbody', 'thead', 'span', 'br', 'hr', 'dl', 'dd', 'dt'],
             removeEmpty: ['h3', 'pre', 'a', 'i', 'b', 'em', 'strong', 'ul', 'ol', 'li', 'span'],
             //allowedAttr:  [
             //    ['p', 'class'],
