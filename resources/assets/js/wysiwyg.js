@@ -41,7 +41,7 @@ function InitWysiwyg() {
             focus: false,
             codemirror: true,
 
-            formatting: ['p', 'h2', 'h3'],
+            formatting: ['p', 'h2', 'h3'    ],
             plugins: $(this).is('.easy') ? [] : plugins,
 
             imageUpload: './',
