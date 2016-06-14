@@ -20,7 +20,7 @@ class AclField extends AbstractField
         $this->makeNames($object);
 
         return $this->render->render($this->templateName, [
-                'acl' => $object->acl ? json_decode($object->acl) : [],
+                'acl' => ($object && $object->acl) ? json_decode($object->acl) : [],
                 'inputName' => $this->fieldNameBase . '[' . $this->name . ']',
                 'structure' => $this->config ? $this->config->get('structure') : null,
             ] + $parameters);
