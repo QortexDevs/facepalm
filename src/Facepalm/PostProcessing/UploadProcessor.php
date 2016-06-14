@@ -20,12 +20,12 @@ class UploadProcessor
 {
     /**
      * @param $fieldName (image|file)
-     * @param AbstractEntity $object
+     * @param AbstractEntity|null $object
      * @param $value
      * @param $requestRawData
      * @return array
      */
-    public function handle($fieldName, AbstractEntity $object, $value, $requestRawData)
+    public function handle($fieldName, $object, $value, $requestRawData)
     {
         $relationMethodName = $fieldName . 's';
         $className = Str::ucfirst($fieldName);
@@ -39,7 +39,7 @@ class UploadProcessor
                 }
                 /** @var UploadedFile $uploadedFile */
                 foreach ($uploadedFiles as $uploadedFile) {
-                    if (!Arr::get($requestRawData, 'multiple', false)) {
+                    if ($object && !Arr::get($requestRawData, 'multiple', false)) {
                         //удаляем предыдущие картинки
                         $object->{$relationMethodName}()
                             ->ofGroup($groupName)
@@ -64,7 +64,9 @@ class UploadProcessor
                         $this->{$afterSaveMethodName}($uploadableObject, $requestRawData);
                     }
 
-                    $object->{$relationMethodName}()->save($uploadableObject);
+                    if ($object) {
+                        $object->{$relationMethodName}()->save($uploadableObject);
+                    }
                     $processedFiles[] = [
                         $fieldName => $this->{$resultMethodName}($uploadableObject, $requestRawData)
                     ];

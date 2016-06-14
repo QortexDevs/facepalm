@@ -28,8 +28,8 @@ function InitWysiwyg() {
     //     });
     // });
 
-    var buttons = ['html', 'formatting', 'bold', 'italic', 'unorderedlist', 'link'];
-    var plugins = ['bufferbuttons', 'table', 'fullscreen'];
+    var buttons = ['html', 'formatting', 'bold', 'italic', 'unorderedlist', 'link', 'image'];
+    var plugins = ['bufferbuttons', 'table', 'fullscreen', 'video'];
     $('textarea[data-wysiwyg]').each(function () {
         $(this).redactor({
             buttons: buttons,
@@ -41,21 +41,18 @@ function InitWysiwyg() {
             focus: false,
             codemirror: true,
 
-            formatting: ['p', 'h2', 'h3'    ],
+            formatting: ['p', 'h2', 'h3'],
             plugins: $(this).is('.easy') ? [] : plugins,
 
             imageUpload: './',
-            imageUploadParam: 'Filedata',
+            imageUploadParam: 'unboundUpload[image]',
             imageResizable: false,
             imagePosition: false,
             convertImageLinks: false,
-            uploadImageFields: {type: 'image', fromWysiwyg: true},
-
-            fileUpload: './',
-            fileUploadParam: 'fileFromWysiwyg',
+            uploadImageFields: {type: 'image', multiple:true, fromWysiwyg: true, '_token': getCsrfTokenParameter()._token},
 
             cleanStyleOnEnter: true, //If set to 'true', this setting will prevent new paragraph from inheriting styles, classes and attributes form a previous paragraph
-            allowedTags: ['p', 'h2', 'h3', 'h4', 'pre', 'a', 'i', 'b', 'em', 'strong', 'ul', 'ol', 'li', 'img', 'iframe', 'blockquote', 'table', 'tr', 'td', 'th', 'tbody', 'thead', 'span', 'br', 'hr', 'dl', 'dd', 'dt'],
+            allowedTags: ['p', 'h2', 'h3', 'h4', 'pre', 'a', 'i', 'b', 'em', 'strong', 'ul', 'ol', 'li', 'img', 'iframe', 'blockquote', 'table', 'tr', 'td', 'th', 'tbody', 'thead', 'span', 'br', 'hr', 'dl', 'dd', 'dt', 'div'],
             removeEmpty: ['h3', 'pre', 'a', 'i', 'b', 'em', 'strong', 'ul', 'ol', 'li', 'span'],
             //allowedAttr:  [
             //    ['p', 'class'],

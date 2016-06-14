@@ -14,9 +14,11 @@ use Facepalm\Cms\Config\Config;
 use Facepalm\Cms\Fields\FieldSet;
 use Facepalm\Cms\PermissionManager;
 use Facepalm\Models\Foundation\BaseEntity;
+use Facepalm\Models\Image;
 use Facepalm\Models\ModelFactory;
 use Facepalm\Models\User;
 use Facepalm\PostProcessing\AmfProcessor;
+use Facepalm\PostProcessing\UploadProcessor;
 use Facepalm\Tools\AssetsBuster;
 use Facepalm\Tools\Tree;
 use Illuminate\Foundation\Application;
@@ -498,6 +500,16 @@ class CmsController extends BaseController
         //todo:
         //todo: продумать нормальный возврат!
         //todo: события до, после и вместо!!!!
+
+        if ($this->request->files->has('unboundUpload')) {
+            $uploadData = $this->request->files->get('unboundUpload');
+            if (Arr::has($uploadData, 'image')) {
+                $image = Image::createFromUpload($uploadData['image']);
+                return response()->json(['filelink' => $image->getUri()]);
+            } elseif (Arr::has($uploadData, 'file')) {
+            }
+        }
+
         if (Arr::has($amfProcessor->getAffectedFields(), 'toggle')) {
             // todo: какашка какая-то
             if ($amfProcessor->getAffectedFieldsCount() === 1) {
