@@ -18,20 +18,19 @@
 //= ../../../bower_components/tether/dist/js/tether.js
 //= ../../../bower_components/tether-drop/dist/js/drop.js
 
-//= ../nonBowerPackages/redactor/redactor/redactor.js
-//= ../nonBowerPackages/redactor/langs/ru.js
-//= ../nonBowerPackages/redactor/plugins/video.js
-//= ../nonBowerPackages/redactor/plugins/fontcolor.js
-//= ../nonBowerPackages/redactor/plugins/table.js
-//= ../nonBowerPackages/redactor/plugins/fontsize.js
-//= ../nonBowerPackages/redactor/plugins/fullscreen.js
-//
-// = ../nonBowerPackages/ckeditor/ckeditor.js
-// = ../nonBowerPackages/ckeditor/adapters/jquery.js
-// = ../nonBowerPackages/ckeditor/build-config.js
+//-= ../nonBowerPackages/redactor/redactor/redactor.js
+//-= ../nonBowerPackages/redactor/langs/ru.js
+//-= ../nonBowerPackages/redactor/plugins/video.js
+//-= ../nonBowerPackages/redactor/plugins/fontcolor.js
+//-= ../nonBowerPackages/redactor/plugins/table.js
+//-= ../nonBowerPackages/redactor/plugins/fontsize.js
+//-= ../nonBowerPackages/redactor/plugins/fullscreen.js
 
 
 $(document).ready(function () {
+
+    FacepalmCMS.init();
+
 
     if ((new Auth()).init()) {
         drop = new Drop({
