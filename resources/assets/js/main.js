@@ -363,8 +363,47 @@ $(document).ready(function () {
             });
         });
 
-        initDropZone();
-
+        $(".dropzone").each(function () {
+            var $dropzone = $(this);
+            var isMultiple = $dropzone.data('multiple') == "1";
+            $(this).dropzone({
+                url: baseUrl + "/?_token=" + $('input:hidden[name=_token]').val() + $dropzone.data('parameters'),
+                paramName: $(this).data('input-name'),
+                parallelUploads: 3,
+                maxFiles: isMultiple ? null : 1,
+                clickable: $(this).find("button.dz-message")[0],
+                uploadMultiple: isMultiple,
+                addRemoveLinks: true,
+                createImageThumbnails: false,
+                acceptedFiles: $dropzone.data('type') == 'image' ? 'image/*' : null,
+                success: function (file, response) {
+                    this.removeFile(file);
+                    if (!isMultiple) {
+                        $dropzone.prev().empty();
+                    }
+                    for (var i in response) {
+                        if ($dropzone.data('type') == 'image') {
+                            if (!$('.images-list .image[data-id=' + response[i].image.id + ']').length) {
+                                $dropzone.prev().append(templateImage.render(response[i]))
+                            }
+                        } else {
+                            if (!$('.files-list .file[data-id=' + response[i].file.id + ']').length) {
+                                $dropzone.prev().append(templateFile.render(response[i]))
+                            }
+                        }
+                    }
+                },
+                error: function (file, errorMessage, xhr) {
+                    this.removeFile(file);
+                    //todo: нормально обрабатывать и показывать ошибки
+                    $.growl.error({
+                        title: 'Ошибка',
+                        message: 'Не удается загрузить файл на сервер. Неверный формат или слишком большой размер.',
+                        duration: 7000
+                    });
+                }
+            });
+        })
 
     }
 });
@@ -381,47 +420,3 @@ function getCsrfTokenParameter() {
     return {'_token': $('input:hidden[name=_token]').val()};
 }
 
-
-function initDropZone() {
-    $(".dropzone").each(function () {
-        var $dropzone = $(this);
-        var isMultiple = $dropzone.data('multiple') == "1";
-        $(this).dropzone({
-            url: baseUrl + "/?_token=" + $('input:hidden[name=_token]').val() + $dropzone.data('parameters'),
-            paramName: $(this).data('input-name'),
-            parallelUploads: 3,
-            maxFiles: isMultiple ? null : 1,
-            clickable: $(this).find("button.dz-message")[0],
-            uploadMultiple: isMultiple,
-            addRemoveLinks: true,
-            createImageThumbnails: false,
-            acceptedFiles: $dropzone.data('type') == 'image' ? 'image/*' : null,
-            success: function (file, response) {
-                this.removeFile(file);
-                if (!isMultiple) {
-                    $dropzone.prev().empty();
-                }
-                for (var i in response) {
-                    if ($dropzone.data('type') == 'image') {
-                        if (!$('.images-list .image[data-id=' + response[i].image.id + ']').length) {
-                            $dropzone.prev().append(templateImage.render(response[i]))
-                        }
-                    } else {
-                        if (!$('.files-list .file[data-id=' + response[i].file.id + ']').length) {
-                            $dropzone.prev().append(templateFile.render(response[i]))
-                        }
-                    }
-                }
-            },
-            error: function (file, errorMessage, xhr) {
-                this.removeFile(file);
-                //todo: нормально обрабатывать и показывать ошибки
-                $.growl.error({
-                    title: 'Ошибка',
-                    message: 'Не удается загрузить файл на сервер. Неверный формат или слишком большой размер.',
-                    duration: 7000
-                });
-            }
-        });
-    })
-}
