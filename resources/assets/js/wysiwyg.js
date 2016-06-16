@@ -16,8 +16,13 @@ function InitWysiwyg() {
         // extended_valid_elements: 'img[class=myclass|!src|border:0|alt|title|width|height|style]',
         // invalid_elements: 'strong,b,em,i',
 
-        plugins: ['autoresize', 'codemirror', 'link', 'autolink', 'media', 'noneditable', 'paste', 'table', 'template', 'visualblocks'],
-        toolbar: 'styleselect | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | link table media | visualblocks code',
+        plugins: ['autoresize', 'codemirror', 'link', 'autolink', 'media', 'noneditable', 'paste', 'table', 'visualblocks'],
+        toolbar: 'styleselect | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | link image table media | visualblocks code',
+
+        images_upload_url: 'postAcceptor.php',
+        images_upload_base_path: '/some/basepath',
+        images_upload_credentials: true,
+        image_caption: true,
 
         media_poster: false,
         media_dimensions: false,
@@ -54,6 +59,18 @@ function InitWysiwyg() {
     for (var selector in options) {
         if (options.hasOwnProperty(selector)) {
             var currentOptions = $.extend(defaultOptions, options[selector]);
+            if (currentOptions.content_css_add) {
+                if (typeof currentOptions.content_css == 'string') {
+                    currentOptions.content_css = [currentOptions.content_css];
+                }
+                currentOptions.content_css = currentOptions.content_css.concat(currentOptions.content_css_add)
+            }
+            if (currentOptions.pluginsAdd) {
+                currentOptions.plugins = currentOptions.plugins.concat(currentOptions.pluginsAdd);
+            }
+            if (currentOptions.toolbarAdd) {
+                currentOptions.toolbar += currentOptions.toolbarAdd;
+            }
             $(selector).tinymce(currentOptions);
         }
     }

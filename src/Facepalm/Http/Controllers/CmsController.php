@@ -23,6 +23,7 @@ use Facepalm\Tools\AssetsBuster;
 use Facepalm\Tools\Tree;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -504,8 +505,27 @@ class CmsController extends BaseController
         if ($this->request->files->has('unboundUpload')) {
             $uploadData = $this->request->files->get('unboundUpload');
             if (Arr::has($uploadData, 'image')) {
-                $image = Image::createFromUpload($uploadData['image']);
-                return response()->json(['filelink' => $image->getUri()]);
+                if ($uploadData['image'] instanceof UploadedFile) {
+                    $uploadData['image'] = [$uploadData['image']];
+                }
+                $images = [];
+                $previewSize = config('facepalm.defaultThumbnailSize');
+                foreach ($uploadData['image'] as $uploadImage) {
+                    $image = Image::createFromUpload($uploadImage);
+                    $image->save();
+                    $image->generateSize($previewSize);
+                    $images[] =
+                        [
+                            'image' => [
+                                'id' => $image->id,
+                                'preview' => $image->getUri($previewSize),
+                                'full' => $image->getUri('original'),
+                                'group' => $image->group
+                            ]
+                        ];
+                }
+//                return response()->json(['filelink' => $image->getUri()]);
+                return response()->json($images);
             } elseif (Arr::has($uploadData, 'file')) {
             }
         }

@@ -1,44 +1,19 @@
-/**
- * Created by xpundel on 02.03.15.
- */
-
-//= ../../../bower_components/jquery/dist/jquery.js
-//= ../../../bower_components/underscore/underscore.js
-//= ../../../bower_components/underscore.string/dist/underscore.string.js
-//= ../../../bower_components/moment/moment.js
-//= ../../../bower_components/pikaday-time/pikaday.js
-//= ../../../bower_components/growl/javascripts/jquery.growl.js
-//= ../../../bower_components/dropzone/dist/dropzone.js
-//= ../../../bower_components/twig.js/twig.js
-//= ../../../bower_components/Sortable/Sortable.js
-//= ../../../bower_components/fancybox/source/jquery.fancybox.pack.js
-//= ../../../bower_components/codemirror/lib/codemirror.js
-//= ../../../bower_components/codemirror/mode/xml/xml.js
-//= ../../../bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.js
-//= ../../../bower_components/tether/dist/js/tether.js
-//= ../../../bower_components/tether-drop/dist/js/drop.js
-
-//-= ../nonBowerPackages/redactor/redactor/redactor.js
-//-= ../nonBowerPackages/redactor/langs/ru.js
-//-= ../nonBowerPackages/redactor/plugins/video.js
-//-= ../nonBowerPackages/redactor/plugins/fontcolor.js
-//-= ../nonBowerPackages/redactor/plugins/table.js
-//-= ../nonBowerPackages/redactor/plugins/fontsize.js
-//-= ../nonBowerPackages/redactor/plugins/fullscreen.js
-
 
 $(document).ready(function () {
+    Dropzone.autoDiscover = false;
 
     FacepalmCMS.init();
 
 
     if ((new Auth()).init()) {
-        drop = new Drop({
-            target: document.querySelector('.user-icon'),
-            content: $('.user-dropdown-container').html(),
-            position: 'bottom right',
-            openOn: 'click'
-        });
+        if(document.querySelector('.user-icon')) {
+            drop = new Drop({
+                target: document.querySelector('.user-icon'),
+                content: $('.user-dropdown-container').html(),
+                position: 'bottom right',
+                openOn: 'click'
+            });
+        }
 
         //load underscore.string
         var baseUrl = $('body').data('base-url');
@@ -258,7 +233,6 @@ $(document).ready(function () {
             $(this).prev().val('');
         });
 
-        Dropzone.autoDiscover = false;
         var templateImage = twig({
             data: $('#image-preview-template').html()
         });
@@ -389,47 +363,9 @@ $(document).ready(function () {
             });
         });
 
-        $(".dropzone").each(function () {
-            var $dropzone = $(this);
-            var isMultiple = $dropzone.data('multiple') == "1";
-            $(this).dropzone({
-                url: baseUrl + "/?_token=" + $('input:hidden[name=_token]').val() + $dropzone.data('parameters'),
-                paramName: $(this).data('input-name'),
-                parallelUploads: 3,
-                maxFiles: isMultiple ? null : 1,
-                clickable: $(this).find("button.dz-message")[0],
-                uploadMultiple: isMultiple,
-                addRemoveLinks: true,
-                createImageThumbnails: false,
-                acceptedFiles: $dropzone.data('type') == 'image' ? 'image/*' : null,
-                success: function (file, response) {
-                    this.removeFile(file);
-                    if (!isMultiple) {
-                        $dropzone.prev().empty();
-                    }
-                    for (var i in response) {
-                        if ($dropzone.data('type') == 'image') {
-                            if (!$('.images-list .image[data-id=' + response[i].image.id + ']').length) {
-                                $dropzone.prev().append(templateImage.render(response[i]))
-                            }
-                        } else {
-                            if (!$('.files-list .file[data-id=' + response[i].file.id + ']').length) {
-                                $dropzone.prev().append(templateFile.render(response[i]))
-                            }
-                        }
-                    }
-                },
-                error: function (file, errorMessage, xhr) {
-                    this.removeFile(file);
-                    //todo: нормально обрабатывать и показывать ошибки
-                    $.growl.error({
-                        title: 'Ошибка',
-                        message: 'Не удается загрузить файл на сервер. Неверный формат или слишком большой размер.',
-                        duration: 7000
-                    });
-                }
-            });
-        })
+        initDropZone();
+
+
     }
 });
 
@@ -446,4 +382,46 @@ function getCsrfTokenParameter() {
 }
 
 
-
+function initDropZone() {
+    $(".dropzone").each(function () {
+        var $dropzone = $(this);
+        var isMultiple = $dropzone.data('multiple') == "1";
+        $(this).dropzone({
+            url: baseUrl + "/?_token=" + $('input:hidden[name=_token]').val() + $dropzone.data('parameters'),
+            paramName: $(this).data('input-name'),
+            parallelUploads: 3,
+            maxFiles: isMultiple ? null : 1,
+            clickable: $(this).find("button.dz-message")[0],
+            uploadMultiple: isMultiple,
+            addRemoveLinks: true,
+            createImageThumbnails: false,
+            acceptedFiles: $dropzone.data('type') == 'image' ? 'image/*' : null,
+            success: function (file, response) {
+                this.removeFile(file);
+                if (!isMultiple) {
+                    $dropzone.prev().empty();
+                }
+                for (var i in response) {
+                    if ($dropzone.data('type') == 'image') {
+                        if (!$('.images-list .image[data-id=' + response[i].image.id + ']').length) {
+                            $dropzone.prev().append(templateImage.render(response[i]))
+                        }
+                    } else {
+                        if (!$('.files-list .file[data-id=' + response[i].file.id + ']').length) {
+                            $dropzone.prev().append(templateFile.render(response[i]))
+                        }
+                    }
+                }
+            },
+            error: function (file, errorMessage, xhr) {
+                this.removeFile(file);
+                //todo: нормально обрабатывать и показывать ошибки
+                $.growl.error({
+                    title: 'Ошибка',
+                    message: 'Не удается загрузить файл на сервер. Неверный формат или слишком большой размер.',
+                    duration: 7000
+                });
+            }
+        });
+    })
+}

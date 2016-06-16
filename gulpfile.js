@@ -57,6 +57,7 @@ if (!modulesToBuild) {
 var path = {
     src: {
         js: 'assets/js/**/*.js',
+        vendorJs: 'assets/vendorJs/*.js',
         styles: 'assets/sass/**/*.scss',
         vendorStyles: 'assets/vendorCss/*.css',
         images: 'assets/i/**/*.*',
@@ -66,7 +67,8 @@ var path = {
     // additional to src-paths
     watch: {
         js: ['bower_components/**/*.js'],
-        vendorStyles: ['assets/vendorCss/**/*.css']
+        vendorStyles: ['assets/vendorCss/**/*.css'],
+        vendorJs: ['assets/vendorJs/**/*.js']
     },
 
     build: {
@@ -144,6 +146,18 @@ modulesToBuild.map(function (module) {
     });
 });
 
+modulesToBuild.map(function (module) {
+    gulp.task('vendorJs:build:' + module, function () {
+        gulp.src(getSrcPath(module, 'vendorJs'))
+            .pipe(rigger())
+            .pipe(uglify())
+            .pipe(gulp.dest(getBuildPath(module, 'js')))
+            .pipe(bust(busterOptions))
+            .pipe(gulp.dest('.'))
+    });
+});
+
+
 /** build vendor styles task */
 modulesToBuild.map(function (module) {
     gulp.task('vendorStyles:build:' + module, function () {
@@ -208,6 +222,7 @@ modulesToBuild.map(function (module) {
         'js:build:' + module,
         'styles:build:' + module,
         'vendorStyles:build:' + module,
+        'vendorJs:build:' + module,
         'fonts:build:' + module,
         'nonBowerPackages:build:' + module,
         'images:build:' + module

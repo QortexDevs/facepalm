@@ -22,9 +22,8 @@ class ArrayTools
         return array_flip(
             array_map(
                 function ($item) use ($prefixToRemove, $prefixToAdd) {
-                    return (string)$prefixToAdd . mb_strpos($item, $prefixToRemove) !== false
-                        ? mb_substr($item, mb_strlen($prefixToRemove))
-                        : $item;
+                    return (string)$prefixToAdd
+                    . (mb_strpos($item, $prefixToRemove) !== false ? mb_substr($item, mb_strlen($prefixToRemove)) : $item);
                 },
                 array_flip($arr)
             )
