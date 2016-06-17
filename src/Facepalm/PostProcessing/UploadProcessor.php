@@ -101,6 +101,8 @@ class UploadProcessor
             'id' => $image->id,
             'preview' => $image->getUri($previewSize),
             'full' => $image->getUri('original'),
+            'basePath' => $image->getUri(null, true),
+            'ext' => $image->ext,
             'group' => $image->group
         ];
     }

@@ -111,12 +111,13 @@ class Image extends BindableEntity
 
     /**
      * todo: вынести пути в конфиги
-     * @param $suffix
+     * @param string $suffix
+     * @param bool $skipExtension
      * @return string
      */
-    public function getUri($suffix = 'original')
+    public function getUri($suffix = 'original', $skipExtension = false)
     {
-        $path = $this->getRelativePath($suffix);
+        $path = $this->getRelativePath($suffix, $skipExtension);
         if ($path) {
             return '/media/images/' . $path;
         }
@@ -217,14 +218,15 @@ class Image extends BindableEntity
 
     /**
      * @param string $suffix
+     * @param bool $skipExtension
      * @return string
      */
-    protected function getRelativePath($suffix = '')
+    protected function getRelativePath($suffix = '', $skipExtension = false)
     {
         if ($this->name) {
             return Path::generateHierarchicalPrefix($this->name)
             . ($suffix ? ('_' . $suffix) : '')
-            . ($this->ext ? ('.' . $this->ext) : '');
+            . ($this->ext && !$skipExtension? ('.' . $this->ext) : '');
         }
     }
 

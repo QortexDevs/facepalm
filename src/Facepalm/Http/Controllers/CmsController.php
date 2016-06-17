@@ -495,6 +495,19 @@ class CmsController extends BaseController
      */
     protected function post()
     {
+        // Unbound image upload, for example from wysiwyg
+        if ($this->request->files->has('unboundUpload')) {
+            // Да, т.к. это непривязанная загрузка, и группа значения не имеет,
+            // у нас "тип" и "группа" передеются одним параметром
+            // Т.е. в unboundUpload[image] мы определяем тип по image и его же используем в UploadProcessor для группы
+            $uploadProcessor = new UploadProcessor();
+            $type = array_keys($this->request->files->get('unboundUpload'))[0];
+            $result = $uploadProcessor->handle($type, null, $this->request->files->get('unboundUpload'), $this->request->all());
+            return response()->json($result);
+        }
+
+
+        // Standard CMS
         $amfProcessor = new AmfProcessor();
         $amfProcessor->process($this->request->all());
 
@@ -502,33 +515,6 @@ class CmsController extends BaseController
         //todo: продумать нормальный возврат!
         //todo: события до, после и вместо!!!!
 
-        if ($this->request->files->has('unboundUpload')) {
-            $uploadData = $this->request->files->get('unboundUpload');
-            if (Arr::has($uploadData, 'image')) {
-                if ($uploadData['image'] instanceof UploadedFile) {
-                    $uploadData['image'] = [$uploadData['image']];
-                }
-                $images = [];
-                $previewSize = config('facepalm.defaultThumbnailSize');
-                foreach ($uploadData['image'] as $uploadImage) {
-                    $image = Image::createFromUpload($uploadImage);
-                    $image->save();
-                    $image->generateSize($previewSize);
-                    $images[] =
-                        [
-                            'image' => [
-                                'id' => $image->id,
-                                'preview' => $image->getUri($previewSize),
-                                'full' => $image->getUri('original'),
-                                'group' => $image->group
-                            ]
-                        ];
-                }
-//                return response()->json(['filelink' => $image->getUri()]);
-                return response()->json($images);
-            } elseif (Arr::has($uploadData, 'file')) {
-            }
-        }
 
         if (Arr::has($amfProcessor->getAffectedFields(), 'toggle')) {
             // todo: какашка какая-то
