@@ -57,18 +57,23 @@
     </body>
 {% endblock bodyOuter %}
 <div id="spinner"></div>
-<script src="/assets/facepalm/js/vendor.js?{{ assetsBusters['facepalm::js/vendor.js'] }}"></script>
-<script src="/assets/facepalm/js/all.js?{{ assetsBusters['facepalm::js/all.js'] }}"></script>
-<script src="/assets/facepalm/nonBowerPackages/tinymce/tinymce.min.js"></script>
-<script src="/assets/facepalm/nonBowerPackages/tinymce/jquery.tinymce.min.js"></script>
-{% if customJsPath %}
-    <script src="/{{ customJsPath }}?{{ assetsBusters[customJsPath] }}"></script>
-{% endif %}
-{% block jsFile %}{% endblock %}
 <script type="text/template" id="image-preview-template">
     {{ source("facepalm::components/form/imagePreview.twig") }}
 </script>
 <script type="text/template" id="file-preview-template">
     {{ source("facepalm::components/form/filePreview.twig") }}
+</script>
+<script src="/assets/facepalm/js/vendor.js?{{ assetsBusters['facepalm::js/vendor.js'] }}"></script>
+<script src="/assets/facepalm/js/all.js?{{ assetsBusters['facepalm::js/all.js'] }}"></script>
+<script src="/assets/facepalm/include/vendor/tinymce/tinymce.min.js"></script>
+<script src="/assets/facepalm/include/vendor/tinymce/jquery.tinymce.min.js"></script>
+{% block jsFile %}{% endblock %}
+{% if customJsPath %}
+    <script src="/{{ customJsPath }}?{{ assetsBusters[customJsPath] }}"></script>
+{% endif %}
+<script>
+    $(function () {
+        (new FacepalmCMS).init().start();
+    });
 </script>
 </html>

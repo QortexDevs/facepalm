@@ -14,7 +14,7 @@
         "tests"
     ],
     "dependencies": {
-        "jquery": "~2.1.*",
+        "jquery": "~3.*",
         "growl": "*",
         "sweetalert": "~1.1.*",
         "underscore": "~1.5.*",

@@ -62,7 +62,7 @@ var path = {
         vendorStyles: 'assets/vendorCss/*.css',
         images: 'assets/i/**/*.*',
         fonts: 'assets/fonts/**/*.*',
-        nonBowerPackages: 'assets/nonBowerPackages/**/*.*'
+        include: 'assets/include/**/*.*'
     },
     // additional to src-paths
     watch: {
@@ -76,7 +76,7 @@ var path = {
         styles: 'css/',
         images: 'i/',
         fonts: 'fonts/',
-        nonBowerPackages: 'nonBowerPackages/',
+        include: 'include/',
     }
 };
 
@@ -194,9 +194,9 @@ modulesToBuild.map(function (module) {
 
 /** build fonts task */
 modulesToBuild.map(function (module) {
-    gulp.task('nonBowerPackages:build:' + module, function () {
-        gulp.src(getSrcPath(module, 'nonBowerPackages'))
-            .pipe(gulp.dest(getBuildPath(module, 'nonBowerPackages')))
+    gulp.task('include:build:' + module, function () {
+        gulp.src(getSrcPath(module, 'include'))
+            .pipe(gulp.dest(getBuildPath(module, 'include')))
     });
 });
 
@@ -224,7 +224,7 @@ modulesToBuild.map(function (module) {
         'vendorStyles:build:' + module,
         'vendorJs:build:' + module,
         'fonts:build:' + module,
-        'nonBowerPackages:build:' + module,
+        'include:build:' + module,
         'images:build:' + module
     ]);
 });

@@ -1,8 +1,10 @@
-function Auth() {
-
+function AuthManager(app) {
+    this.app = app;
 }
 
-Auth.prototype = {
+AuthManager.prototype = {
+    app: null,
+
     init: function () {
         var _this = this;
         $('.login-form form').on('submit', function () {

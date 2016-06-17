@@ -16,6 +16,9 @@ Object.defineProperty(Object.prototype, 'setWithPath', {
         }
         var cur = this;
         var fields = path;
+        fields = fields.filter(function (value) {
+            return typeof value != 'undefined' && value;
+        });
         fields.map(function (field, index) {
             cur[field] = cur[field] || (index == fields.length - 1 ? (value || {}) : {});
             cur = cur[field];
@@ -28,6 +31,11 @@ Object.defineProperty(Object.prototype, 'setWithPath', {
     enumerable: false
 });
 
+/**
+ *
+ * @param ms
+ * @returns {*}
+ */
 function delay(ms) {
     var d = $.Deferred();
     setTimeout(function () {
@@ -36,8 +44,12 @@ function delay(ms) {
     return d.promise();
 }
 
+
+/**
+ *
+ */
 if (!String.prototype.endsWith) {
-    String.prototype.endsWith = function(searchString, position) {
+    String.prototype.endsWith = function (searchString, position) {
         var subjectString = this.toString();
         if (typeof position !== 'number' || !isFinite(position) || Math.floor(position) !== position || position > subjectString.length) {
             position = subjectString.length;
@@ -46,4 +58,19 @@ if (!String.prototype.endsWith) {
         var lastIndex = subjectString.indexOf(searchString, position);
         return lastIndex !== -1 && lastIndex === position;
     };
+}
+
+/**
+ *
+ */
+if (!String.prototype.startsWith) {
+    Object.defineProperty(String.prototype, 'startsWith', {
+        enumerable: false,
+        configurable: false,
+        writable: false,
+        value: function (searchString, position) {
+            position = position || 0;
+            return this.lastIndexOf(searchString, position) === position;
+        }
+    });
 }

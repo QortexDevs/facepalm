@@ -19,20 +19,8 @@
 ;
 //= ../../../bower_components/fancybox/source/jquery.fancybox.pack.js
 ;
-//= ../../../bower_components/codemirror/lib/codemirror.js
-;
-//= ../../../bower_components/codemirror/mode/xml/xml.js
-;
 //= ../../../bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.js
 ;
 //= ../../../bower_components/tether/dist/js/tether.js
 ;
 //= ../../../bower_components/tether-drop/dist/js/drop.js
-
-//-= ../nonBowerPackages/redactor/redactor/redactor.js
-//-= ../nonBowerPackages/redactor/langs/ru.js
-//-= ../nonBowerPackages/redactor/plugins/video.js
-//-= ../nonBowerPackages/redactor/plugins/fontcolor.js
-//-= ../nonBowerPackages/redactor/plugins/table.js
-//-= ../nonBowerPackages/redactor/plugins/fontsize.js
-//-= ../nonBowerPackages/redactor/plugins/fullscreen.js

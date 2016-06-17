@@ -1,8 +1,7 @@
 <div class="cms-module-list">
     <button type="button"
             class="cms-button add-new-item"
-            data-base-url="{{ baseUrl }}"
-    >
+            href="{{ baseUrl }}/create/">
         Создать{{ strings['accusative'] ? (" "~strings['accusative']):"" }}
     </button>
     {% include "facepalm::components/list/list.twig" %}
