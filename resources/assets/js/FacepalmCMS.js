@@ -1,15 +1,36 @@
 _.mixin(s.exports());
 Dropzone.autoDiscover = false;
 
+
+/**
+ *
+ * @returns {FacepalmCMS|*}
+ * @constructor
+ */
 function FacepalmCMS() {
 
+    if (arguments.callee._singletonInstance) {
+        return arguments.callee._singletonInstance;
+    }
+
+    arguments.callee._singletonInstance = this;
 }
+
 
 FacepalmCMS.prototype = {
     csrfToken: '',
     baseUrl: null,
     serviceLocator: null,
     eventHandlers: {},
+
+
+    /**
+     * 
+     * @returns {FacepalmCMS}
+     */
+    get: function() {
+        return this;
+    },
 
     /**
      * Initialization
@@ -22,24 +43,29 @@ FacepalmCMS.prototype = {
         this.serviceLocator = new ServiceLocator(this);
         this.baseUrl = $('body').data('base-url');
 
+        this.service('WysiwygManager'); //init manager
+
         this.fire('afterInit');
         return this;
     },
 
     /**
-     * Start UI and other services
+     * Start UI and other services, after dom ready
      */
     start: function () {
-        this.fire('beforeStart');
+        var _this = this;
+        $(function () {
+            _this.fire('beforeStart');
 
-        if (this.service('AuthManager').init()) {
-            this.initSessionKeepAlive();
+            if (_this.service('AuthManager').init()) {
+                _this.initSessionKeepAlive();
 
-            this.service('UI').init();
-            this.service('WysiwygManager').initAll();
-        }
+                _this.service('UI').init();
+                _this.service('WysiwygManager').initAll();
+            }
 
-        this.fire('afterStart');
+            _this.fire('afterStart');
+        });
     },
 
     /**

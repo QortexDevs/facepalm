@@ -1,6 +1,7 @@
 function WysiwygManager(app) {
     this.app = app;
     this.setOptions(); // set default options
+    this.options[this.defaultWysiwygSelector] = getDefaultTinyMceOptions();
 }
 
 WysiwygManager.prototype = {
@@ -14,10 +15,9 @@ WysiwygManager.prototype = {
      * @param selector
      */
     setOptions: function (options, selector) {
-        var defaultOptions = getDefaultTinyMceOptions();
         if (!selector) selector = this.defaultWysiwygSelector;
         if (!options) options = {};
-        this.options[selector] = $.extend(defaultOptions, options);
+        this.options[selector] = $.extend(this.options[selector], options);
     },
 
     /**
@@ -26,8 +26,11 @@ WysiwygManager.prototype = {
      * @param selector
      */
     addContentCss: function(css, selector) {
+        if (!selector) selector = this.defaultWysiwygSelector;
+        if(typeof this.options[selector].content_css == 'string') {
+            this.options[selector].content_css = [this.options[selector].content_css];
+        }
         this.options[selector].content_css = this.options[selector].content_css.concat(css)
-
     },
 
     /**
@@ -36,6 +39,7 @@ WysiwygManager.prototype = {
      * @param selector
      */
     addPlugin: function (pluginName, selector) {
+        if (!selector) selector = this.defaultWysiwygSelector;
         this.options[selector].plugins = this.options[selector].plugins.concat(pluginName);
     },
 
@@ -45,6 +49,7 @@ WysiwygManager.prototype = {
      * @param selector
      */
     appendToolbar: function (buttons, selector) {
+        if (!selector) selector = this.defaultWysiwygSelector;
         if (!buttons.startsWith(' ')) {
             buttons = ' ' + buttons;
         }
@@ -57,6 +62,7 @@ WysiwygManager.prototype = {
      * @param selector
      */
     prependToolbar: function (buttons, selector) {
+        if (!selector) selector = this.defaultWysiwygSelector;
         if (!buttons.endsWith(' ')) {
             buttons = buttons + ' ';
         }
