@@ -68,9 +68,12 @@
 <script src="/assets/facepalm/include/vendor/tinymce/tinymce.min.js"></script>
 <script src="/assets/facepalm/include/vendor/tinymce/jquery.tinymce.min.js"></script>
 <script>
-    (new FacepalmCMS()).init().start();
-</script>
+    var _facepalm = new FacepalmCMS();
 
+    _facepalm
+            .init()
+            .start();
+</script>
 
 {% block jsFile %}{% endblock %}
 {% if customJsPath %}

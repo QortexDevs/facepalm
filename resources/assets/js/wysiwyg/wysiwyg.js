@@ -82,9 +82,11 @@ WysiwygManager.prototype = {
      *
      */
     initAll: function () {
-        var _this = this;
-        var options = this.getOptions();
         var editorPromises = [];
+        var _this = this;
+
+        _this.initCustomModules();
+        var options = this.getOptions();
 
         _this.app.fire('beforeAllWysiwygInit');
         for (var selector in options) {
@@ -113,6 +115,10 @@ WysiwygManager.prototype = {
         $.when.apply($, editorPromises).then(function () {
             _this.app.fire('afterAllWysiwygInit');
         });
+    },
 
+    initCustomModules: function() {
+        this.app.service('GalleryModule').register();
+        this.addPlugin(['gallery']);
     }
 };

@@ -19,7 +19,7 @@ function getDefaultTinyMceOptions() {
         // invalid_elements: 'strong,b,em,i',
 
         plugins: ['fixedtoolbar', 'autoresize', 'codemirror', 'link', 'autolink', 'media', 'noneditable', 'paste', 'table', 'visualblocks'],
-        toolbar: 'styleselect | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | link image table media | visualblocks code',
+        toolbar: 'styleselect | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | link image table media | visualblocks code | fp:image fp:gallery',
 
         media_poster: false,
         media_dimensions: false,
