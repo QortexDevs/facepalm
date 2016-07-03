@@ -1,167 +1,37 @@
 <link rel="stylesheet" href="/assets/facepalm/css/vendor.css"/>
 <link rel="stylesheet" href="/assets/facepalm/css/main.css"/>
-<style>
-    .mce-gallery-plugin-body {
-        padding: 20px 5px 20px 20px;
-    }
-
-    .images-list {
-    }
-
-    .dropzone {
-        text-align: center;
-        margin-top: 20px;
-    }
-</style>
-
-
 <script src="/assets/facepalm/js/vendor.js"></script>
+<script src="/assets/facepalm/js/all.js"></script>
+
 <div class="mce-gallery-plugin-body">
     <div class="dropzone-container">
         <div class="images-list">
         </div>
         <div class="dropzone" data-input-name="unboundUpload[image]"
              data-type="image"
-             data-multiple="true">
+             data-multiple="true"
+             data-parameters="">
             <button class="dz-message cms-button" type="button">Выберите или перетащите картинку</button>
         </div>
     </div>
 </div>
-
-
+<script type="text/template" id="image-preview-template">
+    <div class="image" data-id="{{ image.id }}">
+        <button type="button" class="delete fa fa-times"></button>
+        <img src="{{ image.preview }}"/>
+    </div>
+</script>
 <script>
+    var _facepalm = new FacepalmCMS();
 
-    var tinymce,     // Reference to TinyMCE
-            editor,      // Reference to TinyMCE editor
-            chr = 0,     // Unused utf-8 character, placeholder for cursor
-            isMac = /macintosh|mac os/i.test(navigator.userAgent);
+    _facepalm.init()
+            .setCsrfToken(getQueryParameters()._token)
+            .setBaseUrl(getQueryParameters().baseUrl);
 
-
-    (function () {// Initialise (before load)
-        "use strict";
-        Dropzone.autoDiscover = false;
-        tinymce = parent.tinymce;
-        editor = tinymce.activeEditor;
-        var i, userSettings = editor.settings.codemirror ? editor.settings.codemirror : {};
-
-
-        var currentNode$ = $(editor.selection.getNode());
-        if (currentNode$.is('.galleryPlaceholder[data-images]')) {
-            $('.images-list').append($(currentNode$.html()))
-        }
-
-        $(document).on('click', '.images-list .image .delete', function () {
-            if (confirm('Sure?')) {
-                var $image = $(this).closest('.image');
-                var id = $image.data('id');
-                var model = 'image';
-                var payload = _.extend({}.setWithPath(['delete', model, id], 1), {_token: getQueryParameters()._token});
-                $.post(getQueryParameters().baseUrl + '/', payload, 'json').done(function (result) {
-                    $image.fadeOut(function () {
-                        $(this).remove();
-                    });
-                });
-                return false;
-
-            }
-        });
-        $('.images-list').each(function () {
-            var sortable = Sortable.create($(this)[0], {
-                animation: 200,
-                scroll: true,
-            });
-
-        });
-        window.onload = start;
-    }());
-
-    function start() {// Initialise (on load)
-        "use strict";
-        initDropZone();
-    }
+    _facepalm.service('GalleryModule').initWindow(parent.tinymce.activeEditor);
 
     function submit() {
-        "use strict";
-
-        // Submit HTML to TinyMCE:
-
-        var imagesIds = [];
-        var imagesHtml = '';
-        $('.images-list .image[data-id]').map(function () {
-            imagesIds.push($(this).data("id"));
-            imagesHtml += $(this)[0].outerHTML;
-        });
-
-        editor.insertContent('<div class="mceNonEditable galleryPlaceholder" data-images="' + imagesIds + '">' + imagesHtml + '</div>');
+        _facepalm.service('GalleryModule').submit();
     }
-
-    function getQueryParameters(str) {
-        return (str || document.location.search).replace(/(^\?)/, '').split("&").map(function (n) {
-            return n = n.split("="), this[n[0]] = n[1], this
-        }.bind({}))[0];
-    }
-
-    function initDropZone() {
-        var templateImage = twig({
-            data: '<div class="image" data-id="{{ image.id }}"> <button type="button" class="delete fa fa-times"></button><img src="{{ image.preview }}" /></div>'
-        });
-        $(".dropzone").each(function () {
-            var $dropzone = $(this);
-            var isMultiple = 1;
-            $(this).dropzone({
-                url: getQueryParameters().baseUrl + "?_token=" + getQueryParameters()._token,
-                paramName: $(this).data('input-name'),
-                parallelUploads: 3,
-                maxFiles: isMultiple ? null : 1,
-                clickable: $(this).find("button.dz-message")[0],
-                uploadMultiple: isMultiple,
-                addRemoveLinks: true,
-                createImageThumbnails: false,
-                acceptedFiles: $dropzone.data('type') == 'image' ? 'image/*' : null,
-                success: function (file, response) {
-                    this.removeFile(file);
-                    if (!isMultiple) {
-                        $dropzone.prev().empty();
-                    }
-                    for (var i in response) {
-                        if (!$('.images-list .image[data-id=' + response[i].image.id + ']').length) {
-                            $dropzone.prev().append(templateImage.render(response[i]))
-                        }
-                    }
-                },
-                error: function (file, errorMessage, xhr) {
-                    this.removeFile(file);
-                    //todo: нормально обрабатывать и показывать ошибки
-                    $.growl.error({
-                        title: 'Ошибка',
-                        message: 'Не удается загрузить файл на сервер. Неверный формат или слишком большой размер.',
-                        duration: 7000
-                    });
-                }
-            });
-        })
-    }
-
-    Object.defineProperty(Object.prototype, 'setWithPath', {
-        value: function (path, value) { /* Makes breakfast, solves world peace, takes out trash */
-            if (typeof  path == 'string') {
-                path = path.split('.');
-            }
-            if (!(path instanceof Array)) {
-                return;
-            }
-            var cur = this;
-            var fields = path;
-            fields.map(function (field, index) {
-                cur[field] = cur[field] || (index == fields.length - 1 ? (value || {}) : {});
-                cur = cur[field];
-            });
-
-            return this;
-        },
-        writable: false,
-        configurable: false,
-        enumerable: false
-    });
 
 </script>

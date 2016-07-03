@@ -25,10 +25,10 @@ FacepalmCMS.prototype = {
 
 
     /**
-     * 
+     *
      * @returns {FacepalmCMS}
      */
-    get: function() {
+    get: function () {
         return this;
     },
 
@@ -151,6 +151,12 @@ FacepalmCMS.prototype = {
      */
     setCsrfToken: function (value) {
         this.csrfToken = value;
+        return this;
+    },
+
+    setBaseUrl: function (value) {
+        this.baseUrl = value;
+        return this;
     }
 
 };

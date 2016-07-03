@@ -24,4 +24,39 @@ body.mce-content-body {
     h2 {
         text-align: center;
     }
+
+    .galleryPlaceholder {
+        margin: 1em 0;
+        display: flex;
+        flex-wrap: wrap;
+        border:1px solid transparent;
+
+        &.type-image {
+            display: inline-block;
+            &:after {
+                content: '';
+                display: block;
+            }
+        }
+
+        &.type-gallery {
+            background: #FbFbF9;
+            padding: 10px;
+            color: #805515;
+        }
+
+        .image {
+            margin: 10px;
+            button {
+                display: none;
+            }
+        }
+
+        &[contentEditable=false][data-mce-selected] {
+            outline: none;
+            border:1px dotted #6484CC;
+            box-shadow: 0 0 2px rgba(0,0,0,0.6);
+        }
+    }
+
 }
