@@ -3,6 +3,7 @@
 namespace Facepalm\Providers;
 
 use Facepalm\Models\Image;
+use Facepalm\Tools\TextProcessor;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
@@ -36,5 +37,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->singleton('Facepalm\Tools\TextProcessor', TextProcessor::class);
     }
 }

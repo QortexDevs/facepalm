@@ -3,6 +3,7 @@
 namespace Facepalm\Http\Controllers;
 
 use Facepalm\Models\SiteSection;
+use Facepalm\Tools\TextProcessor;
 use Facepalm\Tools\Tree;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as FrameworkBaseController;
@@ -15,6 +16,9 @@ class BaseController extends FrameworkBaseController
     /** @var  SiteSection */
     protected $currentSection;
 
+    /** @var  TextProcessor */
+    protected $textProcessor;
+
     protected $commonViewValues = [];
     protected $requestSegments = [];
     protected $activeBranch = [];
@@ -26,10 +30,12 @@ class BaseController extends FrameworkBaseController
     /**
      * BaseController constructor.
      * @param Request $request
+     * @param TextProcessor $textProcessor
      */
-    public function __construct(Request $request)
+    public function __construct(Request $request, TextProcessor $textProcessor)
     {
         $this->request = $request;
+        $this->textProcessor = $textProcessor;
         $this->requestSegments = $request->segments();
         $this->siteTree = Tree::fromEloquentCollection(
             SiteSection::where('status', 1)->orderBy('show_order')->with('textItems')->get()

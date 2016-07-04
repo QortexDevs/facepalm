@@ -20,7 +20,9 @@ if (!function_exists('d')) {
             (new Dumper)->dump($x);
         }, func_get_args());
     }
+}
 
+if (!function_exists('pre')) {
     /**
      * Dump using print_r
      */
