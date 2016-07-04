@@ -17,7 +17,7 @@ class AutoResizeController extends BaseController
 {
     public function handle(Request $request, $path, $name)
     {
-        preg_match('/^(?<hash>[0-9a-f]+)(_(?<dimensions>[\dx]+))?\.(?<ext>jpg|png|gif)$/', $name, $matches);
+        preg_match('/^(?<hash>[0-9a-f]+)(_(?<dimensions>[\dx]+))?\.(?<ext>jpg|png|gif|svg)$/', $name, $matches);
         if (Arr::has($matches, 'hash') & Arr::has($matches, 'dimensions')) {
             if (in_array($matches['dimensions'], (array)config('facepalm.allowedDimensions'))) {
                 /** @var Image $image */

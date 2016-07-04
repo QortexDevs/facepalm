@@ -77,7 +77,7 @@ class Image extends BindableEntity
     public static function createFromFile($srcFile, $originalName = '')
     {
         $size = getimagesize($srcFile);
-        if ($size) {
+        if ($size || self::getExtension($originalName) === 'svg') {
             $image = new Image();
             $image->generateName();
 
@@ -147,16 +147,20 @@ class Image extends BindableEntity
             $height = (int)$size[1];
         }
         if ($width || $height) {
-            $image = \Intervention\Image\Facades\Image::make($this->getPhysicalPath('original'));
-            if ($width && $height) {
-                $image->fit($width, $height);
+            if ($this->ext == 'svg') {
+                copy($this->getPhysicalPath('original'), $this->getPhysicalPath($sizeString));
             } else {
-                $image->resize($width, $height, function ($constraint) {
-                    $constraint->aspectRatio();
-                    $constraint->upsize();
-                });
+                $image = \Intervention\Image\Facades\Image::make($this->getPhysicalPath('original'));
+                if ($width && $height) {
+                    $image->fit($width, $height);
+                } else {
+                    $image->resize($width, $height, function ($constraint) {
+                        $constraint->aspectRatio();
+                        $constraint->upsize();
+                    });
+                }
+                $image->save($this->getPhysicalPath($sizeString));
             }
-            $image->save($this->getPhysicalPath($sizeString));
         }
         return $this;
     }
@@ -189,14 +193,15 @@ class Image extends BindableEntity
     protected static function getExtension($filename)
     {
         //todo: подумать, конечео, на эту тему. Уныло это.
-        $allowed = ['jpg', 'png', 'gif'];
+        $allowed = ['jpg', 'png', 'gif', 'svg'];
         $replaceable = [
             'jpeg' => 'jpg'
         ];
 
         $ext = Str::lower(substr($filename, strrpos($filename, '.') + 1));
+
         $ext = Arr::get($replaceable, $ext, $ext);
-        $ext = Arr::has($allowed, $ext) ? $ext : array_shift($allowed);
+        $ext = in_array($ext, $allowed, true) ? $ext : array_shift($allowed);
 
         return $ext;
     }
@@ -226,7 +231,7 @@ class Image extends BindableEntity
         if ($this->name) {
             return Path::generateHierarchicalPrefix($this->name)
             . ($suffix ? ('_' . $suffix) : '')
-            . ($this->ext && !$skipExtension? ('.' . $this->ext) : '');
+            . ($this->ext && !$skipExtension ? ('.' . $this->ext) : '');
         }
     }
 
