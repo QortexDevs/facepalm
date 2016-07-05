@@ -1,22 +1,29 @@
+.mce-gallery-plugin-body {
+    padding: 20px 5px 20px 20px;
+
+    .images-list {
+    }
+
+    .dropzone {
+        text-align: center;
+        margin-top: 20px;
+    }
+}
+
 .cms-module-form {
+    &.single-field-wysiwyg-mode {
+        .mce-edit-area {
+            background: white;
+            padding: 20px;
+        }
+    }
+
     .mce-ico {
         &.mce-i-gallery-button {
             background: url("../i/icons/images.png") center no-repeat;
         }
         &.mce-i-image-button {
             background: url("../i/icons/images2.png") center no-repeat;
-        }
-    }
-
-    .mce-gallery-plugin-body {
-        padding: 20px 5px 20px 20px;
-
-        .images-list {
-        }
-
-        .dropzone {
-            text-align: center;
-            margin-top: 20px;
         }
     }
 

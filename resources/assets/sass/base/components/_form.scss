@@ -6,6 +6,10 @@
 .cms-module-form {
     margin-left: -20px;
 
+    &.single-field-wysiwyg-mode {
+        margin:-30px -50px;
+    }
+
     table {
         width: 100%;
 
