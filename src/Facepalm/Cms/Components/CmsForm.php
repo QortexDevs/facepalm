@@ -19,6 +19,7 @@
 
 namespace Facepalm\Cms\Components;
 
+use Facepalm\Cms\Fields\Types\TextField;
 use Facepalm\Models\ModelFactory;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Database\Eloquent\Model;
@@ -91,7 +92,8 @@ class CmsForm extends CmsComponent
 
         $output = [
             'fields' => $this->fieldSet->getFields(),
-            'object' => $this->editedObject
+            'object' => $this->editedObject,
+            'singleFieldWysiwygMode' => count($this->fieldSet->getFields()) === 1 && $this->fieldSet->getFields()[array_keys($this->fieldSet->getFields())[0]] instanceof TextField
         ];
 
         return $output;

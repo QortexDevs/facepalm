@@ -1,21 +1,48 @@
-.mce-ico {
-    &.mce-i-gallery-button {
-        background: url("../i/icons/images.png") center no-repeat;
+.cms-module-form {
+    .mce-ico {
+        &.mce-i-gallery-button {
+            background: url("../i/icons/images.png") center no-repeat;
+        }
+        &.mce-i-image-button {
+            background: url("../i/icons/images2.png") center no-repeat;
+        }
     }
-    &.mce-i-image-button {
-        background: url("../i/icons/images2.png") center no-repeat;
+
+    .mce-gallery-plugin-body {
+        padding: 20px 5px 20px 20px;
+
+        .images-list {
+        }
+
+        .dropzone {
+            text-align: center;
+            margin-top: 20px;
+        }
+    }
+
+    .mce-btn, .mce-panel, .mce-caret {
+        background: #74808F;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        //font-family: Cuprum, tinymce, sans-serif;
+
+        button, .mce-ico, .mce-caret {
+            color: #fff;
+        }
+        .mce-caret {
+            border-top-color: #fff;
+        }
+        .mce-btn:hover, .mce-btn:focus, .mce-btn.mce-active, .mce-btn.mce-active:hover {
+            background-color: #4B5266;
+            border-color: #4B5266;
+        }
+    }
+
+    .mce-btn-group:not(:first-child) {
+        border-left-color: #84909F;
+    }
+
+    .mce-panel {
+        border-color: #DDDDE5;
     }
 }
-
-.mce-gallery-plugin-body {
-    padding: 20px 5px 20px 20px;
-
-    .images-list {
-    }
-
-    .dropzone {
-        text-align: center;
-        margin-top: 20px;
-    }
-}
-
