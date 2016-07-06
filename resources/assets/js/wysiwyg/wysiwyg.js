@@ -25,9 +25,9 @@ WysiwygManager.prototype = {
      * @param css
      * @param selector
      */
-    addContentCss: function(css, selector) {
+    addContentCss: function (css, selector) {
         if (!selector) selector = this.defaultWysiwygSelector;
-        if(typeof this.options[selector].content_css == 'string') {
+        if (typeof this.options[selector].content_css == 'string') {
             this.options[selector].content_css = [this.options[selector].content_css];
         }
         this.options[selector].content_css = this.options[selector].content_css.concat(css)
@@ -54,6 +54,17 @@ WysiwygManager.prototype = {
             buttons = ' ' + buttons;
         }
         this.options[selector].toolbar += buttons;
+    },
+
+    /**
+     *
+     * @param remove
+     * @param selector
+     */
+    removeFromToolbar: function (remove, selector) {
+        if (!selector) selector = this.defaultWysiwygSelector;
+
+        this.options[selector].toolbar = this.options[selector].toolbar.replace(remove, '');
     },
 
     /**
@@ -117,7 +128,7 @@ WysiwygManager.prototype = {
         });
     },
 
-    initCustomModules: function() {
+    initCustomModules: function () {
         this.app.service('GalleryModule').register();
         this.addPlugin(['gallery']);
     }
