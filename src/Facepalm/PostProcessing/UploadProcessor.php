@@ -71,7 +71,6 @@ class UploadProcessor
                             curl_close($ch);
                             fclose($fp);
                             //todo: обработка ошибок
-                            //todo: наложение треугольничка
                         } else {
                             $thumbnailImageName = 'video-play-dummy.png';
                             $thumbnailImagePath = app()->publicPath() . DIRECTORY_SEPARATOR . config('facepalm.facepalmAssetsPath') . 'i' . DIRECTORY_SEPARATOR . $thumbnailImageName;

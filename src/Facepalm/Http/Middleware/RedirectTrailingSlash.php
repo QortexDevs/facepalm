@@ -18,7 +18,7 @@ class RedirectTrailingSlash
     {
         if ($request->method() === 'GET') {
             $url = $request->getBaseUrl() . $request->getPathInfo();
-            if ($url && $url !== '/' && !preg_match('/.+\/$/', $url)) {
+            if ($url && $url !== '/' && !strstr($url, '/media/') && !preg_match('/.+\/$/', $url)) {
                 if (null !== $qs = $request->getQueryString()) {
                     $qs = '?' . $qs;
                 }

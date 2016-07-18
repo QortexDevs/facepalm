@@ -132,14 +132,16 @@ class Image extends BindableEntity
      * 200x300
      * 200
      * x300
+     * i200x200 - Inscribe into rectangle, keeping aspect ratio
      * todo: think about non-proportional resize
      * todo: for imagick: $geometry = "{$dimension}^ -gravity North(Center, etc) -extent {$dimension}";
      * todo: не увеличивать картинку, копировать картинку, если совпадают размеры
      *
      * @param $sizeString
+     * @param $modifier
      * @return $this
      */
-    public function generateSize($sizeString)
+    public function generateSize($sizeString, $modifier = '')
     {
         $width = $height = null;
         $size = explode('x', $sizeString);
@@ -149,18 +151,21 @@ class Image extends BindableEntity
         if (isset($size[1]) && (int)$size[1] > 0) {
             $height = (int)$size[1];
         }
+        if ($modifier) {
+            $sizeString = $modifier . $sizeString;
+        }
         if ($width || $height) {
             if ($this->ext == 'svg') {
                 copy($this->getPhysicalPath('original'), $this->getPhysicalPath($sizeString));
             } else {
                 $image = \Intervention\Image\Facades\Image::make($this->getPhysicalPath('original'));
-                if ($width && $height) {
-                    $image->fit($width, $height);
-                } else {
+                if ($modifier === 'i' || !$width || !$height) {
                     $image->resize($width, $height, function ($constraint) {
                         $constraint->aspectRatio();
                         $constraint->upsize();
                     });
+                } else {
+                    $image->fit($width, $height);
                 }
                 $image->save($this->getPhysicalPath($sizeString));
             }

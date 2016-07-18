@@ -17,15 +17,19 @@ class AutoResizeController extends BaseController
 {
     public function handle(Request $request, $path, $name)
     {
-        preg_match('/^(?<hash>[0-9a-f]+)(_(?<dimensions>[\dx]+))?\.(?<ext>jpg|png|gif|svg)$/', $name, $matches);
+        preg_match(
+            '/^(?<hash>[0-9a-f]+)(_(?<modifier>[a-wy-z])?(?<dimensions>[\dx]+))?\.(?<ext>jpg|png|gif|svg)$/',
+            $name,
+            $matches
+        );
         if (Arr::has($matches, 'hash') & Arr::has($matches, 'dimensions')) {
             if (in_array($matches['dimensions'], (array)config('facepalm.allowedDimensions'))) {
                 /** @var Image $image */
                 $image = Image::where('name', $matches['hash'])->first();
                 if ($image) {
-                    $image->generateSize($matches['dimensions']);
+                    $image->generateSize($matches['dimensions'], $matches['modifier']);
                     return redirect(
-                        $request->getUri(),
+                        rtrim($request->getUri(), '/'),
                         302,
                         ['Cache-Control' => 'no-store, no-cache, must-revalidate']
                     );
