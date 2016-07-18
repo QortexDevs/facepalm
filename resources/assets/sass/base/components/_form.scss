@@ -405,6 +405,26 @@
         height: 100px;
         margin: 20px 0;
         display: block;
+
+    }
+    .spinner {
+        height: 55px;
+        background: url('../i/spinner.gif') white center no-repeat;
+        display: none;
+    }
+    &.processing {
+
+        textarea {
+            opacity:0.8;
+        }
+
+        button {
+            display: none;
+        }
+
+        .spinner {
+            display: block;
+        }
     }
 }
 

@@ -168,6 +168,15 @@ class Image extends BindableEntity
         return $this;
     }
 
+    /**
+     * @param $callback
+     */
+    public function postProcess($callback)
+    {
+        $image = \Intervention\Image\Facades\Image::make($this->getPhysicalPath('original'));
+        $callback($image);
+    }
+
 
     /**
      * Cheating own protective mutator

@@ -18,14 +18,17 @@ VideosList.prototype = {
             }));
         });
         $(document).on('click', '.insert-video-dialog button', function () {
-            var textarea = $(this).closest('.insert-video-dialog').find('textarea');
+            var dialog$ = $(this).closest('.insert-video-dialog');
+            var textarea$ = dialog$.find('textarea');
             var payload = _this.app.buildPayload();
-            payload[textarea.attr('name')] = textarea.val();
+            payload[textarea$.attr('name')] = textarea$.val();
             payload['multiple'] = true;
 
-            _this.app.service('UI').toggleSpinner(true);
+            dialog$.addClass('processing');
+            textarea$.attr('disabled', true).css('background', '#eee');
+
             _this.app.doRequest(payload).done(function (response) {
-                var button = $('.cms-button[data-add-video][data-input-name="' + textarea.attr('name') + '"]');
+                var button = $('.cms-button[data-add-video][data-input-name="' + textarea$.attr('name') + '"]');
                 for (var i in response) {
                     if (!button.prevAll('.images-list:first').find('.image[data-id=' + response[i].image.id + ']').length) {
                         button.prevAll('.images-list:first').append(templateImage.render(response[i]))
@@ -33,7 +36,6 @@ VideosList.prototype = {
                     }
                 }
                 $.fancybox.close();
-                _this.app.service('UI').toggleSpinner(false);
             });
         })
     }

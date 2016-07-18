@@ -73,8 +73,8 @@ class UploadProcessor
                             //todo: обработка ошибок
                             //todo: наложение треугольничка
                         } else {
-                            $thumbnailImagePath = app()->publicPath() . DIRECTORY_SEPARATOR . config('facepalm.facepalmAssetsPath') . 'i/video-play-light.png';
-                            $thumbnailImageName = 'video-play-light.png';
+                            $thumbnailImageName = 'video-play-dummy.png';
+                            $thumbnailImagePath = app()->publicPath() . DIRECTORY_SEPARATOR . config('facepalm.facepalmAssetsPath') . 'i' . DIRECTORY_SEPARATOR . $thumbnailImageName;
                         }
                         /** @var Image $uploadableObject */
                         $uploadableObject = Image::createFromFile($thumbnailImagePath, $thumbnailImageName);
@@ -83,6 +83,16 @@ class UploadProcessor
                         $uploadableObject->embed_code = $this->convertYoutube($uploadedFile);
                         $uploadableObject->is_video = true;
                         $uploadableObject->group = $groupName;
+
+                        if ($thumbnailUrl) {
+                            $uploadableObject->postProcess(function (\Intervention\Image\Image $image) {
+                                $playIconImagePath = app()->publicPath() . DIRECTORY_SEPARATOR . config('facepalm.facepalmAssetsPath') . 'i/video-play-icon.png';
+                                $playIcon = \Intervention\Image\Facades\Image::make($playIconImagePath);
+                                $playIcon->fit(0.85 * min($image->getWidth(), $image->getHeight()));
+                                $image->insert($playIcon, 'center');
+                                $image->save();
+                            });
+                        }
                     } else {
                         $uploadableObject = ModelFactory::createFromUpload($className, $uploadedFile)
                             ->setAttribute('group', $groupName);
