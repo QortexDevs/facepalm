@@ -1,6 +1,6 @@
 <label>
     <input type="hidden" name="{{ inputName }}" value="0" checked/>
-    <input type="checkbox" name="{{ inputName }}" value="1"
+    <input type="checkbox" name="{{ inputName }}" value="1" title="{{ parameters.hint }}"
            {% if object.__get(field) %}checked{% endif %} />
     {{ parameters.title }}
 </label>
