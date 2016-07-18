@@ -27,14 +27,20 @@ class UploadProcessor
      */
     public function handle($fieldName, $object, $value, $requestRawData)
     {
+        $isVideo = false;
+        if ($fieldName === 'video') {
+            $fieldName = 'image';
+            $isVideo = true;
+        }
         $relationMethodName = $fieldName . 's';
         $className = Str::ucfirst($fieldName);
         $resultMethodName = 'getResultArrayFor' . $className;
         $afterSaveMethodName = 'processAfterSave' . $className;
+
         $processedFiles = [];
         if (is_array($value)) {
             foreach ($value as $groupName => $uploadedFiles) {
-                if ($uploadedFiles instanceof UploadedFile) {
+                if ($uploadedFiles instanceof UploadedFile || is_string($uploadedFiles)) {
                     $uploadedFiles = [$uploadedFiles];
                 }
                 /** @var UploadedFile $uploadedFile */
@@ -51,8 +57,36 @@ class UploadProcessor
 
 
                     /** @var Image|File $uploadableObject */
-                    $uploadableObject = ModelFactory::createFromUpload($className, $uploadedFile)
-                        ->setAttribute('group', $groupName);
+                    if ($isVideo) {
+                        $thumbnailUrl = $this->getVideoThumbnail($uploadedFile);
+                        if ($thumbnailUrl) {
+                            $thumbnailImageName = 'videoThumbnail.jpg';
+                            $thumbnailImagePath = tempnam(sys_get_temp_dir(), 'myApp_');
+                            $ch = curl_init($thumbnailUrl);
+                            $fp = fopen($thumbnailImagePath, 'wb');
+                            curl_setopt($ch, CURLOPT_FILE, $fp);
+                            curl_setopt($ch, CURLOPT_HEADER, 0);
+                            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+                            curl_exec($ch);
+                            curl_close($ch);
+                            fclose($fp);
+                            //todo: обработка ошибок
+                            //todo: наложение треугольничка
+                        } else {
+                            $thumbnailImagePath = app()->publicPath() . DIRECTORY_SEPARATOR . config('facepalm.facepalmAssetsPath') . 'i/video-play-light.png';
+                            $thumbnailImageName = 'video-play-light.png';
+                        }
+                        /** @var Image $uploadableObject */
+                        $uploadableObject = Image::createFromFile($thumbnailImagePath, $thumbnailImageName);
+
+                        $uploadableObject->video_link = $uploadedFile;
+                        $uploadableObject->embed_code = $this->convertYoutube($uploadedFile);
+                        $uploadableObject->is_video = true;
+                        $uploadableObject->group = $groupName;
+                    } else {
+                        $uploadableObject = ModelFactory::createFromUpload($className, $uploadedFile)
+                            ->setAttribute('group', $groupName);
+                    }
 
 
                     DB::transaction(function () use ($uploadableObject, $className) {
@@ -103,9 +137,13 @@ class UploadProcessor
             'full' => $image->getUri('original'),
             'basePath' => $image->getUri(null, true),
             'ext' => $image->ext,
-            'group' => $image->group
+            'group' => $image->group,
+            'video_link' => $image->video_link,
+            'embed_code' => $image->embed_code,
+            'is_video' => $image->is_video
         ];
     }
+
 
     /**
      * @param File $file
@@ -122,5 +160,52 @@ class UploadProcessor
             'uri' => $file->getUri(),
             'group' => $file->group
         ];
+    }
+
+    /**
+     * Convert youtube link to embed code
+     * @param $string
+     * @return mixed
+     */
+    protected function convertYoutube($string)
+    {
+        return preg_replace(
+            "/\s*[a-zA-Z\/\/:\.]*youtu(be.com\/watch\?v=|.be\/)([a-zA-Z0-9\-_]+)([a-zA-Z0-9\/\*\-\_\?\&\;\%\=\.]*)/i",
+            "<iframe src=\"//www.youtube.com/embed/$2\" width=\"560\" height=\"315\" frameborder=\"0\" allowfullscreen></iframe>",
+            $string
+        );
+    }
+
+    /**
+     * Get thumbnail image for video
+     * @param $string
+     * @return string
+     */
+    protected function getVideoThumbnail($string)
+    {
+        if (strstr($string, 'youtu')) {
+            preg_match(
+                '/(youtu\.be\/|youtube\.com\/(watch\?(.*&)?v=|(embed|v)\/))([^#\?&"\'>]+)((\S*)t=(\d+))?/',
+                $string,
+                $matches
+            );
+            if (isset($matches[5])) {
+                $video['id'] = $matches[5];
+                $imgUrl = "http://img.youtube.com/vi/" . $video['id'] . "/maxresdefault.jpg";
+                $headers = get_headers($imgUrl);
+                if (strstr($headers[0], "404")) {
+                    $imgUrl = "http://img.youtube.com/vi/" . $video['id'] . "/0.jpg";
+                }
+                return $imgUrl;
+            }
+        } elseif (strstr($string, 'vimeo')) {
+            preg_match('/(http\:\/\/)?vimeo\.com\/([0-9]+)/', $string, $matches);
+            if (isset($matches[2])) {
+                $video['id'] = $matches[2];
+                $hash = unserialize(file_get_contents("http://vimeo.com/api/v2/video/" . $video['id'] . ".php"));
+                $imgUrl = $hash[0]["thumbnail_large"];
+                return $imgUrl;
+            }
+        }
     }
 }

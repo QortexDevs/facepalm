@@ -67,6 +67,15 @@ h2 {
     box-shadow: 0 0 10px -2px rgba(0, 0, 0, 0.6);
     transition: 0.3s ease;
 
+    &.gray {
+        transition: opacity 0.2s;
+        margin: 0;
+        background: $menuSubItemColor;
+        font-size: 14px;
+        padding: 3px 20px;
+        box-shadow: 0 0 4px -1px rgba(0, 0, 0, 0.3);
+    }
+
     &:hover {
         opacity: 0.9;
     }
@@ -79,6 +88,7 @@ h2 {
         margin-top: 1px;
         margin-bottom: -1px;
     }
+
 }
 
 #spinner {

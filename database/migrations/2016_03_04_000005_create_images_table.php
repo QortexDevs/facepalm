@@ -27,6 +27,9 @@ class CreateImagesTable extends Migration
             $table->integer('original_height')->nullable();
             $table->string('ext');
             $table->string('original_name');
+            $table->string('video_link');
+            $table->boolean('is_video');
+            $table->text('embed_code');
             $table->timestamps();
             $table->unique('name');
         });

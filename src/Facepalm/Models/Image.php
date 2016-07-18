@@ -27,6 +27,9 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @property integer original_height
  * @property string ext
  * @property string original_name
+ * @property UploadedFile video_link
+ * @property bool is_video
+ * @property mixed embed_code
  */
 class Image extends BindableEntity
 {

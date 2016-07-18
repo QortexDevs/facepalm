@@ -8,21 +8,23 @@
  */
 Object.defineProperty(Object.prototype, 'setWithPath', {
     value: function (path, value) { /* Makes breakfast, solves world peace, takes out trash */
-        if (typeof  path == 'string') {
-            path = path.split('.');
+        if (path && value) {
+            if (typeof  path == 'string') {
+                path = path.split('.');
+            }
+            if (!(path instanceof Array)) {
+                return;
+            }
+            var cur = this;
+            var fields = path;
+            fields = fields.filter(function (value) {
+                return typeof value != 'undefined' && value;
+            });
+            fields.map(function (field, index) {
+                cur[field] = cur[field] || (index == fields.length - 1 ? (value || {}) : {});
+                cur = cur[field];
+            });
         }
-        if (!(path instanceof Array)) {
-            return;
-        }
-        var cur = this;
-        var fields = path;
-        fields = fields.filter(function (value) {
-            return typeof value != 'undefined' && value;
-        });
-        fields.map(function (field, index) {
-            cur[field] = cur[field] || (index == fields.length - 1 ? (value || {}) : {});
-            cur = cur[field];
-        });
 
         return this;
     },
@@ -45,7 +47,7 @@ function delay(ms) {
 }
 
 /**
- * 
+ *
  * @param str
  * @returns {*}
  */

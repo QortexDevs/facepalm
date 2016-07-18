@@ -9,7 +9,10 @@
          data-type="image"
          data-multiple="{{ parameters.multiple ? 1 : 0 }}"
          data-parameters="{% for parameterName,parameterValue in parameters %}{% if parameterName not in data.skipTransferringParameters %}&{{ parameterName }}={{ parameterValue }}{% endif %}{% endfor %}">
-        <button class="dz-message cms-button" type="button">Выберите или перетащите картинку</button>
+        <button class="dz-message cms-button gray" type="button">Выберите или перетащите картинку</button>
     </div>
     <div class="drop-note">Перетащите картинку сюда</div>
+    {% if parameters.video %}
+        <button class="cms-button gray" type="button" data-add-video="true" data-input-name="{{ uploadName }}[video][{{ parameters.name }}]">Добавить видео</button>
+    {% endif %}
 </div>

@@ -38,6 +38,7 @@ DropzoneManager.prototype = {
                             if (dropzone$.data('type') == 'image') {
                                 if (!dropzone$.prev().find('.image[data-id=' + response[i].image.id + ']').length) {
                                     dropzone$.prev().append(templateImage.render(response[i]))
+                                    _this.app.service('UploadablesList').initFancybox(dropzone$.prev());
                                 }
                             } else {
                                 if (!dropzone$.prev().find('.file[data-id=' + response[i].file.id + ']').length) {

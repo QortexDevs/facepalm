@@ -39,7 +39,10 @@ class ImageField extends UploadableField
                     'id' => $image->id,
                     'preview' => $image->getUri($this->parameters['previewSize']),
                     'full' => $image->getUri('original'),
-                    'group' => $this->parameters['name']
+                    'group' => $this->parameters['name'],
+                    'is_video' => $image->is_video,
+                    'video_link' => $image->video_link,
+                    'embed_code' => $image->embed_code
                     // todo: показывать не оригинал по клику, а другой размер?
                 ];
             }

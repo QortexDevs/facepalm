@@ -16,6 +16,7 @@ UI.prototype = {
         this.app.service('Form').init();
         this.app.service('DropzoneManager').init();
         this.app.service('UploadablesList').init();
+        this.app.service('VideosList').init();
     },
 
     initStartupNotifications: function () {
