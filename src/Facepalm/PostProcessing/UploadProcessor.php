@@ -87,7 +87,10 @@ class UploadProcessor
                             $uploadableObject->postProcess(function (\Intervention\Image\Image $image) {
                                 $playIconImagePath = app()->publicPath() . DIRECTORY_SEPARATOR . config('facepalm.facepalmAssetsPath') . 'i/video-play-icon.png';
                                 $playIcon = \Intervention\Image\Facades\Image::make($playIconImagePath);
-                                $playIcon->fit(0.85 * min($image->getWidth(), $image->getHeight()));
+                                $playIcon->fit(
+                                    (config('facepalm.videoIconRelativeSize') ?: 0.8)
+                                        * min($image->getWidth(), $image->getHeight())
+                                );
                                 $image->insert($playIcon, 'center');
                                 $image->save();
                             });
