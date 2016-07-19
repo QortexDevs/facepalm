@@ -51,5 +51,10 @@ class GeneratorServiceProvider extends ServiceProvider
             return $app['Facepalm\Generators\Commands\AddCmsModuleCommand'];
         });
         $this->commands('command.facepalm.addcmsmodule');
+
+        $this->app->singleton('command.facepalm.purgeimages', function ($app) {
+            return $app['Facepalm\Generators\Commands\PurgeImagesCommand'];
+        });
+        $this->commands('command.facepalm.purgeimages');
     }
 }
