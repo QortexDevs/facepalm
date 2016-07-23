@@ -93,7 +93,7 @@ class CmsForm extends CmsComponent
         $output = [
             'fields' => $this->fieldSet->getFields(),
             'object' => $this->editedObject,
-            'singleFieldWysiwygMode' => count($this->fieldSet->getFields()) === 1 && $this->fieldSet->getFields()[array_keys($this->fieldSet->getFields())[0]] instanceof TextField
+            'singleFieldWysiwygMode' => count($this->fieldSet->getFields()) === 1 && $this->fieldSet->getFields()[array_keys($this->fieldSet->getFields())[0]]->fullscreen
         ];
 
         return $output;
