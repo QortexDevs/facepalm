@@ -6,7 +6,7 @@ GoogleMap.prototype = {
     initMaps: function () {
         var _this = this;
         if ($('.map.google[data-lat][data-lng]').length) {
-            $.getScript("https://maps.googleapis.com/maps/api/js?libraries=places&sensor=false", function () {
+            $.getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBF9wNWgC16iCHmTloWEl5Y7sARDSyqRUE&libraries=places&sensor=false", function () {
                 _this.app.fire('afterGoogleMapsApiLoad');
                 $('.map[data-lat][data-lng]').each(function () {
                     var objectLat = parseFloat($(this).data('lat')),
