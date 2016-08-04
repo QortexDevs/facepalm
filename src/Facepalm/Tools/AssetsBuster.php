@@ -26,6 +26,16 @@ class AssetsBuster
     }
 
     /**
+     * @return array
+     */
+    public function getSiteBusters()
+    {
+        $projectBustersPath = app()->publicPath() . DIRECTORY_SEPARATOR . 'assets/build/site/busters.json';
+
+        return $this->get($projectBustersPath, 'public/');
+    }
+
+    /**
      * @param $bustersFilePath
      * @param $prefixToRemove
      * @param null $prefixToAdd

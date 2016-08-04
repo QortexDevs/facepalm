@@ -3,6 +3,7 @@
 namespace Facepalm\Http\Controllers;
 
 use Facepalm\Models\SiteSection;
+use Facepalm\Tools\AssetsBuster;
 use Facepalm\Tools\TextProcessor;
 use Facepalm\Tools\Tree;
 use Illuminate\Http\Request;
@@ -79,6 +80,7 @@ class BaseController extends FrameworkBaseController
             'currentPath' => implode('/', $this->requestSegments) . '/',
             'currentLanguage' => $this->currentLanguage,
             'languages' => $this->languages,
+            'busters' => (new AssetsBuster())->getSiteBusters()
         ];
 
         if ($this->currentSection) {
