@@ -27,6 +27,9 @@ class BaseController extends FrameworkBaseController
     protected $siteName;
     protected $siteTree;
 
+    protected $languages;
+    protected $currentLanguage;
+
     /**
      * BaseController constructor.
      * @param Request $request
@@ -37,6 +40,12 @@ class BaseController extends FrameworkBaseController
         $this->request = $request;
         $this->textProcessor = $textProcessor;
         $this->requestSegments = $request->segments();
+        $this->languages = $request->attributes->get('languages');
+        $this->currentLanguage = $request->attributes->get('currentLanguage');
+
+        if ($this->currentLanguage) {
+            array_shift($this->requestSegments);
+        }
         $this->siteTree = Tree::fromEloquentCollection(
             SiteSection::where('status', 1)->orderBy('show_order')->with('textItems')->get()
         );
@@ -50,7 +59,6 @@ class BaseController extends FrameworkBaseController
                 '/',
                 config('facepalm.rootSection') ? $root : 0
             );
-
         }
 
         if ($this->currentSection) {

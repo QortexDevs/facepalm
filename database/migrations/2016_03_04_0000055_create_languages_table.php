@@ -19,7 +19,7 @@ class CreateLanguagesTable extends Migration
             $table->integer('show_order')->nullable();
             $table->string('code');
             $table->string('name');
-            $table->string('is_default');
+            $table->boolean('is_default');
             $table->timestamps();
         });
 
