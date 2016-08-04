@@ -19,7 +19,7 @@ class Localization
     {
         $languageCodeParameterName = config('facepalm.languageCodeParameterName') ?: 'languageCode';
         $currentLanguage = '';
-        $languages = Language::where('status', 1)->get();
+        $languages = Language::where('status', 1)->orderBy('show_order')->get();
         $request->attributes->add(['languages' => $languages]);
 
         // Check if requested language exists

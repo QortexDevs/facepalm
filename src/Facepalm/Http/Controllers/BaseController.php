@@ -73,8 +73,12 @@ class BaseController extends FrameworkBaseController
             'siteTree' => $this->siteTree,
             'topLevelMenu' => $this->siteTree->getChildren(config('facepalm.rootSection') ? $root : 0),
             'activeBranch' => $this->activeBranch,
-            'root' => '/',
+            'staticRoot' => '/',
+            'root' => '/' . ($this->currentLanguage ? ($this->currentLanguage->code . '/') : ''),
             'requestSegments' => $this->requestSegments,
+            'currentPath' => implode('/', $this->requestSegments) . '/',
+            'currentLanguage' => $this->currentLanguage,
+            'languages' => $this->languages,
         ];
 
         if ($this->currentSection) {
