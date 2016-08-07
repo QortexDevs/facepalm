@@ -47,6 +47,10 @@ class Localization
             }
         }
 
+        // Unset language parameter from Route params. May be little dirty, but works
+        $route = call_user_func($request->getRouteResolver());
+        $route->forgetParameter($languageCodeParameterName);
+
         return $next($request);
     }
 
