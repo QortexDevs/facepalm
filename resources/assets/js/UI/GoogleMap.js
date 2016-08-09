@@ -11,6 +11,10 @@ GoogleMap.prototype = {
                 $('.map[data-lat][data-lng]').each(function () {
                     var objectLat = parseFloat($(this).data('lat')),
                         objectLng = parseFloat($(this).data('lng'));
+
+                    objectLat = isNaN(objectLat) ? 0 : objectLat;
+                    objectLng = isNaN(objectLng) ? 0 : objectLng;
+                    
                     var mapOptions = {
                         mapTypeControl: false,
                         streetViewControl: false,
