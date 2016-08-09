@@ -37,7 +37,7 @@ class Localization
             $request->attributes->add(['currentLanguage' => $currentLanguage]);
             app()->setLocale($currentLanguage->code);
             Carbon::setLocale($currentLanguage->code);
-            setlocale(LC_ALL, $currentLanguage->localeName);
+            setlocale(LC_TIME, $currentLanguage->localeName);
         } else {
             $defaultLanguage = $this->getDefaultLang($languages);
             if ($request->method() === 'GET') {
@@ -48,7 +48,7 @@ class Localization
                 $request->attributes->add(['currentLanguage' => $defaultLanguage]);
                 app()->setLocale($defaultLanguage->code);
                 Carbon::setLocale($defaultLanguage->code);
-                setlocale(LC_ALL, $defaultLanguage->localeName);
+                setlocale(LC_TIME, $defaultLanguage->localeName);
             }
         }
 

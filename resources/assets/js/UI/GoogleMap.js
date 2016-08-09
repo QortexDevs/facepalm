@@ -14,7 +14,7 @@ GoogleMap.prototype = {
 
                     objectLat = isNaN(objectLat) ? 0 : objectLat;
                     objectLng = isNaN(objectLng) ? 0 : objectLng;
-                    
+
                     var mapOptions = {
                         mapTypeControl: false,
                         streetViewControl: false,
