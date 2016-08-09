@@ -1,5 +1,6 @@
 <?php namespace Facepalm\Http\Middleware;
 
+use Carbon\Carbon;
 use Closure;
 use Facepalm\Models\Language;
 use Illuminate\Support\Facades\Redirect;
@@ -35,6 +36,8 @@ class Localization
         if ($currentLanguage) {
             $request->attributes->add(['currentLanguage' => $currentLanguage]);
             app()->setLocale($currentLanguage->code);
+            Carbon::setLocale($currentLanguage->code);
+            setlocale(LC_ALL, $currentLanguage->localeName);
         } else {
             $defaultLanguage = $this->getDefaultLang($languages);
             if ($request->method() === 'GET') {
@@ -44,6 +47,8 @@ class Localization
                 // Set default locale on another requests
                 $request->attributes->add(['currentLanguage' => $defaultLanguage]);
                 app()->setLocale($defaultLanguage->code);
+                Carbon::setLocale($defaultLanguage->code);
+                setlocale(LC_ALL, $defaultLanguage->localeName);
             }
         }
 

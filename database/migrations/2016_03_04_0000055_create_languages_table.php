@@ -18,6 +18,7 @@ class CreateLanguagesTable extends Migration
             $table->integer('status')->nullable();
             $table->integer('show_order')->nullable();
             $table->string('code');
+            $table->string('localeName');
             $table->string('name');
             $table->boolean('is_default');
             $table->timestamps();
@@ -27,6 +28,7 @@ class CreateLanguagesTable extends Migration
             [
                 'name' => 'English',
                 'code' => 'en',
+                'localeName' => 'en_US.UTF-8',
                 'status' => 1,
                 'show_order' => 1,
                 'is_default' => 1
