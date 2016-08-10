@@ -153,4 +153,32 @@ abstract class BaseEntity extends AbstractEntity
 
         return $collection;
     }
+
+    /**
+     * @param $localizationFieldName
+     * @param $languageCode
+     * @return mixed
+     */
+    public static function getCountWithLocalization($localizationFieldName, $languageCode)
+    {
+        $builder = static::where('status', 1);
+        self::setLocalizationExistenceConstraint($builder, $localizationFieldName, $languageCode);
+        return $builder->count();
+    }
+
+    /**
+     * @param $builder
+     * @param $localizationFieldName
+     * @param $languageCode
+     * @return mixed
+     */
+    public static function setLocalizationExistenceConstraint($builder, $localizationFieldName, $languageCode)
+    {
+        $builder->whereHas('textItems', function ($query) use ($localizationFieldName, $languageCode) {
+            $query->where('languageCode', $languageCode);
+            $query->where('group', $localizationFieldName);
+            $query->where('stringValue', '!=', '');
+        });
+    }
+
 }
