@@ -18,7 +18,7 @@ tinymce.PluginManager.add('fixedtoolbar', function (editor, url) {
         toolbar.style.width = '100%';
         toolbar.style.borderWidth = '0px';
 
-        window.onscroll = function () {
+        window.addEventListener('scroll', function () {
             var scrollTop = window.pageYOffset;
             var position = getOffset(container);
 
@@ -32,6 +32,6 @@ tinymce.PluginManager.add('fixedtoolbar', function (editor, url) {
                 toolbar.style.position = 'static';
                 area.style.paddingTop = '0px';
             }
-        }
+        });
     });
 });
