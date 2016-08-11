@@ -67,6 +67,9 @@ class Save extends AbstractAction
             $this->saveTranslatableItems($object, $keyValue);
             $this->syncManyToManyRelations($object, $keyValue);
         }
+
+        //to save translatable items!
+        $object->save();
     }
 
 

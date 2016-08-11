@@ -222,6 +222,7 @@ trait TranslatableTrait
                     'status' => 1,
                     'show_order' => TextItem::max('show_order') + 1
                 ]);
+                $this->textItems->push($textItem);
             }
 
             if ($newValue instanceof TextItem) {
@@ -240,8 +241,24 @@ trait TranslatableTrait
                 throw new \Exception('Addind textitem to non-existing object');
             }
 
-            $this->textItems()->save($textItem);
+            $relationObject = $this->textItems();
+
+            $textItem->setAttribute($relationObject->getPlainMorphType(), $this->getMorphClass());
+            $textItem->setAttribute($relationObject->getPlainForeignKey(), $relationObject->getParentKey());
         });
+    }
+
+    /**
+     *
+     */
+    protected function saveDirtyTextItems()
+    {
+        /** @var TextItem $textItem */
+        foreach ($this->textItems as $textItem) {
+            if ($textItem->isDirty()) {
+                $textItem->save();
+            }
+        }
     }
 
 

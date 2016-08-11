@@ -47,6 +47,9 @@ abstract class BaseEntity extends AbstractEntity
                 });
             $entity->textItems()->delete();
         });
+        self::saving(function (BaseEntity $entity) {
+            $entity->saveDirtyTextItems();
+        });
     }
 
     /**
