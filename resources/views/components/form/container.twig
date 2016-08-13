@@ -8,14 +8,14 @@
                     {{ field.renderFormField(form.object)|raw }}
                 {% else %}
                     <tr data-row-for-field="{{ field.name }}" class="row-for-field-{{ field.getRowClassName() }}">
-                        {% if not form.singleFieldWysiwygMode %}
+                        {% if not form.singleFieldWysiwygMode and not field.wide %}
                             <td class="caption">
                                 {% if not field.doNotShowTitle %}
                                     <div class="caption">{{ field.title }}</div>
                                 {% endif %}
                             </td>
                         {% endif %}
-                        <td class="field">
+                        <td class="field" {% if field.wide %}colspan="2"{% endif %}>
                             {% if field.comment and (not field.comment_position or field.comment_position == "top" or field.comment_position == "above" or field.comment_position == "before") %}
                                 <div class="field-comment {{ field.comment_position }}">{{ field.comment }}</div>
                             {% endif %}

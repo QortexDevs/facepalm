@@ -92,6 +92,11 @@
             }
         }
 
+        .separator {
+            background: #ddd;
+            height: 1px;
+        }
+
         .row-for-field-string {
             .language-row {
                 margin-bottom: 10px;
@@ -416,7 +421,7 @@
     &.processing {
 
         textarea {
-            opacity:0.8;
+            opacity: 0.8;
         }
 
         button {

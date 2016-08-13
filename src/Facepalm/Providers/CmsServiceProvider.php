@@ -47,6 +47,7 @@ class CmsServiceProvider extends ServiceProvider
             'text',
             'plaintext',
             'unknown',
+            'separator'
         ];
 
         foreach ($fieldTypes as $fieldType) {
