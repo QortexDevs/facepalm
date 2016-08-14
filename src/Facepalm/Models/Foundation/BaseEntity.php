@@ -10,6 +10,8 @@ namespace Facepalm\Models\Foundation;
 
 
 use Closure;
+use Facepalm\Models\Image;
+use Facepalm\Models\ModelFactory;
 use Facepalm\Models\TextItem;
 use HirotoK\JSON5\Tests\Base;
 use Illuminate\Database\Eloquent\Builder;
@@ -86,6 +88,15 @@ abstract class BaseEntity extends AbstractEntity
     {
         $this->processBindedEntities('files');
         return $this->bindedEntitiesByGroup['files'];
+    }
+
+
+    public function attachImage($group, $path)
+    {
+        $uploadableObject = Image::createFromFile($path)->setAttribute('group', $group);
+        $uploadableObject->show_order = Image::max('show_order') + 1;
+        $uploadableObject->save();
+        $this->images()->save($uploadableObject);
     }
 
     /**
