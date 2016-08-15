@@ -1,4 +1,5 @@
 {
+    "title": "Строковые значения",
     "model": "StringValue",
     "strings": {
         "title": "Строковые значения"

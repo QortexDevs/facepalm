@@ -66,13 +66,44 @@ class Config
      */
     public function load($group = null, $module = null)
     {
-        $this->configRepository = new Repository($this->loadConfig(self::DEFAULT_CONFIG_NAME));
-        if ($group && $module) {
-            $this->configRepository->set(
-                'module',
-                $this->loadConfig(self::MODULES_CONFIGS_FOLDER . DIRECTORY_SEPARATOR . $group . DIRECTORY_SEPARATOR . $module . '.json')
-            );
+        $cachedConfigPath = app()->storagePath() . DIRECTORY_SEPARATOR . 'cms-config-cache.json';
+
+        // get the latest modification time among all cms configs
+        $latestModificationTime = @max(array_map(function ($el) {
+            return filemtime($el);
+        }, array_merge(glob($this->getConfigPath() . 'groups/*/*.json'), glob($this->getConfigPath() . 'groups/*/*/*.json'))));
+
+        if (is_file($cachedConfigPath) && $latestModificationTime && filemtime($cachedConfigPath) >= $latestModificationTime) {
+            // if cached file is newer - load it
+            $this->configRepository = new Repository(json_decode(file_get_contents($cachedConfigPath), true));
+        } else {
+            // else load all configs and compile into one
+
+            // main config
+            $this->configRepository = new Repository($this->loadMainConfig());
+
+            $cmsStructure = [];
+            if ($this->configRepository->has('structure')) {
+                foreach ($this->configRepository->get('structure') as $groupName) {
+                    // groups configs
+                    $cmsStructure[$groupName] = $this->loadGroupConfig($groupName);
+                    $groupStructure = [];
+                    foreach ($cmsStructure[$groupName]['structure'] as $moduleName) {
+                        // modules configs
+                        $groupStructure[$moduleName] = $this->loadModuleConfig($groupName, $moduleName);
+                    }
+                    $cmsStructure[$groupName]['sections'] = $groupStructure;
+                }
+            }
+            $this->configRepository->set('structure', $cmsStructure);
+
+            file_put_contents($cachedConfigPath, json_encode($this->configRepository->all()));
         }
+
+        if ($group && $module) {
+            $this->configRepository->set('module', $this->configRepository->get('structure.' . $group . '.sections.' . $module));
+        }
+
         return $this;
     }
 
@@ -128,5 +159,32 @@ class Config
     {
         $filePath = $this->getConfigPath() . $name;
         return $this->configLoader->load($filePath);
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function loadMainConfig()
+    {
+        return $this->loadConfig(self::DEFAULT_CONFIG_NAME);
+    }
+
+    /**
+     * @param $groupName
+     * @return mixed
+     */
+    protected function loadGroupConfig($groupName)
+    {
+        return $this->loadConfig('groups' . DIRECTORY_SEPARATOR . $groupName . DIRECTORY_SEPARATOR . 'group.json');
+    }
+
+    /**
+     * @param $groupName
+     * @param $moduleName
+     * @return mixed
+     */
+    protected function loadModuleConfig($groupName, $moduleName)
+    {
+        return $this->loadConfig('groups' . DIRECTORY_SEPARATOR . $groupName . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . $moduleName . '.json');
     }
 }

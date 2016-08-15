@@ -1,4 +1,5 @@
 {
+    "title": "Переводы",
     "model": "TranslatableStringValue",
     "strings": {
         "title": "Переводы"

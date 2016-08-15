@@ -1,4 +1,5 @@
 {
+    "title": "Пользователи",
     "model": "user",
     "strings": {
         "accusative": "пользователя",

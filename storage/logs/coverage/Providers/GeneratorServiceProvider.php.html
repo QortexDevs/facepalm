@@ -67,7 +67,7 @@
        </div>
 </td>
       <td class="danger small"><div align="right">0.00%</div></td>
-      <td class="danger small"><div align="right">0&nbsp;/&nbsp;19</div></td>
+      <td class="danger small"><div align="right">0&nbsp;/&nbsp;25</div></td>
      </tr>
 
      <tr>
@@ -96,7 +96,7 @@
        </div>
 </td>
       <td class="danger small"><div align="right">0.00%</div></td>
-      <td class="danger small"><div align="right">0&nbsp;/&nbsp;19</div></td>
+      <td class="danger small"><div align="right">0&nbsp;/&nbsp;25</div></td>
      </tr>
 
      <tr>
@@ -138,11 +138,11 @@
        </div>
 </td>
       <td class="danger small"><div align="right">0.00%</div></td>
-      <td class="danger small"><div align="right">0&nbsp;/&nbsp;13</div></td>
+      <td class="danger small"><div align="right">0&nbsp;/&nbsp;19</div></td>
      </tr>
 
      <tr>
-      <td class="danger" colspan="4">&nbsp;<a href="#50"><abbr title="anonymous function ($app)">anonymous function</abbr></a></td>
+      <td class="danger" colspan="4">&nbsp;<a href="#60"><abbr title="anonymous function ($app)">anonymous function</abbr></a></td>
       <td class="danger big">       <div class="progress">
          <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="0.00" aria-valuemin="0" aria-valuemax="100" style="width: 0.00%">
            <span class="sr-only">0.00% covered (danger)</span>
@@ -220,8 +220,18 @@
      <tr class="danger"><td><div align="right"><a name="51"></a><a href="#51">51</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">return</span><span class="default">&nbsp;</span><span class="default">$app</span><span class="keyword">[</span><span class="default">'Facepalm\Generators\Commands\AddCmsModuleCommand'</span><span class="keyword">]</span><span class="keyword">;</span></td></tr>
      <tr class="danger"><td><div align="right"><a name="52"></a><a href="#52">52</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">}</span><span class="keyword">)</span><span class="keyword">;</span></td></tr>
      <tr class="danger"><td><div align="right"><a name="53"></a><a href="#53">53</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="default">$this</span><span class="default">-&gt;</span><span class="default">commands</span><span class="keyword">(</span><span class="default">'command.facepalm.addcmsmodule'</span><span class="keyword">)</span><span class="keyword">;</span></td></tr>
-     <tr class="danger"><td><div align="right"><a name="54"></a><a href="#54">54</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">}</span></td></tr>
-     <tr><td><div align="right"><a name="55"></a><a href="#55">55</a></div></td><td class="codeLine"><span class="keyword">}</span></td></tr>
+     <tr><td><div align="right"><a name="54"></a><a href="#54">54</a></div></td><td class="codeLine"></td></tr>
+     <tr><td><div align="right"><a name="55"></a><a href="#55">55</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="default">$this</span><span class="default">-&gt;</span><span class="default">app</span><span class="default">-&gt;</span><span class="default">singleton</span><span class="keyword">(</span><span class="default">'command.facepalm.purgeimages'</span><span class="keyword">,</span><span class="default">&nbsp;</span><span class="keyword">function</span><span class="default">&nbsp;</span><span class="keyword">(</span><span class="default">$app</span><span class="keyword">)</span><span class="default">&nbsp;</span><span class="keyword">{</span></td></tr>
+     <tr class="danger"><td><div align="right"><a name="56"></a><a href="#56">56</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">return</span><span class="default">&nbsp;</span><span class="default">$app</span><span class="keyword">[</span><span class="default">'Facepalm\Generators\Commands\PurgeImagesCommand'</span><span class="keyword">]</span><span class="keyword">;</span></td></tr>
+     <tr class="danger"><td><div align="right"><a name="57"></a><a href="#57">57</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">}</span><span class="keyword">)</span><span class="keyword">;</span></td></tr>
+     <tr class="danger"><td><div align="right"><a name="58"></a><a href="#58">58</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="default">$this</span><span class="default">-&gt;</span><span class="default">commands</span><span class="keyword">(</span><span class="default">'command.facepalm.purgeimages'</span><span class="keyword">)</span><span class="keyword">;</span></td></tr>
+     <tr><td><div align="right"><a name="59"></a><a href="#59">59</a></div></td><td class="codeLine"></td></tr>
+     <tr><td><div align="right"><a name="60"></a><a href="#60">60</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="default">$this</span><span class="default">-&gt;</span><span class="default">app</span><span class="default">-&gt;</span><span class="default">singleton</span><span class="keyword">(</span><span class="default">'command.facepalm.purgetextitems'</span><span class="keyword">,</span><span class="default">&nbsp;</span><span class="keyword">function</span><span class="default">&nbsp;</span><span class="keyword">(</span><span class="default">$app</span><span class="keyword">)</span><span class="default">&nbsp;</span><span class="keyword">{</span></td></tr>
+     <tr class="danger"><td><div align="right"><a name="61"></a><a href="#61">61</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">return</span><span class="default">&nbsp;</span><span class="default">$app</span><span class="keyword">[</span><span class="default">'Facepalm\Generators\Commands\PurgeTextItemsCommand'</span><span class="keyword">]</span><span class="keyword">;</span></td></tr>
+     <tr class="danger"><td><div align="right"><a name="62"></a><a href="#62">62</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">}</span><span class="keyword">)</span><span class="keyword">;</span></td></tr>
+     <tr class="danger"><td><div align="right"><a name="63"></a><a href="#63">63</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="default">$this</span><span class="default">-&gt;</span><span class="default">commands</span><span class="keyword">(</span><span class="default">'command.facepalm.purgetextitems'</span><span class="keyword">)</span><span class="keyword">;</span></td></tr>
+     <tr class="danger"><td><div align="right"><a name="64"></a><a href="#64">64</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">}</span></td></tr>
+     <tr><td><div align="right"><a name="65"></a><a href="#65">65</a></div></td><td class="codeLine"><span class="keyword">}</span></td></tr>
 
     </tbody>
    </table>
@@ -234,7 +244,7 @@
      <span class="warning"><strong>Dead Code</strong></span>
     </p>
     <p>
-     <small>Generated by <a href="http://github.com/sebastianbergmann/php-code-coverage" target="_top">PHP_CodeCoverage 2.2.4</a> using <a href="https://secure.php.net/" target="_top">PHP 5.6.16</a> and <a href="https://phpunit.de/">PHPUnit 4.8.26</a> at Thu May 19 19:34:24 UTC 2016.</small>
+     <small>Generated by <a href="http://github.com/sebastianbergmann/php-code-coverage" target="_top">PHP_CodeCoverage 2.2.4</a> using <a href="https://secure.php.net/" target="_top">PHP 5.6.16</a> and <a href="https://phpunit.de/">PHPUnit 4.8.26</a> at Mon Aug 15 13:37:55 UTC 2016.</small>
     </p>
     <a title="Back to the top" id="toplink" href="#"><span class="glyphicon glyphicon-arrow-up"></span></a>
    </footer>

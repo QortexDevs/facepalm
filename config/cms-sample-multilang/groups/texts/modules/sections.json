@@ -1,0 +1,31 @@
+{
+    "title": "Текстовые разделы",
+    "model": "site_section",
+    "strings": {
+        "title": "Текстовые разделы",
+    },
+    "titles": {
+        "path_name": "Путь",
+        "status": "Активность"
+    },
+    "navigation": {
+        "model": "site_section",
+        "titleField": "title",
+        "skip": [
+        ]
+    },
+    "forms": {
+        "fields": {
+            "title": {
+                "type": "plaintext",
+                "title": "Страница"
+            },
+            "content": {
+                "type": "text",
+                "title": "Content",
+                "translatable": true,
+                "wysiwyg": true
+            }
+        }
+    }
+}

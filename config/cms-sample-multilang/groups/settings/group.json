@@ -1,0 +1,9 @@
+{
+    "title": "Настройки",
+    "icon": "gear",
+    "structure": [
+        "users",
+        "roles",
+        "languages"
+    ]
+}

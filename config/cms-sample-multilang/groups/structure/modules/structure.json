@@ -1,4 +1,5 @@
 {
+    "title": "Структура сайта",
     "model": "site_section",
     "strings": {
         "title": "Структура сайта"
@@ -16,10 +17,12 @@
                 "translatable": true
             },
             "show_in_main_menu": {
-                "type": "checkbox"
+                "type": "checkbox",
+                "hint": "Показывать в главном меню"
             },
             "show_in_service_menu": {
-                "type": "checkbox"
+                "type": "checkbox",
+                "hint": "Показывать в сервисном меню"
             }
         },
         "status": "status"

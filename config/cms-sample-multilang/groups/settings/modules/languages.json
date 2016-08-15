@@ -1,4 +1,5 @@
 {
+    "title": "Языки",
     "model": "language",
     "strings": {
         "accusative": "язык",
@@ -9,6 +10,7 @@
         "name": "Название",
         "code": "Код",
         "status": "Активность",
+        "localeName": "Локаль",
         "is_default": "Язык по умолчанию"
     },
     "list": {
@@ -24,6 +26,9 @@
         "fields": {
             "name": true,
             "code": {
+                "width": "100px"
+            },
+            "localeName": {
                 "width": "100px"
             },
             "is_default": {

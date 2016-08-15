@@ -1,4 +1,5 @@
 {
+    "title": "Роли",
     "model": "role",
     "strings": {
         "accusative": "роль",
