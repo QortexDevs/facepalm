@@ -4,6 +4,7 @@ namespace Facepalm\Tests;
 
 use Facepalm\Cms\Config\Config;
 use Facepalm\Cms\Config\ConfigLoaderInterface;
+use Facepalm\Cms\Config\Json5FileConfigLoader;
 use Facepalm\Cms\Config\JsonFileConfigLoader;
 use Facepalm\Tools\Path;
 use \Mockery as m;
@@ -91,6 +92,15 @@ class ConfigTest extends TestCase
     public function testJsonLoader()
     {
         $loader = new JsonFileConfigLoader();
+        $this->assertEquals([], $loader->load('sdvasdvasdv' . random_int(0, PHP_INT_MAX)));
+    }
+
+    /**
+     *
+     */
+    public function testJson5Loader()
+    {
+        $loader = new Json5FileConfigLoader();
         $this->assertEquals([], $loader->load('sdvasdvasdv' . random_int(0, PHP_INT_MAX)));
     }
 
