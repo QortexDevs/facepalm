@@ -408,6 +408,7 @@ class CmsController extends BaseController
 
 
         $params = [
+            'creating' => !$this->objectId,
             'formHtml' => $form->render($this->renderer),
             'justCreated' => $this->app->session->get('justCreated'),
         ];

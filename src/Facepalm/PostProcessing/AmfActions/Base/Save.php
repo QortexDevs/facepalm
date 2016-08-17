@@ -15,6 +15,7 @@ use Facepalm\Models\Image;
 use Facepalm\PostProcessing\AmfActions\AbstractAction;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -55,21 +56,30 @@ class Save extends AbstractAction
 
         if (!$object->id) {
             $className = class_basename($object);
-            DB::transaction(function () use ($object, $className) {
+            DB::transaction(function () use ($object, $className, $requestRawData) {
                 $object->show_order = ModelFactory::max($className, 'show_order') + 1;
+                Event::fire('facepalm.cms.beforeObjectSave', [$object, $requestRawData]);
+                Event::fire('facepalm.cms.beforeObjectSave.' . class_basename($object), [$object, $requestRawData]);
                 $object->save();
             });
         } else {
+            Event::fire('facepalm.cms.beforeObjectSave', [$object, $requestRawData]);
+            Event::fire('facepalm.cms.beforeObjectSave.' . class_basename($object), [$object, $requestRawData]);
             $object->save();
         }
+        Event::fire('facepalm.cms.afterObjectSave', [$object, $requestRawData]);
+        Event::fire('facepalm.cms.afterObjectSave.' . class_basename($object), [$object, $requestRawData]);
 
         if ($object->id) {
-            $this->saveTranslatableItems($object, $keyValue);
+            $this->setTranslatableItems($object, $keyValue);
             $this->syncManyToManyRelations($object, $keyValue);
+
+            //to save translatable items!
+            $object->save();
+            Event::fire('facepalm.cms.afterObjectSaveRelations.' . class_basename($object), [$object, $requestRawData]);
+            Event::fire('facepalm.cms.afterObjectSaveRelations', [$object, $requestRawData]);
         }
 
-        //to save translatable items!
-        $object->save();
     }
 
 
@@ -111,7 +121,7 @@ class Save extends AbstractAction
      * @param $object
      * @param $keyValue
      */
-    protected function saveTranslatableItems($object, $keyValue)
+    protected function setTranslatableItems($object, $keyValue)
     {
         foreach ($keyValue as $fieldName => $value) {
             if (!$object->isManyToMany($fieldName)) {

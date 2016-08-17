@@ -1,4 +1,4 @@
-<div class="cms-module-form-page" data-create-mode="{{ form.object ? 0 : 1 }}" data-just-created="{{ justCreated }}">
+<div class="cms-module-form-page" data-create-mode="{{ creating ? 1 : 0 }}" data-just-created="{{ justCreated }}">
     {{ formHtml|raw }}
     {# todo: кнопок может не быть! #}
     <div class="form-buttons">
