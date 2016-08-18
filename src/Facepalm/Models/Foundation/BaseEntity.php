@@ -171,12 +171,16 @@ abstract class BaseEntity extends AbstractEntity
     /**
      * @param $localizationFieldName
      * @param $languageCode
+     * @param Closure $callback
      * @return mixed
      */
-    public static function getCountWithLocalization($localizationFieldName, $languageCode)
+    public static function getCountWithLocalization($localizationFieldName, $languageCode, Closure $callback = null)
     {
         $builder = static::where('status', 1);
         self::setLocalizationExistenceConstraint($builder, $localizationFieldName, $languageCode);
+        if ($callback) {
+            $callback($builder);
+        }
         return $builder->count();
     }
 
