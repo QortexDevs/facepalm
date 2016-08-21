@@ -79,9 +79,13 @@ abstract class BaseEntity extends AbstractEntity
     public function imagesByGroup($group = null)
     {
         $this->processBindedEntities('images');
-        return $group && Arr::has($this->bindedEntitiesByGroup['images'], $group)
-            ? $this->bindedEntitiesByGroup['images'][$group]
-            : $this->bindedEntitiesByGroup['images'];
+        if ($group) {
+            if (Arr::has($this->bindedEntitiesByGroup['images'], $group)) {
+                return $this->bindedEntitiesByGroup['images'][$group];
+            }
+            return null;
+        }
+        return $this->bindedEntitiesByGroup['images'];
     }
 
     /**
