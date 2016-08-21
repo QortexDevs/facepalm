@@ -10,6 +10,7 @@ namespace Facepalm\Models\Foundation;
 
 
 use Closure;
+use Facepalm\Http\Middleware\RedirectTrailingSlash;
 use Facepalm\Models\Image;
 use Facepalm\Models\ModelFactory;
 use Facepalm\Models\TextItem;

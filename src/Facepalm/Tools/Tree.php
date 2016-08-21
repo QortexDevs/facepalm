@@ -91,7 +91,16 @@ class Tree
      */
     public function getDescendantsIds($element)
     {
-        return Arr::get($this->elementsDescendants, $this->getIdFromParameter($element), []);
+        if ($element === 0) {
+            $descendants = [];
+            foreach ($this->getChildrenIds($element) as $childrenId) {
+                $descendants[] = $childrenId;
+                $descendants = array_merge($descendants, $this->getDescendantsIds($childrenId));
+            }
+            return $descendants;
+        } else {
+            return Arr::get($this->elementsDescendants, $this->getIdFromParameter($element), []);
+        }
     }
 
     /**
