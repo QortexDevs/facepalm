@@ -2,10 +2,12 @@
 
 namespace Facepalm\Http\Controllers;
 
+use App\Models\ProductType;
 use Facepalm\Models\SiteSection;
 use Facepalm\Tools\AssetsBuster;
 use Facepalm\Tools\TextProcessor;
 use Facepalm\Tools\Tree;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as FrameworkBaseController;
 
@@ -30,6 +32,8 @@ class BaseController extends FrameworkBaseController
 
     protected $languages;
     protected $currentLanguage;
+
+    protected $productTypes;
 
     /**
      * BaseController constructor.
@@ -80,7 +84,13 @@ class BaseController extends FrameworkBaseController
             'currentPath' => implode('/', $this->requestSegments) . '/',
             'currentLanguage' => $this->currentLanguage,
             'languages' => $this->languages,
-            'busters' => (new AssetsBuster())->getSiteBusters()
+            'busters' => (new AssetsBuster())->getSiteBusters(),
+            'menu' => [
+                'expandableItems' => [
+                    'shop',
+                    'cabinet'
+                ]
+            ]
         ];
 
         if ($this->currentSection) {
@@ -97,8 +107,14 @@ class BaseController extends FrameworkBaseController
                     'title' => $this->siteName
                 ],
             ];
-
         }
+
+        $this->productTypes = ProductType::getCollectionWithData(function (Builder $builder) {
+            ProductType::setLocalizationExistenceConstraint($builder, 'name', $this->currentLanguage->code);
+            $builder->orderBy('show_order');
+        });
+        $this->commonViewValues['productTypes'] = $this->productTypes;
+
 
     }
 
