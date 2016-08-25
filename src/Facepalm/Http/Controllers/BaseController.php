@@ -108,14 +108,6 @@ class BaseController extends FrameworkBaseController
                 ],
             ];
         }
-
-        $this->productTypes = ProductType::getCollectionWithData(function (Builder $builder) {
-            ProductType::setLocalizationExistenceConstraint($builder, 'name', $this->currentLanguage->code);
-            $builder->orderBy('show_order');
-        });
-        $this->commonViewValues['productTypes'] = $this->productTypes;
-
-
     }
 
     /**
