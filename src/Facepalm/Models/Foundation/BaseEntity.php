@@ -152,6 +152,19 @@ abstract class BaseEntity extends AbstractEntity
     }
 
     /**
+     * @param $id
+     * @return BaseEntity|null
+     */
+    public static function getByIdOrAbort($id)
+    {
+        $object = static::getByIdWithData($id);
+        if (!$object) {
+            abort(404);
+        }
+        return $object;
+    }
+
+    /**
      * Returns collection of active objects with related textItems and images grouped
      *
      * @param Closure $callback

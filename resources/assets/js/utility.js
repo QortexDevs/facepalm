@@ -8,7 +8,7 @@
  */
 Object.defineProperty(Object.prototype, 'setWithPath', {
     value: function (path, value) { /* Makes breakfast, solves world peace, takes out trash */
-        if (path && value) {
+        if (path) {
             if (typeof  path == 'string') {
                 path = path.split('.');
             }
@@ -21,7 +21,7 @@ Object.defineProperty(Object.prototype, 'setWithPath', {
                 return typeof value != 'undefined' && value;
             });
             fields.map(function (field, index) {
-                cur[field] = cur[field] || (index == fields.length - 1 ? (value || {}) : {});
+                cur[field] = cur[field] || (index == fields.length - 1 ? (typeof value != 'undefined' ? value : {}) : {});
                 cur = cur[field];
             });
         }
