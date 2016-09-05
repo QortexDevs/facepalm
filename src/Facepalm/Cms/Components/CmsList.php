@@ -203,7 +203,6 @@ class CmsList extends CmsComponent
         }
 
         $tree = Tree::fromEloquentCollection($objects);
-
         $output = [
             'settings' => [
                 'showIdColumn' => $this->showIdColumn,

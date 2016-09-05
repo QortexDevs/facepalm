@@ -116,6 +116,11 @@
                         &[type=text] {
                             padding: 2px 4px;
                         }
+
+                        &:disabled {
+                            color: darkgray;
+                            background: #f2f2f2;
+                        }
                     }
 
                     &.buttons {

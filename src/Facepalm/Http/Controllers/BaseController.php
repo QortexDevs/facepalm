@@ -4,12 +4,15 @@ namespace Facepalm\Http\Controllers;
 
 use App\Models\ProductType;
 use Facepalm\Models\SiteSection;
+use Facepalm\Models\StringValue;
+use Facepalm\Models\TranslatableStringValue;
 use Facepalm\Tools\AssetsBuster;
 use Facepalm\Tools\TextProcessor;
 use Facepalm\Tools\Tree;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as FrameworkBaseController;
+use Illuminate\Support\Arr;
 
 class BaseController extends FrameworkBaseController
 {
@@ -25,6 +28,7 @@ class BaseController extends FrameworkBaseController
     protected $commonViewValues = [];
     protected $requestSegments = [];
     protected $activeBranch = [];
+    protected $stringValues = [];
 
     protected $addSiteNameToTitle;
     protected $siteName;
@@ -74,6 +78,13 @@ class BaseController extends FrameworkBaseController
             $this->activeBranch[] = $this->currentSection;
         }
 
+        foreach (StringValue::all() as $v) {
+            $this->stringValues[$v->name] = $v->value;
+        }
+        foreach (TranslatableStringValue::all() as $v) {
+            $this->stringValues[$v->name] = $v->value;
+        }
+
         $this->commonViewValues = [
             'siteTree' => $this->siteTree,
             'topLevelMenu' => $this->siteTree->getChildren(config('facepalm.rootSection') ? $root : 0),
@@ -85,6 +96,7 @@ class BaseController extends FrameworkBaseController
             'currentLanguage' => $this->currentLanguage,
             'languages' => $this->languages,
             'busters' => (new AssetsBuster())->getSiteBusters(),
+            'values' => $this->stringValues,
             'menu' => [
                 'expandableItems' => [
                     'shop',
