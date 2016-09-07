@@ -3,6 +3,7 @@
 namespace Facepalm\Providers;
 
 use Facepalm\Models\Image;
+use Facepalm\Tools\StringsTranslationLoader;
 use Facepalm\Tools\TextProcessor;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;

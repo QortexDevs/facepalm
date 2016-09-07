@@ -2,7 +2,6 @@
 
 namespace Facepalm\Http\Controllers;
 
-use App\Models\ProductType;
 use Facepalm\Models\SiteSection;
 use Facepalm\Models\StringValue;
 use Facepalm\Models\TranslatableStringValue;
@@ -78,11 +77,15 @@ class BaseController extends FrameworkBaseController
             $this->activeBranch[] = $this->currentSection;
         }
 
-        foreach (StringValue::all() as $v) {
-            $this->stringValues[$v->name] = $v->value;
-        }
-        foreach (TranslatableStringValue::all() as $v) {
-            $this->stringValues[$v->name] = $v->value;
+        if (method_exists(app('translation.loader'), 'getStringValues') && app('translation.loader')->isInited()) {
+            $this->stringValues = app('translation.loader')->getStringValues();
+        } else {
+            foreach (StringValue::all() as $v) {
+                $this->stringValues[$v->name] = $v->value;
+            }
+            foreach (TranslatableStringValue::all() as $v) {
+                $this->stringValues[$v->name] = $v->value;
+            }
         }
 
         $this->commonViewValues = [
