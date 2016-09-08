@@ -100,12 +100,7 @@ class BaseController extends FrameworkBaseController
             'languages' => $this->languages,
             'busters' => (new AssetsBuster())->getSiteBusters(),
             'values' => $this->stringValues,
-            'menu' => [
-                'expandableItems' => [
-                    'shop',
-                    'cabinet'
-                ]
-            ]
+            'user' => $request->user(),
         ];
 
         if ($this->currentSection) {

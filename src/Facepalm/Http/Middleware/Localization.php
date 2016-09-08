@@ -42,7 +42,10 @@ class Localization
             $defaultLanguage = $this->getDefaultLang($languages);
             if ($request->method() === 'GET') {
                 // Return redirect to default language on GET request
-                return redirect('/' . $defaultLanguage->code . '/' . trim($request->path(), '/'));
+                if (null !== $qs = $request->getQueryString()) {
+                    $qs = '?' . $qs;
+                }
+                return redirect('/' . $defaultLanguage->code . '/' . trim($request->path(), '/') . $qs);
             } else {
                 // Set default locale on another requests
                 $request->attributes->add(['currentLanguage' => $defaultLanguage]);
