@@ -46,7 +46,7 @@ class StringsTranslationLoader extends ArrayLoader
         foreach (StringValue::all() as $v) {
             $this->stringValues[$v->name] = $v->value;
         }
-        foreach (TranslatableStringValue::all() as $v) {
+        foreach (TranslatableStringValue::with('textItems')->get() as $v) {
             $this->stringValues[$v->name] = $v->value;
         }
 
