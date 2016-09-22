@@ -8,6 +8,16 @@ GoogleMap.prototype = {
         if ($('.map.google[data-lat][data-lng]').length) {
             $.getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBF9wNWgC16iCHmTloWEl5Y7sARDSyqRUE&libraries=places&sensor=false", function () {
                 _this.app.fire('afterGoogleMapsApiLoad');
+
+                var shiftKey = false;
+
+                window.onkeydown = function (e) {
+                    shiftKey = ((e.keyIdentifier == 'Shift') || (e.shiftKey == true));
+                }
+                window.onkeyup = function (e) {
+                    shiftKey = false;
+                }
+
                 $('.map[data-lat][data-lng]').each(function () {
                     var objectLat = parseFloat($(this).data('lat')),
                         objectLng = parseFloat($(this).data('lng'));
@@ -33,9 +43,11 @@ GoogleMap.prototype = {
                     });
 
                     google.maps.event.addListener(map, "click", function (event) {
-                        $(mapElement).closest('.lat-lng-container').find("[data-latlng-field=lat]").val(event.latLng.lat())
-                        $(mapElement).closest('.lat-lng-container').find("[data-latlng-field=lng]").val(event.latLng.lng())
-                        marker.setPosition(event.latLng);
+                        if (shiftKey) {
+                            $(mapElement).closest('.lat-lng-container').find("[data-latlng-field=lat]").val(event.latLng.lat())
+                            $(mapElement).closest('.lat-lng-container').find("[data-latlng-field=lng]").val(event.latLng.lng())
+                            marker.setPosition(event.latLng);
+                        }
                     });
 
                     // Create the search box and link it to the UI element.
