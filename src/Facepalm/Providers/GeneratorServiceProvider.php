@@ -61,5 +61,10 @@ class GeneratorServiceProvider extends ServiceProvider
             return $app['Facepalm\Generators\Commands\PurgeTextItemsCommand'];
         });
         $this->commands('command.facepalm.purgetextitems');
+
+        $this->app->singleton('command.facepalm.translatevalues', function ($app) {
+            return $app['Facepalm\Generators\Commands\TranslateValuesCommand'];
+        });
+        $this->commands('command.facepalm.translatevalues');
     }
 }
