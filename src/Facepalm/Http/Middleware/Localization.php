@@ -19,12 +19,23 @@ class Localization
     public function handle($request, Closure $next)
     {
         $languageCodeParameterName = config('facepalm.languageCodeParameterName') ?: 'languageCode';
+        $languageSource = config('facepalm.languageSource') ?: 'url';
+
         $currentLanguage = '';
         $languages = Language::where('status', 1)->orderBy('show_order')->get();
         $request->attributes->add(['languages' => $languages]);
 
+        $code = '';
+        if ($languageSource === 'user') {
+            if ($request->user()) {
+                $code = $request->user()->$languageCodeParameterName;
+            }
+        } else {
+            $code = $request->$languageCodeParameterName;
+        }
+
         // Check if requested language exists
-        if ($code = $request->$languageCodeParameterName) {
+        if ($code) {
             $langFound = $languages->search(function ($item) use ($code) {
                 return $item->code === $code;
             });
@@ -40,7 +51,8 @@ class Localization
             setlocale(LC_TIME, $currentLanguage->localeName);
         } else {
             $defaultLanguage = $this->getDefaultLang($languages);
-            if ($request->method() === 'GET') {
+            // todo: config.redirectToDefaultLanguage ?
+            if ($languageSource === 'url' && $request->method() === 'GET') {
                 // Return redirect to default language on GET request
                 if (null !== $qs = $request->getQueryString()) {
                     $qs = '?' . $qs;
@@ -55,9 +67,11 @@ class Localization
             }
         }
 
-        // Unset language parameter from Route params. May be little dirty, but works
-        $route = call_user_func($request->getRouteResolver());
-        $route->forgetParameter($languageCodeParameterName);
+        if ($languageSource === 'url') {
+            // Unset language parameter from Route params. May be little dirty, but works
+            $route = call_user_func($request->getRouteResolver());
+            $route->forgetParameter($languageCodeParameterName);
+        }
 
         return $next($request);
     }

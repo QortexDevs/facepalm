@@ -325,4 +325,19 @@ trait TranslatableTrait
         return ((new static)->getTable());
     }
 
+    public function toArray()
+    {
+        $out = [];
+        foreach ($this->stringFields as $field) {
+            $out[$field] = $this->$field;
+        }
+        foreach ($this->textFields as $field) {
+            $out[$field] = $this->$field;
+        }
+        $out = parent::toArray() + $out;
+
+        return $out;
+    }
+
+
 }
