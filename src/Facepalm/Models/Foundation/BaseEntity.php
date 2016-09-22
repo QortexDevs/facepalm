@@ -17,6 +17,7 @@ use Facepalm\Models\TextItem;
 use HirotoK\JSON5\Tests\Base;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
 
 abstract class BaseEntity extends AbstractEntity
@@ -101,7 +102,13 @@ abstract class BaseEntity extends AbstractEntity
 
     public function attachImage($group, $path)
     {
-        $uploadableObject = Image::createFromFile($path)->setAttribute('group', $group);
+        if ($path instanceof UploadedFile) {
+            $uploadableObject = Image::createFromFile($path->getPathName(), $path->getClientOriginalName());
+        } else {
+            $uploadableObject = Image::createFromFile($path);
+        }
+
+        $uploadableObject->setAttribute('group', $group);
         $uploadableObject->show_order = Image::max('show_order') + 1;
         $uploadableObject->save();
         $this->images()->save($uploadableObject);
