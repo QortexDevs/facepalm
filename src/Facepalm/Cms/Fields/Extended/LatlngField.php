@@ -21,8 +21,8 @@ class LatlngField extends AbstractField
         return $this->render->render($this->templateName, [
                 'inputNameLat' => $this->fieldNameBase . '[' . $this->name . '_lat]',
                 'inputNameLng' => $this->fieldNameBase . '[' . $this->name . '_lng]',
-                'lat' => $object->{$this->name . '_lat'},
-                'lng' => $object->{$this->name . '_lng'},
+                'lat' => $object ? $object->{$this->name . '_lat'} : 0,
+                'lng' => $object ? $object->{$this->name . '_lng'} : 0,
                 'parameters' => $this->parameters
             ] + $parameters);
     }
