@@ -66,5 +66,10 @@ class GeneratorServiceProvider extends ServiceProvider
             return $app['Facepalm\Generators\Commands\TranslateValuesCommand'];
         });
         $this->commands('command.facepalm.translatevalues');
+
+        $this->app->singleton('command.facepalm.reorder', function ($app) {
+            return $app['Facepalm\Generators\Commands\ReorderCommand'];
+        });
+        $this->commands('command.facepalm.reorder');
     }
 }
