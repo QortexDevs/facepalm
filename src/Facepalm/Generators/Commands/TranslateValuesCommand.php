@@ -6,6 +6,7 @@ use App\Models\CurrencyRate;
 use Carbon\Carbon;
 use Facepalm\Models\Image;
 use Facepalm\Models\Language;
+use Facepalm\Models\ModelFactory;
 use Facepalm\Models\Role;
 use Facepalm\Models\TranslatableStringValue;
 use Facepalm\Models\User;
@@ -23,7 +24,7 @@ class TranslateValuesCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'facepalm:translatevalues';
+    protected $signature = 'facepalm:translatevalues {model=TranslatableStringValue} {field=value} {displayName=name}';
 
     /**
      * The console command description.
@@ -42,11 +43,11 @@ class TranslateValuesCommand extends Command
     public function handle()
     {
         $langs = Language::orderBy('is_default')->get();
-        foreach (TranslatableStringValue::all() as $value) {
+        foreach (ModelFactory::all($this->argument('model')) as $value) {
             $hasTranslations = [];
             $noTranslations = [];
             foreach ($langs as $lang) {
-                if ($value->string('value', $lang->code)) {
+                if ($value->string($this->argument('field'), $lang->code)) {
                     $hasTranslations[] = $lang->code;
                 } else {
                     $noTranslations[] = $lang->code;
@@ -55,16 +56,16 @@ class TranslateValuesCommand extends Command
 
             if ($noTranslations && $hasTranslations) {
                 $this->comment(
-                    'Translate: ' . $value->name
+                    'Translate: ' . $value->{$this->argument('displayName')}
                     . ' from ' . $hasTranslations[0]
-                    . ' ("' . $value->string('value', $hasTranslations[0]) . '")'
+                    . ' ("' . $value->string($this->argument('field'), $hasTranslations[0]) . '")'
                 );
                 foreach ($noTranslations as $langTo) {
                     $url = 'https://translate.yandex.net/api/v1.5/tr.json/translate?lang=' . $hasTranslations[0] . '-' . $langTo . '&key=' . $this->yandexApiKey . '&text='
-                        . urlencode($value->string('value', $hasTranslations[0]));
+                        . urlencode($value->string($this->argument('field'), $hasTranslations[0]));
                     $response = json_decode(file_get_contents($url));
                     $this->comment($langTo . ': ' . $response->text[0]);
-                    $value->string('value', $langTo, $response->text[0]);
+                    $value->string($this->argument('field'), $langTo, $response->text[0]);
 
                 }
                 $value->save();
