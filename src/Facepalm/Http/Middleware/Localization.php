@@ -3,6 +3,7 @@
 use Carbon\Carbon;
 use Closure;
 use Facepalm\Models\Language;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
 
@@ -34,6 +35,8 @@ class Localization
             $code = $request->$languageCodeParameterName;
         }
 
+        // if no cookie in request - try get it from cookie
+
         // Check if requested language exists
         if ($code) {
             $langFound = $languages->search(function ($item) use ($code) {
@@ -51,19 +54,25 @@ class Localization
             setlocale(LC_TIME, $currentLanguage->localeName);
         } else {
             $defaultLanguage = $this->getDefaultLang($languages);
+
+            $langFound = $languages->search(function ($item) use ($request) {
+                return $item->code === $request->cookie('language');
+            });
+
+            $redirectToLanguage = $langFound ? $languages[$langFound] : $defaultLanguage;
             // todo: config.redirectToDefaultLanguage ?
             if ($languageSource === 'url' && $request->method() === 'GET') {
                 // Return redirect to default language on GET request
                 if (null !== $qs = $request->getQueryString()) {
                     $qs = '?' . $qs;
                 }
-                return redirect('/' . $defaultLanguage->code . '/' . trim($request->path(), '/') . $qs);
+                return redirect('/' . $redirectToLanguage->code . '/' . trim($request->path(), '/') . $qs);
             } else {
                 // Set default locale on another requests
-                $request->attributes->add(['currentLanguage' => $defaultLanguage]);
-                app()->setLocale($defaultLanguage->code);
-                Carbon::setLocale($defaultLanguage->code);
-                setlocale(LC_TIME, $defaultLanguage->localeName);
+                $request->attributes->add(['currentLanguage' => $redirectToLanguage]);
+                app()->setLocale($redirectToLanguage->code);
+                Carbon::setLocale($redirectToLanguage->code);
+                setlocale(LC_TIME, $redirectToLanguage->localeName);
             }
         }
 
@@ -73,7 +82,11 @@ class Localization
             $route->forgetParameter($languageCodeParameterName);
         }
 
-        return $next($request);
+        $response = $next($request);
+        if ($response instanceof Response) {
+            $response->cookie('language', $currentLanguage->code, 2628000);
+        }
+        return $response;
     }
 
     /**
