@@ -81,9 +81,8 @@ class Localization
             $route = call_user_func($request->getRouteResolver());
             $route->forgetParameter($languageCodeParameterName);
         }
-
         $response = $next($request);
-        if ($response instanceof Response) {
+        if ($currentLanguage && $response instanceof Response) {
             $response->cookie('language', $currentLanguage->code, 2628000);
         }
         return $response;
