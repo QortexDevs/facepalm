@@ -101,6 +101,7 @@ class BaseController extends FrameworkBaseController
             'busters' => (new AssetsBuster())->getSiteBusters(),
             'values' => $this->stringValues,
             'user' => $request->user(),
+            'csrf_token' => csrf_token(),
         ];
 
         if ($this->currentSection) {
