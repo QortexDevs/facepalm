@@ -29,6 +29,7 @@ abstract class BaseEntity extends AbstractEntity
     ];
 
     protected $bindedEntitiesByGroup = [];
+    protected $exposeImagesInArray = [];
 
     /**
      *
@@ -225,6 +226,22 @@ abstract class BaseEntity extends AbstractEntity
             $query->where('group', $localizationFieldName);
             $query->where('stringValue', '!=', '');
         });
+    }
+
+    public function toArray()
+    {
+        if ($this->exposeImagesInArray) {
+            foreach ($this->imagesByGroup() as $group => $images) {
+                $this->$group = array_map(function ($element) {
+                    return $element->getUri('500x500');
+                }, $images);
+            }
+        }
+        if (method_exists($this, 'toArrayTranslatable')) {
+            return $this->toArrayTranslatable();
+        } else {
+            return parent::toArray();
+        }
     }
 
 }

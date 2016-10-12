@@ -325,7 +325,7 @@ trait TranslatableTrait
         return ((new static)->getTable());
     }
 
-    public function toArray()
+    public function toArrayTranslatable()
     {
         $out = [];
         foreach ($this->stringFields as $field) {
