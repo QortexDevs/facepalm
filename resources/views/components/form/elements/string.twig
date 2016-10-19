@@ -16,7 +16,7 @@
            name="{{ inputName }}"
            value="{{ forceValue?:object.__get(field) }}"
 
-           {% if parameters.disabledForEdit and forceValue?:object.__get(field) %}disabled="disabled"{% endif %}
+           {% if parameters.disabledForEdit and (forceValue?:object.__get(field)) %}disabled="disabled"{% endif %}
             {% if parameters.width %}style="width: {{ parameters.width }}"{% endif %}
     />
 {% endif %}
