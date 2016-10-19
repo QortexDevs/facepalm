@@ -180,6 +180,7 @@ abstract class BaseEntity extends AbstractEntity
      */
     public static function getCollectionWithData($callback = null)
     {
+        // todo: подумать, как вставить здесь table_name.status
         /** @var Builder $builder */
         $builder = static::where('status', 1)
             ->with('images')
