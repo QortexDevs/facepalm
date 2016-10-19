@@ -61,6 +61,8 @@ trait TranslatableTrait
      * note: нужно подумать, как это кешировать
      * note:    1. на уровне этого трейта
      * note:    2. на уровне выше (ларавель)
+     * note: $this->relationLoaded('...') ???
+     * note: $this->getRelationValue
      *
      * @param $group
      * @param null $languageCode
