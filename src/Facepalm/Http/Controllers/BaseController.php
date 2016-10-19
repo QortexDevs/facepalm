@@ -38,6 +38,8 @@ class BaseController extends FrameworkBaseController
 
     protected $productTypes;
 
+    protected $processSiteTree = true;
+
     /**
      * BaseController constructor.
      * @param Request $request
@@ -54,27 +56,30 @@ class BaseController extends FrameworkBaseController
         if ($this->currentLanguage) {
             array_shift($this->requestSegments);
         }
-        $this->siteTree = Tree::fromEloquentCollection(
-            SiteSection::where('status', 1)->orderBy('show_order')->with('textItems')->get()
-        );
 
-        $root = $this->siteTree->findRoot();
-
-        if ($this->requestSegments) {
-            $this->currentSection = $this->siteTree->getElementByPath(
-                implode('/', $this->requestSegments),
-                'path_name',
-                '/',
-                config('facepalm.rootSection') ? $root : 0
+        if ($this->processSiteTree) {
+            $this->siteTree = Tree::fromEloquentCollection(
+                SiteSection::where('status', 1)->orderBy('show_order')->with('textItems')->get()
             );
-        }
 
-        if ($this->currentSection) {
-            $this->activeBranch = array_reverse($this->siteTree->getElementAncestors($this->currentSection));
-            if (config('facepalm.rootSection') && $this->activeBranch[0]->id == $root) {
-                array_shift($this->activeBranch);
+            $root = $this->siteTree->findRoot();
+
+            if ($this->requestSegments) {
+                $this->currentSection = $this->siteTree->getElementByPath(
+                    implode('/', $this->requestSegments),
+                    'path_name',
+                    '/',
+                    config('facepalm.rootSection') ? $root : 0
+                );
             }
-            $this->activeBranch[] = $this->currentSection;
+
+            if ($this->currentSection) {
+                $this->activeBranch = array_reverse($this->siteTree->getElementAncestors($this->currentSection));
+                if (config('facepalm.rootSection') && $this->activeBranch[0]->id == $root) {
+                    array_shift($this->activeBranch);
+                }
+                $this->activeBranch[] = $this->currentSection;
+            }
         }
 
         if (method_exists(app('translation.loader'), 'getStringValues') && app('translation.loader')->isInited()) {
@@ -89,13 +94,8 @@ class BaseController extends FrameworkBaseController
         }
 
         $this->commonViewValues = [
-            'siteTree' => $this->siteTree,
-            'topLevelMenu' => $this->siteTree->getChildren(config('facepalm.rootSection') ? $root : 0),
-            'activeBranch' => $this->activeBranch,
             'staticRoot' => '/',
             'root' => '/' . ($this->currentLanguage ? ($this->currentLanguage->code . '/') : ''),
-            'requestSegments' => $this->requestSegments,
-            'currentPath' => implode('/', $this->requestSegments) . '/',
             'currentLanguage' => $this->currentLanguage,
             'languages' => $this->languages,
             'busters' => (new AssetsBuster())->getSiteBusters(),
@@ -103,6 +103,16 @@ class BaseController extends FrameworkBaseController
             'user' => $request->user(),
             'csrf_token' => csrf_token(),
         ];
+
+        if ($this->processSiteTree) {
+            $this->commonViewValues += [
+                'siteTree' => $this->siteTree,
+                'topLevelMenu' => $this->siteTree->getChildren(config('facepalm.rootSection') ? $root : 0),
+                'activeBranch' => $this->activeBranch,
+                'requestSegments' => $this->requestSegments,
+                'currentPath' => implode('/', $this->requestSegments) . '/',
+            ];
+        }
 
         if ($this->currentSection) {
             $this->commonViewValues += [

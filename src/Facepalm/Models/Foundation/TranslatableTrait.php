@@ -55,6 +55,13 @@ trait TranslatableTrait
      * Returns single TextItem object
      * If no language is specified the default one is used
      *
+     * note: тут есть интересное поведение.
+     * note: Даже если у нас объект загружен со связями (with('textItems')), но записей в базе нет,
+     * note: то каждое дерганье поля будет вызывать запрос к базе.
+     * note: нужно подумать, как это кешировать
+     * note:    1. на уровне этого трейта
+     * note:    2. на уровне выше (ларавель)
+     *
      * @param $group
      * @param null $languageCode
      * @return mixed
@@ -164,6 +171,7 @@ trait TranslatableTrait
         }
     }
 
+
     public function __isset($key)
     {
         if (in_array($key, $this->stringFields)) {
@@ -179,9 +187,6 @@ trait TranslatableTrait
     /**
      * Magic method for setting string- and text- fields, that is specified in $textFields and $stringFields arrays
      * The default language is used
-     *
-     * todo: каждое присваивание вызывает сохранение в базу сразу.
-     * todo: Это ОЧЕНЬ ПЛОХО! Нужно переделать в отложенное сохранение.
      *
      * @param string $key
      * @param $value
@@ -211,6 +216,7 @@ trait TranslatableTrait
             $languageCode = app()->getLocale();
         }
 
+        // todo: а зачем нам тут транзакция?
         DB::transaction(function () use ($group, $languageCode, $newValue) {
             //todo: potential multi-threading problem
             //todo: подумать, как оно себя будет вести в случае одновременных запросов
@@ -220,7 +226,7 @@ trait TranslatableTrait
                     'group' => $group,
                     'languageCode' => $languageCode,
                     'status' => 1,
-                    'show_order' => TextItem::max('show_order') + 1
+                    'show_order' => TextItem::max('show_order') + 1 // todo: это неправильно, т.к. для всех добавленных до save-а будет один и тот же!
                 ]);
                 $this->textItems->push($textItem);
             }
