@@ -19,7 +19,7 @@ class RedirectTrailingSlash
         if (!app()->runningUnitTests()) {
             if ($request->method() === 'GET') {
                 $url = $request->getBaseUrl() . $request->getPathInfo();
-                if ($url && $url !== '/' && !strstr($url, '/media/') && !preg_match('/.+\/$/', $url)) {
+                if ($url && $url !== '/' && !strstr($url, '/media/') && !Str::endsWith($url, '.xml') && !preg_match('/.+\/$/', $url)) {
                     if (null !== $qs = $request->getQueryString()) {
                         $qs = '?' . $qs;
                     }
