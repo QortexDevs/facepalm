@@ -47,6 +47,10 @@
                     </div>
                 </div>
                 <div class="module-content">
+                    {% if moduleConfig.strings.moduleIntroText %}
+                        <p class="module-intro-text">{{ moduleConfig.strings.moduleIntroText }}</p>
+                    {% endif %}
+
                     {% block moduleContent %}
                         {{ moduleContent|raw }}
                     {% endblock moduleContent %}

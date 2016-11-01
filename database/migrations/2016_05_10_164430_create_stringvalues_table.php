@@ -19,6 +19,7 @@ class CreateStringValuesTable extends Migration
             $table->integer('show_order')->nullable();
             $table->string('name');
             $table->string('value');
+            $table->boolean('custom')->nullable();
             $table->timestamps();
         });
     }

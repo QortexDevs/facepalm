@@ -29,6 +29,7 @@ class CmsList extends CmsComponent
     protected $showEditButton = false;
     protected $showStatusButton = true;
     protected $showDeleteButton = true;
+    protected $showAddButton = true;
     protected $isPlainTreeMode = false;
 
     protected $strings = [];
@@ -52,7 +53,8 @@ class CmsList extends CmsComponent
             ->togglePlainTreeMode($config->get('list.plain') === true)
             ->toggleEditButtonColumn($config->get('list.showEdit') === true)
             ->toggleStatusButtonColumn($config->get('list.showStatus') !== false)
-            ->toggleDeleteButtonColumn($config->get('list.showDelete') !== false);
+            ->toggleDeleteButtonColumn($config->get('list.showDelete') !== false)
+            ->toggleAddButton($config->get('list.showAddButton') !== false);
 
         if ($processFieldSet) {
             $this->fieldSet->process($config->get('list.columns'), $config->get('titles'));
@@ -88,6 +90,16 @@ class CmsList extends CmsComponent
     public function toggleDeleteButtonColumn($display = true)
     {
         $this->showDeleteButton = (bool)$display;
+        return $this;
+    }
+
+    /**
+     * @param bool $display
+     * @return $this
+     */
+    public function toggleAddButton($display = true)
+    {
+        $this->showAddButton = (bool)$display;
         return $this;
     }
 
@@ -209,6 +221,7 @@ class CmsList extends CmsComponent
                 'showStatusButton' => $this->showStatusButton,
                 'showDeleteButton' => $this->showDeleteButton,
                 'showEditButton' => $this->showEditButton,
+                'showAddButton' => $this->showAddButton,
                 'treeMode' => $this->isTreeMode,
                 'plainTreeMode' => $this->isPlainTreeMode,
                 'sortable' => $this->isSortable

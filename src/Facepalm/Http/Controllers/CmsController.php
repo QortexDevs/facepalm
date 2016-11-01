@@ -265,7 +265,7 @@ class CmsController extends BaseController
     {
         return [
             'moduleContent' => $this->renderer->render('facepalm::modulePages/twoColumnIndex'),
-            'pageTitle' => $this->config->get('module.strings.title') ?: 'Список объектов'
+            'pageTitle' => $this->config->get('module.strings.title') ?: 'Список объектов',
         ];
     }
 

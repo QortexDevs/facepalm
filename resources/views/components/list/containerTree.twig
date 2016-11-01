@@ -1,7 +1,9 @@
 <div class="cms-module-tree" data-model="{{ list.meta.model }}" data-tree-root="{{ treeRoot }}">
     {% include "facepalm::components/list/tree.twig" %}
-    <button type="button" class="add-new-tree-item">
-        <i class="fa fa-plus"></i>
-        <span>Добавить</span>
-    </button>
+    {% if list.settings.showAddButton %}
+        <button type="button" class="add-new-tree-item">
+            <i class="fa fa-plus"></i>
+            <span>Добавить</span>
+        </button>
+    {% endif %}
 </div>
