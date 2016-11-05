@@ -29,7 +29,7 @@ class SelectField extends AbstractField
         if (!$this->name) {
             return '';
         }
-        return Arr::get($this->dictionary, (int)$object->{$this->name}, '');
+        return Arr::get($this->dictionary, $object->{$this->name}, '');
     }
 
     /**

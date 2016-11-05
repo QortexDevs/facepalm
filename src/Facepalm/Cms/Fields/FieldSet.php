@@ -95,6 +95,7 @@ class FieldSet
                 $this->fields[$name]->setParameters($this->additionalParameters);
 
                 //todo: перенести в сам класс типа поля
+//                d($this->fields[$name]);
                 if ($this->fields[$name] instanceof SelectField && !$this->fields[$name]->dictionary) {
                     if ($this->fields[$name]->options) {
                         $this->fields[$name]->setDictionary($this->fields[$name]->options);

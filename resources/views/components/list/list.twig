@@ -1,4 +1,4 @@
-<table class="cms-module-list-content" data-model="{{ list.meta.model }}"
+<table class="cms-module-list-content {{ list.settings.listParams.nowrap?'nowrap':'' }}" data-model="{{ list.meta.model }}"
        {% if list.settings.sortable %}data-sortable="true"{% endif %}>
     <thead>
     <tr>
@@ -25,7 +25,7 @@
             data-id="{{ object.id }}">
             <td class="column-id"><a href='{{ object.editUrl }}'>{{ object.id }}</a></td>
             {% for fieldObject in list.meta.columns %}
-                <td class="{% if fieldObject.type %}cell-type-{{ fieldObject.type }}{% endif %}">
+                <td class="{% if fieldObject.type %}cell-type-{{ fieldObject.type }}{% endif %}" {% if fieldObject.getCustomStyle() %}style="{{ fieldObject.getCustomStyle() }}"{% endif %}>
                     {{ fieldObject.renderForList(object)|raw }}
                 </td>
             {% endfor %}

@@ -55,6 +55,10 @@
                     padding-right: 8px;
                 }
 
+                &.cell-type-datetime {
+                    font-size:.8em;
+                }
+
                 &.buttons {
                     padding: 10px 8px;
 
@@ -142,6 +146,14 @@
                         transform: translate(0, 0);
                         padding: 0 10px;
                     }
+                }
+            }
+        }
+
+        &.nowrap {
+            tr {
+                td, th {
+                    white-space: nowrap;
                 }
             }
         }

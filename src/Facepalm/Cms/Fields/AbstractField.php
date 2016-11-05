@@ -193,6 +193,19 @@ abstract class AbstractField implements \ArrayAccess
 
     }
 
+    public function getCustomStyle()
+    {
+        $style = '';
+        if (Arr::has($this->parameters, 'style')) {
+            $style = $this->parameters['style'];
+            array_walk($style, function (&$v, $k) {
+                $v = $k . ': ' . $v;
+            });
+            $style = implode(';', $style);
+        }
+
+        return $style;
+    }
 
     /**
      * @param $object

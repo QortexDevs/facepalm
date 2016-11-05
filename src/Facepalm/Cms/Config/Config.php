@@ -69,9 +69,18 @@ class Config
         $cachedConfigPath = app()->storagePath() . DIRECTORY_SEPARATOR . 'cms-config-cache.json';
 
         // get the latest modification time among all cms configs
-        $latestModificationTime = @max(array_map(function ($el) {
-            return filemtime($el);
-        }, array_merge(glob($this->getConfigPath() . 'groups/*/*.json'), glob($this->getConfigPath() . 'groups/*/*/*.json'))));
+        $latestModificationTime = @max(
+            array_map(
+                function ($el) {
+                    return filemtime($el);
+                },
+                array_merge(
+                    [$this->getConfigPath() . 'cms.json'],
+                    glob($this->getConfigPath() . 'groups/*/*.json'),
+                    glob($this->getConfigPath() . 'groups/*/*/*.json')
+                )
+            )
+        );
 
         if (is_file($cachedConfigPath) && $latestModificationTime && filemtime($cachedConfigPath) >= $latestModificationTime) {
             // if cached file is newer - load it

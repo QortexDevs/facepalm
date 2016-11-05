@@ -303,7 +303,11 @@ class CmsController extends BaseController
         if ($this->config->get('module.constants') && is_array($this->config->get('module.constants'))) {
             foreach ($this->config->get('module.constants') as $constantField => $constantValue) {
                 $list->setAdditionalConstraints(function ($builder) use ($constantField, $constantValue) {
-                    return $builder->where($constantField, $constantValue);
+                    if ($constantValue === 'not null') {
+                        return $builder->whereNotNull($constantField);
+                    } else {
+                        return $builder->where($constantField, $constantValue);
+                    }
                 });
             }
         }

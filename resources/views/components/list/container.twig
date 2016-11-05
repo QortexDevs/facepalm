@@ -1,8 +1,10 @@
 <div class="cms-module-list">
-    <button type="button"
-            class="cms-button add-new-item"
-            href="{{ baseUrl }}/create/">
-        Создать{{ strings['accusative'] ? (" "~strings['accusative']):"" }}
-    </button>
+    {% if list.settings.showAddButton %}
+        <button type="button"
+                class="cms-button add-new-item"
+                href="{{ baseUrl }}/create/">
+            Создать{{ strings['accusative'] ? (" "~strings['accusative']):"" }}
+        </button>
+    {% endif %}
     {% include "facepalm::components/list/list.twig" %}
 </div>

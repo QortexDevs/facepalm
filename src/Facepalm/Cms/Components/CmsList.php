@@ -35,6 +35,7 @@ class CmsList extends CmsComponent
     protected $strings = [];
     protected $relatedModels = [];
     protected $constraintCallbacks = [];
+    protected $listParams = [];
 
 
     /**
@@ -54,7 +55,8 @@ class CmsList extends CmsComponent
             ->toggleEditButtonColumn($config->get('list.showEdit') === true)
             ->toggleStatusButtonColumn($config->get('list.showStatus') !== false)
             ->toggleDeleteButtonColumn($config->get('list.showDelete') !== false)
-            ->toggleAddButton($config->get('list.showAddButton') !== false);
+            ->toggleAddButton($config->get('list.showAddButton') !== false)
+            ->setListParams($config->get('list'));
 
         if ($processFieldSet) {
             $this->fieldSet->process($config->get('list.columns'), $config->get('titles'));
@@ -160,6 +162,16 @@ class CmsList extends CmsComponent
         return $this;
     }
 
+    /**
+     * @param $params
+     * @return $this
+     */
+    public function setListParams($params)
+    {
+        $this->listParams = $params;
+        return $this;
+    }
+
 
     /**
      * @return array
@@ -224,7 +236,8 @@ class CmsList extends CmsComponent
                 'showAddButton' => $this->showAddButton,
                 'treeMode' => $this->isTreeMode,
                 'plainTreeMode' => $this->isPlainTreeMode,
-                'sortable' => $this->isSortable
+                'sortable' => $this->isSortable,
+                'listParams' => $this->listParams
             ],
             'meta' => [
                 'model' => class_basename($this->modelName),

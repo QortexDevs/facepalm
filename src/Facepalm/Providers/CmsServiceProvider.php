@@ -44,6 +44,7 @@ class CmsServiceProvider extends ServiceProvider
             'relation',
             'select',
             'string',
+            'concat',
             'text',
             'plaintext',
             'unknown',
