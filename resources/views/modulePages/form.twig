@@ -3,7 +3,9 @@
     {# todo: кнопок может не быть! #}
     <div class="form-buttons">
         <div class="inner-container">
-            <button class="cms-button save-button" type="submit">Сохранить</button>
+            {% if not noSaveButton %}
+                <button class="cms-button save-button" type="submit">Сохранить</button>
+            {% endif %}
             {% autoescape false %}
                 {{ additionalButtons }}
             {% endautoescape %}

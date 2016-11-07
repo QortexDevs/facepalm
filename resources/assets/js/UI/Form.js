@@ -10,7 +10,7 @@ Form.prototype = {
         this.initDatepicker();
     },
 
-    initSave: function () {
+    initSave: function (callback) {
         var _this = this;
         $(document).on('click', '.form-buttons button.save-button', function () {
             var formData = $('.main-cms-form').serialize();

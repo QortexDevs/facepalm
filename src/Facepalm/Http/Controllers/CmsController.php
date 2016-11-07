@@ -11,6 +11,7 @@ namespace Facepalm\Http\Controllers;
 use Facepalm\Cms\Components\CmsForm;
 use Facepalm\Cms\Components\CmsList;
 use Facepalm\Cms\Config\Config;
+use Facepalm\Cms\Fields\FieldFactory;
 use Facepalm\Cms\Fields\FieldSet;
 use Facepalm\Cms\PermissionManager;
 use Facepalm\Models\Foundation\BaseEntity;
@@ -360,6 +361,7 @@ class CmsController extends BaseController
 
         /** @var CmsForm $form */
         $form = $this->app->make('CmsForm', [$this->fieldSet]);
+        $customForm = null;
 
         //todo: refactor this!
         if ($this->config->get('module.forms')) {
@@ -410,23 +412,32 @@ class CmsController extends BaseController
             $form->setEditedObject($this->objectId);
         }
 
+        $formConfig = $customForm ?: $this->config->part('module.form');
+
+        $additionalButtons = '';
+        if ($formConfig->get('additionalButtonHandler')) {
+            $className = $formConfig->get('additionalButtonHandler');
+            $additionalButtons = $form->buildButtons($className);
+        }
 
         $params = [
             'creating' => !$this->objectId,
             'formHtml' => $form->render($this->renderer),
             'justCreated' => $this->app->session->get('justCreated'),
+            'noSaveButton' => $formConfig->get('noSaveButton', false),
+            'additionalButtons' => $additionalButtons
         ];
 
         return [
             'moduleContent' => $this->renderer->render('facepalm::modulePages/form', $params),
-            'pageTitle' => $this->config->get('strings.editTitle') ?: $defaultPageTitle
+            'pageTitle' => $this->config->get('strings.editTitle') ?: $defaultPageTitle,
         ];
 
     }
 
 
     /**
-     * Render whoel UI page
+     * Render whole UI page
      *
      * Render whole CMS page
      * @param $template

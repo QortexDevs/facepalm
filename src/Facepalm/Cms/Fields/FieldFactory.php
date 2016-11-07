@@ -59,7 +59,7 @@ class FieldFactory
     }
 
 
-    private function dottedNotationToNamespace($name)
+    public function dottedNotationToNamespace($name)
     {
         return implode('\\', array_map(function ($part) {
             return Str::ucfirst(Str::camel($part));

@@ -19,6 +19,7 @@
 
 namespace Facepalm\Cms\Components;
 
+use Facepalm\Cms\Fields\FieldFactory;
 use Facepalm\Cms\Fields\Types\TextField;
 use Facepalm\Models\ModelFactory;
 use Illuminate\Contracts\Config\Repository;
@@ -92,6 +93,7 @@ class CmsForm extends CmsComponent
 
         $output = [
             'fields' => $this->fieldSet->getFields(),
+            'model' => class_basename($this->modelName),
             'object' => $this->editedObject,
             'singleFieldWysiwygMode' => count($this->fieldSet->getFields()) === 1 && $this->fieldSet->getFields()[array_keys($this->fieldSet->getFields())[0]]->fullscreen
         ];
@@ -111,6 +113,16 @@ class CmsForm extends CmsComponent
         return $render->render($templateName, [
             'form' => $this->build(),
         ]);
+    }
+
+    public function buildButtons($className)
+    {
+        // блять, это ебаный ад. Причем тут FieldFactory
+        // todo: вынести всю эту фигню в отдельный класс
+        $fieldFactory = new FieldFactory();
+        $className = '\\' . $fieldFactory->dottedNotationToNamespace($className);
+        $buttonsHandler = app()->make($className);
+        return $buttonsHandler->render($this->editedObject);
     }
 
 

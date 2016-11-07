@@ -1,4 +1,4 @@
-<div class="cms-module-form {% if form.singleFieldWysiwygMode %}single-field-wysiwyg-mode{% endif %}">
+<div class="cms-module-form {% if form.singleFieldWysiwygMode %}single-field-wysiwyg-mode{% endif %}" data-model="{{ form.model }}" data-id="{{ form.object.id }}">
     <input style="display:none" type="text" name="fakeusernameremembered"/>
     <input style="display:none" type="password" name="fakepasswordremembered"/>
     <table>
