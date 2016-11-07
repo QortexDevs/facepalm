@@ -26,3 +26,5 @@
 //= ../../../bower_components/tether/dist/js/tether.js
 ;
 //= ../../../bower_components/tether-drop/dist/js/drop.js
+;
+//= ../../../bower_components/sweetalert2/dist/sweetalert2.min.js
