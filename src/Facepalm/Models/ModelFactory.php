@@ -42,7 +42,7 @@ class ModelFactory
     {
         return self::where(
             $modelName,
-            Str::snake(class_basename($modelName)) . 's.' . CmsCommon::COLUMN_NAME_ID,
+            Str::plural(Str::snake(class_basename($modelName))) . '.' . CmsCommon::COLUMN_NAME_ID,
             '>',
             '0'
         );

@@ -107,7 +107,7 @@ class RelationField extends AbstractField
     protected function buildRelationFieldsNames()
     {
         //todo: если они не установлены извне!!!
-        $this->setParameter('collectionName', Str::snake($this->foreignModel) . 's');
+        $this->setParameter('collectionName', Str::plural(Str::snake($this->foreignModel)));
         $this->setParameter('foreignKey', Str::snake($this->foreignModel) . '_id');
         return $this;
     }

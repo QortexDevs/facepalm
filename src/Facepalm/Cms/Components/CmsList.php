@@ -183,7 +183,7 @@ class CmsList extends CmsComponent
             throw new \InvalidArgumentException('No model defined');
         }
 
-        $tableName = Str::snake(class_basename($this->modelName)) . 's';
+        $tableName = Str::plural(Str::snake(class_basename($this->modelName)));
 
         // get query builder with all records (dummy clause)
         /** @var Builder $queryBuilder */

@@ -32,7 +32,7 @@ class UploadProcessor
             $fieldName = 'image';
             $isVideo = true;
         }
-        $relationMethodName = $fieldName . 's';
+        $relationMethodName = Str::plural($fieldName);
         $className = Str::ucfirst($fieldName);
         $resultMethodName = 'getResultArrayFor' . $className;
         $afterSaveMethodName = 'processAfterSave' . $className;
