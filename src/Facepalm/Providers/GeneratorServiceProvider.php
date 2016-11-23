@@ -37,6 +37,11 @@ class GeneratorServiceProvider extends ServiceProvider
         });
         $this->commands('command.facepalm.migration');
 
+        $this->app->singleton('command.facepalm.migrationaddfields', function ($app) {
+            return $app['Facepalm\Generators\Commands\MigrateAddFieldsCommand'];
+        });
+        $this->commands('command.facepalm.migrationaddfields');
+
         $this->app->singleton('command.facepalm.superuser', function ($app) {
             return $app['Facepalm\Generators\Commands\SuperuserCommand'];
         });
