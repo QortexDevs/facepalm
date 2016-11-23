@@ -2,6 +2,7 @@
 
 namespace Facepalm\Http\Controllers;
 
+use Facepalm\Models\Language;
 use Facepalm\Models\SiteSection;
 use Facepalm\Models\StringValue;
 use Facepalm\Models\TranslatableStringValue;
@@ -52,6 +53,13 @@ class BaseController extends FrameworkBaseController
         $this->requestSegments = $request->segments();
         $this->languages = $request->attributes->get('languages');
         $this->currentLanguage = $request->attributes->get('currentLanguage');
+        if (!$this->currentLanguage) {
+            //todo: think about it
+            $defaultLang = Language::where('status', 1)->where('is_default', 1)->first();
+            if ($defaultLang) {
+                app()->setLocale($defaultLang->code);
+            }
+        }
 
         if ($this->currentLanguage) {
             array_shift($this->requestSegments);
