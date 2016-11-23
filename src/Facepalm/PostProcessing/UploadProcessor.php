@@ -89,7 +89,7 @@ class UploadProcessor
                                 $playIcon = \Intervention\Image\Facades\Image::make($playIconImagePath);
                                 $playIcon->fit(
                                     (config('facepalm.videoIconRelativeSize') ?: 0.8)
-                                        * min($image->getWidth(), $image->getHeight())
+                                    * min($image->getWidth(), $image->getHeight())
                                 );
                                 $image->insert($playIcon, 'center');
                                 $image->save();
@@ -130,8 +130,14 @@ class UploadProcessor
     protected function processAfterSaveImage(Image $image, $requestRawData)
     {
         //todo: дополнительные прегенерируемые размеры
-        $previewSize = Arr::get($requestRawData, 'previewSize', config('facepalm.defaultThumbnailSize'));
-        $image->generateSize($previewSize);
+        $pregenerateSizes = [
+            'previewSize' => Arr::get($requestRawData, 'previewSize', config('facepalm.defaultThumbnailSize'))
+        ];
+        $pregenerateSizes += explode(',', Arr::get($requestRawData, 'sizes', ''));
+        foreach (array_unique($pregenerateSizes) as $size) {
+            $image->generateSize($size);
+        }
+
     }
 
 
