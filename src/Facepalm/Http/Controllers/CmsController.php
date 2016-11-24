@@ -498,7 +498,8 @@ class CmsController extends BaseController
             $showRoot,
             [
                 'baseUrlNav' => $this->baseUrlNav,
-                'navigationId' => $this->navigationId
+                'navigationId' => $this->navigationId,
+                'titleField' => $this->config->get('module.navigation.titleField')
             ]
         );
     }

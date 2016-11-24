@@ -2,7 +2,7 @@
     {% if isRoot %}
         <a href="{{ baseUrlNav }}/">Главная</a>
     {% else %}
-        <a href="{{ baseUrlNav }}/{{ element.id }}/">{{ element.title?element.title:element.name?element.name:element.path_name }}</a>
+        <a href="{{ baseUrlNav }}/{{ element.id }}/">{{ element[titleField]?element[titleField]:element.title?element.title:element.name?element.name:element.path_name }}</a>
     {% endif %}
     {% if nested %}
         <ul>{{ nested|raw }}</ul>
