@@ -135,7 +135,14 @@ class UploadProcessor
         ];
         $pregenerateSizes += explode(',', Arr::get($requestRawData, 'sizes', ''));
         foreach (array_unique($pregenerateSizes) as $size) {
-            $image->generateSize($size);
+            preg_match(
+                '/^(?<modifier>[a-wy-z])?(?<dimensions>[\dx]+)(\|(?<filters>.+))?$/',
+                $size,
+                $matches
+            );
+            if ($matches && Arr::has($matches, 'dimensions')) {
+                $image->generateSize($matches['dimensions'], @$matches['modifier'], @$matches['filters']);
+            }
         }
 
     }

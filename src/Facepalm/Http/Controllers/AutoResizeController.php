@@ -17,6 +17,11 @@ class AutoResizeController extends BaseController
 {
     public function handle(Request $request, $path, $name)
     {
+//        preg_match(
+//            '/^(?<hash>[0-9a-f]+)(_(?<modifier>[a-wy-z])?(?<dimensions>[\dx]+)(_(?<filters>.+))?)?\.(?<ext>jpg|png|gif|svg)$/',
+//            $name,
+//            $matches
+//        );
         preg_match(
             '/^(?<hash>[0-9a-f]+)(_(?<modifier>[a-wy-z])?(?<dimensions>[\dx]+))?\.(?<ext>jpg|png|gif|svg)$/',
             $name,

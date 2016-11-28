@@ -141,7 +141,7 @@ class Image extends BindableEntity
      * @param $modifier
      * @return $this
      */
-    public function generateSize($sizeString, $modifier = '')
+    public function generateSize($sizeString, $modifier = '', $filters = '')
     {
         $width = $height = null;
         $size = explode('x', $sizeString);
@@ -154,6 +154,9 @@ class Image extends BindableEntity
         if ($modifier) {
             $sizeString = $modifier . $sizeString;
         }
+//        if ($filters) {
+//            $sizeString = $modifier . $sizeString . '_' . $filters;
+//        }
         if ($width || $height) {
             if ($this->ext == 'svg') {
                 copy($this->getPhysicalPath('original'), $this->getPhysicalPath($sizeString));
@@ -167,6 +170,18 @@ class Image extends BindableEntity
                 } else {
                     $image->fit($width, $height);
                 }
+
+                if ($filters) {
+                    $filters = array_filter(explode(',', $filters));
+                    if ($filters) {
+                        foreach ($filters as $filter) {
+                            if (method_exists($this, 'filter' . ucfirst($filter))) {
+                                $this->{'filter' . ucfirst($filter)}($image);
+                            }
+                        }
+                    }
+                }
+
                 $image->save($this->getPhysicalPath($sizeString));
             }
         }
@@ -250,6 +265,11 @@ class Image extends BindableEntity
             . ($suffix ? ('_' . $suffix) : '')
             . ($this->ext && !$skipExtension ? ('.' . $this->ext) : '');
         }
+    }
+
+    protected function filterUsm($image)
+    {
+        $image->sharpen(5);
     }
 
 
