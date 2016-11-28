@@ -50,7 +50,7 @@ class FieldSet
      * @param $titles
      * @return FieldSet $this
      */
-    public function process($fields, array $titles = array())
+    public function process($fields, $titles = array())
     {
         // Ensure $fields is array
         $fields = (array)$fields;

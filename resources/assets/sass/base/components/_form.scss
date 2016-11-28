@@ -26,6 +26,10 @@
                     color: $captionsColor;
                     padding: 3px 20px;
                     margin-top: 3px;
+
+                    .sub-caption {
+                        font: 300 12px $mainFontName;
+                    }
                 }
 
                 &.red {

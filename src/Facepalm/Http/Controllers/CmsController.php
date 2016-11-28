@@ -192,6 +192,10 @@ class CmsController extends BaseController
             $this->objectId = $params[0];
             $this->action = self::ACTION_EDIT_OBJECT;
             array_shift($params);
+        } elseif ((int)$this->config->get('module.single_object')) {
+            $this->objectId = $this->config->get('module.single_object');
+            $this->action = self::ACTION_EDIT_OBJECT;
+            array_shift($params);
         } else {
             $this->action = self::ACTION_LIST_OBJECTS;
         }
@@ -357,7 +361,6 @@ class CmsController extends BaseController
                 $this->fieldSet->prependHiddenField($constantField, $constantValue);
             }
         }
-
 
         /** @var CmsForm $form */
         $form = $this->app->make('CmsForm', [$this->fieldSet]);
