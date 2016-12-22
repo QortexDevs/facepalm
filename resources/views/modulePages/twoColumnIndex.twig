@@ -1,1 +1,13 @@
-выберите раздел
+<div class="index-page">
+    {% for element in items %}
+        <div class="tile color{{ loop.index }}">
+            <i class="fa fa-fw fa-{{ sectionInfo.icon }}"></i>
+            <a href="{{ baseUrlNav }}/{{ element.id }}/">
+                <span>{{ element[titleField]?element[titleField]:element.title?element.title:element.name?element.name:element.path_name }}</span>
+            </a>
+        </div>
+    {% endfor %}
+    {% for i in 1..10 %}
+        <div class="tile empty"></div>
+    {% endfor %}
+</div>

@@ -268,8 +268,24 @@ class CmsController extends BaseController
      */
     protected function renderTwoColumnIndexPage()
     {
+        $skip = (array)$this->config->get('module.navigation.skip');
+        $model = (string)$this->config->get('module.navigation.model');
+
+        $sectionsCollection = ModelFactory::builderFor($model)
+            ->with('textItems')
+            ->whereNotIn('id', $skip ?: [])
+            ->orderBy('show_order')
+            ->get();
+
+        $tree = Tree::fromEloquentCollection($sectionsCollection);
+
         return [
-            'moduleContent' => $this->renderer->render('facepalm::modulePages/twoColumnIndex'),
+            'moduleContent' => $this->renderer->render('facepalm::modulePages/twoColumnIndex', [
+                'items' => $tree->getChildren(0),
+                'titleField' => $this->config->get('module.navigation.titleField'),
+                'baseUrlNav' => $this->baseUrlNav,
+                'sectionInfo' => $this->config->get('structure')[$this->group]
+            ]),
             'pageTitle' => $this->config->get('module.strings.title') ?: 'Список объектов',
         ];
     }
