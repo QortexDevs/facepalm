@@ -21,6 +21,39 @@ if (!function_exists('d')) {
         }, func_get_args());
     }
 }
+if (!function_exists('ed')) {
+    /**
+     * Dump the passed variables.
+     *
+     * @param  mixed
+     * @return void
+     */
+    function ed($x)
+    {
+        echo($x);
+        exit;
+    }
+}
+
+if (!function_exists('dietime')) {
+    /**
+     * Dump the passed variables.
+     *
+     * @param  mixed
+     * @return void
+     */
+    function dietime($t = null)
+    {
+        if (defined('T1')) {
+            if (!$t) {
+                $t = microtime(1);
+            }
+            ed(round($t - T1, 4));
+        } else {
+            ed('not defined T1');
+        }
+    }
+}
 
 if (!function_exists('pre')) {
     /**
@@ -40,6 +73,16 @@ if (!function_exists('pre')) {
             }
         }, func_get_args());
 
+    }
+}
+if (!function_exists('prd')) {
+    /**
+     * Dump using print_r
+     */
+    function prd()
+    {
+        call_user_func_array('pre', func_get_args());
+        exit;
     }
 }
 
