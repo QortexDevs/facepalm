@@ -95,7 +95,7 @@ class File extends BindableEntity
             if (is_uploaded_file($srcFile)) {
                 $file->original_name = $originalName;
             } else {
-                $file->original_name = basename($srcFile);
+                $file->original_name = $originalName ?: basename($srcFile);
             }
 
             $file->type = $file->getExtension();
