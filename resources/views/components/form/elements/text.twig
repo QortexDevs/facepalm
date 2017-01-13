@@ -22,6 +22,7 @@
 {% else %}
     <textarea name="{{ inputName }}"
               {% if parameters.wysiwyg %}data-wysiwyg="true"{% endif %}
+            {% if parameters.wysiwygToolbar %}data-wysiwyg-toolbar="{{ parameters.wysiwygToolbar }}"{% endif %}
               style="{% if parameters.width %}width:{{ parameters.width }}; {% endif %}
                       {% if parameters.height %}height:{{ parameters.height }}; {% endif %}"
     >{{ object.__get(field) }}</textarea>

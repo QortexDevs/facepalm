@@ -116,7 +116,12 @@ WysiwygManager.prototype = {
                         });
                     };
 
-                    $(this).tinymce(options[selector]);
+                    var customToolbar = $(this).data('wysiwygToolbar');
+                    if (customToolbar) {
+                        $(this).tinymce($.extend(options[selector], {'toolbar': customToolbar}));
+                    } else {
+                        $(this).tinymce(options[selector]);
+                    }
 
                     editorPromises.push(d.promise());
                 });
