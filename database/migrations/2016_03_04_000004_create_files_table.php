@@ -27,6 +27,7 @@ class CreateFilesTable extends Migration
             $table->string('display_name');
             $table->timestamps();
             $table->unique('name');
+            $table->index(['bind_id', 'bind_type']);
         });
     }
 

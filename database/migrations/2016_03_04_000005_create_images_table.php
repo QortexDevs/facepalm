@@ -32,6 +32,7 @@ class CreateImagesTable extends Migration
             $table->text('embed_code');
             $table->timestamps();
             $table->unique('name');
+            $table->index(['bind_id', 'bind_type']);
         });
     }
 
