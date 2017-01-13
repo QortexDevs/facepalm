@@ -218,6 +218,10 @@
         main {
             margin-left: $leftMenuWidth+$collapsedLeftMenuWidth;
         }
+
+        menu.wide + main {
+            margin-left: $leftMenuWidth*2;
+        }
     }
 
 }

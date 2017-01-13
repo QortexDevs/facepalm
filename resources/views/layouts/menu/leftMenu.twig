@@ -1,9 +1,9 @@
-<menu class="main-menu">
+<menu class="main-menu {% if navigation and moduleConfig.navigation.wide %}wide{% endif %}">
     <div class="logo-bar">
         <a href="/cms/" class="logo" title="Facepalm CMS"></a>
     </div>
     <div class="panels">
-        <div class="left-panel {% if navigation %}collapsed{% endif %}">
+        <div class="left-panel {% if navigation and not moduleConfig.navigation.wide %}collapsed{% endif %}">
             <ul class="clearfix">
                 {% for sectionName, sectionInfo in cmsStructure %}
                     <li{% if currentPathSections[0] == sectionName %} class="active"{% endif %}>

@@ -509,7 +509,7 @@ class CmsController extends BaseController
             ->get();
 
         $tree = Tree::fromEloquentCollection($sectionsCollection);
-
+        
         return $tree->render(
             $this->renderer,
             'facepalm::layouts/menu/navigationItem',
