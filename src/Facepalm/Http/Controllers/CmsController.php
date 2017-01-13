@@ -500,6 +500,7 @@ class CmsController extends BaseController
     {
         $skip = (array)$this->config->get('module.navigation.skip');
         $model = (string)$this->config->get('module.navigation.model');
+        $groupModel = (string)$this->config->get('module.navigation.groupModel');
         $showRoot = (boolean)$this->config->get('module.navigation.showRoot');
 
         $sectionsCollection = ModelFactory::builderFor($model)
@@ -508,19 +509,47 @@ class CmsController extends BaseController
             ->orderBy('show_order')
             ->get();
 
-        $tree = Tree::fromEloquentCollection($sectionsCollection);
+        if ($groupModel) {
+            $itemsByGroups = $sectionsCollection->groupBy(Str::snake($groupModel) . "_id");
+            $groups = ModelFactory::builderFor($groupModel)->whereIn('id', $itemsByGroups->keys())->get();
+            $output = '';
+            foreach ($groups as $group) {
+                $tree = Tree::fromEloquentCollection($itemsByGroups->get($group->id));
+                $subtree = $tree->render(
+                    $this->renderer,
+                    'facepalm::layouts/menu/navigationItem',
+                    0,
+                    $showRoot,
+                    [
+                        'baseUrlNav' => $this->baseUrlNav,
+                        'navigationId' => $this->navigationId,
+                        'titleField' => $this->config->get('module.navigation.titleField')
+                    ]
+                );
 
-        return $tree->render(
-            $this->renderer,
-            'facepalm::layouts/menu/navigationItem',
-            0,
-            $showRoot,
-            [
-                'baseUrlNav' => $this->baseUrlNav,
-                'navigationId' => $this->navigationId,
-                'titleField' => $this->config->get('module.navigation.titleField')
-            ]
-        );
+                $output .= $this->renderer->render('facepalm::layouts/menu/navigationItemGroup', [
+                    'groupName' => $group->name,
+                    'nested' => $subtree
+                ]);
+            }
+            return $output;
+        } else {
+            $tree = Tree::fromEloquentCollection($sectionsCollection);
+
+            return $tree->render(
+                $this->renderer,
+                'facepalm::layouts/menu/navigationItem',
+                0,
+                $showRoot,
+                [
+                    'baseUrlNav' => $this->baseUrlNav,
+                    'navigationId' => $this->navigationId,
+                    'titleField' => $this->config->get('module.navigation.titleField')
+                ]
+            );
+        }
+
+
     }
 
     /**

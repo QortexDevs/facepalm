@@ -1,0 +1,6 @@
+<li class="group">
+    <a class="groupName">{{ groupName }}</a>
+    {% if nested %}
+        <ul>{{ nested|raw }}</ul>
+    {% endif %}
+</li>

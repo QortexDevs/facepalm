@@ -24,7 +24,7 @@
             {{ csrf_field() }}
             {% block moduleContentOuter %}
                 <div class="top-bar">
-                    <h1>{{ pageTitle }}</h1>
+                    <h1 title="{{ pageTitle }}">{{ pageTitle }}</h1>
                     <div class="right">
                         <div title="{{ user.email }}"
                                 {% if userpic %}

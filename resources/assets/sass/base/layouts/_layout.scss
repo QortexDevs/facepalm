@@ -57,6 +57,13 @@
             align-items: center;
             color: white;
 
+            h1 {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                padding-right: 50px;
+            }
+
             .right {
                 .user-icon {
                     opacity: 0.8;

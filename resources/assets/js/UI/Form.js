@@ -27,11 +27,15 @@ Form.prototype = {
             ).then(function (result) {
                 var response = result[0];
                 if (createMode && parseInt(response) > 0) {
-                    var url = _.rtrim(document.location.href, '/');
-                    if (url.endsWith('/create')) {
-                        url = _.strLeftBack(url, '/');
+                    if (button$.data('action') == 'save-and-return') {
+                        document.location.href = _this.app.baseUrl;
+                    } else {
+                        var url = _.rtrim(document.location.href, '/');
+                        if (url.endsWith('/create')) {
+                            url = _.strLeftBack(url, '/');
+                        }
+                        document.location.href = url + '/' + response + '/';
                     }
-                    document.location.href = url + '/' + response + '/';
                 } else {
                     $.growl.notice({title: '', message: "Cохранено"});
                     _this.app.service('UI').toggleSpinner(false);
