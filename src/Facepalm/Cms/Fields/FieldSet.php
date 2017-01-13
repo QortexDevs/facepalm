@@ -78,7 +78,12 @@ class FieldSet
                     $type = self::RELATION_TYPE_NAME;
                     list($parameters['foreignModel'], $parameters['foreignDisplayName']) = explode('.', $name);
                     $parameters['cardinality'] = Arr::get($parameters, 'cardinality', self::CARDINALITY_ONE);
-                    $this->relatedModels[] = $parameters['foreignModel'];
+
+                    //note: добавлено условие, чтобы many2many связи не попадали в eager-loading списка
+                    //todo: разобраться с eager-loading many2many relations
+                    if ($parameters['cardinality'] === self::CARDINALITY_ONE) {
+                        $this->relatedModels[] = $parameters['foreignModel'];
+                    }
                     $type = Arr::get($parameters, 'type', $type);
                 } else {
                     $type = Arr::get($parameters, 'type', self::FIELD_TYPE_DEFAULT);

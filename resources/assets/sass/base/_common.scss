@@ -76,6 +76,12 @@ h2 {
         box-shadow: 0 0 4px -1px rgba(0, 0, 0, 0.3);
     }
 
+    &.white {
+        background: transparent;
+        color: $mainButtonBackgroundColor;
+        box-shadow: 0 0 4px -1px rgba(0, 0, 0, 0.3);
+    }
+
     &:hover {
         opacity: 0.9;
     }

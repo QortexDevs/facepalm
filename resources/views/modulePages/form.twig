@@ -5,6 +5,7 @@
         <div class="inner-container">
             {% if not noSaveButton %}
                 <button class="cms-button save-button" type="submit">Сохранить</button>
+                <button class="cms-button white save-button" data-action="save-and-return" type="submit">Сохранить и вернуться к списку</button>
             {% endif %}
             {% autoescape false %}
                 {{ additionalButtons }}

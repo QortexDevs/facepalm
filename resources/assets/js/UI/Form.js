@@ -15,6 +15,7 @@ Form.prototype = {
         $(document).on('click', '.form-buttons button.save-button', function () {
             var formData = $('.main-cms-form').serialize();
             var createMode = $('.cms-module-form-page').data('create-mode');
+            var button$ = $(this);
 
             _this.app.service('UI').toggleSpinner(true);
             _this.app.service('UI').toggleFormButtons(false);
@@ -35,6 +36,10 @@ Form.prototype = {
                     $.growl.notice({title: '', message: "Cохранено"});
                     _this.app.service('UI').toggleSpinner(false);
                     _this.app.service('UI').toggleFormButtons(true);
+
+                    if (button$.data('action') == 'save-and-return') {
+                        document.location.href = _this.app.baseUrl;
+                    }
                 }
             });
 
