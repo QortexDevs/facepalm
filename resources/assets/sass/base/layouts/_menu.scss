@@ -136,6 +136,10 @@
             max-height: 100%;
             padding-bottom: 70px;
 
+            &:not(.mCustomScrollbar) {
+                padding-right: 30px;
+            }
+
             ul {
                 li {
                     a {
