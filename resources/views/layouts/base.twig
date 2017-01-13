@@ -17,7 +17,7 @@
 
 </head>
 {% block bodyOuter %}
-    <body class="cms-page{% if navigation %} two-column{% endif %}" data-base-url="{{ baseUrl }}">
+    <body class="cms-page{% if navigation %} two-column{% endif %}" data-base-url="{{ baseUrl }}" data-base-url-nav="{{ baseUrlNav }}" data-nav-hash="{{ navHash }}">
     {% include 'facepalm::layouts/menu/leftMenu' %}
     <main>
         <form class="main-cms-form" action="./" enctype="multipart/form-data" method="post">

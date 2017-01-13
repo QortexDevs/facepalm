@@ -28,3 +28,5 @@
 //= ../../../bower_components/tether-drop/dist/js/drop.js
 ;
 //= ../../../bower_components/sweetalert2/dist/sweetalert2.min.js
+;
+//= ../../../bower_components/js-cookie/src/js.cookie.js

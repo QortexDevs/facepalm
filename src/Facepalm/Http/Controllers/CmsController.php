@@ -476,6 +476,8 @@ class CmsController extends BaseController
         $params = array_merge($params, [
             'user' => $this->user,
             'baseUrl' => $this->baseUrl,
+            'baseUrlNav' => $this->baseUrlNav,
+            'navHash' => md5($this->baseUrlNav),
             'assetsBusters' => $assetsBusters,
             'moduleConfig' => $this->config->get('module'),
             'cmsStructure' => $this->config->get('structure'),
