@@ -1,16 +1,5 @@
 {% if parameters.relationType == 'hasMany' %}
     {{ parameters['listHtml']|raw }}
-    {#<div class="nested-form cms-module-list">#}
-    {#<table class="nested-form-table cms-module-list-content">#}
-    {#{{ parameters['tableHeader']|raw }}#}
-    {#{{ parameters['answers']|raw }}#}
-    {#{{ parameters['formHtml']|raw }}#}
-    {#</table>#}
-    {#<button class="cms-button gray" data-action="add-item">Добавить</button>#}
-    {#<script type="text/template" class="template">#}
-    {#{{ parameters['newItemTemplate']|raw }}#}
-    {#</script>#}
-    {#</div>#}
 {% else %}
     {% if parameters.cardinality=='many' %}
         <ul>

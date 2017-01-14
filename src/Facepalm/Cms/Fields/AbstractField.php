@@ -212,9 +212,6 @@ abstract class AbstractField implements \ArrayAccess
      */
     protected function makeNames($object)
     {
-//        d($this->createObjectRandomName);
-        //note: убрал пока эту хуйню, потому что она не только из формы должна отсанавливаться но и из списка. И это тупо
-//        $createName = $this->createObjectRandomName ? '%CREATE_' . $this->randomId . '%' : '';
         $createName = '%CREATE_' . $this->randomId . '%' ;
         $this->amfNameBase = $object
             ? '[' . class_basename($this->modelName) . '][' . $object->id . ']'

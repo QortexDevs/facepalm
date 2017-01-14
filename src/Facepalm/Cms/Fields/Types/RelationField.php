@@ -61,7 +61,6 @@ class RelationField extends AbstractField
                 $constantField = Str::lower(class_basename($object) . "_id");
                 $constantValue = $object->id;
 
-                //note: Почему я тут решил юзать форму, а не встраиваемое дерево?!
                 /** @var FieldSet $fieldSet */
                 $fieldSet = app()->make('CmsFieldSet')->setRender($this->render);
                 $fieldSet->process($this->parameters['form']);
@@ -80,23 +79,6 @@ class RelationField extends AbstractField
                     });
 
                 $this->parameters['listHtml'] = $list->render($this->render);
-
-
-//                $this->parameters['relations'] = $object->{$this->collectionName};
-//
-//
-//
-//                /** @var CmsForm $form */
-//                $form = app()->make('CmsForm', [$fieldSet]);
-//                $form->setCreateObjectRandomName(false);
-//                $form->setMainModel($modelName);
-//                $this->parameters['tableHeader'] = $form->render($this->render, 'facepalm::components/form/nestedFormHeader');
-//                $this->parameters['newItemTemplate'] = $form->render($this->render, 'facepalm::components/form/nestedFormItem');
-//                $this->parameters['answers'] = '';
-//                foreach ($object->answers as $answer) {
-//                    $form->setEditedObject($answer);
-//                    $this->parameters['answers'] .= $form->render($this->render, 'facepalm::components/form/nestedFormItem');
-//                }
             } else {
                 $this->setSkipped(true);
             }

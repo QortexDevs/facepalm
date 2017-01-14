@@ -33,23 +33,6 @@ class CmsForm extends CmsComponent
 
     /** @var BaseEntity */
     protected $editedObject;
-    protected $createObjectRandomName = true;
-
-    /**
-     * @return bool
-     */
-    public function isCreateObjectRandomName()
-    {
-        return $this->createObjectRandomName;
-    }
-
-    /**
-     * @param bool $createObjectRandomName
-     */
-    public function setCreateObjectRandomName($createObjectRandomName)
-    {
-        $this->createObjectRandomName = $createObjectRandomName;
-    }
 
     /**
      * @param Repository $config
@@ -103,7 +86,6 @@ class CmsForm extends CmsComponent
         foreach ($this->fieldSet->getFields() as $field) {
             $field->setParameters([
                 'randomId' => $randomId,
-                'createObjectRandomName' => $this->isCreateObjectRandomName(),
                 'modelName' => $this->modelName
             ]);
             $field->prepareData($this->editedObject, $this->fieldSet);

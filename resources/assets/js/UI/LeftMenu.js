@@ -9,6 +9,8 @@ LeftMenu.prototype = {
         var initialScroll = 0;
         if (Cookies.get(scrollCookieName)) {
             initialScroll = Cookies.get(scrollCookieName);
+            //todo: Сохранять в куку еще и айдишник, проверять, он ли активен, и только тогда скроллить.
+            //todo: Иначе высчитывать позицию, куда скроллить
         }
         $('.main-menu .left-panel:not(.collapsed), .main-menu .right-panel').mCustomScrollbar({
             theme: "light-2",
