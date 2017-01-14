@@ -5,9 +5,18 @@ function Form(app) {
 Form.prototype = {
     app: null,
 
+    initNestedForms: function () {
+        $('.nested-form button[data-action="add-item"]').on('click', function () {
+            var randomId = '%CREATE_' + Math.random().toString(36).substring(2, 8) + '%';
+            var template = $(this).closest('.nested-form').find('script.template').html().replace(/\[]/g, '[' + randomId + ']');
+            $(this).closest('.nested-form').find('.nested-form-table').append($(template));
+            return false;
+        });
+    },
     init: function () {
         this.initSave();
         this.initDatepicker();
+        this.initNestedForms();
     },
 
     initSave: function (callback) {

@@ -263,10 +263,10 @@ class CmsList extends CmsComponent
             $templateName = $listData['settings']['treeMode'] ? 'facepalm::components/list/containerTree' : 'facepalm::components/list/container';
         }
         if ($listData['settings']['treeMode']) {
-            $treeContent = $listData['tree']->render($render, 'facepalm::components/list/treeItem', $this->treeRoot, false, [
+            $emptyTreeItem = $render->render('facepalm::components/list/treeItem', [
                 'list' => $listData,
             ]);
-            $emptyTreeItem = $render->render('facepalm::components/list/treeItem', [
+            $treeContent = $listData['tree']->render($render, 'facepalm::components/list/treeItem', $this->treeRoot, false, [
                 'list' => $listData,
             ]);
         }
@@ -283,6 +283,7 @@ class CmsList extends CmsComponent
     public function setAdditionalConstraints($param)
     {
         $this->constraintCallbacks[] = $param;
+        return $this;
     }
 
 }

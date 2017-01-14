@@ -1,26 +1,42 @@
-{% if parameters.cardinality=='many' %}
-    <ul>
-        {% for id,name in parameters.dictionary %}
-            <li>
-                <label>
-                    <input type="hidden" name="{{ fieldNameBase }}[{{ parameters.collectionName }}][{{ id }}]" value="0" checked/>
-                    <input type="checkbox" name="{{ fieldNameBase }}[{{ parameters.collectionName }}][{{ id }}]"
-                           value="1" data-id="{{ id }}" data-name="{{ name }}"
-                           {% if id in parameters.relations %}checked{% endif %} />
-                    {{ name }}
-                </label>
-            </li>
-        {% endfor %}
-    </ul>
-
+{% if parameters.relationType == 'hasMany' %}
+    {{ parameters['listHtml']|raw }}
+    {#<div class="nested-form cms-module-list">#}
+    {#<table class="nested-form-table cms-module-list-content">#}
+    {#{{ parameters['tableHeader']|raw }}#}
+    {#{{ parameters['answers']|raw }}#}
+    {#{{ parameters['formHtml']|raw }}#}
+    {#</table>#}
+    {#<button class="cms-button gray" data-action="add-item">Добавить</button>#}
+    {#<script type="text/template" class="template">#}
+    {#{{ parameters['newItemTemplate']|raw }}#}
+    {#</script>#}
+    {#</div>#}
 {% else %}
-    <select class="text" name="{{ fieldNameBase }}[{{ parameters.foreignKey }}]">
-        {% if not parameters.noEmpty %}
-            <option></option>
-        {% endif %}
-        {% for id,name in parameters.dictionary %}
-            <option value="{{ id }}"
-                    {% if id == object.__get(parameters.foreignModel).id %}selected{% endif %}>{{ name }}</option>
-        {% endfor %}
-    </select>
+    {% if parameters.cardinality=='many' %}
+        <ul>
+            {% for id,name in parameters.dictionary %}
+                <li>
+                    <label>
+                        <input type="hidden" name="{{ fieldNameBase }}[{{ parameters.collectionName }}][{{ id }}]" value="0"
+                               checked/>
+                        <input type="checkbox" name="{{ fieldNameBase }}[{{ parameters.collectionName }}][{{ id }}]"
+                               value="1" data-id="{{ id }}" data-name="{{ name }}"
+                               {% if id in parameters.relations %}checked{% endif %} />
+                        {{ name }}
+                    </label>
+                </li>
+            {% endfor %}
+        </ul>
+
+    {% else %}
+        <select class="text" name="{{ fieldNameBase }}[{{ parameters.foreignKey }}]">
+            {% if not parameters.noEmpty %}
+                <option></option>
+            {% endif %}
+            {% for id,name in parameters.dictionary %}
+                <option value="{{ id }}"
+                        {% if id == object.__get(parameters.foreignModel).id %}selected{% endif %}>{{ name }}</option>
+            {% endfor %}
+        </select>
+    {% endif %}
 {% endif %}

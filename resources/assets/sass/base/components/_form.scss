@@ -93,6 +93,40 @@
                 ul ul {
                     margin-left: 20px;
                 }
+
+                .nested-form {
+                    .nested-form-table {
+                        margin-bottom: 20px;
+                        margin-top: 0;
+                        width: auto;
+                        .cms-nested-header {
+                            th {
+                                text-align: left;
+                                font-size: 10px;
+                                text-transform: uppercase;
+                                font-weight: bold;
+                                color: #ccc;
+                                background: none;
+                                border-bottom: 1px solid #f0f0f0;
+                                padding-left: 5px;;
+
+                                + th {
+                                    padding-left: 20px;
+                                }
+                            }
+                        }
+                        .nested-item-field {
+                            padding: 8px 0 0 5px;
+                            border: none;
+                            color: #232323;
+
+                            + .nested-item-field {
+                                padding-left: 20px;
+                            }
+                        }
+                    }
+                }
+
             }
         }
 

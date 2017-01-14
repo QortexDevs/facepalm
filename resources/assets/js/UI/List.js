@@ -66,13 +66,19 @@ List.prototype = {
                 var model = _this.getItemModel(btn$);
                 var itemContainer$ = _this.getItemContainer(btn$);
 
-                var payload = _this.app.buildPayload(['delete', model, id], 1);
+                if (id) {
+                    var payload = _this.app.buildPayload(['delete', model, id], 1);
 
-                _this.app.doRequest(payload).done(function () {
+                    _this.app.doRequest(payload).done(function () {
+                        itemContainer$.fadeOut('fast', function () {
+                            $(this).remove()
+                        });
+                    });
+                } else {
                     itemContainer$.fadeOut('fast', function () {
                         $(this).remove()
                     });
-                });
+                }
             }
             return false;
         });
@@ -130,6 +136,7 @@ List.prototype = {
      */
     initSortable: function () {
         var _this = this;
+
         function initSortableEngine(el, handleName, groupName) {
             var sortable = Sortable.create(el, {
                 scroll: true,
@@ -144,6 +151,7 @@ List.prototype = {
                 }
             });
         }
+
         function onTreeSort(evt, sortable) {
             var model = $(evt.target).closest('[data-model]').data('model');
             var parentId = $(evt.target).data('id');
@@ -178,7 +186,7 @@ List.prototype = {
 
     },
 
-    
+
     /**
      *
      * @param el$
@@ -207,7 +215,6 @@ List.prototype = {
     getItemModel: function (el$) {
         return el$.closest('[data-model]').data('model');
     },
-
 
 
     /**

@@ -158,7 +158,7 @@ abstract class AbstractField implements \ArrayAccess
      */
     public function getValueForList($object)
     {
-        return isset($object->{$this->name}) ? $object->{$this->name} : '';
+        return isset($object->{$this->name}) ? strip_tags($object->{$this->name}) : '';
     }
 
     /**
@@ -212,9 +212,13 @@ abstract class AbstractField implements \ArrayAccess
      */
     protected function makeNames($object)
     {
+//        d($this->createObjectRandomName);
+        //note: убрал пока эту хуйню, потому что она не только из формы должна отсанавливаться но и из списка. И это тупо
+//        $createName = $this->createObjectRandomName ? '%CREATE_' . $this->randomId . '%' : '';
+        $createName = '%CREATE_' . $this->randomId . '%' ;
         $this->amfNameBase = $object
             ? '[' . class_basename($this->modelName) . '][' . $object->id . ']'
-            : '[' . class_basename($this->modelName) . '][%CREATE_' . $this->randomId . '%]';
+            : '[' . class_basename($this->modelName) . '][' . $createName . ']';
 
         $this->fieldNameBase = $object
             ? 'save' . $this->amfNameBase

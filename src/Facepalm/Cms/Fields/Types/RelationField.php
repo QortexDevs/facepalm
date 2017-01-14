@@ -10,7 +10,10 @@ namespace Facepalm\Cms\Fields\Types;
 
 
 use Facepalm\Cms\CmsCommon;
+use Facepalm\Cms\Components\CmsForm;
+use Facepalm\Cms\Components\CmsList;
 use Facepalm\Cms\Fields\AbstractField;
+use Facepalm\Cms\Fields\FieldSet;
 use Facepalm\Models\ModelFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
@@ -52,21 +55,68 @@ class RelationField extends AbstractField
      */
     public function prepareData($object = null)
     {
-        //todo: add query conditions
-        //todo: переделать статический вызов на di
-        foreach (ModelFactory::all($this->foreignModel) as $foreignObject) {
-            $this->parameters['dictionary'][$foreignObject->{CmsCommon::COLUMN_NAME_ID}] = $foreignObject->{$this->foreignDisplayName};
-        }
-
-        if ($this->cardinality === 'many') {
-
+        if ($this->relationType === 'hasMany') {
             if ($object) {
-                //todo: format displayname in config with placeholders-string
-                //todo: add query conditions
+                $modelName = Str::ucfirst(Str::singular($this->foreignModel));
+                $constantField = Str::lower(class_basename($object) . "_id");
+                $constantValue = $object->id;
 
-                $relatedItems = $object->{$this->collectionName};
-                foreach ($relatedItems as $relatedItem) {
-                    $this->parameters['relations'][] = $relatedItem->{CmsCommon::COLUMN_NAME_ID};
+                //note: Почему я тут решил юзать форму, а не встраиваемое дерево?!
+                /** @var FieldSet $fieldSet */
+                $fieldSet = app()->make('CmsFieldSet')->setRender($this->render);
+                $fieldSet->process($this->parameters['form']);
+                $fieldSet->prependHiddenField($constantField, $constantValue);
+
+                /** @var CmsList $list */
+                $list = app()->make('CmsList', [$fieldSet])
+                    ->setMainModel($modelName)
+                    ->setTreeRoot(0)
+                    ->toggleTreeMode(true)
+                    ->togglePlainTreeMode(true)
+                    ->toggleStatusButtonColumn(false)
+                    ->toggleAddButton(true)
+                    ->setAdditionalConstraints(function ($builder) use ($constantField, $constantValue) {
+                        return $builder->where($constantField, $constantValue);
+                    });
+
+                $this->parameters['listHtml'] = $list->render($this->render);
+
+
+//                $this->parameters['relations'] = $object->{$this->collectionName};
+//
+//
+//
+//                /** @var CmsForm $form */
+//                $form = app()->make('CmsForm', [$fieldSet]);
+//                $form->setCreateObjectRandomName(false);
+//                $form->setMainModel($modelName);
+//                $this->parameters['tableHeader'] = $form->render($this->render, 'facepalm::components/form/nestedFormHeader');
+//                $this->parameters['newItemTemplate'] = $form->render($this->render, 'facepalm::components/form/nestedFormItem');
+//                $this->parameters['answers'] = '';
+//                foreach ($object->answers as $answer) {
+//                    $form->setEditedObject($answer);
+//                    $this->parameters['answers'] .= $form->render($this->render, 'facepalm::components/form/nestedFormItem');
+//                }
+            } else {
+                $this->setSkipped(true);
+            }
+        } else {
+            //todo: add query conditions
+            //todo: переделать статический вызов на di
+            foreach (ModelFactory::all($this->foreignModel) as $foreignObject) {
+                $this->parameters['dictionary'][$foreignObject->{CmsCommon::COLUMN_NAME_ID}] = $foreignObject->{$this->foreignDisplayName};
+            }
+
+            if ($this->cardinality === 'many') {
+
+                if ($object) {
+                    //todo: format displayname in config with placeholders-string
+                    //todo: add query conditions
+                    $relatedItems = $object->{$this->collectionName};
+                    $this->parameters['relations'] = [];
+                    foreach ($relatedItems as $relatedItem) {
+                        $this->parameters['relations'][] = $relatedItem->{CmsCommon::COLUMN_NAME_ID};
+                    }
                 }
             }
         }
