@@ -29,7 +29,7 @@ GalleryModule.prototype = {
                 text: null,
                 icon: 'gallery-button',
                 title: 'Галерея',
-                disabledStateSelector : '.type-image',
+                disabledStateSelector: '.type-image',
                 onclick: function () {
                     _this.onButtonClick(editor, _this.BUTTON_GALLERY);
                 }
@@ -39,7 +39,7 @@ GalleryModule.prototype = {
                 text: null,
                 icon: 'image-button',
                 title: 'Картинка',
-                disabledStateSelector : '.type-gallery',
+                disabledStateSelector: '.type-gallery',
                 onclick: function () {
                     _this.onButtonClick(editor, _this.BUTTON_IMAGE);
                 }
@@ -96,7 +96,7 @@ GalleryModule.prototype = {
         var imagesHtml = '';
         $('.images-list .image[data-id]').map(function () {
             imagesIds.push($(this).data("id"));
-            imagesHtml += $(this)[0].outerHTML;
+            imagesHtml += $(this)[0].outerHTML.replace(/(\.\.\/)+/g, '/');
         });
 
         var typeClassName = (getQueryParameters().type == 'BUTTON_GALLERY' ? 'type-gallery' : 'type-image');

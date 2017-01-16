@@ -12,7 +12,8 @@ namespace Facepalm\Cms\Fields\Types;
 use Facepalm\Cms\Fields\AbstractField;
 use Illuminate\Database\Eloquent\Model;
 
-class FloatField extends AbstractField
+class FloatField extends StringField
 {
+    protected $templateName = 'facepalm::components/form/elements/float';
 
 }

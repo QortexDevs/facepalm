@@ -34,7 +34,6 @@ abstract class CmsComponent
     public function setMainModel($modelName)
     {
         $modelName = ModelFactory::getFullModelClassName($modelName);
-
         if ($modelName) {
             $this->modelName = $modelName;
         } else {
