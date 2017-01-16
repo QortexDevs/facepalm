@@ -11,6 +11,7 @@ namespace Facepalm\Http\Controllers;
 use Facepalm\Cms\Components\CmsForm;
 use Facepalm\Cms\Components\CmsList;
 use Facepalm\Cms\Config\Config;
+use Facepalm\Cms\CustomModuleHandler;
 use Facepalm\Cms\Fields\FieldFactory;
 use Facepalm\Cms\Fields\FieldSet;
 use Facepalm\Cms\PermissionManager;
@@ -81,6 +82,9 @@ class CmsController extends BaseController
     /** @var  string */
     protected $layoutMode;
 
+    /** @var  CustomModuleHandler */
+    protected $customModuleHandler;
+
 
     /**
      * CmsController constructor.
@@ -120,6 +124,13 @@ class CmsController extends BaseController
 
         // Abort 404 if user has no access
         $this->permissionManager->checkAccess($this->config, $group, $module);
+
+
+        if ($this->config->get('module.custom')) {
+            $fieldFactory = new FieldFactory();
+            $className = '\\' . $fieldFactory->dottedNotationToNamespace($this->config->get('module.custom'));
+            $this->customModuleHandler = app()->make($className, [$this->config->part('module')]);
+        }
 
         if ($group) {
             if (!$module) {
@@ -184,6 +195,9 @@ class CmsController extends BaseController
                 $this->baseUrl .= ('/' . $this->navigationId);
             }
         }
+        if ($this->customModuleHandler) {
+            $params = $this->customModuleHandler->processParameters($params);
+        }
         if (Arr::get($params, 0) === 'create') {
             $this->objectId = null;
             $this->action = self::ACTION_CREATE_OBJECT;
@@ -198,6 +212,10 @@ class CmsController extends BaseController
             array_shift($params);
         } else {
             $this->action = self::ACTION_LIST_OBJECTS;
+        }
+
+        if ($this->customModuleHandler) {
+            $this->customModuleHandler->setMode($this->action, $this->objectId);
         }
 
         return $params;
@@ -223,14 +241,18 @@ class CmsController extends BaseController
             if ($this->layoutMode === self::LAYOUT_TWO_COLUMN && !$this->navigationId) {
                 $moduleContent = $this->renderTwoColumnIndexPage();
             } else {
-                switch ($this->action) {
-                    case self::ACTION_LIST_OBJECTS:
-                        $moduleContent = $this->renderObjectsListPage();
-                        break;
-                    case self::ACTION_EDIT_OBJECT:
-                    case self::ACTION_CREATE_OBJECT:
-                        $moduleContent = $this->renderEditObjectFormPage();
-                        break;
+                if ($this->customModuleHandler) {
+                    $moduleContent = $this->customModuleHandler->render($this->renderer);
+                } else {
+                    switch ($this->action) {
+                        case self::ACTION_LIST_OBJECTS:
+                            $moduleContent = $this->renderObjectsListPage();
+                            break;
+                        case self::ACTION_EDIT_OBJECT:
+                        case self::ACTION_CREATE_OBJECT:
+                            $moduleContent = $this->renderEditObjectFormPage();
+                            break;
+                    }
                 }
             }
         } else {
@@ -299,7 +321,6 @@ class CmsController extends BaseController
      */
     protected function renderObjectsListPage()
     {
-
         $defaultPageTitle = $this->config->get('module.strings.title') ?: 'Список объектов';
 
         /** @var CmsList $list */
@@ -338,6 +359,7 @@ class CmsController extends BaseController
             'buttonsPanel' => (bool)$this->config->get('module.list.treeMode'),
             'listHtml' => $list->render($this->renderer),
         ];
+
 
         return [
             'moduleContent' => $this->renderer->render('facepalm::modulePages/list', $params),
