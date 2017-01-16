@@ -49,13 +49,13 @@
         height: 100%;
 
         .top-bar {
-            background: $topBarBackgroundColor;
+            //background: $topBarBackgroundColor;
             height: 57px;
             padding: 0 10px 0 50px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            color: white;
+            color: $topBarBackgroundColor;
 
             h1 {
                 white-space: nowrap;
@@ -66,12 +66,12 @@
 
             .right {
                 .user-icon {
-                    opacity: 0.8;
+                    //opacity: 0.5;
                     font-size: 20px;
-                    border: 1px solid rgba(255, 255, 255, 0.4);
+                    border: 2px solid #aaa;
                     background: rgba(0, 0, 0, 0.1);
                     padding: 7px 10px;
-                    border-radius: 50px;
+                    border-radius: 50%;
                     background-size: cover;
                     width: 37px;
                     height: 36px;

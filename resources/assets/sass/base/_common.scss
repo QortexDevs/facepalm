@@ -47,7 +47,7 @@ input, select, textarea {
 h1 {
     font: 100 30px/40px $mainFontName;
     margin-bottom: 5px;
-    color: white;
+    color: $topBarBackgroundColor;
 }
 
 h2 {
