@@ -32,7 +32,12 @@ class AuthController extends BaseController
      */
     public function get(Application $app, Request $request)
     {
-        return $app->make('twig')->render('facepalm::loginPage', []);
+        $customCssPath = 'assets/build/cms/css/main.css';
+        $customJsPath = 'assets/build/cms/js/all.js';
+        return $app->make('twig')->render('facepalm::loginPage', [
+            'customJsPath' => is_file(public_path($customJsPath)) ? $customJsPath : '',
+            'customCssPath' => is_file(public_path($customCssPath)) ? $customCssPath : '',
+        ]);
     }
 
     /**
