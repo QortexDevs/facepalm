@@ -7,6 +7,7 @@ function getDefaultTinyMceOptions() {
         language: 'ru',
         menubar: false,
         statusbar: false,
+        relative_urls : false,
         style_formats: [
             {title: 'Обычный текст', block: 'p'},
             {title: 'Заголовок', block: 'h2'},
