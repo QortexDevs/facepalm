@@ -178,13 +178,16 @@ abstract class BaseEntity extends AbstractEntity
      * @param Closure $callback
      * @return mixed
      */
-    public static function getCollectionWithData($callback = null)
+    public static function getCollectionWithData($callback = null, $onlyImages = false)
     {
         // todo: подумать, как вставить здесь table_name.status
         /** @var Builder $builder */
         $builder = static::where('status', 1)
-            ->with('images')
-            ->with('textItems');
+            ->with('images');
+
+        if (!$onlyImages) {
+            $builder = $builder->with('textItems');
+        }
 
         if ($callback) {
             $callback($builder);
