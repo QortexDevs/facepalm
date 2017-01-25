@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="utf-8"/>
-    <title>Facepalm CMS</title>
+    <title>{{ app.config.facepalm.cmsTitle ?:'Facepalm CMS' }}</title>
 
     <link rel="stylesheet"
           href="/assets/facepalm/css/vendor.css?{{ assetsBusters['facepalm::css/vendor.css'] }}"/>
