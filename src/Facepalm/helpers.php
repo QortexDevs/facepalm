@@ -112,3 +112,24 @@ if (!function_exists('pluralize')) {
         }
     }
 }
+
+function russian_date($date)
+{
+    $monthes = [
+        "",
+        "января",
+        "февраля",
+        "марта",
+        "апреля",
+        "мая",
+        "июня",
+        "июля",
+        "августа",
+        "сентября",
+        "октября",
+        "ноября",
+        "декабря"
+    ];
+    $date = strtotime($date);
+    return date('d', $date) . ' ' . $monthes[date('n', $date)] . ' ' . date('Y', $date);
+}
