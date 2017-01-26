@@ -24,7 +24,7 @@ class DownloadFileController extends BaseController
             $guesser = MimeTypeGuesser::getInstance();
             if (strpos($request->server('SERVER_SOFTWARE'), 'nginx') !== false) {
                 return response('', 200)
-                    ->header('Content-Disposition', 'attachment; filename="' . $fileName . '"')
+//                    ->header('Content-Disposition', 'attachment; filename="' . $fileName . '"')
                     ->header('Content-Type', $guesser->guess($file->getPhysicalPath()))
                     ->header('X-Accel-Redirect', '/_internal_files/' . $file->getRelativePath());
             } else {

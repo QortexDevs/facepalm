@@ -94,9 +94,15 @@ abstract class BaseEntity extends AbstractEntity
     /**
      * @return array
      */
-    public function filesByGroup()
+    public function filesByGroup($group = null)
     {
         $this->processBindedEntities('files');
+        if ($group) {
+            if (Arr::has($this->bindedEntitiesByGroup['files'], $group)) {
+                return $this->bindedEntitiesByGroup['files'][$group];
+            }
+            return null;
+        }
         return $this->bindedEntitiesByGroup['files'];
     }
 
