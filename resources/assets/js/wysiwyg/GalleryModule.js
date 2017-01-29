@@ -45,6 +45,11 @@ GalleryModule.prototype = {
                 }
             });
 
+            //fix bug with page jumping when clicking first time to image/gallery
+            editor.on('init', function () {
+                editor.selection.select(editor.getBody(), true); // ed is the editor instance
+                editor.selection.collapse(false);
+            });
         });
 
     },
