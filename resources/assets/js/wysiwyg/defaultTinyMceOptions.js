@@ -15,12 +15,17 @@ function getDefaultTinyMceOptions() {
             {title: 'Врезка', block: 'blockquote'},
             // { title: 'Table row 1', selector: 'tr', classes: 'tablerow1' }
         ],
+        removeformat: [
+            {selector: '*', remove : 'all', split : true, expand : false, block_expand: true, deep : true},
+        ],
 
         // extended_valid_elements: 'img[class=myclass|!src|border:0|alt|title|width|height|style]',
         // invalid_elements: 'strong,b,em,i',
 
-        plugins: ['fixedtoolbar', 'autoresize', 'codemirror', 'link', 'autolink', 'media', 'noneditable', 'paste', 'table', 'visualblocks'],
-        toolbar: 'styleselect | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | link image table media | visualblocks code | fp:image fp:gallery',
+        plugins: ['fixedtoolbar', 'autoresize', 'codemirror', 'link', 'autolink', 'media', 'noneditable', 'paste', 'table', 'visualblocks', 'paste'],
+        toolbar: 'styleselect | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | link image table media | visualblocks code removeformat | fp:image fp:gallery',
+
+        // paste_as_text: true,
 
         media_poster: false,
         media_dimensions: false,
