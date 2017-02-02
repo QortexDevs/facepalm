@@ -54,11 +54,19 @@ class AuthController extends BaseController
         $credentials = $request->only('email', 'password');
         $credentials['status'] = 1;
 
-        if (Auth::attempt($credentials)) {
-            if ($request->ajax()) {
-                return response()->json(['user' => Auth::user()]);
-            } else {
-                return $this->handleUserWasAuthenticated($request, false);
+        $guards = config('facepalm.cmsAuthGuards')
+            ? explode(',', config('facepalm.cmsAuthGuards'))
+            : [config('auth.defaults.guard')];
+        foreach ($guards as $guard) {
+            try {
+                if (Auth::guard($guard)->attempt($credentials)) {
+                    if ($request->ajax()) {
+                        return response()->json(['user' => Auth::user()]);
+                    } else {
+                        return $this->handleUserWasAuthenticated($request, false);
+                    }
+                }
+            } catch (\Exception $e) {
             }
         }
         //todo: переделать вывод текста ошибки! Локализация!

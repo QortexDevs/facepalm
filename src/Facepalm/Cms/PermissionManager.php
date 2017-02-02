@@ -56,6 +56,8 @@ class PermissionManager
                 }
                 $config->set('structure', $structure);
             }
+        } else {
+            $config->set('structure', []);
         }
         return $config;
     }
