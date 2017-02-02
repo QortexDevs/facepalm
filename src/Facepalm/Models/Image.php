@@ -189,6 +189,15 @@ class Image extends BindableEntity
     }
 
     /**
+     * @param string $size
+     * @return mixed
+     */
+    public function getImageResource($size = "original")
+    {
+        return \Intervention\Image\Facades\Image::make($this->getPhysicalPath($size));
+    }
+
+    /**
      * @param $callback
      */
     public function postProcess($callback)
@@ -244,7 +253,7 @@ class Image extends BindableEntity
      * @param string $suffix
      * @return string
      */
-    protected function getPhysicalPath($suffix = '')
+    public function getPhysicalPath($suffix = '')
     {
         $path = $this->getRelativePath($suffix);
         if ($path) {
@@ -262,8 +271,8 @@ class Image extends BindableEntity
     {
         if ($this->name) {
             return Path::generateHierarchicalPrefix($this->name)
-            . ($suffix ? ('_' . $suffix) : '')
-            . ($this->ext && !$skipExtension ? ('.' . $this->ext) : '');
+                . ($suffix ? ('_' . $suffix) : '')
+                . ($this->ext && !$skipExtension ? ('.' . $this->ext) : '');
         }
     }
 

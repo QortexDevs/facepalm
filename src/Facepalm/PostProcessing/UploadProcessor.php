@@ -129,7 +129,10 @@ class UploadProcessor
      */
     protected function processAfterSaveImage(Image $image, $requestRawData)
     {
-        //todo: дополнительные прегенерируемые размеры
+        if (Arr::get($requestRawData, 'orientate') && $requestRawData['orientate'] === 'true') {
+            $image->getImageResource('original')->orientate()->save($image->getPhysicalPath('original'));
+        }
+
         $pregenerateSizes = [
             'previewSize' => Arr::get($requestRawData, 'previewSize', config('facepalm.defaultThumbnailSize'))
         ];
