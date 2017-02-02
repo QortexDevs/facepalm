@@ -8,7 +8,7 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::get('/cms/login', 'AuthController@get');
     Route::post('/cms/login', 'AuthController@login');
-    Route::get('/cms/logout', 'AuthController@logout');
+    Route::get('/cms/logout', 'AuthController@logout')->middleware([Facepalm\Http\Middleware\Authenticate::class]);
 
 
     Route::any('/cms/{group?}/{module?}/{params?}', 'CmsController@handle')->where(

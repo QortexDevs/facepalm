@@ -25,6 +25,7 @@ class AuthController extends BaseController
 
     protected $redirectAfterLogout = '/cms/';
 
+
     /**
      * @param Application $app
      * @param Request $request
@@ -61,7 +62,7 @@ class AuthController extends BaseController
             try {
                 if (Auth::guard($guard)->attempt($credentials)) {
                     if ($request->ajax()) {
-                        return response()->json(['user' => Auth::user()]);
+                        return response()->json(['user' => Auth::guard($guard)->user()]);
                     } else {
                         return $this->handleUserWasAuthenticated($request, false);
                     }

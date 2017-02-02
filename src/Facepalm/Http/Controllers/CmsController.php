@@ -491,8 +491,13 @@ class CmsController extends BaseController
         $assetsBusters = $assetsBuster->getCmsBusters();
 
         // todo: вынести в конфиг?
-        $customCssPath = 'assets/build/cms/css/main.css';
-        $customJsPath = 'assets/build/cms/js/all.js';
+        $customCssPath = array_filter(['assets/build/cms/css/vendor.css', 'assets/build/cms/css/main.css'], function ($item) {
+            return is_file(public_path($item));
+        });
+        $customJsPath = array_filter(['assets/build/cms/js/vendor.js', 'assets/build/cms/js/all.js'], function ($item) {
+            return is_file(public_path($item));
+        });
+
 
         $userpic = $this->user->images()->ofGroup('avatar')->first();
         $params = array_merge($params, [
@@ -506,8 +511,8 @@ class CmsController extends BaseController
             'assetsPath' => config('facepalm.facepalmAssetsPath'),
             'currentPathSections' => [$this->group, $this->module],
             'userpic' => $userpic ? $userpic->getUri('200x200') : '',
-            'customJsPath' => is_file(public_path($customJsPath)) ? $customJsPath : '',
-            'customCssPath' => is_file(public_path($customCssPath)) ? $customCssPath : '',
+            'customJsPath' => $customJsPath,
+            'customCssPath' => $customCssPath,
             'navigation' => $this->layoutMode === self::LAYOUT_TWO_COLUMN ? $this->renderNavigationMenu() : '',
         ]);
 

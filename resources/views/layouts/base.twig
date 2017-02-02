@@ -9,7 +9,9 @@
     <link rel="stylesheet" href="/assets/facepalm/css/main.css?{{ assetsBusters['facepalm::css/main.css'] }}"/>
     {# todo: общий css, js и отдельные файлики для модулей, если надо  #}
     {% if customCssPath %}
-        <link rel="stylesheet" href="/{{ customCssPath }}?{{ assetsBusters[customCssPath] }}"/>
+        {% for path in customCssPath %}
+            <link rel="stylesheet" href="/{{ path }}?{{ assetsBusters[path] }}"/>
+        {% endfor %}
     {% endif %}
     {% block cssFile %}{% endblock %}
 
@@ -17,7 +19,8 @@
 
 </head>
 {% block bodyOuter %}
-    <body class="cms-page{% if navigation %} two-column{% endif %}" data-base-url="{{ baseUrl }}" data-base-url-nav="{{ baseUrlNav }}" data-nav-hash="{{ navHash }}">
+    <body class="cms-page{% if navigation %} two-column{% endif %}" data-base-url="{{ baseUrl }}"
+          data-base-url-nav="{{ baseUrlNav }}" data-nav-hash="{{ navHash }}">
     {% include 'facepalm::layouts/menu/leftMenu' %}
     <main>
         <form class="main-cms-form" action="./" enctype="multipart/form-data" method="post">
@@ -78,12 +81,14 @@
     var _facepalm = new FacepalmCMS();
 
     _facepalm
-            .init()
-            .start();
+        .init()
+        .start();
 </script>
 
 {% block jsFile %}{% endblock %}
 {% if customJsPath %}
-    <script src="/{{ customJsPath }}?{{ assetsBusters[customJsPath] }}"></script>
+    {% for path in customJsPath %}
+        <script src="/{{ path }}?{{ assetsBusters[path] }}"></script>
+    {% endfor %}
 {% endif %}
 </html>
