@@ -25,7 +25,7 @@ abstract class UploadableField extends AbstractField
     {
         parent::prepareData($object);
 
-        $this->data['skipTransferringParameters'] = ['name', 'title', 'type', 'randomId', 'modelName', 'config'];
+        $this->data['skipTransferringParameters'] = ['name', 'title', 'type', 'randomId', 'modelName', 'config', 'data_fields'];
         if (!$object) {
             $this->setSkipped(true);
         }

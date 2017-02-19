@@ -74,15 +74,15 @@ class CmsForm extends CmsComponent
     }
 
     /**
+     * @param null $randomId
      * @return array
-     * @throws \Exception
      */
-    public function build()
+    public function build($randomId = null)
     {
         if (!$this->modelName) {
             throw new \InvalidArgumentException('No model defined');
         }
-        $randomId = Str::quickRandom(6);
+        $randomId = $randomId ?: Str::quickRandom(6);
         foreach ($this->fieldSet->getFields() as $field) {
             $field->setParameters([
                 'randomId' => $randomId,

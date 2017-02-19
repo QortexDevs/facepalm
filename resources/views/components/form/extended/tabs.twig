@@ -1,0 +1,12 @@
+<div class="tabs-container">
+    <div class="tabs-row">
+        {% for tab in tabs %}
+            <div class="tab {% if loop.index == 1 %}active{% endif %}">{{ tab.title }}</div>
+        {% endfor %}
+    </div>
+    <div class="content-container">
+        {% for tab in tabs %}
+            <div class="tab-content {% if loop.index == 1 %}active{% endif %}">{{ tab.content|raw }}</div>
+        {% endfor %}
+    </div>
+</div>

@@ -33,18 +33,25 @@ class ImageField extends UploadableField
 
             $this->data['images'] = [];
 
+            if (Arr::has($this->parameters, 'data_fields')) {
+                $this->parameters['data_fields'] = explode(',', $this->parameters['data_fields']);
+            } else {
+                $this->parameters['data_fields'] = [];
+            }
+
             /** @var Image $image */
             foreach ($this->getItems($object, 'images')->get() as $image) {
                 $this->data['images'][] = [
-                    'id' => $image->id,
-                    'preview' => $image->getUri($this->parameters['previewSize']),
-                    'full' => $image->getUri('original'),
-                    'group' => $this->parameters['name'],
-                    'is_video' => $image->is_video,
-                    'video_link' => $image->video_link,
-                    'embed_code' => $image->embed_code
-                    // todo: показывать не оригинал по клику, а другой размер?
-                ];
+                        'id' => $image->id,
+                        'original_name' => $image->original_name,
+                        'preview' => $image->getUri($this->parameters['previewSize']),
+                        'full' => $image->getUri('original'),
+                        'group' => $this->parameters['name'],
+                        'is_video' => $image->is_video,
+                        'video_link' => $image->video_link,
+                        'embed_code' => $image->embed_code,
+                        // todo: показывать не оригинал по клику, а другой размер?
+                    ] + Arr::only($image->attributesToArray(), $this->parameters['data_fields']);
             }
         }
     }

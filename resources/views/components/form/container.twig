@@ -12,7 +12,7 @@
                         {% if not form.singleFieldWysiwygMode and not field.wide %}
                             <td class="caption">
                                 {% if not field.doNotShowTitle %}
-                                    <div class="caption">{{ field.title }}
+                                    <div class="caption{{ field.caption_nowrap?" nowrap":"" }}">{{ field.title }}
                                         {% if field.subtitle %}
                                             <div class="sub-caption">{{ field.subtitle }}</div>
                                         {% endif %}

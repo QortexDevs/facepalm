@@ -8,6 +8,7 @@ Form.prototype = {
     init: function () {
         this.initSave();
         this.initDatepicker();
+        this.initTabs();
     },
 
     initSave: function (callback) {
@@ -82,6 +83,14 @@ Form.prototype = {
         });
         $('.datepicker + .clear-date').on('click', function () {
             $(this).prev().val('');
+        });
+    },
+
+    initTabs: function () {
+        $('.tabs-container .tab').on('click', function () {
+            var container$ = $(this).closest('.tabs-container');
+            $(this).addClass('active').siblings().removeClass('active');
+            $(this).parent().next().children('.tab-content:eq(' + $(this).prevAll().length + ')').addClass('active').siblings().removeClass('active')
         });
     }
 };

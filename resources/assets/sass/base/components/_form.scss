@@ -27,6 +27,10 @@
                     padding: 3px 20px;
                     margin-top: 3px;
 
+                    &.nowrap {
+                        white-space: nowrap;
+                    }
+
                     .sub-caption {
                         font: 300 12px $mainFontName;
                     }
@@ -463,4 +467,43 @@
     height: 32px;
     outline: none;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.tabs-container {
+    margin-left: 20px;
+    .tabs-row {
+        margin-left: -50px;
+        padding-left: 50px;
+        display: flex;
+        border-bottom: 1px solid #d4d7dA;
+        .tab {
+            margin-bottom: -1px;
+            padding: 10px 20px 10px 20px;
+            margin-right: 3px;
+            border: 1px solid #d4d7dA;
+            //border-bottom: 1px solid #282C37;
+            border-top-left-radius: 3px;
+            border-top-right-radius: 3px;
+            cursor: pointer;
+            background-color: #F4F7FA;
+            text-transform: uppercase;
+            font-size:11px;
+            font-weight:600;
+            color: #8e9aa9;
+
+            &.active {
+                background-color: #fff;
+                border-bottom-color: #fff;
+            }
+        }
+        margin-bottom: 40px;
+    }
+    .content-container {
+        .tab-content {
+            display: none;
+            &.active {
+                display: block;
+            }
+        }
+    }
 }

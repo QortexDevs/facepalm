@@ -1,11 +1,11 @@
-<div class="image" data-id="{{ image.id }}">
+<div class="image" data-id="{{ image.id }}" {% for df in parameters.data_fields %}data-{{ df }}="{{ image.rate }}"{% endfor %}>
     <button type="button" class="delete fa fa-times"></button>
     {% if image.is_video %}
         <a href='{{ image.embed_code }}' target="_blank" data-fancybox-type="html" data-fancybox-group="{{ image.group }}">
             <img src="{{ image.preview }}">
         </a>
     {% else %}
-    <a href="{{ image.full }}" target="_blank" data-fancybox-group="{{ image.group }}">
+    <a href="{{ image.full }}" target="_blank" data-fancybox-group="{{ image.group }}" title="{{ image.original_name }}">
         <img src="{{ image.preview }}">
     </a>
     {% endif %}

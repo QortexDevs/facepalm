@@ -4,7 +4,6 @@
             {% include "facepalm::components/form/imagePreview.twig" %}
         {% endfor %}
     </div>
-    {#{{ dump(parameters) }}#}
     <div class="dropzone" data-input-name="{{ uploadName }}[{{ parameters.type }}][{{ parameters.name }}]"
          data-type="image"
          data-multiple="{{ parameters.multiple ? 1 : 0 }}"
