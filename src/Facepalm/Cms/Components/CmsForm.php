@@ -34,6 +34,7 @@ class CmsForm extends CmsComponent
     /** @var BaseEntity */
     protected $editedObject;
 
+
     /**
      * @param Repository $config
      * @param bool $processFieldSet
@@ -48,6 +49,14 @@ class CmsForm extends CmsComponent
         }
 
         return $this;
+    }
+
+    /**
+     * @return BaseEntity
+     */
+    public function getEditedObject()
+    {
+        return $this->editedObject;
     }
 
 

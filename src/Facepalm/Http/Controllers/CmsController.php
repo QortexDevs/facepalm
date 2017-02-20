@@ -455,6 +455,15 @@ class CmsController extends BaseController
 
         $formConfig = $customForm ?: $this->config->part('module.form');
 
+        if ($formConfig->get('useObjectFieldsForTitle')) {
+            $fields = is_array($formConfig->get('useObjectFieldsForTitle')) ? $formConfig->get('useObjectFieldsForTitle') : [$formConfig->get('useObjectFieldsForTitle')];
+            /** @var BaseEntity $object */
+            if ($object = $form->getEditedObject()) {
+                $defaultPageTitle = implode(" ", Arr::only($object->toArray(), $fields));
+            }
+        }
+
+
         $additionalButtons = '';
         if ($formConfig->get('additionalButtonHandler')) {
             $className = $formConfig->get('additionalButtonHandler');
