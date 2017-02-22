@@ -1,8 +1,8 @@
 <div id="test"></div>
 {% if parameters.translatable %}
     {% for langCode,langTitle in languages %}
-        <div class="language-row">
-            {% if languages|length > 1 %}
+        <div class="language-row {{ parameters.languageLabelPosition }}">
+            {% if languages|length > 1 and parameters.languageLabelPosition != "after" %}
                 <div class="language-caption">{{ langTitle }}</div>
                 {# todo: добавить возможность строкового комментария к тексту#}
             {% endif %}
@@ -11,6 +11,10 @@
                       style="{% if parameters.width %}width:{{ parameters.width }}; {% endif %}
                               {% if     parameters.height %}height:{{ parameters.height }}; {% endif %}"
             >{{ object.text(field, langCode) }}</textarea>
+            {% if languages|length > 1 and parameters.languageLabelPosition == "after" %}
+                <div class="language-caption">{{ langTitle }}</div>
+                {# todo: добавить возможность строкового комментария к тексту#}
+            {% endif %}
         </div>
     {% endfor %}
 {% elseif parameters.dynamic %}

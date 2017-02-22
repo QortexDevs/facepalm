@@ -101,6 +101,7 @@ List.prototype = {
             _this.app.doRequest(payload).done(function (result) {
                 var template = btn$.closest('[data-model]').find('script[data-template-name="empty-tree-element"]').html();
                 itemContainer$.find('>ul').append(_this.createNewElement(template, result));
+                _facepalm.service('Form').initComboboxes();
             });
             return false;
         });
@@ -126,6 +127,7 @@ List.prototype = {
             _this.app.doRequest(payload).done(function (result) {
                 var template = btn$.closest('[data-model]').find('script[data-template-name="empty-tree-element"]').html();
                 itemContainer$.find('ul:first').append(_this.createNewElement(template, result));
+                _facepalm.service('Form').initComboboxes();
             });
             return false;
         });

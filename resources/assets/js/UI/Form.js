@@ -9,6 +9,7 @@ Form.prototype = {
         this.initSave();
         this.initDatepicker();
         this.initTabs();
+        this.initComboboxes();
     },
 
     initSave: function (callback) {
@@ -92,5 +93,12 @@ Form.prototype = {
             $(this).addClass('active').siblings().removeClass('active');
             $(this).parent().next().children('.tab-content:eq(' + $(this).prevAll().length + ')').addClass('active').siblings().removeClass('active')
         });
+    },
+
+    initComboboxes: function() {
+        $("select.combobox").select2({
+            tags: true,
+            selectOnBlur: true,
+        })
     }
 };
