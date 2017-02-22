@@ -8,6 +8,6 @@
 {% else %}
     <input type="hidden"
            name="{{ inputName }}"
-           value="{{ forceValue?:object.__get(field) }}"
+           value="{{ forceValue?:object.__get(field) ?: parameters.value }}"
     />
 {% endif %}

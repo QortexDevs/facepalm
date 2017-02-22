@@ -2,10 +2,14 @@
     <div class="row">
         <div class="id">{{ element.id }}</div>
         {% for fieldelement in list.meta.columns %}
-            {{  fieldelement.prepareData(element) }}
-            <div data-cell-for-field="{{ fieldelement.name }}">
+            {{ fieldelement.prepareData(element) }}
+            {% if fieldelement.isHidden %}
                 {{ fieldelement.renderFormField(element)|raw }}
-            </div>
+            {% else %}
+                <div data-cell-for-field="{{ fieldelement.name }}">
+                    {{ fieldelement.renderFormField(element)|raw }}
+                </div>
+            {% endif %}
         {% endfor %}
         {% if not list.settings.plainTreeMode %}
             <div class="buttons">
