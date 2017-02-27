@@ -14,6 +14,16 @@ DropzoneManager.prototype = {
             data: $('#file-preview-template').html()
         });
 
+        // prevent drop external files into whole page
+        window.addEventListener("dragover", function (e) {
+            e = e || event;
+            e.preventDefault();
+        }, false);
+        window.addEventListener("drop", function (e) {
+            e = e || event;
+            e.preventDefault();
+        }, false);
+
         $(".dropzone").each(function () {
             var dropzone$ = $(this);
             var isMultiple = dropzone$.data('multiple') == "1";
