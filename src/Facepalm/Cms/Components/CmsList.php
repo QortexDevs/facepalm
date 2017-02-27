@@ -9,6 +9,7 @@ use Facepalm\Models\ModelFactory;
 use Facepalm\Tools\Tree;
 use Illuminate\Config\Repository;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 class CmsList extends CmsComponent
@@ -194,6 +195,11 @@ class CmsList extends CmsComponent
             foreach ($this->constraintCallbacks as $constraintCallback) {
                 $queryBuilder = $constraintCallback($queryBuilder);
             }
+        }
+
+        if (Arr::has($this->listParams, 'rawConditions') && $this->listParams['rawConditions']) {
+//            dd($queryBuilder);
+            $queryBuilder->whereRaw($this->listParams['rawConditions']);
         }
 
         // todo: сортировка из настроек
