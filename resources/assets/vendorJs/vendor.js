@@ -7,9 +7,7 @@
 ;
 //= ../../../bower_components/underscore.string/dist/underscore.string.js
 ;
-//= ../../../bower_components/moment/moment.js
-;
-//= ../../../bower_components/pikaday-time/pikaday.js
+//= ../../../bower_components/datetimepicker/build/jquery.datetimepicker.full.js
 ;
 //= ../../../bower_components/growl/javascripts/jquery.growl.js
 ;

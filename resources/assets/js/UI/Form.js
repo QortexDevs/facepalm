@@ -56,32 +56,27 @@ Form.prototype = {
 
     initDatepicker: function () {
         //todo: подумать, насчет live?
-        $('.datepicker').each(function () {
-            var options = {
-                field: $(this)[0],
-                theme: 'dark-theme',
-                format: 'DD.MM.YYYY',
-                firstDay: 1,
-                showTime: false,
-                i18n: {
-                    previousMonth: 'Предыдущий месяц',
-                    nextMonth: 'Следующий месяц',
-                    months: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
-                    weekdays: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'],
-                    weekdaysShort: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб']
-                }
-            };
-            if ($(this).is('.datetime')) {
-                options = _.extend(options, {
-                    format: 'DD.MM.YYYY HH:mm',
-                    showTime: true,
-                    showSeconds: false,
-                    use24hour: true
-                })
-            }
 
-            new Pikaday(options);
+        $.datetimepicker.setLocale('ru');
+        $('.datepicker').each(function () {
+            // $(this).datetimepicker();
+            $(this).datetimepicker({
+                i18n: {
+                    ru: {
+                        months: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+                        dayOfWeek: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб']
+                    }
+                },
+                yearStart: 1900,
+                yearEnd: (new Date()).getFullYear() + 10,
+                timepicker: $(this).is('.datetime'),
+                format: 'd.m.Y' + ($(this).is('.datetime') ? " H:i" : ""),
+                mask: true,
+                lazyInit: true,
+            });
         });
+
+
         $('.datepicker + .clear-date').on('click', function () {
             $(this).prev().val('');
         });
@@ -95,7 +90,7 @@ Form.prototype = {
         });
     },
 
-    initComboboxes: function() {
+    initComboboxes: function () {
         $("select.combobox").select2({
             tags: true,
             selectOnBlur: true,

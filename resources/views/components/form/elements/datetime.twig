@@ -1,4 +1,4 @@
-<input type="text" class="text datepicker datetime" data-year-range="{{ parameters.yearRange }}" readonly
+<input type="text" class="text datepicker datetime" data-year-range="{{ parameters.yearRange }}"
        name="{{ inputName }}"
        value="{{ object.__get(field)=='0000-01-01 00:00:00' or not object.__get(field)?'':object.__get(field)|date('d.m.Y H:i') }}"/>
 <i class="fa fa-times clear-date" title="Сбросить дату"></i>
