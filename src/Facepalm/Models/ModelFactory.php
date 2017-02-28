@@ -35,17 +35,13 @@ class ModelFactory
     }
 
     /**
+     * todo: эта херня не работает. когда имя таблицы не совпадает
      * @param $modelName
      * @return Builder
      */
     public static function builderFor($modelName)
     {
-        return self::where(
-            $modelName,
-            Str::plural(Str::snake(class_basename($modelName))) . '.' . CmsCommon::COLUMN_NAME_ID,
-            '>',
-            '0'
-        );
+        return self::whereRaw($modelName, '1');
     }
 
     /**

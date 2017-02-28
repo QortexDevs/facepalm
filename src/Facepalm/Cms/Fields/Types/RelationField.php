@@ -85,7 +85,18 @@ class RelationField extends AbstractField
         } else {
             //todo: add query conditions
             //todo: переделать статический вызов на di
-            foreach (ModelFactory::all($this->foreignModel) as $foreignObject) {
+
+            if ($this->filter) {
+                $builder = ModelFactory::builderFor($this->foreignModel);
+                foreach ($this->filter as $field => $value) {
+                    $builder->where($field, $value);
+                }
+                $items = $builder->get();
+            } else {
+                $items = ModelFactory::all($this->foreignModel);
+            }
+
+            foreach ($items as $foreignObject) {
                 $this->parameters['dictionary'][$foreignObject->{CmsCommon::COLUMN_NAME_ID}] = $foreignObject->{$this->foreignDisplayName};
             }
 
