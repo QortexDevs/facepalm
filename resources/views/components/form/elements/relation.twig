@@ -18,9 +18,13 @@
         </ul>
 
     {% else %}
-        <select class="text" name="{{ fieldNameBase }}[{{ parameters.foreignKey }}]">
+        <select class="text" name="{{ fieldNameBase }}[{{ parameters.foreignKey }}]"
+                {% if parameters.width %}style="width: {{ parameters.width }}"{% endif %}>
+            {% if parameters.showPlaceholder %}
+                <option value="" disabled selected hidden>{{ parameters.title }}</option>
+            {% endif %}
             {% if not parameters.noEmpty %}
-                <option></option>
+                <option value=""></option>
             {% endif %}
             {% for id,name in parameters.dictionary %}
                 <option value="{{ id }}"
