@@ -102,6 +102,7 @@ List.prototype = {
                 var template = btn$.closest('[data-model]').find('script[data-template-name="empty-tree-element"]').html();
                 itemContainer$.find('>ul').append(_this.createNewElement(template, result));
                 _facepalm.service('Form').initComboboxes();
+                _facepalm.service('Form').initDatepicker();
             });
             return false;
         });
@@ -121,13 +122,11 @@ List.prototype = {
 
             var payload = _this.app.buildPayload(['create', model, _this.generateRandomIdString(), 'parent_id'], id);
 
-            console.log(['create', model, _this.generateRandomIdString(), 'parent_id'], id);
-            console.log(payload);
-
             _this.app.doRequest(payload).done(function (result) {
                 var template = btn$.closest('[data-model]').find('script[data-template-name="empty-tree-element"]').html();
                 itemContainer$.find('ul:first').append(_this.createNewElement(template, result));
                 _facepalm.service('Form').initComboboxes();
+                _facepalm.service('Form').initDatepicker();
             });
             return false;
         });

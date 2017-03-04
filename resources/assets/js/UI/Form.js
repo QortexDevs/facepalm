@@ -56,29 +56,32 @@ Form.prototype = {
 
     initDatepicker: function () {
         //todo: подумать, насчет live?
-
+        var _this = this;
         $.datetimepicker.setLocale('ru');
         $('.datepicker').each(function () {
-            // $(this).datetimepicker();
-            $(this).datetimepicker({
-                i18n: {
-                    ru: {
-                        months: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
-                        dayOfWeek: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб']
-                    }
-                },
-                yearStart: 1900,
-                yearEnd: (new Date()).getFullYear() + 10,
-                timepicker: $(this).is('.datetime'),
-                format: 'd.m.Y' + ($(this).is('.datetime') ? " H:i" : ""),
-                mask: true,
-                lazyInit: true,
-            });
+            _this.initDatepickerControl($(this));
         });
 
 
         $('.datepicker + .clear-date').on('click', function () {
             $(this).prev().val('');
+        });
+    },
+
+    initDatepickerControl: function (el) {
+        el.datetimepicker({
+            i18n: {
+                ru: {
+                    months: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+                    dayOfWeek: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб']
+                }
+            },
+            yearStart: 1900,
+            yearEnd: (new Date()).getFullYear() + 10,
+            timepicker: el.is('.datetime'),
+            format: 'd.m.Y' + (el.is('.datetime') ? " H:i" : ""),
+            mask: true,
+            lazyInit: true,
         });
     },
 
