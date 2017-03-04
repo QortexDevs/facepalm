@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\DB;
 
 trait TranslatableTrait
 {
+
     protected $textFields = [];
     protected $stringFields = [];
 
@@ -228,7 +229,8 @@ trait TranslatableTrait
                     'group' => $group,
                     'languageCode' => $languageCode,
                     'status' => 1,
-                    'show_order' => TextItem::max('show_order') + 1 // todo: это неправильно, т.к. для всех добавленных до save-а будет один и тот же!
+                    'show_order' => TextItem::max('show_order') + 1
+                    // todo: это неправильно, т.к. для всех добавленных до save-а будет один и тот же!
                 ]);
                 $this->textItems->push($textItem);
             }

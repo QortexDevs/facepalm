@@ -93,7 +93,13 @@ class RelationField extends AbstractField
                 }
                 $items = $builder->get();
             } else {
-                $items = ModelFactory::all($this->foreignModel);
+                $items = ModelFactory::builderFor($this->foreignModel);
+
+                $fullModelName = ModelFactory::getFullModelClassName($this->foreignModel);
+                if (method_exists($fullModelName, 'textItems')) {
+                    $items->with('textItems');
+                }
+                $items = $items->get();
             }
 
             foreach ($items as $foreignObject) {
