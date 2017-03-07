@@ -110,6 +110,7 @@ class BaseController extends FrameworkBaseController
             'values' => $this->stringValues,
             'user' => $request->user(),
             'csrf_token' => csrf_token(),
+            'hostname' => $this->getCurrentHost()
         ];
 
         if ($this->processSiteTree) {
@@ -149,4 +150,15 @@ class BaseController extends FrameworkBaseController
     {
         return view($template, $parameters + $this->commonViewValues);
     }
+
+    protected function getCurrentHost()
+    {
+        return 'http' . ($this->isSecure($this->request) ? 's' : '') . '://' . $this->request->server('HTTP_HOST');
+    }
+
+    protected function isSecure()
+    {
+        return (!empty($this->request->server('HTTPS')) && $this->request->server('HTTPS') !== 'off') || $this->request->server('SERVER_PORT') === 443;
+    }
+
 }
