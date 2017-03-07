@@ -56,14 +56,15 @@ trait TranslatableTrait
      * Returns single TextItem object
      * If no language is specified the default one is used
      *
-     * note: тут есть интересное поведение.
-     * note: Даже если у нас объект загружен со связями (with('textItems')), но записей в базе нет,
-     * note: то каждое дерганье поля будет вызывать запрос к базе.
-     * note: нужно подумать, как это кешировать
-     * note:    1. на уровне этого трейта
-     * note:    2. на уровне выше (ларавель)
-     * note: $this->relationLoaded('...') ???
-     * note: $this->getRelationValue
+     * TODO: ТЕОРЕТИЧЕСКИ, ВОТ ЭТО НИЖЕ Я ИСПРАВИЛ. НУЖНО ТЕСТИТЬ
+     * 1note: тут есть интересное поведение.
+     * 1note: Даже если у нас объект загружен со связями (with('textItems')), но записей в базе нет,
+     * 1note: то каждое дерганье поля будет вызывать запрос к базе.
+     * 1note: нужно подумать, как это кешировать
+     * 1note:    1. на уровне этого трейта
+     * 1note:    2. на уровне выше (ларавель)
+     * 1note: $this->relationLoaded('...') ???
+     * 1note: $this->getRelationValue
      *
      * @param $group
      * @param null $languageCode
@@ -79,7 +80,11 @@ trait TranslatableTrait
                 return $item;
             }
         }
-        return $this->textItems()->ofGroupAndLanguage($group, $languageCode)->first();
+        if (!$this->relationLoaded('textItems')) {
+            return $this->textItems()->ofGroupAndLanguage($group, $languageCode)->first();
+        } else {
+            return '';
+        }
     }
 
     /**
