@@ -15,6 +15,7 @@ use Facepalm\Cms\Components\CmsList;
 use Facepalm\Cms\Fields\AbstractField;
 use Facepalm\Cms\Fields\FieldSet;
 use Facepalm\Models\ModelFactory;
+use Facepalm\Models\TextItem;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -33,14 +34,28 @@ class ComboboxField extends AbstractField
 
     public function prepareData($object = null)
     {
-        $this->parameters['dictionary'] =
-            collect($this->parameters['dictionary'])->merge(
-                ModelFactory::builderFor($this->parameters['modelName'])
-                    ->where('name', '!=', '')
-                    ->groupBy($this->parameters['name'])
-                    ->get()
-                    ->pluck('name')
-            )->unique()->sort();
+        if (!Arr::has($this->parameters, 'dictionary')) {
+            $this->parameters['dictionary'] = [];
+        }
+        if ($this->parameters['translatable']) {
+            $strings = TextItem::where('bind_type', 'App\Models\\' . class_basename($this->parameters['modelName']))
+                ->where('group', $this->name)->get()->groupBy('languageCode');
+            foreach ($strings as $lang => $stringsArr) {
+                $strings[$lang] = $stringsArr->pluck('stringValue')->filter()->unique()->sort();
+
+            }
+
+            $this->parameters['dictionary'] = $strings;
+        } else {
+            $this->parameters['dictionary'] =
+                collect($this->parameters['dictionary'])->merge(
+                    ModelFactory::builderFor($this->parameters['modelName'])
+                        ->where('name', '!=', '')
+                        ->groupBy($this->parameters['name'])
+                        ->get()
+                        ->pluck('name')
+                )->unique()->sort();
+        }
     }
 
 

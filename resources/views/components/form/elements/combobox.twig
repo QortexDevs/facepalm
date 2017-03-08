@@ -1,8 +1,28 @@
-<select class="combobox" name="{{ inputName }}"
-        {% if parameters.minWidth %}style="min-width:{{ parameters.minWidth }}"{% endif %}>
-    {% if not object.__get(parameters.name) %}<option></option>{% endif %}
-    {% for id,name in parameters.dictionary %}
-        <option value="{{ name }}"
-                {% if name == object.__get(parameters.name) %}selected{% endif %}>{{ name }}</option>
+{% if parameters.translatable %}
+    {% for langCode,langTitle in languages %}
+        <div class="language-row">
+            <select class="combobox" name="{{ inputName }}[{{ langCode }}][stringValue]"
+                    {% if parameters.minWidth %}style="min-width:{{ parameters.minWidth }}"{% endif %}>
+                {% if not object.string(field, langCode) %}
+                    <option></option>{% endif %}
+                {% for id,name in parameters.dictionary[langCode] %}
+                    <option value="{{ name }}"
+                            {% if name == object.string(field, langCode) %}selected{% endif %}>{{ name }}</option>
+                {% endfor %}
+            </select>
+            {% if languages|length > 1 %}
+                <div class="language-caption">{{ langTitle }}</div>
+            {% endif %}
+        </div>
     {% endfor %}
-</select>
+{% else %}
+    <select class="combobox" name="{{ inputName }}"
+            {% if parameters.minWidth %}style="min-width:{{ parameters.minWidth }}"{% endif %}>
+        {% if not object.__get(parameters.name) %}
+            <option></option>{% endif %}
+        {% for id,name in parameters.dictionary %}
+            <option value="{{ name }}"
+                    {% if name == object.__get(parameters.name) %}selected{% endif %}>{{ name }}</option>
+        {% endfor %}
+    </select>
+{% endif %}

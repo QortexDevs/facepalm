@@ -105,7 +105,7 @@
             height: 1px;
         }
 
-        .row-for-field-string {
+        .row-for-field-string, .row-for-field-combobox {
             .language-row {
                 margin-bottom: 10px;
                 display: flex;
@@ -138,7 +138,6 @@
                     min-width: 40px;
                     overflow: hidden;
                 }
-
 
                 &.after {
                     display: flex;
@@ -462,7 +461,6 @@
 
 //todo: переделать =)
 
-
 #pac-input {
     background-color: #fff;
     font-size: 15px;
@@ -514,8 +512,8 @@
                 //border: 1px solid #dddde5;
                 background-color: #fff;
                 border-bottom-color: #fff;
-                border-top:3px solid #e0e3ea;
-                margin-top:-2px;
+                border-top: 3px solid #e0e3ea;
+                margin-top: -2px;
             }
         }
         margin-bottom: 40px;
