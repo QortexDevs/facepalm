@@ -19,6 +19,7 @@
 
     {% else %}
         <select class="text" name="{{ fieldNameBase }}[{{ parameters.foreignKey }}]"
+                {% if parameters.withSearch %}data-search="true"{% endif %}
                 {% if parameters.width %}style="width: {{ parameters.width }}"{% endif %}>
             {% if parameters.showPlaceholder %}
                 <option value="" disabled selected hidden>{{ parameters.title }}</option>

@@ -98,5 +98,7 @@ Form.prototype = {
             tags: true,
             selectOnBlur: true,
         })
+
+        $('select[data-search=true]').select2({dropdownCssClass: 'bigdrop'});
     }
 };

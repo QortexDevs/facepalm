@@ -544,7 +544,8 @@
 
         .select2-selection__arrow {
             width: 30px;
-            height: 28px;
+            height: 26px;
+            background: white;
             border-left: 1px solid #e1e1e1;
             b {
                 border-color: #232323 transparent transparent;
@@ -585,8 +586,12 @@
 
     .select2-dropdown {
         border-radius: 0;
-        border-color: #efefef;
-        box-shadow: 0 0 20px -5px rgba(0, 0, 0, 0.2);
+        border-color: #dfdfdf;
+        box-shadow: 0 0 20px -3px rgba(0, 0, 0, 0.3);
     }
 
+}
+
+.bigdrop {
+    width: 400px !important;
 }
