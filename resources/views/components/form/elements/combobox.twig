@@ -2,7 +2,9 @@
     {% for langCode,langTitle in languages %}
         <div class="language-row">
             <select class="combobox" name="{{ inputName }}[{{ langCode }}][stringValue]"
-                    {% if parameters.minWidth %}style="min-width:{{ parameters.minWidth }}"{% endif %}>
+                    style="{% if parameters.minWidth %}min-width:{{ parameters.minWidth }};{% endif %}
+                            {% if parameters.width %}width:{{ parameters.width }};{% endif %}
+                            ">
                 {% if not object.string(field, langCode) %}
                     <option></option>{% endif %}
                 {% for id,name in parameters.dictionary[langCode] %}
