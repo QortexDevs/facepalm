@@ -139,6 +139,9 @@ abstract class BaseEntity extends AbstractEntity
                     }
                 }
             }
+            foreach ($this->bindedEntitiesByGroup[$type] as $group => $arr) {
+                $this->bindedEntitiesByGroup[$type][$group] = collect($arr)->sortBy('show_order')->all();
+            }
         }
 
         return $this;

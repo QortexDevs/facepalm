@@ -13,6 +13,7 @@ use Facepalm\Models\ModelFactory;
 use Facepalm\PostProcessing\AmfActions\AbstractAction;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -113,6 +114,7 @@ class UploadProcessor
                     if ($object) {
                         $object->{$relationMethodName}()->save($uploadableObject);
                     }
+                    Event::fire('facepalm.cms.afterUpload', [$object, $uploadableObject, $requestRawData]);
                     $processedFiles[] = [
                         $fieldName => $this->{$resultMethodName}($uploadableObject, $requestRawData)
                     ];
