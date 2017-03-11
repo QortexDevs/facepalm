@@ -2,11 +2,30 @@
     padding: 20px 5px 20px 20px;
 
     .images-list {
+        textarea {
+            display: none;
+            margin: 10px;
+            width: 200px;
+            height: 100px;
+            font-size: 12px;
+            line-height: 14px;
+        }
+
+        &.with-comments {
+            .image {
+                border: none;
+                display: flex;
+                align-items: center;
+                textarea {
+                    display: block;
+                }
+            }
+        }
     }
 
     .dropzone {
         text-align: center;
-        margin-top: 20px;
+        margin-top: 0px;
     }
 }
 

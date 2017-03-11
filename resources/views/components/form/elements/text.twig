@@ -8,6 +8,7 @@
             {% endif %}
             <textarea name="{{ inputName }}[{{ langCode }}][textBody]"
                       {% if parameters.wysiwyg %}data-wysiwyg="true"{% endif %}
+                    {% if parameters.imagesWithComments %}data-images-with-comments="true"{% endif %}
                       style="{% if parameters.width %}width:{{ parameters.width }}; {% endif %}
                               {% if     parameters.height %}height:{{ parameters.height }}; {% endif %}"
             >{{ object.text(field, langCode) }}</textarea>
