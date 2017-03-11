@@ -101,7 +101,10 @@ GalleryModule.prototype = {
         var imagesHtml = '';
         $('.images-list .image[data-id]').map(function () {
             imagesIds.push($(this).data("id"));
-            imagesHtml += $(this)[0].outerHTML.replace(/(\.\.\/)+/g, '/');
+            var comment = $(this).find('textarea').val();
+            var str = $(this)[0].outerHTML.replace(/(\.\.\/)+/g, '/').replace(/<textarea>(.*)<\/textarea>/g, '<textarea>' + comment + '</textarea>');
+            imagesHtml += str;
+
         });
 
         var typeClassName = (getQueryParameters().type == 'BUTTON_GALLERY' ? 'type-gallery' : 'type-image');
