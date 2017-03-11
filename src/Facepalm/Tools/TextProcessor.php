@@ -28,7 +28,7 @@ class TextProcessor
      */
     public function replaceMceImages($text, $templates)
     {
-        $pattern = '/<div class="mceNonEditable galleryPlaceholder type-(.+)" data-images="([0-9,]*)">.*<\/div>/i';
+        $pattern = '/<div class="mceNonEditable galleryPlaceholder type-(.+)" data-images="([0-9,]*)"( data-comments="(.*?)")?>.*<\/div>/i';
         preg_match_all($pattern, $text, $matches);
 
         if ($matches && $matches[1] && $matches[2]) {
@@ -37,9 +37,13 @@ class TextProcessor
                 if ($matches[2][$i]) {
                     $imageIds = explode(',', $matches[2][$i]);
                     $images = Image::whereIn('id', $imageIds)->get();
+
                     $html = $this->renderer->render(
                         is_array($templates) ? $templates[$matches[1][$i]] : $templates,
-                        ['images' => $images]
+                        [
+                            'images' => $images,
+                            'comments' => json_decode(urldecode($matches[4][$i]), true),
+                        ]
                     );
                 }
                 $text = str_replace($match, $html, $text);

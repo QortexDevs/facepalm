@@ -117,6 +117,10 @@ WysiwygManager.prototype = {
                     };
 
                     var customToolbar = $(this).data('wysiwygToolbar');
+                    if ($(this).data('imagesWithComments')) {
+                        options[selector] = $.extend(options[selector], {'fp_images_with_comments': true});
+                        options[selector] = $.extend(options[selector], {'body_class': "fp_images_with_comments"});
+                    }
                     if (customToolbar) {
                         $(this).tinymce($.extend(options[selector], {'toolbar': customToolbar}));
                     } else {

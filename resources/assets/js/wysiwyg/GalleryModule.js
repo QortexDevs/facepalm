@@ -16,7 +16,7 @@ GalleryModule.prototype = {
         BUTTON_IMAGE: {
             title: 'Картинка',
             width: 430,
-            height: 200
+            height: 250
         }
     },
 
@@ -85,8 +85,9 @@ GalleryModule.prototype = {
 
         var currentNode$ = $(this.editor.selection.getNode());
         if (currentNode$.is('.galleryPlaceholder[data-images]')) {
-            $('.images-list').append($(currentNode$.html()))
+            $('.images-list').append($(currentNode$.html().replace(/<textarea (.*?)>/, '<textarea>')))
         }
+        $('.images-list').toggleClass('with-comments', editor.settings.fp_images_with_comments == true);
 
         this.app.service('UploadablesList').init();
         this.app.service('DropzoneManager').init();
@@ -98,15 +99,22 @@ GalleryModule.prototype = {
         // Submit HTML to TinyMCE:
 
         var imagesIds = [];
+        var comments = {};
         var imagesHtml = '';
         $('.images-list .image[data-id]').map(function () {
             imagesIds.push($(this).data("id"));
-            imagesHtml += $(this)[0].outerHTML.replace(/(\.\.\/)+/g, '/');
+            var comment = $(this).find('textarea').val() || '';
+            if(comment) {
+                comments[$(this).data("id")] = comment;
+            }
+            var str = $(this)[0].outerHTML.replace(/(\.\.\/)+/g, '/').replace(/<textarea(.*)<\/textarea>/g, '<textarea style="height:' + (Math.max(20, 14 * comment.length / 20)) + 'px">' + comment + '</textarea>');
+            imagesHtml += str;
+
         });
 
         var typeClassName = (getQueryParameters().type == 'BUTTON_GALLERY' ? 'type-gallery' : 'type-image');
 
-        this.editor.insertContent('<div class="mceNonEditable galleryPlaceholder ' + typeClassName + '" data-images="' + imagesIds + '">' + imagesHtml + '</div>');
+        this.editor.insertContent('<div class="mceNonEditable galleryPlaceholder ' + typeClassName + '" data-images="' + imagesIds + '" data-comments="' + encodeURIComponent(JSON.stringify(comments)) + '">' + imagesHtml + '</div>');
     }
 
 };
