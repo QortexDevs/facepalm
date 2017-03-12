@@ -99,6 +99,28 @@ Form.prototype = {
             selectOnBlur: true,
         })
 
-        $('select[data-search=true]').select2({dropdownCssClass: 'bigdrop'});
+        function formatState(state) {
+            if (!state.id) {
+                return state.text;
+            }
+            var texts = state.text.split('%|').map(function (el) {
+                return el.trim()
+            });
+            if (texts[1]) {
+                var $state = $(
+                    '<span>' + texts[0] + ' <span style="font-size: 12px;color: #999;">' + texts[1] + '</span></span>'
+                );
+                return $state;
+            } else {
+                return state.text;
+
+            }
+        };
+
+        $('select[data-search=true]').select2({
+            dropdownCssClass: 'bigdrop',
+            templateResult: formatState,
+            templateSelection: formatState
+        });
     }
 };

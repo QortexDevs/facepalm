@@ -28,7 +28,7 @@
                 <option value=""></option>
             {% endif %}
             {% for id,name in parameters.dictionary %}
-                <option value="{{ id }}"
+                <option value="{{ id }}" title="{{ name }}"
                         {% if id == object.__get(parameters.foreignModel).id %}selected{% endif %}>{{ name }}</option>
             {% endfor %}
         </select>

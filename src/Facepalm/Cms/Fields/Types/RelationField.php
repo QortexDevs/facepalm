@@ -102,8 +102,27 @@ class RelationField extends AbstractField
                 $items = $items->get();
             }
 
+            $concatMatches = null;
+            if (Arr::has($this->parameters, 'concat')) {
+                preg_match_all('/%(.*?)%/', $this->parameters['concat'], $concatMatches);
+            }
+
             foreach ($items as $foreignObject) {
-                $this->parameters['dictionary'][$foreignObject->{CmsCommon::COLUMN_NAME_ID}] = $foreignObject->{$this->foreignDisplayName};
+                $concat = "";
+                $isConcatEmpty = true;
+                if ($concatMatches && $concatMatches[0]) {
+                    $concat = $this->parameters['concat'];
+                    foreach ($concatMatches[0] as $k => $v) {
+                        if ($foreignObject->{$concatMatches[1][$k]}) {
+                            $isConcatEmpty = false;
+                            $concat = str_replace($v, $foreignObject->{$concatMatches[1][$k]}, $concat);
+                        }
+                    }
+                    if (!$isConcatEmpty && $concat && Arr::get($this->parameters, 'withSearch')) {
+                        $concat = '%|' . $concat;
+                    }
+                }
+                $this->parameters['dictionary'][$foreignObject->{CmsCommon::COLUMN_NAME_ID}] = $foreignObject->{$this->foreignDisplayName} . ($isConcatEmpty ? '' : '' . $concat);
             }
 
             asort($this->parameters['dictionary']);

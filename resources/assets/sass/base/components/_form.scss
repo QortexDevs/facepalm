@@ -569,6 +569,9 @@
         font-size: 14px;
         text-transform: none;
         font-weight: 400;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
 
         &[aria-selected=true] {
             background: #fff;
