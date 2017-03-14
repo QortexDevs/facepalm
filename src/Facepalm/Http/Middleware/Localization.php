@@ -54,12 +54,10 @@ class Localization
             setlocale(LC_TIME, $currentLanguage->localeName);
         } else {
             $defaultLanguage = $this->getDefaultLang($languages);
-
             $langFound = $languages->search(function ($item) use ($request) {
                 return $item->code === $request->cookie('language');
             });
-
-            $redirectToLanguage = $langFound ? $languages[$langFound] : $defaultLanguage;
+            $redirectToLanguage = $languages[$langFound] ?: $defaultLanguage;
             // todo: config.redirectToDefaultLanguage ?
             if ($languageSource === 'url' && $request->method() === 'GET') {
                 // Return redirect to default language on GET request
