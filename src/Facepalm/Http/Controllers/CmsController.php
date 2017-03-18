@@ -325,7 +325,7 @@ class CmsController extends BaseController
 
         /** @var CmsList $list */
         $list = $this->app->make('CmsList', [$this->fieldSet])
-            ->setBaseUrl($this->baseUrl)
+            ->setBaseUrl($this->baseUrl, $this->baseUrlNav)
             ->setupFromConfig($this->config->part('module'));
 
         // дополнительная фильтрация списка в зависимости от выбора в левом меню

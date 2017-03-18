@@ -6,5 +6,15 @@
             Создать{{ strings['accusative'] ? (" "~strings['accusative']):"" }}
         </button>
     {% endif %}
+    {% if(list.settings.listParams.languageSelector) %}
+        <div style="margin-top:50px; margin-bottom: -10px;">
+            <span style="text-transform: uppercase;font-size: 12px;">Язык отображения списка:</span>
+            <select class="list-language-selector">
+                {% for langCode,langTitle in languages %}
+                    <option {% if currentLanguage==langCode %}selected{% endif %} value="{{ langCode }}">{{ langTitle }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    {% endif %}
     {% include "facepalm::components/list/list.twig" %}
 </div>

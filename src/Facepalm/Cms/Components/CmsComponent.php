@@ -13,6 +13,9 @@ abstract class CmsComponent
     /** @var string */
     protected $baseUrl = '.';
 
+    /** @var string */
+    protected $baseUrlNav = '.';
+
     /** @var FieldSet */
     protected $fieldSet;
 
@@ -48,9 +51,10 @@ abstract class CmsComponent
      * @param $baseUrl
      * @return CmsComponent|CmsList|CmsForm
      */
-    public function setBaseUrl($baseUrl)
+    public function setBaseUrl($baseUrl, $baseUrlNav)
     {
         $this->baseUrl = $baseUrl;
+        $this->baseUrlNav = $baseUrlNav;
 
         return $this;
     }

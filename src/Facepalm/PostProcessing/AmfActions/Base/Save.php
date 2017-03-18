@@ -31,6 +31,10 @@ class Save extends AbstractAction
     {
         // Run through all incoming fields except Many-to-Many relations and set it
 
+        if (Arr::has($requestRawData, 'listLanguage')) {
+            app()->setLocale(Arr::get($requestRawData, 'listLanguage'));
+        }
+
         foreach ($keyValue as $fieldName => $value) {
             if (!$object->isManyToMany($fieldName)) {
                 // todo: учитывать описания полей из общей схемы данных (которой пока нет :))
@@ -142,7 +146,7 @@ class Save extends AbstractAction
     private function isMultiLangValue($value)
     {
         return is_array($value)
-        && is_array(reset($value))
-        && (Arr::has(reset($value), 'textBody') || Arr::has(reset($value), 'stringValue'));
+            && is_array(reset($value))
+            && (Arr::has(reset($value), 'textBody') || Arr::has(reset($value), 'stringValue'));
     }
 }

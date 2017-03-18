@@ -18,6 +18,10 @@ List.prototype = {
     init: function () {
         this.initButtons();
         this.initSortable();
+        $('.list-language-selector').on('change', function () {
+            Cookies.set('lang_' + $('body').data('navHash'), $(this).val()/*, { expires:1 }*/);
+            document.location.reload(true);
+        });
     },
 
     /**
@@ -165,6 +169,9 @@ List.prototype = {
                 if (orderArray.hasOwnProperty(i)) {
                     payload['save'][model][orderArray[i]] = {'show_order': parseInt(i) + 1, 'parent_id': parentId};
                 }
+            }
+            if ($('.list-language-selector').length) {
+                payload['listLanguage'] = $('.list-language-selector').val();
             }
 
             _this.app.doRequest(payload);

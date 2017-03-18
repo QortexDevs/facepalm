@@ -354,5 +354,10 @@ trait TranslatableTrait
         return $out;
     }
 
+    public function isTranslatable($field)
+    {
+        return in_array($field, $this->stringFields) || in_array($field, $this->textFields);
+    }
+
 
 }

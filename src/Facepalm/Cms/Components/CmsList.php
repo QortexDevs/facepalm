@@ -5,6 +5,7 @@ namespace Facepalm\Cms\Components;
 use Facepalm\Cms\CmsCommon;
 use Facepalm\Cms\Config\Config;
 use Facepalm\Models\Foundation\BaseEntity;
+use Facepalm\Models\Language;
 use Facepalm\Models\ModelFactory;
 use Facepalm\Tools\Tree;
 use Illuminate\Config\Repository;
@@ -188,7 +189,7 @@ class CmsList extends CmsComponent
 
         // get query builder with all records (dummy clause)
         /** @var Builder $queryBuilder */
-        $queryBuilder = ModelFactory::builderFor($this->modelName);
+        $queryBuilder = ModelFactory::builderFor($this->modelName)->with('textItems');
 
 
         if ($this->constraintCallbacks) {
@@ -226,6 +227,18 @@ class CmsList extends CmsComponent
 
         // do query
         $objects = $queryBuilder->get();
+
+        if ($first = $objects->first()) {
+            if ($first->isTranslatable('show_order')) {
+                if (Arr::has($_COOKIE, 'lang_' . md5($this->baseUrlNav))) {
+                    $localForModule = $_COOKIE['lang_' . md5($this->baseUrlNav)];
+                    if ($localForModule) {
+                        app()->setLocale($localForModule);
+                    }
+                }
+                $objects = $objects->sortBy('show_order');
+            }
+        }
 
         /** @var BaseEntity $object */
         foreach ($objects as $object) {
@@ -276,6 +289,18 @@ class CmsList extends CmsComponent
                 'list' => $listData,
             ]);
         }
+
+        $defaultLocale = config('facepalm.cmsLocale') ?: config('app.locale');
+        $localForModule = null;
+        if (Arr::has($_COOKIE, 'lang_' . md5($this->baseUrlNav))) {
+            $localForModule = $_COOKIE['lang_' . md5($this->baseUrlNav)];
+        }
+        $currentLanguage = $localForModule ?: $defaultLocale;
+        if ($localForModule) {
+            app()->setLocale($localForModule);
+        }
+
+
         return $render->render($templateName, [
             'list' => $listData,
             'baseUrl' => $this->baseUrl,
@@ -283,6 +308,8 @@ class CmsList extends CmsComponent
             'treeContent' => $treeContent ?: '',
             'emptyTreeItem' => $emptyTreeItem ?: '',
             'treeRoot' => $this->treeRoot,
+            'languages' => Language::where('status', 1)->orderby('is_default', 'desc')->get()->pluck('name', 'code'),
+            'currentLanguage' => $currentLanguage
         ]);
     }
 
