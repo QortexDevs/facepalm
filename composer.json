@@ -17,7 +17,8 @@
         "twig/twig": "~1.23",
         "rcrowe/twigbridge": "0.9.x",
         "intervention/image": "^2.3",
-        "hiroto-k/json5-php": "~1.0"
+        "hiroto-k/json5-php": "~1.0",
+        "cocur/slugify": "^2.4"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
