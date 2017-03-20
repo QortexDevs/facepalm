@@ -61,7 +61,8 @@ class Save extends AbstractAction
         if (!$object->id) {
             $className = class_basename($object);
             DB::transaction(function () use ($object, $className, $requestRawData) {
-                $object->show_order = ModelFactory::max($className, 'show_order') + 1;
+//                $object->show_order = ModelFactory::max($className, 'show_order') + 1;
+                $object->setAttribute('show_order', ModelFactory::max($className, 'show_order') + 1);
                 Event::fire('facepalm.cms.beforeObjectSave', [$object, $requestRawData]);
                 Event::fire('facepalm.cms.beforeObjectSave.' . class_basename($object), [$object, $requestRawData]);
                 $object->save();
@@ -75,6 +76,11 @@ class Save extends AbstractAction
         Event::fire('facepalm.cms.afterObjectSave.' . class_basename($object), [$object, $requestRawData]);
 
         if ($object->id) {
+
+            //todo: save showorder localizations
+            //todo: save showorder localizations
+            //todo: save showorder localizations
+
             $this->setTranslatableItems($object, $keyValue);
             $this->syncManyToManyRelations($object, $keyValue);
 
@@ -83,7 +89,6 @@ class Save extends AbstractAction
             Event::fire('facepalm.cms.afterObjectSaveRelations.' . class_basename($object), [$object, $requestRawData]);
             Event::fire('facepalm.cms.afterObjectSaveRelations', [$object, $requestRawData]);
         }
-
     }
 
 
