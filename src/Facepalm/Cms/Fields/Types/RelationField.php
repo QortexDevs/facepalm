@@ -86,7 +86,7 @@ class RelationField extends AbstractField
         } else {
             //todo: add query conditions
             //todo: переделать статический вызов на di
-            $cacheKey = "dictionary_" . md5(serialize($this->parameters));
+            $cacheKey = "dictionary_" . md5($this->name.json_encode($this->filter).$this->concat.$this->withSearch);
             if (Cache::store('array')->has($cacheKey)) {
                 $this->parameters['dictionary'] = Cache::store('array')->get($cacheKey);
             } else {
