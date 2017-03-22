@@ -57,7 +57,8 @@ class Localization
             $langFound = $languages->search(function ($item) use ($request) {
                 return $item->code === $request->cookie('language');
             });
-            $redirectToLanguage = $languages[$langFound] ?: $defaultLanguage;
+            $redirectToLanguage = ($langFound !== false && $languages[$langFound]) ? $languages[$langFound] : $defaultLanguage;
+
             // todo: config.redirectToDefaultLanguage ?
             if ($languageSource === 'url' && $request->method() === 'GET') {
                 // Return redirect to default language on GET request
