@@ -17,6 +17,7 @@ use Facepalm\Cms\Fields\FieldSet;
 use Facepalm\Models\ModelFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
 /**
@@ -85,47 +86,53 @@ class RelationField extends AbstractField
         } else {
             //todo: add query conditions
             //todo: переделать статический вызов на di
-
-            if ($this->filter) {
-                $builder = ModelFactory::builderFor($this->foreignModel);
-                foreach ($this->filter as $field => $value) {
-                    $builder->where($field, $value);
-                }
-                $items = $builder->get();
+            $cacheKey = "dictionary_" . md5(serialize($this->parameters));
+            if (Cache::store('array')->has($cacheKey)) {
+                $this->parameters['dictionary'] = Cache::store('array')->get($cacheKey);
             } else {
-                $items = ModelFactory::builderFor($this->foreignModel);
 
-                $fullModelName = ModelFactory::getFullModelClassName($this->foreignModel);
-                if (method_exists($fullModelName, 'textItems')) {
-                    $items->with('textItems');
+                if ($this->filter) {
+                    $builder = ModelFactory::builderFor($this->foreignModel);
+                    foreach ($this->filter as $field => $value) {
+                        $builder->where($field, $value);
+                    }
+                    $items = $builder->get();
+                } else {
+                    $items = ModelFactory::builderFor($this->foreignModel);
+
+                    $fullModelName = ModelFactory::getFullModelClassName($this->foreignModel);
+                    if (method_exists($fullModelName, 'textItems')) {
+                        $items->with('textItems');
+                    }
+                    $items = $items->get();
                 }
-                $items = $items->get();
-            }
 
-            $concatMatches = null;
-            if (Arr::has($this->parameters, 'concat')) {
-                preg_match_all('/%(.*?)%/', $this->parameters['concat'], $concatMatches);
-            }
+                $concatMatches = null;
+                if (Arr::has($this->parameters, 'concat')) {
+                    preg_match_all('/%(.*?)%/', $this->parameters['concat'], $concatMatches);
+                }
 
-            foreach ($items as $foreignObject) {
-                $concat = "";
-                $isConcatEmpty = true;
-                if ($concatMatches && $concatMatches[0]) {
-                    $concat = $this->parameters['concat'];
-                    foreach ($concatMatches[0] as $k => $v) {
-                        if ($foreignObject->{$concatMatches[1][$k]}) {
-                            $isConcatEmpty = false;
-                            $concat = str_replace($v, $foreignObject->{$concatMatches[1][$k]}, $concat);
+                foreach ($items as $foreignObject) {
+                    $concat = "";
+                    $isConcatEmpty = true;
+                    if ($concatMatches && $concatMatches[0]) {
+                        $concat = $this->parameters['concat'];
+                        foreach ($concatMatches[0] as $k => $v) {
+                            if ($foreignObject->{$concatMatches[1][$k]}) {
+                                $isConcatEmpty = false;
+                                $concat = str_replace($v, $foreignObject->{$concatMatches[1][$k]}, $concat);
+                            }
+                        }
+                        if (!$isConcatEmpty && $concat && Arr::get($this->parameters, 'withSearch')) {
+                            $concat = '%|' . $concat;
                         }
                     }
-                    if (!$isConcatEmpty && $concat && Arr::get($this->parameters, 'withSearch')) {
-                        $concat = '%|' . $concat;
-                    }
+                    $this->parameters['dictionary'][$foreignObject->{CmsCommon::COLUMN_NAME_ID}] = $foreignObject->{$this->foreignDisplayName} . ($isConcatEmpty ? '' : '' . $concat);
                 }
-                $this->parameters['dictionary'][$foreignObject->{CmsCommon::COLUMN_NAME_ID}] = $foreignObject->{$this->foreignDisplayName} . ($isConcatEmpty ? '' : '' . $concat);
-            }
 
-            asort($this->parameters['dictionary']);
+                asort($this->parameters['dictionary']);
+                Cache::store('array')->put($cacheKey, $this->parameters['dictionary'], 1);
+            }
 
             if ($this->cardinality === 'many') {
 
