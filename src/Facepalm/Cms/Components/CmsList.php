@@ -208,7 +208,11 @@ class CmsList extends CmsComponent
         if ($this->isTreeMode || $this->isSortable) {
             $queryBuilder = $queryBuilder->orderBy($tableName . '.' . CmsCommon::COLUMN_NAME_SHOW_ORDER, 'asc');
         } else {
+            if (Arr::has($this->listParams, 'orderBy')) {
+                $queryBuilder = $queryBuilder->orderByRaw($this->listParams['orderBy']);
+            }
             $queryBuilder = $queryBuilder->orderBy($tableName . '.' . CmsCommon::COLUMN_NAME_ID, self::DEFAULT_ORDERING);
+
         }
 
         // Eager loading of related models

@@ -347,6 +347,8 @@ class CmsController extends BaseController
                 $list->setAdditionalConstraints(function ($builder) use ($constantField, $constantValue) {
                     if ($constantValue === 'not null') {
                         return $builder->whereNotNull($constantField);
+                    } elseif ($constantValue === 'null') {
+                        return $builder->whereNull($constantField);
                     } else {
                         return $builder->where($constantField, $constantValue);
                     }

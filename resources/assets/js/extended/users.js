@@ -4,7 +4,8 @@
 $(document).ready(function () {
     if ($('tr[data-row-for-field="acl"]').length) {
         $('[data-row-for-field="role.name"] select').on('change', function () {
-            if ($(this).val() == 1) {
+            console.log($(this).val());
+            if ($(this).val() == 1 || !$(this).val()) {
                 $('tr[data-row-for-field="acl"]').hide();
             } else {
                 $('tr[data-row-for-field="acl"]').show();

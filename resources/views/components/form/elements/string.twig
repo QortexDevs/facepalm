@@ -5,7 +5,7 @@
                    name="{{ inputName }}[{{ langCode }}][stringValue]"
                    value="{{ object.string(field, langCode) }}"
                    {% if parameters.showPlaceholder %}placeholder="{{ parameters.title }}"{% endif %}
-                   {% if parameters.width %}style="width: {{ parameters.width }}"{% endif %}
+                    {% if parameters.width %}style="width: {{ parameters.width }}"{% endif %}
             />
             {% if languages|length > 1 %}
                 <div class="language-caption">{{ langTitle }}</div>
@@ -16,8 +16,9 @@
     <input type="text" class="text"
            name="{{ inputName }}"
            value="{{ forceValue?:object.__get(field) }}"
-           {% if parameters.showPlaceholder %}placeholder="{{ parameters.title }}"{% endif %}
-           {% if parameters.disabledForEdit and (forceValue?:object.__get(field)) %}disabled="disabled"{% endif %}
+           {% if parameters.autocomplete == 'off' %}autocomplete="off"{% endif %}
+            {% if parameters.showPlaceholder %}placeholder="{{ parameters.title }}"{% endif %}
+            {% if parameters.disabledForEdit and (forceValue?:object.__get(field)) %}disabled="disabled"{% endif %}
             {% if parameters.width %}style="width: {{ parameters.width }}"{% endif %}
     />
 {% endif %}
