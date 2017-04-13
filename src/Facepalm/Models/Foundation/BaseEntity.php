@@ -11,6 +11,7 @@ namespace Facepalm\Models\Foundation;
 
 use Closure;
 use Facepalm\Http\Middleware\RedirectTrailingSlash;
+use Facepalm\Models\File;
 use Facepalm\Models\Image;
 use Facepalm\Models\ModelFactory;
 use Facepalm\Models\TextItem;
@@ -107,8 +108,17 @@ abstract class BaseEntity extends AbstractEntity
     }
 
 
-    public function attachImage($group, $path)
+    public function attachImage($group, $path, $deleteOld = false)
     {
+        if ($deleteOld) {
+            $this->images()
+                ->ofGroup($group)
+                ->get()
+                ->each(function ($uploadableObject) {
+                    $uploadableObject->delete();
+                });
+
+        }
         if ($path instanceof UploadedFile) {
             $uploadableObject = Image::createFromFile($path->getPathName(), $path->getClientOriginalName());
         } else {
@@ -119,6 +129,31 @@ abstract class BaseEntity extends AbstractEntity
         $uploadableObject->show_order = Image::max('show_order') + 1;
         $uploadableObject->save();
         $this->images()->save($uploadableObject);
+        return $uploadableObject;
+    }
+
+    public function attachFile($group, $path, $deleteOld = false)
+    {
+        if ($deleteOld) {
+            $this->images()
+                ->ofGroup($group)
+                ->get()
+                ->each(function ($uploadableObject) {
+                    $uploadableObject->delete();
+                });
+
+        }
+        if ($path instanceof UploadedFile) {
+            $uploadableObject = File::createFromFile($path->getPathName(), $path->getClientOriginalName());
+        } else {
+            $uploadableObject = File::createFromFile($path);
+        }
+
+        $uploadableObject->setAttribute('group', $group);
+        $uploadableObject->show_order = File::max('show_order') + 1;
+        $uploadableObject->save();
+        $this->images()->save($uploadableObject);
+        return $uploadableObject;
     }
 
     /**
