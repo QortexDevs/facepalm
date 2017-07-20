@@ -38,6 +38,7 @@ class CmsList extends CmsComponent
     protected $relatedModels = [];
     protected $constraintCallbacks = [];
     protected $listParams = [];
+    protected $filterString;
 
 
     /**
@@ -198,6 +199,25 @@ class CmsList extends CmsComponent
             }
         }
 
+        if ($this->filterString ) {
+            if (Arr::has($this->listParams, 'filter.fields')) {
+                switch (Arr::get($this->listParams, 'filter.search_mode')) {
+                    case 'starts':
+                        $this->filterString .= '%';
+                        break;
+                    case 'contains':
+                        $this->filterString = '%' . $this->filterString . '%';
+                        break;
+                }
+                $queryBuilder->where(function ($q) {
+                    foreach (Arr::get($this->listParams, 'filter.fields') as $field) {
+
+                        $q->orWhere($field, 'like', $this->filterString);
+                    }
+                });
+            }
+        }
+
         if (Arr::has($this->listParams, 'rawConditions') && $this->listParams['rawConditions']) {
 //            dd($queryBuilder);
             $queryBuilder->whereRaw($this->listParams['rawConditions']);
@@ -321,6 +341,11 @@ class CmsList extends CmsComponent
     {
         $this->constraintCallbacks[] = $param;
         return $this;
+    }
+
+    public function setFilterString($string)
+    {
+        $this->filterString = $string;
     }
 
 }

@@ -259,7 +259,11 @@ class CmsController extends BaseController
             $moduleContent = $this->renderCmsDashboard();
         }
 
-        return $this->renderPage('facepalm::layouts/base', $moduleContent);
+        if ($this->request->isXmlHttpRequest() || $this->request->input('ajax')) {
+            return $moduleContent;
+        } else {
+            return $this->renderPage('facepalm::layouts/base', $moduleContent);
+        }
     }
 
     /**
@@ -357,16 +361,26 @@ class CmsController extends BaseController
         }
 
 
-        $params = [
-            'buttonsPanel' => (bool)$this->config->get('module.list.treeMode'),
-            'listHtml' => $list->render($this->renderer),
-        ];
+        if ($this->config->get('module.list.filter') && $this->request->input('filter') !== null) {
+            $list->setFilterString($this->request->input('filter'));
+        }
 
 
-        return [
-            'moduleContent' => $this->renderer->render('facepalm::modulePages/list', $params),
-            'pageTitle' => $defaultPageTitle
-        ];
+        if ($this->request->input('filter') !== null) {
+            if ($this->config->get('module.list.filter')) {
+                return $list->render($this->renderer, 'facepalm::components/list/list');
+            }
+        } else {
+            $params = [
+                'buttonsPanel' => (bool)$this->config->get('module.list.treeMode'),
+                'listHtml' => $list->render($this->renderer),
+            ];
+
+            return [
+                'moduleContent' => $this->renderer->render('facepalm::modulePages/list', $params),
+                'pageTitle' => $defaultPageTitle
+            ];
+        }
 
     }
 

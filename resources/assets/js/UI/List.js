@@ -32,6 +32,7 @@ List.prototype = {
         this.initDeleteButton();
         this.initAddButton();
         this.initAddToRootButton();
+        this.initFilter();
     },
 
 
@@ -194,6 +195,27 @@ List.prototype = {
 
     },
 
+    initFilter: function () {
+        var timer = null;
+        var prevFilter = '';
+        $('.list-filter input:text').on('change input keypress blur', function (e) {
+            var strSearch = $('.list-filter input:text').val();
+            if (e.keyCode === 13) return false;
+            if (prevFilter !== strSearch) {
+                if (timer) {
+                    clearTimeout(timer);
+                }
+                timer = setTimeout(function () {
+                    prevFilter = strSearch;
+                    if (strSearch.length !== 1) {
+                        $.get('./?filter=' + strSearch).done(function (response) {
+                            $('.cms-module-list-content').replaceWith(response);
+                        });
+                    }
+                }, 500);
+            }
+        });
+    },
 
     /**
      *

@@ -16,5 +16,13 @@
             </select>
         </div>
     {% endif %}
+    {% if(list.settings.listParams.filter) %}
+        <div class="list-filter">
+            <div style="margin-top:50px; margin-bottom: -10px; padding:15px; background:#f4f7fa; display: inline-block">
+                <div style="text-transform: uppercase;font-size: 11px; color: #999;">Фильтр:</div>
+                <input type="text" name="filter" style="width: 400px;">
+            </div>
+        </div>
+    {% endif %}
     {% include "facepalm::components/list/list.twig" %}
 </div>

@@ -135,7 +135,7 @@ abstract class BaseEntity extends AbstractEntity
     public function attachFile($group, $path, $deleteOld = false)
     {
         if ($deleteOld) {
-            $this->images()
+            $this->files()
                 ->ofGroup($group)
                 ->get()
                 ->each(function ($uploadableObject) {
