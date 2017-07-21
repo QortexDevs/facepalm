@@ -24,6 +24,11 @@ class CreateTextItemsTable extends Migration
             $table->string('stringValue');
             $table->text('textBody');
             $table->timestamps();
+            $table->index('bind_type');
+            $table->index('bind_id');
+            $table->index('group');
+            $table->index('stringValue');
+            $table->index('languageCode');
         });
     }
 

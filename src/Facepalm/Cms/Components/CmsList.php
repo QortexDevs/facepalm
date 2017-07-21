@@ -11,6 +11,7 @@ use Facepalm\Tools\Tree;
 use Illuminate\Config\Repository;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class CmsList extends CmsComponent
@@ -199,20 +200,35 @@ class CmsList extends CmsComponent
             }
         }
 
-        if ($this->filterString ) {
+
+        if ($this->filterString) {
             if (Arr::has($this->listParams, 'filter.fields')) {
                 switch (Arr::get($this->listParams, 'filter.search_mode')) {
-                    case 'starts':
-                        $this->filterString .= '%';
-                        break;
                     case 'contains':
                         $this->filterString = '%' . $this->filterString . '%';
                         break;
+                    case 'starts':
+                    default:
+                        $this->filterString .= '%';
+                        break;
                 }
-                $queryBuilder->where(function ($q) {
+                $queryBuilder->where(function ($q) use ($tableName) {
                     foreach (Arr::get($this->listParams, 'filter.fields') as $field) {
-
-                        $q->orWhere($field, 'like', $this->filterString);
+                        if (
+                            Arr::has($this->fieldSet->getFields(), $field)
+                            && $this->fieldSet->getFields()['last_name']->translatable
+                        ) {
+                            // условия филтрации для транслейтбл полей
+                            $q->orWhereHas('textItems', function ($q1) use ($tableName, $field) {
+//                                $q1->where('bind_type', $this->modelName);
+//                                $q1->whereRaw('bind_id = ' . $tableName . '.id');
+                                $q1->where('group', $field);
+                                $q1->where('stringValue', 'like', $this->filterString);
+                                // todo: подумать насчет локали!
+                            });
+                        } else {
+                            $q->orWhere($field, 'like', $this->filterString);
+                        }
                     }
                 });
             }
