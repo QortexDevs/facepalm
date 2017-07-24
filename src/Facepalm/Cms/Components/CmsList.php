@@ -216,7 +216,7 @@ class CmsList extends CmsComponent
                     foreach (Arr::get($this->listParams, 'filter.fields') as $field) {
                         if (
                             Arr::has($this->fieldSet->getFields(), $field)
-                            && $this->fieldSet->getFields()['last_name']->translatable
+                            && $this->fieldSet->getFields()[$field]->translatable
                         ) {
                             // условия филтрации для транслейтбл полей
                             $q->orWhereHas('textItems', function ($q1) use ($tableName, $field) {
