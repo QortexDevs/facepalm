@@ -19,4 +19,5 @@ pipelines:
     master:
       - step:
           script:
+            - apt-get update && apt-get install -y openssh-client
             - ssh -t packages@qortex.ru "cd www/ && php bin/satis build satis.json web/"
