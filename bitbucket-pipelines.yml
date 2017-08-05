@@ -6,18 +6,20 @@
 image: php:7.1.1
 
 pipelines:
-#  default:
-#    - step:
-#        caches:
-#          - composer
-#        script:
+  default:
+    - step:
+        caches:
+          - composer
+        script:
+          - apt-get update && apt-get install -y openssh-client
+          - ssh -t packages@qortex.ru "cd www/ && php bin/satis build satis.json web/"
 #          - apt-get update && apt-get install -y unzip
 #          - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 #          - composer install
 #          - vendor/bin/phpunit
-  branches:
-    master:
-      - step:
-          script:
-            - apt-get update && apt-get install -y openssh-client
-            - ssh -t packages@qortex.ru "cd www/ && php bin/satis build satis.json web/"
+#  branches:
+#    master:
+#      - step:
+#          script:
+#            - apt-get update && apt-get install -y openssh-client
+#            - ssh -t packages@qortex.ru "cd www/ && php bin/satis build satis.json web/"
