@@ -26,9 +26,9 @@ class CreateLanguagesTable extends Migration
 
         DB::table('languages')->insert(
             [
-                'name' => 'English',
-                'code' => 'en',
-                'localeName' => 'en_US.UTF-8',
+                'name' => 'Русский',
+                'code' => 'ru',
+                'localeName' => 'ru_RU.UTF-8',
                 'status' => 1,
                 'show_order' => 1,
                 'is_default' => 1
