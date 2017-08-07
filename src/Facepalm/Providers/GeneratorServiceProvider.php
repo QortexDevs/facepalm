@@ -76,5 +76,10 @@ class GeneratorServiceProvider extends ServiceProvider
             return $app['Facepalm\Generators\Commands\ReorderCommand'];
         });
         $this->commands('command.facepalm.reorder');
+
+        $this->app->singleton('command.facepalm.install', function ($app) {
+            return $app['Facepalm\Generators\Commands\InstallCommand'];
+        });
+        $this->commands('command.facepalm.install');
     }
 }
