@@ -25,7 +25,7 @@ class AppServiceProvider extends ServiceProvider
         // не копируем ассеты фейспалма, потому что делаем симлинк
         // $this->publishes([__DIR__ . '/../../../build/' => public_path() . "/assets/facepalm/"], 'assets');
 
-        //       $this->publishes([__DIR__ . '/../../../config/cms-sample-multilang/' => config_path() . "/cms/"], 'config');
+        $this->publishes([__DIR__ . '/../../../config/cms-sample/' => config_path() . "/cms/"], 'config');
 
         $this->loadViewsFrom(__DIR__ . '/../../../resources/views/', 'facepalm');
         //test

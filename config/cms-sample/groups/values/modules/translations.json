@@ -12,7 +12,9 @@
         "showStatus": false,
         "plain": true,
         "columns": {
-            "name": true,
+            "name": {
+                "disabledForEdit":true
+            },
             "value": {
                 "type": "string",
                 "title": "Значение",
