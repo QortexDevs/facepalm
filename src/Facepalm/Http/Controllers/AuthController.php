@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Auth;
 class AuthController extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
-    use AuthenticatesUsers, ThrottlesLogins;
+    use AuthenticatesUsers;
 
     protected $redirectAfterLogout = '/cms/';
 

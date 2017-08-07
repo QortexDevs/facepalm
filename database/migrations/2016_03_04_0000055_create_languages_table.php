@@ -17,10 +17,10 @@ class CreateLanguagesTable extends Migration
             $table->integer('parent_id')->nullable();
             $table->integer('status')->nullable();
             $table->integer('show_order')->nullable();
-            $table->string('code');
-            $table->string('localeName');
-            $table->string('name');
-            $table->boolean('is_default');
+            $table->string('code')->nullable();
+            $table->string('localeName')->nullable();
+            $table->string('name')->nullable();
+            $table->boolean('is_default')->nullable();
             $table->timestamps();
         });
 

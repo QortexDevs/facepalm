@@ -1,7 +1,11 @@
 /vendor
 /node_modules
 /bower_components
+/storage/cms-config-cache.json
+/storage/logs/
+/bootstrap/cache/
 
+composer.lock
 
 Homestead.yaml
 Homestead.json
