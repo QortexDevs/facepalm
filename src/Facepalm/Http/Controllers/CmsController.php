@@ -185,8 +185,9 @@ class CmsController extends BaseController
     {
         $params = explode('/', trim($params, '/ '));
 
-        if ($this->config->get('module.navigation') && (int)Arr::get($params, 0)) {
+        if ($this->config->get('module.navigation') && Arr::has($params, 0) && Arr::get($params, 0) !== '') {
             $this->navigationId = (int)Arr::get($params, 0);
+//            dd((int)Arr::get($params, 0));
 
             // If navigation entity is not editing entity, remove first (navigation) id from parameters
             if ($this->config->get('module.navigation.model') !== $this->config->get('module.model')) {
@@ -238,7 +239,7 @@ class CmsController extends BaseController
                 ->setAdditionalParameter('config', $this->config);
             // Render page part content
             $moduleContent = '';
-            if ($this->layoutMode === self::LAYOUT_TWO_COLUMN && !$this->navigationId) {
+            if ($this->layoutMode === self::LAYOUT_TWO_COLUMN && $this->navigationId === null) {
                 $moduleContent = $this->renderTwoColumnIndexPage();
             } else {
                 if ($this->customModuleHandler) {
@@ -333,15 +334,20 @@ class CmsController extends BaseController
             ->setupFromConfig($this->config->part('module'));
 
         // дополнительная фильтрация списка в зависимости от выбора в левом меню
-        if ($this->navigationId && $this->isDifferentNavModel) {
-            if ($this->config->get('module.navigation.titleField')) {
+        if ($this->navigationId !== null && $this->isDifferentNavModel) {
+            if ($this->navigationId && $this->config->get('module.navigation.titleField')) {
                 $relationObject = ModelFactory::find($this->config->get('module.navigation.model'), $this->navigationId);
                 $defaultPageTitle = $relationObject->{$this->config->get('module.navigation.titleField')};
             }
 
             $list->setAdditionalConstraints(function ($builder) {
                 $relationField = Str::snake($this->config->get('module.navigation.model')) . '_id';
-                return $builder->where($relationField, $this->navigationId);
+                if ($this->navigationId) {
+                    $builder->where($relationField, $this->navigationId);
+                } else {
+                    $builder->where($relationField, 0)->orWhere($relationField, null);
+                }
+                return $builder;
             });
         }
 
@@ -589,8 +595,19 @@ class CmsController extends BaseController
             return $output;
         } else {
             $tree = Tree::fromEloquentCollection($sectionsCollection);
-
-            return $tree->render(
+            $output = '';
+            if ($this->config->get('module.navigation.showUnattachedObjects')) {
+                $output .= $this->renderer->render('facepalm::layouts/menu/navigationItem', [
+                    'element' => [
+                        'id' => 0,
+                        'title' => $this->config->get('module.navigation.showUnattachedObjects.title')
+                    ],
+                    'titleField' => 'title',
+                    'baseUrlNav' => $this->baseUrlNav,
+                    'navigationId' => $this->navigationId,
+                ]);
+            }
+            $output .= $tree->render(
                 $this->renderer,
                 'facepalm::layouts/menu/navigationItem',
                 0,
@@ -601,6 +618,7 @@ class CmsController extends BaseController
                     'titleField' => $this->config->get('module.navigation.titleField')
                 ]
             );
+            return $output;
         }
 
 

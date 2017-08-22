@@ -1,4 +1,4 @@
-<li {% if navigationId==element.id %}class="active"{% endif %}>
+<li {% if navigationId is same as(element.id) %}class="active"{% endif %}>
     {% if isRoot %}
         <a href="{{ baseUrlNav }}/">Главная</a>
     {% else %}
