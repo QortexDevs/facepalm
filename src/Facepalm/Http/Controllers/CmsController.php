@@ -296,11 +296,21 @@ class CmsController extends BaseController
         $skip = (array)$this->config->get('module.navigation.skip');
         $model = (string)$this->config->get('module.navigation.model');
 
-        $sectionsCollection = ModelFactory::builderFor($model)
+
+        $builder = ModelFactory::builderFor($model)
             ->with('textItems')
             ->whereNotIn('id', $skip ?: [])
-            ->orderBy('show_order')
-            ->get();
+            ->orderBy('show_order');
+
+        if ($this->config->get('module.navigation.customConstraint')) {
+            $fieldFactory = new FieldFactory();
+            $className = '\\' . $fieldFactory->dottedNotationToNamespace($this->config->get('module.navigation.customConstraint'));
+            $filter = app()->make($className);
+            $builder = $filter->filter($builder);
+        }
+
+        $sectionsCollection = $builder->get();
+
 
         $tree = Tree::fromEloquentCollection($sectionsCollection);
 
