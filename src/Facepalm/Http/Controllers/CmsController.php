@@ -563,11 +563,19 @@ class CmsController extends BaseController
         $groupModel = (string)$this->config->get('module.navigation.groupModel');
         $showRoot = (boolean)$this->config->get('module.navigation.showRoot');
 
-        $sectionsCollection = ModelFactory::builderFor($model)
+        $builder = ModelFactory::builderFor($model)
             ->with('textItems')
             ->whereNotIn('id', $skip ?: [])
-            ->orderBy('show_order')
-            ->get();
+            ->orderBy('show_order');
+
+        if ($this->config->get('module.navigation.customConstraint')) {
+            $fieldFactory = new FieldFactory();
+            $className = '\\' . $fieldFactory->dottedNotationToNamespace($this->config->get('module.navigation.customConstraint'));
+            $filter = app()->make($className);
+            $builder = $filter->filter($builder);
+        }
+
+        $sectionsCollection = $builder->get();
 
         if ($groupModel) {
             $itemsByGroups = $sectionsCollection->groupBy(Str::snake($groupModel) . "_id");
