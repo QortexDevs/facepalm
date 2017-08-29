@@ -13,6 +13,7 @@ use Facepalm\Cms\CmsCommon;
 use Facepalm\Cms\Components\CmsForm;
 use Facepalm\Cms\Components\CmsList;
 use Facepalm\Cms\Fields\AbstractField;
+use Facepalm\Cms\Fields\FieldFactory;
 use Facepalm\Cms\Fields\FieldSet;
 use Facepalm\Models\ModelFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -86,7 +87,7 @@ class RelationField extends AbstractField
         } else {
             //todo: add query conditions
             //todo: переделать статический вызов на di
-            $cacheKey = "dictionary_" . md5($this->name.json_encode($this->filter).$this->concat.$this->withSearch);
+            $cacheKey = "dictionary_" . md5($this->name . json_encode($this->filter) . $this->concat . $this->withSearch);
             if (Cache::store('array')->has($cacheKey)) {
                 $this->parameters['dictionary'] = Cache::store('array')->get($cacheKey);
             } else {
@@ -99,6 +100,12 @@ class RelationField extends AbstractField
                     $items = $builder->get();
                 } else {
                     $items = ModelFactory::builderFor($this->foreignModel);
+                    if (Arr::has($this->parameters, 'customConstraint')) {
+                        $fieldFactory = new FieldFactory();
+                        $className = '\\' . $fieldFactory->dottedNotationToNamespace($this->parameters['customConstraint']);
+                        $filter = app()->make($className);
+                        $items = $filter->filter($items);
+                    }
 
                     $fullModelName = ModelFactory::getFullModelClassName($this->foreignModel);
                     if (method_exists($fullModelName, 'textItems')) {
