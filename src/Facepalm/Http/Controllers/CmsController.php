@@ -144,7 +144,19 @@ class CmsController extends BaseController
             $this->baseUrl = $this->baseUrlNav = '/cms/' . $group . '/' . $module;
 
             if ($this->config->get('module.navigation')) {
-                $this->layoutMode = self::LAYOUT_TWO_COLUMN;
+                if ($this->config->get('module.navigation.navigationExistence')) {
+                    $fieldFactory = new FieldFactory();
+                    $className = '\\' . $fieldFactory->dottedNotationToNamespace($this->config->get('module.navigation.navigationExistence'));
+                    $filter = app()->make($className, [$this->config->part('module')]);
+                    if ($filter->showNavigation()) {
+                        $this->layoutMode = self::LAYOUT_TWO_COLUMN;
+                    } else {
+                        $this->layoutMode = self::LAYOUT_SIMPLE;
+                        $this->config->set('module.navigation', null);
+                    }
+                } else {
+                    $this->layoutMode = self::LAYOUT_TWO_COLUMN;
+                }
             } else {
                 $this->layoutMode = self::LAYOUT_SIMPLE;
             }
@@ -359,6 +371,12 @@ class CmsController extends BaseController
             });
         }
 
+        if ($this->config->get('module.constantsFilter')) {
+            $fieldFactory = new FieldFactory();
+            $className = '\\' . $fieldFactory->dottedNotationToNamespace($this->config->get('module.constantsFilter'));
+            $filter = app()->make($className, [$this->config->part('module')]);
+            $this->config->set('module.constants', $filter->constants());
+        }
 
         if ($this->config->get('module.constants') && is_array($this->config->get('module.constants'))) {
             foreach ($this->config->get('module.constants') as $constantField => $constantValue) {
