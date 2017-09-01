@@ -29,7 +29,7 @@
             {% endif %}
             {% for id,name in parameters.dictionary %}
                 <option value="{{ id }}" title="{{ name }}"
-                        {% if id == object.__get(parameters.foreignModel).id %}selected{% endif %}>{{ name }}</option>
+                        {% if (object and id == object.__get(parameters.foreignKey)) or (not object and id==parameters.forceValue) %}selected{% endif %}>{{ name }}</option>
             {% endfor %}
         </select>
     {% endif %}

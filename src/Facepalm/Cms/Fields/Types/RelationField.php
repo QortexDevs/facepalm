@@ -54,8 +54,9 @@ class RelationField extends AbstractField
      * todo: т.к., например грузить словарь можно и без объекта
      *
      * @param null|Model $object
+     * @param null|FieldSet $currentFormfieldSet
      */
-    public function prepareData($object = null)
+    public function prepareData($object = null, $currentFormfieldSet = null)
     {
         if ($this->relationType === 'hasMany') {
             if ($object) {
@@ -140,6 +141,15 @@ class RelationField extends AbstractField
                 asort($this->parameters['dictionary']);
                 Cache::store('array')->put($cacheKey, $this->parameters['dictionary'], 1);
             }
+
+            if ($currentFormfieldSet) {
+                foreach ($currentFormfieldSet->getFields() as $k => $v) {
+                    if ($k === $this->foreignKey) {
+                        $this->parameters['forceValue'] = $v->forceValue;
+                    }
+                }
+            }
+
 
             if ($this->cardinality === 'many') {
 
