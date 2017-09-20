@@ -273,7 +273,11 @@ class CmsController extends BaseController
         if ($this->request->isXmlHttpRequest() || $this->request->input('ajax')) {
             return $moduleContent;
         } else {
-            return $this->renderPage('facepalm::layouts/base', $moduleContent);
+            if (Arr::has($moduleContent, 'overrideTemplate')) {
+                return $this->renderPage($moduleContent['overrideTemplate'], $moduleContent);
+            } else {
+                return $this->renderPage('facepalm::layouts/base', $moduleContent);
+            }
         }
     }
 
