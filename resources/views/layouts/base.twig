@@ -23,9 +23,9 @@
           data-base-url-nav="{{ baseUrlNav }}" data-nav-hash="{{ navHash }}">
     {% include 'facepalm::layouts/menu/leftMenu' %}
     <main>
-        <form class="main-cms-form" action="./" enctype="multipart/form-data" method="post">
-            {{ csrf_field() }}
-            {% block moduleContentOuter %}
+        {% block moduleContentOuter %}
+            <form class="main-cms-form" action="./" enctype="multipart/form-data" method="post">
+                {{ csrf_field() }}
                 <div class="top-bar">
                     <h1 title="{{ pageTitle }}">{{ pageTitle }}</h1>
                     <div class="right">
@@ -58,8 +58,8 @@
                         {{ moduleContent|raw }}
                     {% endblock moduleContent %}
                 </div>
-            {% endblock moduleContentOuter %}
-        </form>
+            </form>
+        {% endblock moduleContentOuter %}
     </main>
     </body>
 {% endblock bodyOuter %}
