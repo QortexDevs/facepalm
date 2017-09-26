@@ -18,7 +18,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->publishes([__DIR__ . '/../../../database/' => base_path("database")], 'database');
+        $this->loadMigrationsFrom(__DIR__.'/../../../database/migrations');
+//        $this->publishes([__DIR__ . '/../../../database/' => base_path("database")], 'database');
         $this->publishes([__DIR__ . '/../../../config/facepalm.php' => config_path() . "/facepalm.php"], 'config');
         $this->publishes([__DIR__ . '/../../../config/hooks/' => config_path() . "/hooks/"], 'config');
 
