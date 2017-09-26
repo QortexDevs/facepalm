@@ -91,7 +91,7 @@ class CmsForm extends CmsComponent
         if (!$this->modelName) {
             throw new \InvalidArgumentException('No model defined');
         }
-        $randomId = $randomId ?: Str::quickRandom(6);
+        $randomId = $randomId ?: Str::random(6);
         foreach ($this->fieldSet->getFields() as $field) {
             $field->setParameters([
                 'randomId' => $randomId,
