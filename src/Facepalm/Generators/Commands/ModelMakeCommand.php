@@ -8,24 +8,26 @@ class ModelMakeCommand extends \Illuminate\Foundation\Console\ModelMakeCommand
 {
     protected $name = 'facepalm:makemodel';
 
-
-    /**
-     * Execute the console command.
-     *
-     * @return mixed
-     */
-    public function fire()
+    public function handle()
     {
         if ($this->argument('name')) {
             $this->input->setArgument('name', Str::ucfirst($this->argument('name')));
         }
-        parent::fire();
+        $this->input->setOption('migration', true);
 
-        $table = Str::plural(Str::snake(class_basename($this->argument('name'))));
-
-        $this->call('facepalm:makemigration', ['name' => "create_{$table}_table", '--create' => $table]);
+        parent::handle();
     }
 
+
+    protected function createMigration()
+    {
+        $table = Str::plural(Str::snake(class_basename($this->argument('name'))));
+
+        $this->call('facepalm:makemigration', [
+            'name' => "create_{$table}_table",
+            '--create' => $table,
+        ]);
+    }
 
     /**
      * @param string $rootNamespace
