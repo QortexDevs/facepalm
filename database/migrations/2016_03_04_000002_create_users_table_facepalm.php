@@ -38,6 +38,9 @@ class CreateUsersTableFacepalm extends Migration
                 if (!Schema::hasColumn('users', 'email')) {
                     $table->string('email')->unique()->nullable();
                 }
+                if (!Schema::hasColumn('users', 'username')) {
+                    $table->string('username')->unique()->nullable();
+                }
                 if (!Schema::hasColumn('users', 'password')) {
                     $table->string('password', 60)->nullable();
                 }

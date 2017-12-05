@@ -64,14 +64,22 @@ class AuthController extends BaseController
         foreach ($guards as $guard) {
             try {
                 if ($guard == 'ldap') {
-                    if (Adldap::auth()->attempt($credentials['email'], $credentials['password'], true)) {
+                    $username = $credentials['email'];
+                    $password = $credentials['password'];
 
+                    if (Adldap::auth()->attempt($username, $password, true)) {
 
-                        $ldapuser = Adldap::search()->users()->where('samaccountname', '=', $credentials['email'])->first();
+                        $ldapuser = Adldap::search()->users()->where('samaccountname', '=', $username)->first();
 
-                        $user = User::firstOrCreate(['email' => $credentials['email']]);
+                        $user = User::firstOrCreate(['email' => $ldapuser['mail'][0]]);
+                        $user->name = $ldapuser['name'][0];
+                        $user->username = $ldapuser['samaccountname'][0];
+                        $user->save();
                         Auth::guard($guard)->login($user, true);
 
+                        if (config('facepalm.onAfterCmsLogin') && is_callable(config('facepalm.onAfterCmsLogin'))) {
+                            config('facepalm.onAfterCmsLogin')($credentials);
+                        }
 
                         if ($request->ajax()) {
                             return response()->json(['user' => Auth::guard($guard)->user()]);
@@ -81,6 +89,11 @@ class AuthController extends BaseController
                     }
                 } else {
                     if (Auth::guard($guard)->attempt($credentials)) {
+
+                        if (config('facepalm.onAfterCmsLogin') && is_callable(config('facepalm.onAfterCmsLogin'))) {
+                            config('facepalm.onAfterCmsLogin')($credentials);
+                        }
+
                         if ($request->ajax()) {
                             return response()->json(['user' => Auth::guard($guard)->user()]);
                         } else {
