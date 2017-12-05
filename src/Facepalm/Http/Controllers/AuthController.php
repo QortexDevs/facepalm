@@ -8,6 +8,8 @@
 
 namespace Facepalm\Http\Controllers;
 
+use Adldap\Laravel\Facades\Adldap;
+use Facepalm\Models\User;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -61,14 +63,33 @@ class AuthController extends BaseController
             : [config('auth.defaults.guard')];
         foreach ($guards as $guard) {
             try {
-                if (Auth::guard($guard)->attempt($credentials)) {
-                    if ($request->ajax()) {
-                        return response()->json(['user' => Auth::guard($guard)->user()]);
-                    } else {
-                        return $this->handleUserWasAuthenticated($request, false);
+                if ($guard == 'ldap') {
+                    if (Adldap::auth()->attempt($credentials['email'], $credentials['password'], true)) {
+
+
+                        $ldapuser = Adldap::search()->users()->where('samaccountname', '=', $credentials['email'])->first();
+
+                        $user = User::firstOrCreate(['email' => $credentials['email']]);
+                        Auth::guard($guard)->login($user, true);
+
+
+                        if ($request->ajax()) {
+                            return response()->json(['user' => Auth::guard($guard)->user()]);
+                        } else {
+                            return $this->handleUserWasAuthenticated($request, false);
+                        }
+                    }
+                } else {
+                    if (Auth::guard($guard)->attempt($credentials)) {
+                        if ($request->ajax()) {
+                            return response()->json(['user' => Auth::guard($guard)->user()]);
+                        } else {
+                            return $this->handleUserWasAuthenticated($request, false);
+                        }
                     }
                 }
             } catch (\Exception $e) {
+                pre($e->getMessage());
             }
         }
         //todo: переделать вывод текста ошибки! Локализация!
@@ -78,6 +99,11 @@ class AuthController extends BaseController
         } else {
             return $this->sendFailedLoginResponse($request);
         }
+    }
+
+    private function loginUsername()
+    {
+        return 'login';
     }
 
 

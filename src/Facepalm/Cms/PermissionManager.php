@@ -62,7 +62,7 @@ class PermissionManager
     public function checkAccess(Config $config, $group, $module)
     {
         if (!$config->get('structure')) {
-            abort(403);
+//            abort(403);
         }
     }
 

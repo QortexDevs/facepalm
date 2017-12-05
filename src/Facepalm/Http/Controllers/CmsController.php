@@ -30,6 +30,7 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\Response;
 
 class CmsController extends BaseController
 {
@@ -353,7 +354,7 @@ class CmsController extends BaseController
         $defaultPageTitle = $this->config->get('module.strings.title') ?: 'Список объектов';
 
         /** @var CmsList $list */
-        $list = $this->app->makeWith('CmsList', ['fieldSet'=>$this->fieldSet])
+        $list = $this->app->makeWith('CmsList', ['fieldSet' => $this->fieldSet])
             ->setBaseUrl($this->baseUrl, $this->baseUrlNav)
             ->setupFromConfig($this->config->part('module'));
 
@@ -453,7 +454,7 @@ class CmsController extends BaseController
         }
 
         /** @var CmsForm $form */
-        $form = $this->app->makeWith('CmsForm', ['fieldSet'=>$this->fieldSet]);
+        $form = $this->app->makeWith('CmsForm', ['fieldSet' => $this->fieldSet]);
         $customForm = null;
 
         //todo: refactor this!
@@ -670,6 +671,18 @@ class CmsController extends BaseController
      */
     protected function post()
     {
+        if ($this->config->get('module.postHandler')) {
+            $fieldFactory = new FieldFactory();
+            $className = '\\' . $fieldFactory->dottedNotationToNamespace($this->config->get('module.postHandler'));
+            $postHandler = app()->make($className);
+            if ($postHandler) {
+                $response = $postHandler->handle($this->request);
+                if ($response instanceof Response) {
+                    return $response;
+                }
+            }
+        }
+
         // Unbound image upload, for example from wysiwyg
         if ($this->request->files->has('unboundUpload')) {
             // Да, т.к. это непривязанная загрузка, и группа значения не имеет,

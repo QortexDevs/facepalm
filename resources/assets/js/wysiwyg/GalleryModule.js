@@ -22,6 +22,7 @@ GalleryModule.prototype = {
 
     register: function () {
         var _this = this;
+        // console.log('register');
 
         tinymce.PluginManager.add('gallery', function (editor, url) {
             // Add a button that opens a window
@@ -57,6 +58,7 @@ GalleryModule.prototype = {
     onButtonClick: function (editor, type) {
         var _this = this;
         var baseUrl = $('body').data('base-url');
+        // console.log('onButtonClick');
 
         var win = editor.windowManager.open({
             title: _this.windowParams[type].title,
@@ -78,6 +80,7 @@ GalleryModule.prototype = {
 
     initWindow: function (editor) {
         this.editor = editor;
+        // console.log('init window');
 
         $('.mce-gallery-plugin-body').addClass((getQueryParameters().type == 'BUTTON_GALLERY' ? 'type-gallery' : 'type-image'));
 
@@ -94,7 +97,8 @@ GalleryModule.prototype = {
     },
 
     submit: function () {
-        "use strict";
+        // "use strict";
+        // console.log('submit');
 
         // Submit HTML to TinyMCE:
 
@@ -111,6 +115,8 @@ GalleryModule.prototype = {
             imagesHtml += str;
 
         });
+
+        // console.log(imagesHtml);
 
         var typeClassName = (getQueryParameters().type == 'BUTTON_GALLERY' ? 'type-gallery' : 'type-image');
 
