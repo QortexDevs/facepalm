@@ -75,7 +75,7 @@ class AuthController extends BaseController
                         $user->name = $ldapuser['name'][0];
                         $user->username = $ldapuser['samaccountname'][0];
                         $user->save();
-                        Auth::guard($guard)->login($user, true);
+                        Auth::guard($guard)->login($user, false);
 
                         if (config('facepalm.onAfterCmsLogin') && is_callable(config('facepalm.onAfterCmsLogin'))) {
                             config('facepalm.onAfterCmsLogin')($credentials);
