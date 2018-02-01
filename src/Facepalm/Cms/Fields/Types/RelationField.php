@@ -70,7 +70,7 @@ class RelationField extends AbstractField
                 $fieldSet->prependHiddenField($constantField, $constantValue);
 
                 /** @var CmsList $list */
-                $list = app()->make('CmsList', [$fieldSet])
+                $list = app()->makeWith('CmsList', ['fieldSet' => $fieldSet])
                     ->setMainModel($modelName)
                     ->setTreeRoot(0)
                     ->toggleTreeMode(true)
