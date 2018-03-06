@@ -1,0 +1,25 @@
+{
+    "title": "Переводы",
+    "model": "TranslatableStringValue",
+    "strings": {
+        "title": "Переводы"
+    },
+    "titles": {
+        "name": "Имя"
+    },
+    "list": {
+        "treeMode": true,
+        "showStatus": false,
+        "plain": true,
+        "columns": {
+            "name": {
+                "disabledForEdit":true
+            },
+            "value": {
+                "type": "string",
+                "title": "Значение",
+                "translatable": true
+            }
+        }
+    }
+}

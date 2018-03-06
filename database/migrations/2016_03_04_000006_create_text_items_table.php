@@ -18,11 +18,11 @@ class CreateTextItemsTable extends Migration
             $table->integer('status')->nullable();
             $table->integer('show_order')->nullable();
             $table->integer('bind_id')->nullable();
-            $table->string('bind_type');
-            $table->string('group');
-            $table->string('languageCode');
-            $table->string('stringValue');
-            $table->text('textBody');
+            $table->string('bind_type')->nullable();
+            $table->string('group')->nullable();
+            $table->string('languageCode')->nullable();
+            $table->string('stringValue')->nullable();
+            $table->text('textBody')->nullable();
             $table->timestamps();
             $table->index('bind_type');
             $table->index('bind_id');

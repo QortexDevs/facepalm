@@ -17,6 +17,7 @@ class DummyClass extends Migration
             $table->integer('parent_id')->nullable();
             $table->integer('status')->nullable();
             $table->integer('show_order')->nullable();
+            $table->integer('created_by')->nullable();
             $table->timestamps();
         });
     }

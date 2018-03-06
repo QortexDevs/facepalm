@@ -1,6 +1,6 @@
 <?php
 
-namespace Facepalm\Tests\Bootstrap\Console;
+namespace Tests\Bootstrap\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;

@@ -258,8 +258,8 @@ trait TranslatableTrait
 
             $relationObject = $this->textItems();
 
-            $textItem->setAttribute($relationObject->getPlainMorphType(), $this->getMorphClass());
-            $textItem->setAttribute($relationObject->getPlainForeignKey(), $relationObject->getParentKey());
+            $textItem->setAttribute($relationObject->getMorphType(), $this->getMorphClass());
+            $textItem->setAttribute($relationObject->getForeignKeyName(), $relationObject->getParentKey());
         });
     }
 

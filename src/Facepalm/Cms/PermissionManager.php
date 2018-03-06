@@ -17,23 +17,15 @@ class PermissionManager
 {
     protected $user;
 
-    /**
-     * PermissionManager constructor.
-     * @param User $user
-     */
-    public function __construct(User $user)
-    {
-        $this->user = $user;
-    }
-
 
     /**
      * @param Config $config
      * @return Config
      */
-    public function filterCmsStructureWithPermissions(Config $config)
+    public function filterCmsStructureWithPermissions(User $user, Config $config)
     {
-        if ($this->user->role) {
+        $this->user = $user;
+        if ($this->user && $this->user->role) {
             if ($this->user->role->id !== 1) {
                 $acl = $this->user->acl ? json_decode($this->user->acl, true) : [];
 
@@ -70,7 +62,7 @@ class PermissionManager
     public function checkAccess(Config $config, $group, $module)
     {
         if (!$config->get('structure')) {
-            abort(403);
+//            abort(403);
         }
     }
 

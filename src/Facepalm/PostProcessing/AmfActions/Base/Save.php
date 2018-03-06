@@ -12,6 +12,7 @@ use Facepalm\Models\File;
 use Facepalm\Models\Foundation\AbstractEntity;
 use Facepalm\Models\Foundation\BaseEntity;
 use Facepalm\Models\Image;
+use Facepalm\Models\User;
 use Facepalm\PostProcessing\AmfActions\AbstractAction;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -52,6 +53,10 @@ class Save extends AbstractAction
                         $object->$fieldName = json_encode($value, JSON_UNESCAPED_UNICODE);
                     }
                 } else {
+                    // фубля
+                    if ($object instanceof User && $fieldName == 'password' && !$value) {
+                        continue;
+                    }
                     $object->$fieldName = $value;
                 }
             }
