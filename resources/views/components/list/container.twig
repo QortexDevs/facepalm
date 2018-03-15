@@ -25,4 +25,7 @@
         </div>
     {% endif %}
     {% include "facepalm::components/list/list.twig" %}
+    {% if list.paginator %}
+        {{ list.paginator.links()|raw }}
+    {% endif %}
 </div>
