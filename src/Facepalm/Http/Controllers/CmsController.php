@@ -383,6 +383,10 @@ class CmsController extends BaseController
             $this->config->set('module.constants', $filter->constants());
         }
 
+        if ($this->config->get('module.list.pager')) {
+            $list->setPager($this->config->get('module.list.pager'));
+        }
+
         if ($this->config->get('module.constants') && is_array($this->config->get('module.constants'))) {
             foreach ($this->config->get('module.constants') as $constantField => $constantValue) {
                 $list->setAdditionalConstraints(function ($builder) use ($constantField, $constantValue) {
@@ -402,8 +406,7 @@ class CmsController extends BaseController
             $list->setFilterString($this->request->input('filter'));
         }
 
-
-        if ($this->request->input('filter') !== null) {
+        if ($this->request->has('filter')) {
             if ($this->config->get('module.list.filter')) {
                 return $list->render($this->renderer, 'facepalm::components/list/list');
             }

@@ -207,6 +207,7 @@ List.prototype = {
                 }
                 timer = setTimeout(function () {
                     prevFilter = strSearch;
+                    $('.pagination').toggle(strSearch === '');
                     if (strSearch.length !== 1) {
                         $.get('./?filter=' + strSearch).done(function (response) {
                             $('.cms-module-list-content').replaceWith(response);
