@@ -136,6 +136,7 @@ class RelationField extends AbstractField
                         }
                     }
                     $this->parameters['dictionary'][$foreignObject->{CmsCommon::COLUMN_NAME_ID}] = $foreignObject->{$this->foreignDisplayName} . ($isConcatEmpty ? '' : '' . $concat);
+                    $this->parameters['dictionaryAdditional'][$foreignObject->{CmsCommon::COLUMN_NAME_ID}] = $foreignObject;
                 }
 
                 asort($this->parameters['dictionary']);
