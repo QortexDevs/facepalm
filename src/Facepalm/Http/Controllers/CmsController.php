@@ -28,7 +28,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\Response;
 
 class CmsController extends BaseController
 {
@@ -95,12 +97,10 @@ class CmsController extends BaseController
      *
      * @noinspection MoreThanThreeArgumentsInspection
      */
-    public function __construct(Application $app, Request $request, User $user, PermissionManager $pm)
+    public function __construct(Application $app, Request $request, User $user = null, PermissionManager $pm = null)
     {
         $this->setupLocale();
-
         $this->app = $app;
-        $this->user = $user;
         $this->request = $request;
         $this->permissionManager = $pm;
         $this->renderer = $this->app->make('twig');
@@ -118,10 +118,10 @@ class CmsController extends BaseController
      */
     public function handle($group = null, $module = null, $params = null)
     {
+        $this->user = Auth::user();
         $this->group = $group;
         $this->module = $module;
-        $this->config = $this->permissionManager->filterCmsStructureWithPermissions(Config::fromFile($group, $module));
-
+        $this->config = $this->permissionManager->filterCmsStructureWithPermissions($this->user, Config::fromFile($group, $module));
         // Abort 404 if user has no access
         $this->permissionManager->checkAccess($this->config, $group, $module);
 
@@ -243,7 +243,6 @@ class CmsController extends BaseController
     protected function get()
     {
         if ($this->group) {
-
             // Setup Field Set and set this instance to service container
             $this->fieldSet = $this->app->make('CmsFieldSet')
                 ->setDictionaries($this->config->get('module.dictionaries', []))
@@ -355,7 +354,7 @@ class CmsController extends BaseController
         $defaultPageTitle = $this->config->get('module.strings.title') ?: 'Список объектов';
 
         /** @var CmsList $list */
-        $list = $this->app->make('CmsList', [$this->fieldSet])
+        $list = $this->app->makeWith('CmsList', ['fieldSet' => $this->fieldSet])
             ->setBaseUrl($this->baseUrl, $this->baseUrlNav)
             ->setupFromConfig($this->config->part('module'));
 
@@ -384,6 +383,10 @@ class CmsController extends BaseController
             $this->config->set('module.constants', $filter->constants());
         }
 
+        if ($this->config->get('module.list.pager')) {
+            $list->setPager($this->config->get('module.list.pager'));
+        }
+
         if ($this->config->get('module.constants') && is_array($this->config->get('module.constants'))) {
             foreach ($this->config->get('module.constants') as $constantField => $constantValue) {
                 $list->setAdditionalConstraints(function ($builder) use ($constantField, $constantValue) {
@@ -403,8 +406,7 @@ class CmsController extends BaseController
             $list->setFilterString($this->request->input('filter'));
         }
 
-
-        if ($this->request->input('filter') !== null) {
+        if ($this->request->has('filter')) {
             if ($this->config->get('module.list.filter')) {
                 return $list->render($this->renderer, 'facepalm::components/list/list');
             }
@@ -455,7 +457,7 @@ class CmsController extends BaseController
         }
 
         /** @var CmsForm $form */
-        $form = $this->app->make('CmsForm', [$this->fieldSet]);
+        $form = $this->app->makeWith('CmsForm', ['fieldSet' => $this->fieldSet]);
         $customForm = null;
 
         //todo: refactor this!
@@ -672,6 +674,18 @@ class CmsController extends BaseController
      */
     protected function post()
     {
+        if ($this->config->get('module.postHandler')) {
+            $fieldFactory = new FieldFactory();
+            $className = '\\' . $fieldFactory->dottedNotationToNamespace($this->config->get('module.postHandler'));
+            $postHandler = app()->make($className);
+            if ($postHandler) {
+                $response = $postHandler->handle($this->request);
+                if ($response instanceof Response) {
+                    return $response;
+                }
+            }
+        }
+
         // Unbound image upload, for example from wysiwyg
         if ($this->request->files->has('unboundUpload')) {
             // Да, т.к. это непривязанная загрузка, и группа значения не имеет,

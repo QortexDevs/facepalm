@@ -1,0 +1,100 @@
+{
+    "title": "Текстовые разделы",
+    "model": "site_section",
+    "strings": {
+        "title": "Текстовые разделы",
+    },
+    "titles": {
+        "path_name": "Путь",
+        "status": "Активность"
+    },
+    "navigation": {
+        "model": "site_section",
+        "titleField": "title",
+        "skip": [
+            1,
+            11,
+            6,
+            7,
+            8
+        ]
+    },
+    "forms": {
+        "default": {
+            "fields": {
+                "title": {
+                    "type": "plaintext",
+                    "title": "Страница"
+                },
+                "content": {
+                    "type": "text",
+                    "title": "Content",
+                    "translatable": true,
+                    "wysiwyg": true
+                }
+            }
+        },
+        "for_id_3,4": {
+            "fields": {
+                "top_img": {
+                    "type": "image",
+                    "title": "Фото в шапку"
+                },
+                "top_title": {
+                    "type": "string",
+                    "title": "Заголовок в шапку",
+                    "translatable": true,
+                },
+                "top_text": {
+                    "type": "text",
+                    "title": "Текст в шапку",
+                    "translatable": true,
+                    "height": "100px"
+                }
+            }
+        },
+        "for_id_5": {
+            "model": "contact",
+            "overrideObjectId": 1,
+            "fields": {
+                "intro": {
+                    "title": "Вводный текст",
+                    "translatable": true
+                },
+                "address": {
+                    "title": "Адрес",
+                    "translatable": true
+                },
+                "phone": {
+                    "title": "Телефон"
+                },
+                "email": {
+                    "title": "Email"
+                },
+                "open_days": {
+                    "title": "Дни работы",
+                    "translatable": true
+                },
+                "open_hours": {
+                    "title": "Часы работы"
+                },
+                "messengers_number": {
+                    "title": "Номер мессенджеров"
+                },
+                "feedback_email": {
+                    "title": "E-mail для формы обратной связи",
+                },
+                "orders_email": {
+                    "title": "E-mail для заказов",
+                },
+                "map": {
+                    "title": "Карта",
+                    "type": "facepalm.cms.fields.extended.latlng",
+                    "map": "google",
+                    "height": "400px",
+                    "width": "100%"
+                }
+            }
+        }
+    }
+}

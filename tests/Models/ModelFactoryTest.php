@@ -1,5 +1,5 @@
 <?php
-namespace Facepalm\Tests;
+namespace Tests;
 
 use Facepalm\Models\ModelFactory;
 

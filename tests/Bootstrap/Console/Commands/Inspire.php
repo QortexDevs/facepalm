@@ -1,6 +1,6 @@
 <?php
 
-namespace Facepalm\Tests\Bootstrap\Console\Commands;
+namespace Tests\Bootstrap\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Inspiring;

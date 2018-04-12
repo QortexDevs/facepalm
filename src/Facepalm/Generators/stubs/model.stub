@@ -4,6 +4,13 @@ namespace DummyNamespace;
 
 use Facepalm\Models\Foundation\BaseEntity;
 
+/**
+ * @property int id
+ * @property int parent_id
+ * @property int status
+ * @property int show_order
+ * @property int created_by
+ */
 class DummyClass extends BaseEntity
 {
     protected $textFields = [];

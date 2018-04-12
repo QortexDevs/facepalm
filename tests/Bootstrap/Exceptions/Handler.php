@@ -1,6 +1,6 @@
 <?php
 
-namespace Facepalm\Tests\Bootstrap\Exceptions;
+namespace Tests\Bootstrap\Exceptions;
 
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;

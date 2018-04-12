@@ -1,6 +1,6 @@
 <?php
 
-namespace Facepalm\Tests\Bootstrap\Http;
+namespace Tests\Bootstrap\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 

@@ -8,6 +8,8 @@ function getDefaultTinyMceOptions() {
         menubar: false,
         statusbar: false,
         relative_urls : false,
+        convert_urls: false,
+
         style_formats: [
             {title: 'Обычный текст', block: 'p'},
             {title: 'Заголовок', block: 'h2'},

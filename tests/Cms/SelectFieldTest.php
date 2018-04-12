@@ -1,5 +1,5 @@
 <?php
-namespace Facepalm\Tests;
+namespace Tests;
 
 use Facepalm\Cms\Fields\FieldFactory;
 use Facepalm\Cms\Fields\Types\BooleanField;

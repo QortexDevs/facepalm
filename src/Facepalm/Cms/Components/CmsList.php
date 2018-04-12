@@ -40,6 +40,7 @@ class CmsList extends CmsComponent
     protected $constraintCallbacks = [];
     protected $listParams = [];
     protected $filterString;
+    protected $itemsPerPage = null;
 
 
     /**
@@ -176,6 +177,10 @@ class CmsList extends CmsComponent
         return $this;
     }
 
+    public function setPager($pagerParams)
+    {
+        $this->itemsPerPage = $pagerParams['itemsPerPage'];
+    }
 
     /**
      * @return array
@@ -263,6 +268,10 @@ class CmsList extends CmsComponent
                 $field->setParameter('modelName', $this->modelName);
                 $field->prepareData();
             }
+        } else {
+            if ($this->itemsPerPage && !$this->filterString) {
+                $paginator = $queryBuilder->paginate($this->itemsPerPage);
+            }
         }
 
         // do query
@@ -304,6 +313,11 @@ class CmsList extends CmsComponent
             ],
             'tree' => $tree
         ];
+
+        if (isset($paginator)) {
+            $output['paginator'] = $paginator;
+        }
+
         return $output;
     }
 
