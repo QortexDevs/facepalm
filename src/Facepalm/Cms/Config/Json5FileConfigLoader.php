@@ -9,7 +9,6 @@
 namespace Facepalm\Cms\Config;
 
 use Facepalm\Cms\Config\ConfigLoaderInterface;
-use HirotoK\JSON5\JSON5;
 use Illuminate\Config\Repository;
 
 
@@ -22,7 +21,7 @@ class Json5FileConfigLoader implements ConfigLoaderInterface
     public function load($filePath)
     {
         if (file_exists($filePath)) {
-            return JSON5::decodeFile($filePath, true);
+            return json5_decode(file_get_contents($filePath), true);
         }
 
         return [];
