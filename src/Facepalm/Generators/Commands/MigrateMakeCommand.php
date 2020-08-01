@@ -2,6 +2,7 @@
 
 namespace Facepalm\Generators\Commands;
 
+use Facepalm\Generators\MigrationCreator;
 use Illuminate\Support\Composer;
 
 class MigrateMakeCommand extends \Illuminate\Database\Console\Migrations\MigrateMakeCommand
