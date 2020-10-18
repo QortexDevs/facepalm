@@ -114,7 +114,7 @@ class UploadProcessor
                     if ($object) {
                         $object->{$relationMethodName}()->save($uploadableObject);
                     }
-                    Event::fire('facepalm.cms.afterUpload', [$object, $uploadableObject, $requestRawData]);
+                    Event::dispatch('facepalm.cms.afterUpload', [$object, $uploadableObject, $requestRawData]);
                     $processedFiles[] = [
                         $fieldName => $this->{$resultMethodName}($uploadableObject, $requestRawData)
                     ];

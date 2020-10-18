@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: xpundel
@@ -7,6 +8,7 @@
  */
 
 namespace Facepalm\Providers;
+
 use Illuminate\Support\AggregateServiceProvider;
 
 class FacepalmServiceProvider extends AggregateServiceProvider
@@ -16,7 +18,7 @@ class FacepalmServiceProvider extends AggregateServiceProvider
      *
      * @var bool
      */
-//    protected $defer = true;
+    //    protected $defer = true;
 
     /**
      * The provider class names.
@@ -33,7 +35,4 @@ class FacepalmServiceProvider extends AggregateServiceProvider
         'Facepalm\Providers\GeneratorServiceProvider',
         'Facepalm\Providers\TranslationServiceProvider',
     ];
-
-
-
 }

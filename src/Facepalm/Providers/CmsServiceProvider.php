@@ -75,7 +75,7 @@ class CmsServiceProvider extends ServiceProvider
             return Auth::user() ?: null;
         });
 
-//        $this->app->bind('facepalm.amf.action.acl', 'Facepalm\PostProcessing\AmfActions\Extended\Acl');
+        //        $this->app->bind('facepalm.amf.action.acl', 'Facepalm\PostProcessing\AmfActions\Extended\Acl');
 
     }
 }
