@@ -28,7 +28,7 @@ class InstallCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Publishes Facepalm static';
+    protected $description = 'Publishes Facepalm static files';
 
     /**
      * Execute the console command.
