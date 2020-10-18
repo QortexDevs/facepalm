@@ -14,7 +14,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
-class InstallCommand extends Command
+class PublishCommand extends Command
 {
     /**
      * The name and signature of the console command.
